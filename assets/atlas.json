@@ -1,11 +1,14 @@
 {
+  "scale": 2,
+  "note": "sizes are design units; PNG pixels = size x scale",
   "heroes": {
     "rubeus": {
-      "title": "Sir Rubeus of the Lion",
-      "trait": "Balanced - the classic all-rounder",
+      "title": "Sir Rubeus",
+      "trait": "Balanced all-rounder; the spear-bearer",
+      "weapon": "spear",
       "frame": [
-        20,
-        24
+        64,
+        96
       ],
       "frames": [
         "idle",
@@ -16,11 +19,12 @@
       "file": "heroes/rubeus.png"
     },
     "azura": {
-      "title": "Dame Azura of the Swan",
-      "trait": "Floaty jumper - glides a little at the top of a jump",
+      "title": "Dame Azura",
+      "trait": "Floaty jumper; glides a moment at the top of a leap",
+      "weapon": "sword",
       "frame": [
-        20,
-        24
+        64,
+        96
       ],
       "frames": [
         "idle",
@@ -31,11 +35,12 @@
       "file": "heroes/azura.png"
     },
     "verdain": {
-      "title": "Sir Verdain of the Stag",
-      "trait": "Heavy and strong - can bash bricks while running",
+      "title": "Sir Verdain",
+      "trait": "Heavy and strong; his axe breaks masonry",
+      "weapon": "axe",
       "frame": [
-        20,
-        24
+        64,
+        96
       ],
       "frames": [
         "idle",
@@ -46,11 +51,12 @@
       "file": "heroes/verdain.png"
     },
     "aurelia": {
-      "title": "Lady Aurelia of the Sun",
-      "trait": "Swift runner - fastest on foot, lighter jumps",
+      "title": "Lady Aurelia",
+      "trait": "Swift; fastest on foot, lighter jumps",
+      "weapon": "mace",
       "frame": [
-        20,
-        24
+        64,
+        96
       ],
       "frames": [
         "idle",
@@ -62,197 +68,251 @@
     }
   },
   "enemies": {
-    "snail_knight": {
-      "title": "Snail Knight",
-      "behaviour": "walker; stomp once to hide in shell, kick the shell",
+    "snail_hound": {
+      "title": "Snail-Hound",
+      "behaviour": "walker; stomp it and it hides in its shell - kick the shell to bowl over other beasts",
       "frame": [
-        16,
-        16
+        64,
+        64
       ],
       "frame_count": 3,
-      "file": "enemies/snail_knight.png"
+      "file": "enemies/snail_hound.png"
     },
-    "bishop_fox": {
-      "title": "Bishop Fox",
-      "behaviour": "walker; sneaky - speeds up when a knight is near",
+    "owl_face": {
+      "title": "Man-Faced Owl",
+      "behaviour": "perches in trees, swoops down at a knight when one passes beneath",
       "frame": [
-        16,
-        16
+        72,
+        72
       ],
       "frame_count": 2,
-      "file": "enemies/bishop_fox.png"
+      "file": "enemies/owl_face.png"
     },
-    "hare_jouster": {
-      "title": "Hare Jouster",
-      "behaviour": "hopper; hops in an arc, lance points forward (hurts from front)",
+    "soup_cat": {
+      "title": "The Soup Cat",
+      "behaviour": "stands guard stirring her cauldron; flings arcs of scalding soup ('That's it, you're going in the soup')",
       "frame": [
-        16,
-        16
+        72,
+        82
+      ],
+      "frame_count": 3,
+      "file": "enemies/soup_cat.png"
+    },
+    "unicorn": {
+      "title": "Spotted Unicorn",
+      "behaviour": "charger; lowers its horn and gallops when it sees a knight, can't turn quickly",
+      "frame": [
+        80,
+        64
       ],
       "frame_count": 2,
-      "file": "enemies/hare_jouster.png"
+      "file": "enemies/unicorn.png"
     },
-    "winged_boar": {
-      "title": "Winged Boar",
-      "behaviour": "flyer; swoops in a sine wave, stompable",
+    "wyvern": {
+      "title": "Wyvern",
+      "behaviour": "flyer; loops in a figure-eight above pits; stompable",
       "frame": [
-        16,
-        16
+        80,
+        60
       ],
       "frame_count": 2,
-      "file": "enemies/winged_boar.png"
+      "file": "enemies/wyvern.png"
     },
-    "thistle_hedgehog": {
-      "title": "Thistle Hedgehog",
-      "behaviour": "walker; spiny back - do NOT stomp, must be bumped from below or fireballed",
+    "killer_hare": {
+      "title": "Killer Hare",
+      "behaviour": "hopper; bounds toward the knight brandishing a sword - stomp before it lands",
       "frame": [
-        16,
-        16
+        56,
+        64
       ],
       "frame_count": 2,
-      "file": "enemies/thistle_hedgehog.png"
+      "file": "enemies/killer_hare.png"
     },
-    "wyrm_boss": {
-      "title": "Wyrm of the Great Hall",
-      "behaviour": "boss; paces the bridge, spits fireballs, defeat by 3 stomps on the head / axe the bridge",
+    "bayeux_hound": {
+      "title": "Bayeux Hound",
+      "behaviour": "fast runner that comes in packs of three; leaps small gaps",
       "frame": [
-        32,
-        24
+        76,
+        48
       ],
-      "frame_count": 1,
-      "file": "enemies/wyrm_boss.png"
+      "frame_count": 2,
+      "file": "enemies/bayeux_hound.png"
+    },
+    "whale_boss": {
+      "title": "Aspidochelone, the Island-Whale",
+      "behaviour": "boss; surfaces from the sea, spouts water, snaps; knights must jump on its scaly back and strike the eye",
+      "frame": [
+        256,
+        168
+      ],
+      "frame_count": 2,
+      "file": "enemies/whale_boss.png"
     }
   },
   "scenery": {
     "ground_top": {
       "size": [
-        16,
-        16
+        48,
+        48
       ],
       "file": "scenery/ground_top.png"
     },
     "ground_fill": {
       "size": [
-        16,
-        16
+        48,
+        48
       ],
       "file": "scenery/ground_fill.png"
     },
-    "brick": {
+    "masonry": {
       "size": [
-        16,
-        16
+        48,
+        48
       ],
-      "file": "scenery/brick.png"
+      "file": "scenery/masonry.png"
     },
-    "platform": {
+    "roundel_block": {
       "size": [
-        16,
-        16
+        48,
+        48
       ],
-      "file": "scenery/platform.png"
+      "file": "scenery/roundel_block.png"
     },
-    "block_shield": {
+    "roundel_used": {
       "size": [
-        16,
-        16
+        48,
+        48
       ],
-      "file": "scenery/block_shield.png"
+      "file": "scenery/roundel_used.png"
     },
-    "block_used": {
+    "plank": {
       "size": [
-        16,
-        16
+        48,
+        18
       ],
-      "file": "scenery/block_used.png"
+      "file": "scenery/plank.png"
     },
     "tower_top": {
       "size": [
-        32,
-        16
+        96,
+        48
       ],
       "file": "scenery/tower_top.png"
     },
     "tower_body": {
       "size": [
-        32,
-        16
+        96,
+        48
       ],
       "file": "scenery/tower_body.png"
     },
-    "cloud": {
+    "sea": {
       "size": [
         48,
-        20
+        48
       ],
-      "file": "scenery/cloud.png"
+      "file": "scenery/sea.png"
     },
     "tree": {
       "size": [
-        32,
-        48
+        96,
+        160
       ],
       "file": "scenery/tree.png"
     },
-    "flag": {
+    "shrub": {
       "size": [
-        16,
+        64,
         48
       ],
-      "file": "scenery/flag.png"
+      "file": "scenery/shrub.png"
     },
-    "bush": {
+    "gonfanon": {
       "size": [
-        32,
-        16
+        48,
+        144
       ],
-      "file": "scenery/bush.png"
+      "file": "scenery/gonfanon.png"
     },
-    "flowers": {
+    "ship": {
       "size": [
-        16,
-        16
+        160,
+        96
       ],
-      "file": "scenery/flowers.png"
+      "file": "scenery/ship.png"
     },
-    "border_strip": {
+    "hill": {
       "size": [
-        32,
-        16
+        160,
+        64
       ],
-      "file": "scenery/border_strip.png"
+      "file": "scenery/hill.png"
     },
-    "coin": {
+    "hall": {
       "size": [
-        16,
-        16
+        160,
+        128
+      ],
+      "file": "scenery/hall.png"
+    },
+    "motte": {
+      "size": [
+        128,
+        128
+      ],
+      "file": "scenery/motte.png"
+    },
+    "border": {
+      "size": [
+        384,
+        64
+      ],
+      "file": "scenery/border.png"
+    },
+    "inscription": {
+      "size": [
+        760,
+        44
+      ],
+      "file": "scenery/inscription.png"
+    },
+    "title": {
+      "size": [
+        500,
+        44
+      ],
+      "file": "scenery/title.png"
+    },
+    "bezant": {
+      "size": [
+        24,
+        24
       ],
       "frame_count": 4,
-      "file": "scenery/coin.png",
-      "note": "spinning florin"
+      "file": "scenery/bezant.png",
+      "note": "spinning gold bezant (the coin)"
     }
   },
   "backgrounds": {
-    "sky": {
+    "linen": {
       "size": [
-        480,
-        270
+        960,
+        540
       ],
-      "file": "backgrounds/sky.png",
-      "tileable_x": false
+      "file": "backgrounds/linen.png"
     },
     "far": {
       "size": [
-        480,
-        270
+        960,
+        540
       ],
       "file": "backgrounds/far.png",
       "tileable_x": true
     },
     "near": {
       "size": [
-        480,
-        270
+        960,
+        540
       ],
       "file": "backgrounds/near.png",
       "tileable_x": true
