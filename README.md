@@ -9,11 +9,15 @@ The art imitates Bayeux wool embroidery: laid-and-couched fills, stem-stitch out
 
 | Folder | Contents |
 |---|---|
-| `assets/heroes/` | 4 knights in nasal helmets, mail and kite shields; frames idle, walk1, walk2, jump. **Sir Rubeus** (spear, cross shield), **Dame Azura** (sword, wyrm shield), **Sir Verdain** (axe, banded shield), **Lady Aurelia** (mace, bezant shield) |
-| `assets/enemies/` | **Snail-Hound** (walk x2 + shell), **Man-Faced Owl** (perched, flying), **Soup Cat** (stir x2, fling), **Spotted Unicorn**, **Wyvern**, **Killer Hare**, **Bayeux Hound**, boss **Aspidochelone the Island-Whale** (closed / open jaws) |
+| `assets/heroes/` | 4 knights in nasal helmets, mail and kite shields; frames idle, walk1, walk2, jump, ride. **Sir Rubeus** (spear, cross shield), **Dame Azura** (sword, wyrm shield), **Sir Verdain** (axe, banded shield), **Lady Aurelia** (mace, bezant shield). Each also has a `_mounted` sheet riding Bayard |
+| `assets/mounts/` | **Bayard, the magic horse**: the Yoshi-style mount. Frames idle, walk1, walk2, leap, rear. A hit throws the rider; Bayard rears and bolts. The atlas holds the saddle point and rider offset |
+| `assets/princess/` | **Princess Aelfgyva** (the mysterious lady of the Bayeux Tapestry): idle, wave, joy |
+| `assets/enemies/` | **Snail-Hound** (walk x2 + shell), **Man-Faced Owl**, **Soup Cat**, **Spotted Unicorn**, **Wyvern**, **Killer Hare**, **Bayeux Hound**, **Fiery Lion** (walk x2 + roar), **Camel-Dragon** (two-faced, with a head on its tail) |
+| `assets/bosses/` | **Aspidochelone the Island-Whale** (sea), **The Cockatrice** (petrifying gaze), **The Great Dragon** (fire breath), **The Cat King** (final boss, on his throne with a ladle-sceptre) |
+| `assets/projectiles/` | fireball, soup glob |
 | `assets/scenery/` | 48px tiles: turf, earth, masonry, roundel block (the `?` block) and used block, sea. Also bezant coin (4 frames), tower (the "pipe"), plank, longship, gonfanon (goal banner), Bayeux tree, shrub, hill, hall, castle on a motte, a beast-and-bird border strip, and Latin inscriptions |
 | `assets/backgrounds/` | 960x540 layers: linen, far (outline-only stitched "underdrawing"), near (trees, shrubs, hills); far and near tile horizontally |
-| `assets/atlas.json` | frame sizes, frame counts and intended enemy behaviours |
+| `assets/atlas.json` | frame sizes, frame counts and intended behaviours |
 
 Each PNG is rendered at **2x** its design size (see `scale` in the atlas). It is meant to be drawn at half size in a 960x540 game. Sprite sheets lay their frames out left to right, and sprites face right.
 
@@ -22,7 +26,8 @@ All the art is code: `tools/emb/` holds SVG drawings plus an embroidery filter, 
 
 ```
 python3 tools/emb/build.py      # renders all assets (Pillow + Node Playwright)
-python3 tools/emb/showcase.py   # composes assets/showcase.png
+python3 tools/emb/showcase.py   # composes assets/showcase.png and showcase_cast.png
+python3 tools/emb/gallery.py    # writes assets/gallery.html
 ```
 
 - To recolour a knight, edit the `KNIGHTS` table in `knights.py`.

@@ -59,10 +59,13 @@ def arm(color):
     return s
 
 def knight(cfg, pose):
+    return doc(W, H, knight_body(cfg, pose), seed=cfg["seed"])
+
+def knight_body(cfg, pose):
     hz, sh = cfg["mail"], cfg["shield"]
-    fl, bl = {"idle": (0, 0), "walk1": (-24, 20), "walk2": (20, -24), "jump": (-38, 26)}[pose]
+    fl, bl = {"idle": (0, 0), "walk1": (-24, 20), "walk2": (20, -24), "jump": (-38, 26), "ride": (-34, 0)}[pose]
     lift = -3 if pose == "jump" else (-1 if pose.startswith("walk") else 0)
-    s = g(leg(cfg["hose"], True), rot(bl, 33, 63) + " translate(-4 0)")
+    s = g(leg(cfg["hose"], True), rot(bl, 33, 63) + " translate(-4 0)") if pose != "ride" else ""
     s += weapon(cfg["weapon"])
     s += arm(hz)
     s += g(leg(cfg["hose"]), rot(fl, 35, 63))
@@ -81,7 +84,7 @@ def knight(cfg, pose):
     s += fill("M24,18.3 L45.5,18.3 L45.5,21 L24,21 Z", cfg["trim"], 0, "dark", 1)
     s += fill("M42,19 L45,19 L45,27 L42.4,27 Z", cfg["helm"], 90, "dark", 1)
     s += shield_design(cfg["device"], sh[0], sh[1])
-    return doc(W, H, g(s, f"translate(0 {lift})"), seed=cfg["seed"])
+    return g(s, f"translate(0 {lift})")
 
 KNIGHTS = {
     "rubeus": dict(title="Sir Rubeus", mail="terra", hose="blue", helm="grey", trim="gold", shield=("gold", "terra"), device="cross", weapon="spear", beard="brown", seed=3,
@@ -93,4 +96,4 @@ KNIGHTS = {
     "aurelia": dict(title="Lady Aurelia", mail="ochre", hose="green", helm="grey", trim="indigo", shield=("indigo", "gold"), device="bezants", weapon="mace", braid="terra", seed=9,
                     trait="Swift; fastest on foot, lighter jumps"),
 }
-POSES = ["idle", "walk1", "walk2", "jump"]
+POSES = ["idle", "walk1", "walk2", "jump", "ride"]   # "ride": seated, far leg hidden, for use on Bayard

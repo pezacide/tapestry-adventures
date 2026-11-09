@@ -14,9 +14,24 @@
         "idle",
         "walk1",
         "walk2",
-        "jump"
+        "jump",
+        "ride"
       ],
-      "file": "heroes/rubeus.png"
+      "file": "heroes/rubeus.png",
+      "mounted": {
+        "file": "heroes/rubeus_mounted.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
+      }
     },
     "azura": {
       "title": "Dame Azura",
@@ -30,9 +45,24 @@
         "idle",
         "walk1",
         "walk2",
-        "jump"
+        "jump",
+        "ride"
       ],
-      "file": "heroes/azura.png"
+      "file": "heroes/azura.png",
+      "mounted": {
+        "file": "heroes/azura_mounted.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
+      }
     },
     "verdain": {
       "title": "Sir Verdain",
@@ -46,9 +76,24 @@
         "idle",
         "walk1",
         "walk2",
-        "jump"
+        "jump",
+        "ride"
       ],
-      "file": "heroes/verdain.png"
+      "file": "heroes/verdain.png",
+      "mounted": {
+        "file": "heroes/verdain_mounted.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
+      }
     },
     "aurelia": {
       "title": "Lady Aurelia",
@@ -62,9 +107,66 @@
         "idle",
         "walk1",
         "walk2",
-        "jump"
+        "jump",
+        "ride"
       ],
-      "file": "heroes/aurelia.png"
+      "file": "heroes/aurelia.png",
+      "mounted": {
+        "file": "heroes/aurelia_mounted.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
+      }
+    }
+  },
+  "mounts": {
+    "bayard": {
+      "title": "Bayard, the magic horse",
+      "frame": [
+        104,
+        84
+      ],
+      "frames": [
+        "idle",
+        "walk1",
+        "walk2",
+        "leap",
+        "rear"
+      ],
+      "file": "mounts/bayard.png",
+      "saddle": [
+        48,
+        22
+      ],
+      "rider_offset": [
+        13,
+        -41
+      ],
+      "behaviour": "Yoshi-style mount: found in roundel blocks; ride to run faster, jump higher and trample fiery beasts. Take a hit while riding and you are thrown off - Bayard rears and bolts, and you can catch him again. Press down to dismount. Use a knight's _mounted sheet, or draw the knight 'ride' frame at rider_offset."
+    }
+  },
+  "princess": {
+    "aelfgyva": {
+      "title": "Princess Aelfgyva",
+      "frame": [
+        52,
+        100
+      ],
+      "frames": [
+        "idle",
+        "wave",
+        "joy"
+      ],
+      "file": "princess/aelfgyva.png",
+      "note": "Named after the mysterious lady in the Bayeux Tapestry. Held captive behind the Cat King's throne; idle, wave, joy (rescued)."
     }
   },
   "enemies": {
@@ -138,6 +240,58 @@
       "frame_count": 2,
       "file": "enemies/bayeux_hound.png"
     },
+    "fiery_lion": {
+      "title": "Fiery Lion",
+      "behaviour": "walker; its mane is burning - stomping it singes you unless you're mounted; roars out a fireball (frame 3)",
+      "frame": [
+        86,
+        64
+      ],
+      "frame_count": 3,
+      "file": "enemies/fiery_lion.png"
+    },
+    "camel_dragon": {
+      "title": "Camel-Dragon",
+      "behaviour": "slow walker with a second head on its tail, so it bites from behind too; stomp the hump",
+      "frame": [
+        84,
+        64
+      ],
+      "frame_count": 2,
+      "file": "enemies/camel_dragon.png"
+    }
+  },
+  "bosses": {
+    "cockatrice": {
+      "title": "The Cockatrice",
+      "behaviour": "boss; struts and pecks, its gaze (frame 2) turns a knight to stone for a moment; stomp its crown three times",
+      "frame": [
+        160,
+        150
+      ],
+      "frame_count": 2,
+      "file": "bosses/cockatrice.png"
+    },
+    "great_dragon": {
+      "title": "The Great Dragon",
+      "behaviour": "castle boss; flies between battlements, breathes a gout of fire (frame 3); cut the bridge or stomp its head",
+      "frame": [
+        300,
+        160
+      ],
+      "frame_count": 3,
+      "file": "bosses/great_dragon.png"
+    },
+    "cat_king": {
+      "title": "The Cat King",
+      "behaviour": "final boss; enthroned in the Great Hall, flings soup with his ladle-sceptre and summons Soup Cats; rescue Princess Aelfgyva from behind his throne",
+      "frame": [
+        164,
+        170
+      ],
+      "frame_count": 2,
+      "file": "bosses/cat_king.png"
+    },
     "whale_boss": {
       "title": "Aspidochelone, the Island-Whale",
       "behaviour": "boss; surfaces from the sea, spouts water, snaps; knights must jump on its scaly back and strike the eye",
@@ -146,7 +300,29 @@
         168
       ],
       "frame_count": 2,
-      "file": "enemies/whale_boss.png"
+      "file": "bosses/whale_boss.png"
+    }
+  },
+  "projectiles": {
+    "fireball": {
+      "title": "Fireball",
+      "behaviour": "projectile from the Fiery Lion and the Great Dragon",
+      "frame": [
+        24,
+        16
+      ],
+      "frame_count": 2,
+      "file": "projectiles/fireball.png"
+    },
+    "soup_glob": {
+      "title": "Soup Glob",
+      "behaviour": "projectile flung by the Soup Cat and the Cat King",
+      "frame": [
+        16,
+        16
+      ],
+      "frame_count": 2,
+      "file": "projectiles/soup_glob.png"
     }
   },
   "scenery": {

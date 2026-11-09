@@ -101,6 +101,19 @@ C["owl_face"] = dict(title="Man-Faced Owl", size=(72, 72), frames=2, build=owl,
                      behaviour="perches in trees, swoops down at a knight when one passes beneath")
 
 # ---------------- Soup Cat ----------------
+def cat_head():
+    s = ""
+    head = "M10,20 Q10,8 21,8 Q32,8 32,20 Q32,30 21,31 Q10,30 10,20 Z"
+    s += fill("M11,13 L12,2 L18,9 Z", "grey", 90, "dark", 1) + fill("M31,13 L30,2 L24,9 Z", "grey", 90, "dark", 1)
+    s += fill(head, "grey", 0)
+    s += stem("M17,9 L18,13 M21,8.5 L21,12.5 M25,9 L24,13", "dark", 0.9, False)
+    s += stem("M13.5,16 L19,18.5 M28.5,16 L23,18.5", "dark", 1.3, False)
+    s += fill("M15,19.5 Q17,18 19,20 Q17,21.5 15,19.5 Z", "gold", 0, "dark", 0.7) + fill("M23,20 Q25,18 27,19.5 Q25,21.5 23,20 Z", "gold", 0, "dark", 0.7)
+    s += fill("M19.5,23 L22.5,23 L21,24.6 Z", "rose", 0, "dark", 0.6)
+    s += stem("M17.5,27.5 Q21,25.5 24.5,27.5", "dark", 0.9, False)
+    s += stem("M9,24 L16,24.5 M9,26.5 L16,26 M33,24 L26,24.5 M33,26.5 L26,26", "dark", 0.5, False)
+    return s
+
 def soup_cat(f):
     s = ""
     fl = (0, 1, 0)[f]
@@ -133,16 +146,7 @@ def soup_cat(f):
         s += g(stem("M30,32 L44,6", "brown", 2.4, False) + fill("M42,3 Q48,1 48,7 Q45,10 42,8 Z", "brown", 0, "dark", 0.9), "")
         s += mail("M27,34 Q30,28 31,24 L35,26 Q34,31 31,37 Z", "grey", "dark", 1.1) + dot(32.5, 25, 2.6, "grey", "dark")
         s += dot(52, 6, 2.4, "sage", "dark") + dot(58, 10, 1.6, "sage", "dark")
-    # head
-    head = "M10,20 Q10,8 21,8 Q32,8 32,20 Q32,30 21,31 Q10,30 10,20 Z"
-    s += fill("M11,13 L12,2 L18,9 Z", "grey", 90, "dark", 1) + fill("M31,13 L30,2 L24,9 Z", "grey", 90, "dark", 1)
-    s += fill(head, "grey", 0)
-    s += stem("M17,9 L18,13 M21,8.5 L21,12.5 M25,9 L24,13", "dark", 0.9, False)
-    s += stem("M13.5,16 L19,18.5 M28.5,16 L23,18.5", "dark", 1.3, False)
-    s += fill("M15,19.5 Q17,18 19,20 Q17,21.5 15,19.5 Z", "gold", 0, "dark", 0.7) + fill("M23,20 Q25,18 27,19.5 Q25,21.5 23,20 Z", "gold", 0, "dark", 0.7)
-    s += fill("M19.5,23 L22.5,23 L21,24.6 Z", "rose", 0, "dark", 0.6)
-    s += stem("M17.5,27.5 Q21,25.5 24.5,27.5", "dark", 0.9, False)
-    s += stem("M9,24 L16,24.5 M9,26.5 L16,26 M33,24 L26,24.5 M33,26.5 L26,26", "dark", 0.5, False)
+    s += cat_head()
     return s
 C["soup_cat"] = dict(title="The Soup Cat", size=(72, 82), frames=3, build=soup_cat,
                      behaviour="stands guard stirring her cauldron; flings arcs of scalding soup ('That's it, you're going in the soup')")
@@ -258,3 +262,81 @@ C["whale_boss"] = dict(title="Aspidochelone, the Island-Whale", size=(256, 168),
 def build_svg(name, f):
     c = C[name]; w, h = c["size"]
     return doc(w, h, c["build"](f), seed=11 + f)
+
+# ---------------- Fiery Lion (bestiary lion with a mane of flame) ----------------
+def flame(cx, cy, ang, L, c1="terra", c2="gold"):
+    d = f"M-3,0 Q-4,{-L * 0.5} 0,{-L} Q4,{-L * 0.5} 3,0 Z"
+    inner = f"M-1.4,0 Q-1.8,{-L * 0.45} 0,{-L * 0.7} Q1.8,{-L * 0.45} 1.4,0 Z"
+    return g(fill(d, c1, 90, "dark", 0.9) + fill(inner, c2, 90, None), f"translate({cx} {cy}) rotate({ang})")
+
+def lion(f):
+    return g(_lion(f), "translate(2 6) scale(0.9)")
+def _lion(f):
+    roar = f == 2
+    fl, bl = ((-20, 20), (16, -18), (0, 0))[f]
+    s = limb(22, 40, 18, 5, "olive", bl, "paw", "olive") + limb(56, 38, 18, 5, "olive", fl, "paw", "olive")
+    s += stem("M14,30 Q4,26 6,14 Q8,8 4,4", "ochre", 2.4, False) + flame(4, 6, -20, 9)
+    body = "M13,28 Q34,20 58,25 L63,40 Q46,47 24,45 Q11,41 13,28 Z"
+    s += fill(body, "ochre", 160)
+    s += stem("M22,28 Q24,34 22,40 M30,26 Q32,33 30,40", "brown", 0.8, False)
+    s += limb(27, 40, 18, 5, "ochre", -bl * 0.6, "paw", "ochre") + limb(52, 38, 18, 5, "ochre", -fl * 0.6, "paw", "ochre")
+    for i, a in enumerate(range(-120, 101, 22)):   # mane of flames radiating from behind the head
+        L = 15 + (i % 2) * 6 + (4 if roar else 0)
+        s += flame(64 + 4 * math.sin(math.radians(a)), 19 - 4 * math.cos(math.radians(a)), a, L, ("terra", "terra", "ochre")[i % 3], "gold")
+    head = "M58,12 Q66,6 74,10 L79,17 Q80,22 76,24 L69,26 Q60,26 57,20 Q56,15 58,12 Z"
+    s += fill(head, "ochre", 0)
+    s += stem("M64,13 L69,14", "dark", 1.2, False) + dot(67, 15.5, 1, "gold", "dark")
+    if roar:
+        s += fill("M70,20 L80,17 L80,27 L70,24 Z", "terra", 0, "dark", 1)
+        for i, (dx, dy) in enumerate(((8, -4), (12, 0), (8, 4))):
+            pass
+    else:
+        s += stem("M70,22 L78,21", "dark", 0.9, False)
+    return s
+C["fiery_lion"] = dict(title="Fiery Lion", size=(86, 64), frames=3, build=lion,
+                       behaviour="walker; its mane is burning - stomping it singes you unless you're mounted; roars out a fireball (frame 3)")
+
+# ---------------- Camel-Dragon (two-faced, with a second head on its tail) ----------------
+def camel_dragon(f):
+    a = (0, 1)[f]
+    s = ""
+    for i, ang in enumerate(range(-70, 71, 20)):   # fan wing on the hump
+        d = "M-3,0 Q-5,-14 0,-22 Q5,-14 3,0 Z"
+        s += g(fill(d, ("grey", "sky")[i % 2], 90, "dark", 0.9), f"translate(40 30) rotate({ang + (6 if a else 0)})")
+    s += fill("M36,30 a6,6 0 1,0 8,0 Z", "gold", 0, "dark", 1)
+    # tail rising to a second little dragon-head
+    s += stem("M18,44 Q4,44 6,30 Q8,20 16,18", "ochre", 3.6, False) + stem("M18,44 Q4,44 6,30 Q8,20 16,18", "dark", 0.6, False)
+    s += fill("M12,16 Q16,10 22,13 L25,16 Q24,19 20,19 Q14,20 12,16 Z", "blue", 0, "dark", 1) + dot(18, 14.6, 0.8, "dark")
+    s += stem("M25,16.5 L28,16 M28,16 l1,-1 M28,16 l1,1", "terra", 0.8, False)
+    body = "M14,42 Q20,26 40,30 Q58,26 64,40 L62,52 Q40,56 18,52 Q12,48 14,42 Z"
+    s += fill(body, "ochre", 150)
+    s += clip("cdb", body, fill("M0,30 L40,30 L40,60 L0,60 Z", "blue", 150, None))   # half blue, half ochre
+    s += stem(body, "dark", 1.6)
+    for x, ang in ((22, (10, -10)[a]), (34, (-10, 10)[a]), (50, (10, -10)[a]), (58, (-10, 10)[a])):
+        s += limb(x, 50, 9, 4.2, "blue" if x < 40 else "ochre", ang, "hoof")
+    neck = "M56,34 Q62,22 66,16 L74,18 Q66,28 64,44 Z"
+    s += fill(neck, "ochre", 110)
+    head = "M62,10 Q68,4 75,6 L80,12 Q82,17 78,19 L71,20 Q64,20 62,15 Z"
+    s += fill(head, "ochre", 0)
+    s += clip("cdh", head, fill("M60,0 L70,0 L70,24 L60,24 Z", "blue", 0, None)) + stem(head, "dark", 1.4)
+    s += fill("M66,6 L64,0.5 L69,4.5 Z", "blue", 90, "dark", 0.8)
+    s += dot(68.5, 10.5, 1, "dark") + dot(72.5, 10.5, 1, "dark")    # two faces = two pairs of eyes
+    s += stem("M76,16 L80,15.6", "dark", 0.8, False) + dot(79.5, 13, 0.6, "dark")
+    return s
+C["camel_dragon"] = dict(title="Camel-Dragon", size=(84, 64), frames=2, build=camel_dragon,
+                         behaviour="slow walker with a second head on its tail, so it bites from behind too; stomp the hump")
+
+# ---------------- projectiles ----------------
+def fireball(f):
+    s = ""
+    for i in range(3):
+        x = 4 + i * 6 + (f * 2)
+        s += fill(f"M{x},8 Q{x + 3},{3 - f} {x + 8},8 Q{x + 3},{13 + f} {x},8 Z", ("terra", "ochre", "gold")[i], 0, "dark" if i == 0 else None, 0.9)
+    return s
+C["fireball"] = dict(title="Fireball", size=(24, 16), frames=2, build=fireball, behaviour="projectile from the Fiery Lion and the Great Dragon")
+
+def soup_glob(f):
+    s = fill("M8,2 Q15,4 14,10 Q12,15 6,14 Q1,12 2,7 Q3,2 8,2 Z", "sage", 0, "dark", 1.1)
+    s += dot(6 + f, 7, 1.3, "ochre") + dot(10, 10 - f, 1, "terra")
+    return s
+C["soup_glob"] = dict(title="Soup Glob", size=(16, 16), frames=2, build=soup_glob, behaviour="projectile flung by the Soup Cat and the Cat King")

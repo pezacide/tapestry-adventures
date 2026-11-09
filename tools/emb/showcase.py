@@ -22,7 +22,7 @@ for i, n in enumerate(("masonry", "roundel_block", "masonry", "roundel_used", "m
 for i in range(4): put(fr("scenery", "bezant", i), 232 + 48 * i, GY - 190)
 put(L("scenery/tower_top.png"), 540, GY - 96); put(L("scenery/tower_body.png"), 540, GY - 48)
 put(L("scenery/gonfanon.png"), 640, GY - 144)
-put(fr("enemies", "whale_boss", 1), 704, 540 - 168)
+put(fr("bosses", "whale_boss", 1), 704, 540 - 168)
 put(L("scenery/ship.png"), 724, 540 - 168 - 30)
 put(fr("enemies", "owl_face"), 470, GY - 260)
 put(fr("enemies", "wyvern"), 380, GY - 240)
@@ -33,4 +33,24 @@ for n, x in (("snail_hound", 262), ("killer_hare", 330), ("bayeux_hound", 380), 
     e = fr("enemies", n); put(e, x, GY - e.height / K)
 cat = fr("enemies", "soup_cat", 2); put(cat, 540 + 8, GY - 96 - 82)
 sc.convert("RGB").save(os.path.join(R, "showcase.png"), optimize=True)
+
+# ---- second scene: the cast (mount, princess, bosses, new beasts) ----
+sc = L("backgrounds/linen.png")
+put(L("backgrounds/far.png"), 0, 0)
+for x in range(0, 960, 384): put(L("scenery/border.png"), x, 0)
+put(L("scenery/inscription.png"), 100, 70)
+GY = 470
+for x in range(0, 960, 48):
+    put(L("scenery/ground_top.png"), x, GY); put(L("scenery/ground_fill.png"), x, GY + 48)
+put(fr("bosses", "cat_king", 1), 770, GY - 170)
+put(fr("princess", "aelfgyva", 2), 900, GY - 100)
+put(fr("bosses", "great_dragon", 2), 440, GY - 175)
+put(fr("bosses", "cockatrice", 1), 30, GY - 150 - 120)
+put(fr("enemies", "fiery_lion", 2), 250, GY - 64)
+put(fr("enemies", "camel_dragon", 0), 345, GY - 64)
+m = L(A["heroes"]["rubeus"]["mounted"]["file"]); fw = A["heroes"]["rubeus"]["mounted"]["frame"][0] * K
+put(m.crop((3 * fw, 0, 4 * fw, m.height)), 120, GY - 128 - 10)
+put(fr("mounts", "bayard", 0), 20, GY - 84)
+put(fr("projectiles", "fireball", 0), 225, GY - 50)
+sc.convert("RGB").save(os.path.join(R, "showcase_cast.png"), optimize=True)
 print("ok")
