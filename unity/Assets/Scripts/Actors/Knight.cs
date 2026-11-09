@@ -1,0 +1,164 @@
+using UnityEngine;
+
+namespace Tapestry
+{
+    /// <summary>The player: Mario-style running and jumping, plus riding Bayard.</summary>
+    public class Knight
+    {
+        const float FootW = 0.62f, FootH = 1.72f, RideW = 1.25f, RideH = 2.3f;
+        const float RiseGravity = 24f, FallGravity = 60f, MaxFall = 17f;
+
+        public readonly Body Body;
+        public KnightDef Def { get; private set; }
+        public bool Mounted { get; private set; }
+        public bool Dead { get; private set; }
+        public int Hearts = 3;
+        public bool FacingRight { get { return view.FacingRight; } }
+
+        readonly SpriteView view;
+        float invuln, coyote, jumpBuffer, flutterTime, anim;
+        bool flutterUsed, frozen;
+
+        public Knight(KnightDef def, Vector2 pos, Transform parent)
+        {
+            Def = def;
+            Body = new Body(pos, FootW, FootH);
+            view = new SpriteView(def.Sheet, parent, 20);
+            view.SetPosition(pos);
+        }
+
+        public void SetKnight(KnightDef def)
+        {
+            Def = def;
+            view.SetSheet(Mounted ? def.MountedSheet : def.Sheet);
+        }
+
+        public void Freeze() { frozen = true; Body.Vel = Vector2.zero; }
+
+        public void Tick(float dt, Level lv)
+        {
+            if (Dead)
+            {
+                Body.Vel.y -= FallGravity * 0.6f * dt;
+                Body.Pos += Body.Vel * dt;
+                view.SetPosition(Body.Pos);
+                return;
+            }
+            if (frozen) { Animate(dt); view.SetPosition(Body.Pos); return; }
+
+            float h = TapestryInput.Horizontal;
+            float speedMul = Mounted ? 1.2f : 1f;
+            float target = h * (TapestryInput.RunHeld ? Def.Run : Def.Walk) * speedMul;
+            float accel;
+            if (Body.Grounded || coyote > 0f)
+                accel = h != 0f && Mathf.Sign(h) != Mathf.Sign(Body.Vel.x) && Mathf.Abs(Body.Vel.x) > 0.5f ? 55f : (h != 0f ? 28f : 34f);
+            else
+                accel = 18f;
+            Body.Vel.x = Mathf.MoveTowards(Body.Vel.x, target, accel * dt);
+            if (h > 0.1f) view.Face(true); else if (h < -0.1f) view.Face(false);
+
+            // jump with coyote time and a jump buffer, so it feels forgiving
+            if (Body.Grounded) { coyote = 0.1f; flutterUsed = false; }
+            else coyote -= dt;
+            if (TapestryInput.JumpPressed) jumpBuffer = 0.12f; else jumpBuffer -= dt;
+            if (jumpBuffer > 0f && coyote > 0f)
+            {
+                Body.Vel.y = Def.Jump + Mathf.Abs(Body.Vel.x) * 0.12f + (Mounted ? 1.4f : 0f);
+                jumpBuffer = coyote = 0f;
+            }
+
+            // dismount
+            if (Mounted && TapestryInput.DownPressed && Body.Grounded) Dismount(false);
+
+            float g = Body.Vel.y > 0f && TapestryInput.JumpHeld ? RiseGravity : FallGravity;
+            float maxFall = MaxFall;
+            if (Def.Glide && !Mounted && Body.Vel.y < 0f && TapestryInput.JumpHeld) maxFall = 2.6f;
+
+            // Bayard's flutter-leap: once per jump, hold JUMP while falling for a short boost (like Yoshi)
+            if (Mounted && !Body.Grounded && Body.Vel.y < 0f && TapestryInput.JumpHeld && !flutterUsed) { flutterUsed = true; flutterTime = 0.45f; }
+            if (flutterTime > 0f)
+            {
+                flutterTime -= dt;
+                if (TapestryInput.JumpHeld) { g = -28f; if (Body.Vel.y > 3.5f) Body.Vel.y = 3.5f; }
+                else flutterTime = 0f;
+            }
+
+            Body.Vel.y = Mathf.Max(Body.Vel.y - g * dt, -maxFall);
+            Body.Step(lv, dt);
+
+            if (Body.HitCeiling) GameManager.I.KnightHitBlock(Body.CeilX, Body.CeilY);
+
+            if (invuln > 0f) invuln -= dt;
+            view.Renderer.enabled = invuln <= 0f || Mathf.Repeat(invuln, 0.16f) > 0.08f;
+            Animate(dt);
+            view.SetPosition(Body.Pos);
+        }
+
+        void Animate(float dt)
+        {
+            int frame;
+            if (!Body.Grounded && !frozen) frame = 3;
+            else if (Mathf.Abs(Body.Vel.x) < 0.3f) frame = 0;
+            else
+            {
+                anim += dt * (2f + Mathf.Abs(Body.Vel.x) * 0.9f);
+                frame = 1 + ((int)anim % 2);
+            }
+            view.SetFrame(frame);
+        }
+
+        /// <summary>Spring off a stomped beast.</summary>
+        public void Bounce()
+        {
+            Body.Vel.y = TapestryInput.JumpHeld ? 13f : 9f;
+            flutterUsed = false;
+        }
+
+        public bool Invulnerable { get { return invuln > 0f || Dead; } }
+
+        public void Hurt()
+        {
+            if (Invulnerable) return;
+            if (Mounted)
+            {
+                Dismount(true);
+                invuln = 1.4f;
+                return;
+            }
+            Hearts--;
+            invuln = 1.6f;
+            if (Hearts <= 0) Die();
+        }
+
+        public void Die()
+        {
+            if (Dead) return;
+            Dead = true;
+            if (Mounted) { Mounted = false; view.SetSheet(Def.Sheet); }
+            view.Renderer.enabled = true;
+            view.SetFrame(3);
+            view.Renderer.flipY = true;
+            Body.Vel = new Vector2(0f, 11f);
+            GameManager.I.PlayerDied();
+        }
+
+        public void Mount()
+        {
+            Mounted = true;
+            Body.W = RideW; Body.H = RideH;
+            view.SetSheet(Def.MountedSheet);
+        }
+
+        void Dismount(bool thrown)
+        {
+            Mounted = false;
+            Body.W = FootW; Body.H = FootH;
+            view.SetSheet(Def.Sheet);
+            GameManager.I.ReleaseBayard(Body.Pos, FacingRight, thrown);
+            Body.Vel.y = thrown ? 10f : 7f;
+            Body.Vel.x = thrown ? (FacingRight ? -3f : 3f) : 0f;
+        }
+
+        public void Destroy() { view.Destroy(); }
+    }
+}

@@ -21,6 +21,9 @@ The art imitates Bayeux wool embroidery: laid-and-couched fills, stem-stitch out
 
 Each PNG is rendered at **2x** its design size (see `scale` in the atlas). It is meant to be drawn at half size in a 960x540 game. Sprite sheets lay their frames out left to right, and sprites face right.
 
+## The game (Unity)
+The playable game is in [`unity/`](unity/README.md): open that folder in Unity 6 and press Play. That README has the setup steps, controls and build notes. `assets/level1_preview.png` shows the whole of World 1-1.
+
 ## Regenerating
 All the art is code: `tools/emb/` holds SVG drawings plus an embroidery filter, and Chromium renders them.
 
@@ -28,6 +31,9 @@ All the art is code: `tools/emb/` holds SVG drawings plus an embroidery filter, 
 python3 tools/emb/build.py      # renders all assets (Pillow + Node Playwright)
 python3 tools/emb/showcase.py   # composes assets/showcase.png and showcase_cast.png
 python3 tools/emb/gallery.py    # writes assets/gallery.html
+python3 tools/unity/export_art.py    # copies the art into the Unity project + ArtCatalog.cs
+python3 tools/unity/make_level1.py   # regenerates World 1-1's map
+python3 tools/unity/preview_level.py # renders assets/level1_preview.png
 ```
 
 - To recolour a knight, edit the `KNIGHTS` table in `knights.py`.
