@@ -1,0 +1,261 @@
+{
+  "heroes": {
+    "rubeus": {
+      "title": "Sir Rubeus of the Lion",
+      "trait": "Balanced - the classic all-rounder",
+      "frame": [
+        20,
+        24
+      ],
+      "frames": [
+        "idle",
+        "walk1",
+        "walk2",
+        "jump"
+      ],
+      "file": "heroes/rubeus.png"
+    },
+    "azura": {
+      "title": "Dame Azura of the Swan",
+      "trait": "Floaty jumper - glides a little at the top of a jump",
+      "frame": [
+        20,
+        24
+      ],
+      "frames": [
+        "idle",
+        "walk1",
+        "walk2",
+        "jump"
+      ],
+      "file": "heroes/azura.png"
+    },
+    "verdain": {
+      "title": "Sir Verdain of the Stag",
+      "trait": "Heavy and strong - can bash bricks while running",
+      "frame": [
+        20,
+        24
+      ],
+      "frames": [
+        "idle",
+        "walk1",
+        "walk2",
+        "jump"
+      ],
+      "file": "heroes/verdain.png"
+    },
+    "aurelia": {
+      "title": "Lady Aurelia of the Sun",
+      "trait": "Swift runner - fastest on foot, lighter jumps",
+      "frame": [
+        20,
+        24
+      ],
+      "frames": [
+        "idle",
+        "walk1",
+        "walk2",
+        "jump"
+      ],
+      "file": "heroes/aurelia.png"
+    }
+  },
+  "enemies": {
+    "snail_knight": {
+      "title": "Snail Knight",
+      "behaviour": "walker; stomp once to hide in shell, kick the shell",
+      "frame": [
+        16,
+        16
+      ],
+      "frame_count": 3,
+      "file": "enemies/snail_knight.png"
+    },
+    "bishop_fox": {
+      "title": "Bishop Fox",
+      "behaviour": "walker; sneaky - speeds up when a knight is near",
+      "frame": [
+        16,
+        16
+      ],
+      "frame_count": 2,
+      "file": "enemies/bishop_fox.png"
+    },
+    "hare_jouster": {
+      "title": "Hare Jouster",
+      "behaviour": "hopper; hops in an arc, lance points forward (hurts from front)",
+      "frame": [
+        16,
+        16
+      ],
+      "frame_count": 2,
+      "file": "enemies/hare_jouster.png"
+    },
+    "winged_boar": {
+      "title": "Winged Boar",
+      "behaviour": "flyer; swoops in a sine wave, stompable",
+      "frame": [
+        16,
+        16
+      ],
+      "frame_count": 2,
+      "file": "enemies/winged_boar.png"
+    },
+    "thistle_hedgehog": {
+      "title": "Thistle Hedgehog",
+      "behaviour": "walker; spiny back - do NOT stomp, must be bumped from below or fireballed",
+      "frame": [
+        16,
+        16
+      ],
+      "frame_count": 2,
+      "file": "enemies/thistle_hedgehog.png"
+    },
+    "wyrm_boss": {
+      "title": "Wyrm of the Great Hall",
+      "behaviour": "boss; paces the bridge, spits fireballs, defeat by 3 stomps on the head / axe the bridge",
+      "frame": [
+        32,
+        24
+      ],
+      "frame_count": 1,
+      "file": "enemies/wyrm_boss.png"
+    }
+  },
+  "scenery": {
+    "ground_top": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/ground_top.png"
+    },
+    "ground_fill": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/ground_fill.png"
+    },
+    "brick": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/brick.png"
+    },
+    "platform": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/platform.png"
+    },
+    "block_shield": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/block_shield.png"
+    },
+    "block_used": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/block_used.png"
+    },
+    "tower_top": {
+      "size": [
+        32,
+        16
+      ],
+      "file": "scenery/tower_top.png"
+    },
+    "tower_body": {
+      "size": [
+        32,
+        16
+      ],
+      "file": "scenery/tower_body.png"
+    },
+    "cloud": {
+      "size": [
+        48,
+        20
+      ],
+      "file": "scenery/cloud.png"
+    },
+    "tree": {
+      "size": [
+        32,
+        48
+      ],
+      "file": "scenery/tree.png"
+    },
+    "flag": {
+      "size": [
+        16,
+        48
+      ],
+      "file": "scenery/flag.png"
+    },
+    "bush": {
+      "size": [
+        32,
+        16
+      ],
+      "file": "scenery/bush.png"
+    },
+    "flowers": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/flowers.png"
+    },
+    "border_strip": {
+      "size": [
+        32,
+        16
+      ],
+      "file": "scenery/border_strip.png"
+    },
+    "coin": {
+      "size": [
+        16,
+        16
+      ],
+      "frame_count": 4,
+      "file": "scenery/coin.png",
+      "note": "spinning florin"
+    }
+  },
+  "backgrounds": {
+    "sky": {
+      "size": [
+        480,
+        270
+      ],
+      "file": "backgrounds/sky.png",
+      "tileable_x": false
+    },
+    "far": {
+      "size": [
+        480,
+        270
+      ],
+      "file": "backgrounds/far.png",
+      "tileable_x": true
+    },
+    "near": {
+      "size": [
+        480,
+        270
+      ],
+      "file": "backgrounds/near.png",
+      "tileable_x": true
+    }
+  }
+}
