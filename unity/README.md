@@ -34,6 +34,10 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **Beating it:** stomp its crowned head three times, or shoot it (three bolts count as one stomp), or slip past it and strike the axe beyond. The bridge falls and the Cockatrice with it.
   - **The ending:** Brother Odo the monk thanks you: the Princess is in another castle.
   - It has its own castle march and boss music, and the boss has its own tapestry health bar.
+- **Worlde 2-1, Ye Shipwrights' Yarde** (World 2: the Bayeux Channel crossing): the Norman shore. It has sand underfoot and timber crates for bricks, with the fleet sailing past behind.
+  - **Log piles** roll logs at you. Jump them or bounce off their tops; bolts split them.
+  - **Gulls** wheel overhead and dive at you; **crabs** scuttle and hop along the beach.
+  - It has a rolling 6/8 sea dance (D Mixolydian) and ends at **Ye Harbour Gate**.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 

@@ -42,6 +42,8 @@ namespace Tapestry
                 case "unicorn": speed = 1.2f; break;
                 case "wyvern": gravity = false; break;
                 case "owl_face": gravity = false; break;
+                case "gull": gravity = false; break;
+                case "crab": speed = 2f; break;
                 case "soup_cat": speed = 0f; timer = 1.2f; break;
             }
             view.SetPosition(pos);
@@ -162,6 +164,31 @@ namespace Tapestry
                         if (timer > 1.1f) Body.Vel = new Vector2(Mathf.Sign(Body.Vel.x == 0f ? 1f : Body.Vel.x) * 3f, 4f);
                         if (Body.Pos.y > 14f) Remove();
                     }
+                    break;
+
+                case "gull":
+                    // wheels to and fro over its patch of shore, then dives at a knight beneath it
+                    if (!swooping)
+                    {
+                        Body.Pos.y = Mathf.MoveTowards(Body.Pos.y, home.y + Mathf.Sin(timer * 2f) * 0.4f, 3f * dt);
+                        Body.Vel = new Vector2(dir * 2.4f, 0f);
+                        if (Body.Pos.x < home.x - 4f) dir = 1f; else if (Body.Pos.x > home.x + 4f) dir = -1f;
+                        view.Face(dir > 0f);
+                        WalkFrames(0, 1, 5f);
+                        if (Mathf.Abs(dx) < 2f && p.Body.Pos.y < Body.Pos.y - 1f && timer > 1.5f)
+                        { swooping = true; timer = 0f; Body.Vel = (p.Body.Pos + new Vector2(0f, 0.8f) - Body.Pos).normalized * 7f; Audio.Play("jump", 0.4f); }
+                    }
+                    else
+                    {
+                        view.SetFrame(1);
+                        view.Face(Body.Vel.x > 0f);
+                        if (timer > 0.7f || Body.Pos.y < p.Body.Pos.y + 0.6f) { swooping = false; timer = 0f; }   // pull up and climb back
+                    }
+                    break;
+
+                case "crab":
+                    Walk(lv, true); WalkFrames(0, 1, 7f);
+                    if (Body.Grounded && timer > 1.8f) { timer = 0f; Body.Vel.y = 7f; }
                     break;
 
                 case "soup_cat":

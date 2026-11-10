@@ -11,7 +11,7 @@ All of these works are centuries old and in the public domain. We redraw them in
 | World | Tapestry | Look | Signature new mechanic | Boss | Status |
 |---|---|---|---|---|---|
 | 1 | Bayeux Tapestry | wool embroidery on bare linen | Bayard, shells, lifts | The Cockatrice | **done** |
-| 2 | Bayeux Tapestry, the Channel crossing | embroidery; sea and ships | swimming, rocking longships, wind | Aspidochelone, the Island-Whale | next |
+| 2 | Bayeux Tapestry, the Channel crossing | embroidery; sea and ships | swimming, rocking longships, wind | Aspidochelone, the Island-Whale | **in progress** (2-1 done) |
 | 3 | Tapestry of Creation (Girona) | Romanesque needlework; roundels and compartments | wind-heads that blow you, sky platforms | Ye Foure Windes | planned |
 | 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | planned |
 | 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | planned |

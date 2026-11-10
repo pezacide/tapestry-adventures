@@ -36,6 +36,8 @@ namespace Tapestry
         bool carry; int carryHearts; bool carryCrossbow, carryMounted;
         // castles: flails, the boss, the axe that drops the bridge, and the rescued monk
         readonly List<Flail> flails = new List<Flail>();
+        readonly List<Log> logs = new List<Log>();
+        readonly List<Vector2> logPiles = new List<Vector2>(); readonly List<float> logTimers = new List<float>();
         Boss boss;
         bool bossMusic, deathFire;
         int relicCombo;   // beasts smitten in a row by the holy relique
@@ -161,10 +163,10 @@ namespace Tapestry
         {
             if (world != null) Destroy(world.gameObject);
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
-            flails.Clear(); boss = null; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
-            level = new Level(L.Map, world);
+            level = new Level(L.Map, world, L);
 
             foreach (var d in L.Props)
                 Art.Make(d.Key, world, new Vector2(d.X, level.GroundAt(d.X)), -20);
@@ -181,6 +183,9 @@ namespace Tapestry
                     case 'G': Art.Make("scenery/goal_pole", world, p, 5); break;
                     case 's': kind = "snail_hound"; break;
                     case 'S': kind = "snail_moss"; break;
+                    case 'g': kind = "gull"; break;
+                    case 'x': kind = "crab"; break;
+                    case 'Q': logPiles.Add(p); logTimers.Add(1.5f); Art.Make("scenery/log_pile", world, p, 3); break;
                     case 'F': flails.Add(new Flail(p, world, flails.Count % 2 == 0, flails.Count * 1.7f)); break;
                     case 'K': boss = new Boss(p, world); break;
                     case 'A': hasAxe = true; axePos = p; axeView = Art.Make("scenery/bridge_axe", world, p, 5); break;
@@ -434,6 +439,14 @@ namespace Tapestry
             }
             foreach (var f in flails)
                 if (f.Hits(pb)) player.Hurt();
+            foreach (var lg in logs)
+            {
+                if (lg.Removed || !pb.Overlaps(lg.Body)) continue;
+                if (player.Blessed) { lg.Destroy(); AddScore(200, lg.Body.Pos + new Vector2(0f, 1f)); continue; }
+                bool onTop = pb.Vel.y < 0f && pb.PrevBottom >= lg.Body.Pos.y + lg.Body.H * 0.5f;
+                if (onTop) { player.Bounce(); Audio.Play("bump", 0.6f); }   // bounce off it: logs can't be stomped flat
+                else player.Hurt();
+            }
             if (boss != null && boss.Active && !boss.Dead && pb.Overlaps(boss.Body))
             {
                 bool onCrown = pb.Vel.y < 0f && pb.PrevBottom >= boss.Body.Pos.y + boss.Body.H * 0.6f;
@@ -452,6 +465,9 @@ namespace Tapestry
                     continue;
                 }
                 if (boss != null && boss.Active && !boss.Dead && s.Body.Overlaps(boss.Body)) { boss.Hit(0.34f); s.Destroy(); continue; }
+                foreach (var lg in logs)   // a bolt splits a log
+                    if (!lg.Removed && s.Body.Overlaps(lg.Body)) { lg.Destroy(); s.Destroy(); AddScore(200, lg.Body.Pos + new Vector2(0f, 1f)); break; }
+                if (s.Removed) continue;
                 foreach (var e in enemies)   // a crossbowe bolt fells any beast, burning lions too
                     if (e.Active && e.Alive && !e.Carried && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
             }
@@ -540,6 +556,21 @@ namespace Tapestry
             foreach (var s in shots) s.Tick(dt, level);
             foreach (var b in bezants) b.Tick(dt);
             foreach (var d in debris) d.Tick(dt);
+            // log piles roll a log toward the knight every few seconds while he is near
+            for (int i = 0; i < logPiles.Count; i++)
+            {
+                var lp = logPiles[i];
+                if (Mathf.Abs(lp.x - player.Body.Pos.x) > HalfWidth + 3f) continue;
+                logTimers[i] -= dt;
+                if (logTimers[i] <= 0f)
+                {
+                    logTimers[i] = 3.2f;
+                    float d = player.Body.Pos.x < lp.x ? -1f : 1f;
+                    logs.Add(new Log(lp + new Vector2(d * 1.2f, 0.05f), d, world));
+                    Audio.Play("bump", 0.5f);
+                }
+            }
+            foreach (var lg in logs) lg.Tick(dt, level);
             foreach (var it in items) it.Tick(dt, level);
             if (bayard != null)
             {
@@ -562,6 +593,7 @@ namespace Tapestry
             shots.RemoveAll(s => s.Removed);
             bezants.RemoveAll(b => b.Removed);
             debris.RemoveAll(d => d.Removed);
+            logs.RemoveAll(l => l.Removed);
             items.RemoveAll(i => i.Removed);
         }
 

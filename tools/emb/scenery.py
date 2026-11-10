@@ -302,6 +302,69 @@ def aura():
     return s
 S["aura"] = (128, 152, aura, False)
 
+# ---------------- the shore (World 2) ----------------
+def sand_top():
+    s = fill("M0,8 L48,8 L48,48 L0,48 Z", "buff", 0, None)
+    for i, y in enumerate((18, 28, 38)):
+        s += stem(f"M0,{y} q6,-2 12,0 q6,2 12,0 q6,-2 12,0 q6,2 12,0", ("ochre", "cream", "ochre")[i], 1.2, False)
+    s += fill("M0,4 q6,-3 12,0 q6,3 12,0 q6,-3 12,0 q6,3 12,0 L48,11 q-6,2 -12,0 q-6,-2 -12,0 q-6,2 -12,0 q-6,-2 -12,0 Z", "cream", 0, "dark", 1.2)
+    s += dot(9, 14, 1.4, "rose") + dot(33, 22, 1.2, "white") + stem("M40,13 l3,-2 l3,2", "terra", 0.9, False)   # shells
+    return s
+S["sand_top"] = (T, T, sand_top, False)
+
+def sand_fill():
+    s = fill("M0,0 L48,0 L48,48 L0,48 Z", "buff", 0, None)
+    for i, y in enumerate((6, 16, 26, 36, 46)):
+        s += stem(f"M0,{y} q6,-2 12,0 q6,2 12,0 q6,-2 12,0 q6,2 12,0", ("ochre", "cream")[i % 2], 1.2, False)
+    return s
+S["sand_fill"] = (T, T, sand_fill, False)
+
+def timber():
+    """A timber crate from the shipwrights' yard: breaks like a brick."""
+    s = fill("M1,1 L47,1 L47,47 L1,47 Z", "ochre", 0, "dark", 1.6)
+    s += stem("M1,12.5 L47,12.5 M1,24 L47,24 M1,35.5 L47,35.5", "brown", 1, False)
+    s += stem("M4,4 L44,44 M44,4 L4,44", "brown", 3, False) + stem("M4,4 L44,44 M44,4 L4,44", "dark", 0.6, False)
+    for x, y in ((5, 5), (43, 5), (5, 43), (43, 43)): s += dot(x, y, 1.2, "grey", "dark")
+    return s
+S["timber"] = (T, T, timber, False)
+
+def log_roll():
+    """A rolling log, seen end-on (the game spins it as it rolls)."""
+    s = fill("M24,2 a22,22 0 1,0 0.1,0 Z", "brown", 30, "dark", 1.8)
+    s += fill("M24,7 a17,17 0 1,0 0.1,0 Z", "buff", 0, "dark", 1)
+    for r in (12, 7, 3): s += stem(f"M{24 - r},24 a{r},{r} 0 1,0 {2 * r},0 a{r},{r} 0 1,0 {-2 * r},0", "ochre", 1, False)
+    s += stem("M24,10 L24,20", "brown", 1.2, False)   # a crack, so the spin shows
+    return s
+S["log"] = (T, T, log_roll, False)
+
+def log_pile():
+    s = ""
+    for i, (cx, cy) in enumerate(((14, 70), (40, 70), (66, 70), (27, 48), (53, 48), (40, 26))):
+        s += fill(f"M{cx},{cy - 12} a12,12 0 1,0 0.1,0 Z", "brown", 30, "dark", 1.3) + fill(f"M{cx},{cy - 8} a8,8 0 1,0 0.1,0 Z", "buff", 0, "dark", 0.8)
+        s += stem(f"M{cx - 4},{cy} a4,4 0 1,0 8,0", "ochre", 0.8, False)
+    s += stem("M2,82 L78,82", "brown", 3, False) + stem("M6,82 L2,94 M74,82 L78,94", "brown", 2.4, False)
+    return s
+S["log_pile"] = (80, 96, log_pile, False)
+
+def shore_far():
+    """The sea, with the fleet of longships sailing on it."""
+    s = ""
+    for i, y in enumerate(range(350, BH + 20, 22)):
+        c = ("sky", "blue", "sky", "indigo")[i % 4]
+        s += fill(f"M0,{y} " + " ".join(f"q12,{-6 if (j + i) % 2 else -3} 24,0" for j in range(42)) + f" L{BW + 20},{BH} L0,{BH} Z", c, 0, "dark", 1)
+    for x, y in ((80, 290), (380, 300), (680, 286)):
+        s += g(underdraw(ship()) .replace('opacity="0.33"', 'opacity="0.55"'), f"translate({x} {y}) scale(1.0)")
+    return s
+
+def shore_near():
+    items = []
+    for x in range(40, BW, 320):
+        items.append((x, g(log_pile(), "translate(0 430) scale(1.0)")))
+    for x in range(200, BW, 320):   # stumps of the felled trees
+        st = fill("M0,500 L0,476 Q14,468 28,476 L28,500 Z", "brown", 90, "dark", 1.2) + fill("M0,476 Q14,468 28,476 Q14,482 0,476 Z", "buff", 0, "dark", 1)
+        items.append((x, st))
+    return _wrap(items)
+
 # ---------------- castle (World 1-4) ----------------
 def fire_pit(f):
     def fn():
@@ -513,3 +576,6 @@ S["bg_crypt_near"] = (BW, BH, crypt_near, False)
 
 S["bg_castle_far"] = (BW, BH, castle_far, False)
 S["bg_castle_near"] = (BW, BH, castle_near, False)
+
+S["bg_shore_far"] = (BW, BH, shore_far, False)
+S["bg_shore_near"] = (BW, BH, shore_near, False)

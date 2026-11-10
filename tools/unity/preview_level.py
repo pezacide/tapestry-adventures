@@ -27,12 +27,14 @@ def render(n):
   for key, x in props:
       x = float(x); gy = next((y + 1 for y in range(H - 1, -1, -1) if get(int(x), y) in "#BXHT?t1MWRV" and not (get(int(x), y) == "V" and y >= 9)), 0)
       put(load(key), x, gy)
-  tiles = {c: "scenery/masonry" for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"; tiles["V"] = "scenery/vault"; tiles["F"] = "scenery/vault"
+  sk = lambda k, d: (re.search(k + r' = "([^"]+)"', src) or re.search("(" + d + ")", d)).group(1)
+  brick, gtop, gfill = sk("Brick", "scenery/masonry"), sk("GroundTop", "scenery/ground_top"), sk("GroundFill", "scenery/ground_fill")
+  tiles = {c: brick for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"; tiles["V"] = "scenery/vault"; tiles["F"] = "scenery/vault"
   done = set()
   for y in range(H):
       for x in range(W):
           c = get(x, y)
-          if c == "#": put(load("scenery/ground_fill" if get(x, y + 1) == "#" else "scenery/ground_top"), x + 0.5, y)
+          if c == "#": put(load(gfill if get(x, y + 1) == "#" else gtop), x + 0.5, y)
           elif c in tiles: put(load(tiles[c]), x + 0.5, y)
           elif c == "=": put(load("scenery/plank"), x + 0.5, y + 1 - 18 / 48)
           elif c == "^": put(load("scenery/canopy"), x + 0.5, y + 1 - 26 / 48)
@@ -41,7 +43,7 @@ def render(n):
           elif c in "LE": put(load("scenery/lift"), x + 1.5, y + 1 - 14 / 48)
           elif c in "Tt" and (x, y) not in done:
               done.add((x, y)); done.add((x + 1, y)); put(load("scenery/tower_top" if c == "T" else "scenery/tower_body"), x + 1, y)
-  spr = {"s": ("enemies/snail_hound", 3), "S": ("enemies/snail_moss", 3), "h": ("enemies/killer_hare", 2), "l": ("enemies/fiery_lion", 3), "d": ("enemies/bayeux_hound", 2),
+  spr = {"s": ("enemies/snail_hound", 3), "S": ("enemies/snail_moss", 3), "g": ("enemies/gull", 2), "x": ("enemies/crab", 2), "Q": ("scenery/log_pile", 1), "h": ("enemies/killer_hare", 2), "l": ("enemies/fiery_lion", 3), "d": ("enemies/bayeux_hound", 2),
          "c": ("enemies/camel_dragon", 2), "w": ("enemies/wyvern", 2), "u": ("enemies/unicorn", 2), "O": ("enemies/owl_face", 2), "k": ("enemies/soup_cat", 3)}
   for y in range(H):
       for x in range(W):

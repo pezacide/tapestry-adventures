@@ -15,7 +15,8 @@ namespace Tapestry
     /// Map legend:  # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
     ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
     ///              * fire pit (burns)  _ drawbridge (falls when the axe is struck)  F flail block (iron flail swings round it)
-    ///              A the axe that drops the bridge  K the boss  N the rescued monk
+    ///              A the axe that drops the bridge  K the boss  N the rescued monk  Q log pile (rolls logs)
+    ///              g gull  x crab
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -34,9 +35,12 @@ namespace Tapestry
 
         class Bump { public SpriteRenderer View; public float T; public Vector3 Home; }
 
-        public Level(string[] map, Transform parent)
+        readonly LevelDef skin;
+
+        public Level(string[] map, Transform parent, LevelDef def = null)
         {
             root = parent;
+            skin = def ?? new LevelDef();
             Height = map.Length;
             int w = 0;
             foreach (var r in map) w = Mathf.Max(w, r.Length);
@@ -128,8 +132,8 @@ namespace Tapestry
                     string key = null; float dy = 0f;
                     switch (c)
                     {
-                        case '#': key = Get(x, y + 1) == '#' ? "scenery/ground_fill" : "scenery/ground_top"; break;
-                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': key = "scenery/masonry"; break;   // item bricks look like any other brick
+                        case '#': key = Get(x, y + 1) == '#' ? skin.GroundFill : skin.GroundTop; break;
+                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': key = skin.Brick; break;   // item bricks look like any other brick
                         case 'X': key = "scenery/roundel_used"; break;
                         case '~': key = "scenery/sea"; break;
                         case '=': key = "scenery/plank"; dy = 1f - 18f / Art.DesignPerTile; break;

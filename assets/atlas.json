@@ -282,6 +282,26 @@
       ],
       "frame_count": 2,
       "file": "enemies/camel_dragon.png"
+    },
+    "gull": {
+      "title": "Shore Gull",
+      "behaviour": "flyer; wheels over the shore and dives at a knight passing beneath; stompable",
+      "frame": [
+        66,
+        48
+      ],
+      "frame_count": 2,
+      "file": "enemies/gull.png"
+    },
+    "crab": {
+      "title": "Sea Crab",
+      "behaviour": "walker; scuttles sideways along the shore and hops; stompable",
+      "frame": [
+        56,
+        42
+      ],
+      "frame_count": 2,
+      "file": "enemies/crab.png"
     }
   },
   "bosses": {
@@ -565,6 +585,41 @@
       ],
       "file": "scenery/aura.png"
     },
+    "sand_top": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/sand_top.png"
+    },
+    "sand_fill": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/sand_fill.png"
+    },
+    "timber": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/timber.png"
+    },
+    "log": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/log.png"
+    },
+    "log_pile": {
+      "size": [
+        80,
+        96
+      ],
+      "file": "scenery/log_pile.png"
+    },
     "drawbridge": {
       "size": [
         48,
@@ -683,6 +738,13 @@
         288
       ],
       "file": "scenery/crypt_exit.png"
+    },
+    "castle_harbour_gate": {
+      "size": [
+        264,
+        264
+      ],
+      "file": "scenery/castle_harbour_gate.png"
     },
     "ui_joy_base": {
       "size": [
@@ -833,6 +895,20 @@
         540
       ],
       "file": "backgrounds/castle_near.png"
+    },
+    "shore_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/shore_far.png"
+    },
+    "shore_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/shore_near.png"
     }
   }
 }

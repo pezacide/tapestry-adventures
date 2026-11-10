@@ -193,5 +193,18 @@ def crypt_exit():
     return s
 C["crypt_exit"] = dict(size=(144, 288), title="Ye Stair to ye Lyght", fn=crypt_exit)
 
+# ---------- World 2-1: Ye Harbour Gate ----------
+def harbour_gate():
+    W, H = 264, 264
+    s = wall(14, 120, 250, 264, "grey", "dark") + crenels(14, 250, 120, "grey")
+    s += wall(90, 50, 174, 264, "buff") + crenels(86, 178, 50, "terra")
+    s += fill("M80,64 L184,64 L184,92 L80,92 Z", "brown", 0, "dark", 1.4)   # timber hoarding
+    s += stem("M80,78 L184,78 M96,64 L96,92 M112,64 L112,92 M128,64 L128,92 M144,64 L144,92 M160,64 L160,92", "ochre", 1, False)
+    s += window(110, 116) + window(154, 116)
+    s += pennant(132, 2, "blue", 30) + pennant(40, 76, "terra", 18) + pennant(224, 76, "terra", 18, True)
+    s += door(132, 264, 44, 78, True)
+    return s
+C["castle_harbour_gate"] = dict(size=(264, 264), title="Ye Harbour Gate", fn=harbour_gate)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

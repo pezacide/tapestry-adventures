@@ -347,3 +347,37 @@ def soup_glob(f):
     s += dot(6 + f, 7, 1.3, "ochre") + dot(10, 10 - f, 1, "terra")
     return s
 C["soup_glob"] = dict(title="Soup Glob", size=(16, 16), frames=2, build=soup_glob, behaviour="projectile flung by the Soup Cat and the Cat King")
+
+
+# ---------------- World 2: gulls and crabs ----------------
+def gull(f):
+    up = f == 0
+    s = ""
+    wing = ("M28,22 Q20,4 6,2 Q14,10 12,16 Q20,16 26,26 Z" if up else "M28,26 Q18,38 4,42 Q12,34 12,30 Q20,30 26,24 Z")
+    s += fill(wing, "grey", 40) + stem("M28,22 L8,4 M28,22 L14,14" if up else "M28,26 L6,40 M28,26 L14,31", "dark", 0.8, False)
+    s += fill("M14,26 Q26,16 44,20 Q54,22 52,28 Q40,34 24,32 Q14,31 14,26 Z", "white", 0)
+    s += fill("M14,26 L4,22 L6,30 Z", "grey", 0, "dark", 1)
+    s += fill("M44,18 Q52,12 58,18 Q58,23 52,24 Z", "white", 0, "dark", 1.1) + dot(53, 18.5, 0.9, "dark")
+    s += fill("M58,19 L64,21 L58,22.5 Z", "ochre", 0, "dark", 0.8)
+    s += fill(wing.replace("28,22", "30,22").replace("28,26", "30,26"), "white", 40, "dark", 1) if False else ""
+    s += fill(("M30,22 Q26,8 16,4 Q22,12 20,16 Q26,17 30,26 Z" if up else "M30,26 Q24,38 14,44 Q20,36 20,32 Q26,31 30,24 Z"), "white", 40, "dark", 1)
+    return s
+C["gull"] = dict(title="Shore Gull", size=(66, 48), frames=2, build=gull,
+                 behaviour="flyer; wheels over the shore and dives at a knight passing beneath; stompable")
+
+def crab(f):
+    s = ""
+    for i, x in enumerate((14, 20, 36, 42)):   # legs
+        a = (8 if (i + f) % 2 else -8)
+        s += g(stem(f"M{x},30 L{x + (-6 if x < 28 else 6)},40", "terra", 2.2, False), rot(a, x, 30))
+    s += fill("M8,28 Q8,14 28,13 Q48,14 48,28 Q40,34 28,34 Q16,34 8,28 Z", "terra", 0)
+    s += stem("M14,22 Q28,17 42,22", "rose", 1.2, False) + dot(20, 26, 1.2, "rose") + dot(36, 26, 1.2, "rose")
+    s += stem("M22,14 L20,7 M34,14 L36,7", "dark", 1.2, False) + dot(20, 6, 2, "white", "dark") + dot(36, 6, 2, "white", "dark")
+    up = -6 if f else 0
+    for side in (-1, 1):   # claws raised
+        cx = 28 + side * 24
+        s += fill(f"M{cx - 6},{18 + up} Q{cx - 7},{8 + up} {cx},{6 + up} Q{cx + 7},{8 + up} {cx + 6},{18 + up} L{cx + 2},{14 + up} L{cx - 2},{18 + up} Z", "terra", 0, "dark", 1.1)
+        s += stem(f"M{cx - side * 4},{20 + up / 2} L{28 + side * 16},24", "terra", 2.4, False)
+    return s
+C["crab"] = dict(title="Sea Crab", size=(56, 42), frames=2, build=crab,
+                 behaviour="walker; scuttles sideways along the shore and hops; stompable")
