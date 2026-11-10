@@ -1,17 +1,137 @@
-# Ye Tapestrie Adventures: roadmap
+# Ye Tapestrie Adventures: the plan
 
-**One game.** Each world is a different medieval tapestry, and each world has four levels, the fourth being its castle and boss. The knights and Bayard stay stitched in the Bayeux manner as they cross from one tapestry into the next, chasing Princess Aelfgyva.
+**One game.** Each world is a different medieval tapestry, and each world has four levels, the fourth being its castle and boss. The knights and Bayard stay stitched in the Bayeux manner as they cross from one tapestry into the next, chasing Princess Aelfgyva. She was carried off by the **Cat King**, who flees deeper into the tapestries world by world. The last world ends at his Great Hall.
 
-| World | Tapestry | Setting | Boss | Status |
-|---|---|---|---|---|
-| 1 | Bayeux Tapestry (embroidery) | meadow, forest, undercroft, castle | The Cockatrice | **done** (1-1 to 1-4) |
-| 2 | Bayeux Tapestry: the Channel crossing | longships, the sea, the shore | Aspidochelone, the Island-Whale | next |
-| 3 | Tapestry of Creation (Girona) | the winds, stars and sea creatures of the cosmos | to be decided | planned |
-| 4 | Devonshire Hunting Tapestries | aristocratic hunts in the forest | a great boar or bear | planned |
-| 5 | The Unicorn Tapestries | the hunt and capture of the unicorn | the Spotted Unicorn | planned |
-| 6 | The Lady and the Unicorn | red mille-fleur gardens, the lion and the unicorn | the Cat King | planned |
-| 7 | Apocalypse Tapestry | the seven-headed beast, fire, falling stars | the Great Dragon | planned |
+All of these works are centuries old and in the public domain. We redraw them in our own stitched or woven style rather than copying museum photographs, which can carry their own rights.
 
-**Release idea:** World 1 free, with later tapestries as updates or unlocked by purchase (to be decided before the Play Store).
+---
 
-**Art note:** all these works are centuries old and in the public domain. We redraw them in our own stitched or woven style rather than copying museum photographs, which can carry their own rights.
+## The worlds at a glance
+
+| World | Tapestry | Look | Signature new mechanic | Boss | Status |
+|---|---|---|---|---|---|
+| 1 | Bayeux Tapestry | wool embroidery on bare linen | Bayard, shells, lifts | The Cockatrice | **done** |
+| 2 | Bayeux Tapestry, the Channel crossing | embroidery; sea and ships | swimming, rocking longships, wind | Aspidochelone, the Island-Whale | next |
+| 3 | Tapestry of Creation (Girona) | Romanesque needlework; roundels and compartments | wind-heads that blow you, sky platforms | Ye Foure Windes | planned |
+| 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | planned |
+| 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | planned |
+| 6 | The Lady and the Unicorn | woven; red mille-fleur grounds, blue flower islands | one level for each of the five senses | Ye Lyon and ye Unicorne (twin boss) | planned |
+| 7 | Apocalypse Tapestry | woven; alternating red and blue grounds | falling stars, trumpet blasts | The Seven-Headed Dragon, then the **Cat King** finale | planned |
+
+**The art changes with each tapestry.** Worlds 1–3 keep the stitched-on-linen look. From World 4 the backgrounds become fully woven (dense hatching and a weave texture), while the knights stay stitched. The contrast is deliberate: embroidered heroes walking into woven worlds.
+
+---
+
+## World 2: Bayeux, the Channel crossing
+The Tapestry shows trees felled for ships, the fleet sailing with horses aboard, and the landing at Pevensey.
+
+| Level | Name | Idea | New things |
+|---|---|---|---|
+| 2-1 | Ye Shipwrights' Yarde | a busy shore: felled trees, ship hulls on stocks, rolling logs | **rolling logs** (jump or ride them); **gulls** that dive |
+| 2-2 | Beneath ye Waves | underwater, as in Mario's water levels | **swimming** (tap to stroke upward); **sea-serpents**, **Bayeux fish**, **eels** in pipes of coral |
+| 2-3 | Ye Crossing | leaping from longship to longship across open sea | ships **rock and bob** (moving platforms); **wind gusts**; serpents leap from the waves |
+| 2-4 | Ye Landing and ye Sea-Castle | the beach at Pevensey, then the fight at sea | boss **Aspidochelone, the Island-Whale** |
+
+- **The boss:** the knight fights from the decks of three moored longships. The whale surfaces, spouts water (a spout lifts you if you stand on it), and snaps at the ship nearest it. Strike its eye with stomps or bolts when it surfaces; three hits and it sinks. The end building is ye Tower by ye Sea, where a rescued monk waits.
+- **Music:** a rolling sea dance for 2-1 and 2-3, a muffled underwater piece for 2-2, and the castle march with the boss tune for 2-4.
+
+## World 3: Tapestry of Creation
+A great cosmic wheel, the four winds blowing from the corners, the sun and moon, the days of creation, and Adam naming the beasts.
+
+| Level | Name | Idea |
+|---|---|---|
+| 3-1 | Ye Firmament | cloud and star platforms high in the sky; a **wind-head** in the corner blows you sideways |
+| 3-2 | Ye Waters Above | more swimming, among the creatures of the fifth day |
+| 3-3 | Ye Naming of ye Beastes | a stampede of every beast from World 1, in Romanesque colours |
+| 3-4 | Ye Wheel of ye Yeare | a castle of **rotating wheel platforms**; boss **Ye Foure Windes**: four giant blowing heads round the arena; strike each one as it draws breath |
+
+## World 4: Devonshire Hunting Tapestries
+Aristocratic hunts: boar, bear, otter and swan, and falconry.
+
+| Level | Name | Idea |
+|---|---|---|
+| 4-1 | Ye Boare Hunte | a forest run; **hunting hounds chase you** from behind (gentle auto-scroll) |
+| 4-2 | Ye Otter and ye Swanne | the river: **log rafts** drift on the current; otters pop up; swans charge |
+| 4-3 | Ye Falconers' Heath | open heath with tall hunting stands to climb; **falcons dive** at you |
+| 4-4 | Ye Hunting Lodge | boss **Ye Greate Boar**: charges across the hall; dodge so it rams the wall, then stomp it while it's dazed |
+
+## World 5: The Unicorn Tapestries
+The hunters set out, the unicorn purifies the stream, the unicorn at bay, then captive.
+
+| Level | Name | Idea |
+|---|---|---|
+| 5-1 | Ye Hunters Set Out | a verdure forest; hunters with spears are new enemies |
+| 5-2 | Ye Fountaine | a **poisoned stream** hurts you until you carry the unicorn's horn-touch upstream to purify it |
+| 5-3 | Ye Unicorne at Baye | a chase level: keep pace as the hunt closes in |
+| 5-4 | Ye Unicorne in Captivitie | boss **the Spotted Unicorn**, frantic in its fence; make it charge the fence posts until the gate breaks. It is **spared** and becomes a second mount, faster than Bayard, with a horn charge. |
+
+## World 6: The Lady and the Unicorn
+Six tapestries: Sight, Hearing, Taste, Smell, Touch, and "À mon seul désir".
+
+| Level | Name | Idea |
+|---|---|---|
+| 6-1 | Sight | **mirror platforms** that only exist in their reflection |
+| 6-2 | Hearing | the **organ**: platforms rise and fall with the music; the hares from your reference picture play it |
+| 6-3 | Taste and Smell | sweets and flower garlands; monkeys and parakeets |
+| 6-4 | À mon seul désir | the Lady's pavilion tent; boss **Ye Lyon and ye Unicorne**, the heraldic pair come to life (defeat both; each hit makes the other angrier) |
+
+## World 7: Apocalypse Tapestry
+The seven trumpets, the locusts with human faces, the four horsemen, and the seven-headed beast.
+
+| Level | Name | Idea |
+|---|---|---|
+| 7-1 | Ye Seven Trumpettes | **falling stars** as hazards; **trumpet blasts** push you back |
+| 7-2 | Ye Locustes | swarms of crowned locusts with human faces |
+| 7-3 | Ye Foure Horsemen | a chase: four riders sweep the screen in turn; ride Bayard to keep pace |
+| 7-4 | Ye Beaste of Seven Heddes | boss **the Seven-Headed Dragon** (the Great Dragon's final form); fell its heads one by one |
+| 7-5 | Ye Greate Halle (finale) | the **Cat King** on his throne flings soup and summons Soup Cats; beat him and **rescue Princess Aelfgyva** |
+| Ending | | the story so far, scrolling past as one long embroidered strip |
+
+---
+
+## What each world needs (about the same every time)
+- **Art:** 3–5 new beasts, 1 boss, new tiles and props, 2 background layers, 4 end buildings, and any new items.
+- **Mechanics:** 1–2 new ones, such as swimming, rafts, wind or mirrors.
+- **Music:** a level tune or two, a castle tune, and the boss tune.
+- **Levels:** four layouts in `tools/unity/make_levels.py`, each checked with a preview render, then play-tested on your phone.
+
+## Release plan
+1. **Now:** World 1 test builds on your Android phone; iPhone builds once a Mac is sorted.
+2. **First release:** Worlds 1 and 2 (8 levels).
+   - World 1 free, with the later worlds unlocked by one purchase ("Ye Whole Tapestrie"), using Unity In-App Purchasing, which handles both Google Play and Apple.
+   - The other options were ads, or pricing the whole game up front. To be decided before we submit.
+3. **Updates:** one new tapestry (world) at a time, each one a reason for players to come back.
+4. **Consoles** (Switch, PlayStation, Xbox): once the game is complete or nearly so, applying through each platform's developer programme.
+
+## Store checklist (both stores)
+- **Store listing:** an app icon (done), screenshots in each store's required sizes, a short and long description, and a 1024×500 feature graphic (Google).
+- **Privacy:** a privacy policy web page (simple if there are no ads or accounts), plus Google's Data Safety form and Apple's privacy labels.
+- **Age rating:** the questionnaires, likely "Everyone / 4+" (mild fantasy violence).
+- **Purchases:** in-app purchase products set up in each store, if we use the unlock model.
+
+---
+
+## Deploying to iPhone
+**To set up in the project (when we start iPhone work):**
+- **iPhone and iPad settings:** the same app ID as Android (`com.pezacide.tapestryadventures`), iOS 15 and newer, landscape only, and automatic signing.
+- **Encryption declaration:** declare that the game uses no special encryption, so App Store uploads skip that question.
+- **A build menu item:** **Tapestry → iOS → Build Xcode Project**, which writes the Xcode project into `unity/Builds/iOS`.
+- **Already done and carrying over:** the app icon (no transparency, as Apple requires), the touch controls, the notch-safe layout and controller support.
+
+**What you need:**
+1. **A Mac with Xcode (free from the Mac App Store).** Unity on your PC makes the Xcode project, but only Xcode on a Mac can sign it and install it. The options are:
+   - **a Mac of your own** (a second-hand Mac mini is plenty);
+   - **a rented cloud Mac** (by the hour or month, used over remote desktop);
+   - **Unity Build Automation** (Unity's cloud build service), which builds the iPhone app on Unity's Macs without you owning one.
+2. **An Apple account.**
+   - A free Apple ID is enough to put the game on your own iPhone, but the install expires after 7 days.
+   - The **Apple Developer Program** (a yearly fee) is needed for TestFlight (sharing test builds) and the App Store.
+3. **An iPhone and a cable.** On iOS 16 and later, turn on **Settings → Privacy & Security → Developer Mode** the first time.
+
+**Steps on the Mac:**
+1. Get the project onto the Mac: clone the repository and open the `unity` folder in Unity 6.4 with **iOS Build Support** installed.
+2. Run **Tapestry → iOS → Build Xcode Project** (once it has been added).
+3. Open `Builds/iOS/Unity-iPhone.xcodeproj` in Xcode.
+4. Under **Signing & Capabilities**, choose your Apple ID as the **Team**.
+5. Plug in the iPhone, choose it at the top of Xcode, and press **▶ Run**.
+6. **For TestFlight and the App Store:** in Xcode use **Product → Archive → Distribute App → App Store Connect**, then create the app listing in App Store Connect.
