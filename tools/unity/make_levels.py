@@ -1,6 +1,7 @@
 """Lay out the levels and write each as an ASCII map in C# (unity/Assets/Scripts/Levels/LevelN.cs).
 Legend:  # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding Bayard   = plank (one-way)
          1 brick hiding a golden chalice (life)   M roast capon (heart)   W crossbowe   R holy relique (star)
+         V vault stone (unbreakable)   L lift gliding sideways   E lift rising and falling (both 3 wide, from that tile)
          ^ treetop (one-way)   | tree trunk (scenery)   T/t tower top/body (2 wide)   ~ sea   o bezant
          P start   G goal pole
          s snail-hound (red shell: kick it)  S mossy snail-hound (green shell: pick up and throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -32,6 +33,13 @@ class Map:
         cx = x0 + w // 2
         for y in range(0, top):
             if self.g[y][cx] == " ": self.put(cx, y, "|")
+    def vault(self, x0, x1, y0=9, y1=11):
+        for x in range(x0, x1 + 1):
+            for y in range(y0, y1 + 1): self.put(x, y, "V")
+    def pillar(self, x, bottom, w=1):
+        """Vault stone hanging from the ceiling down to row `bottom` (leave >= 2 rows of headroom below it)."""
+        for xx in range(x, x + w):
+            for y in range(bottom, 9): self.put(xx, y, "V")
     def rows(self): return ["".join(self.g[y]).rstrip() for y in range(self.H - 1, -1, -1)]
 
 def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=None, near=None):
@@ -101,3 +109,29 @@ m.put(182, 2, "G")
 write("Level2", "Worlde 1-2", "Ye Foreste of Wyverns", "HERE YE KNYGHTES PASSE THORUGH YE DERKE FORESTE", m,
       [("shrub", 5), ("shrub", 30), ("shrub", 72), ("shrub", 110), ("shrub", 152), ("shrub", 178)],
       "scenery/castle_abbey", 191, "forest", "backgrounds/forest_far", "backgrounds/forest_near")
+
+# ======================================================= 1-3  Ye Undercroft
+m = Map()
+m.ground(0, 30); m.ground(41, 70); m.ground(82, 96); m.ground(108, 140); m.ground(146, 199)
+m.vault(12, 163)                                              # the crypt ceiling (rows 9-11); open sky over the end stairs
+m.put(3, 2, "P")
+m.row(16, 5, "B?BMB"); m.put(20, 2, "s"); m.put(26, 2, "S")
+m.pillar(24, 6, 2)                                            # low arch: 3 rows of headroom under it
+m.put(30, 4, "L")                                             # glide over the first pit (31-40)
+m.row(33, 7, "ooo")
+m.put(46, 2, "h"); m.row(50, 5, "?W?"); m.put(55, 2, "k")
+m.stairs(58, 3); m.pillar(63, 6, 3); m.put(66, 2, "S")
+m.put(73, 3, "E"); m.row(74, 8, "oo")                         # rising lift in the second pit (71-81)
+m.put(78, 5, "L")
+m.put(86, 2, "d"); m.row(88, 5, "BHB"); m.put(93, 2, "l")
+m.put(98, 4, "L"); m.put(102, 2, "E")                         # two lifts over the third pit (97-107)
+m.row(99, 7, "oooo")
+m.put(112, 2, "c"); m.pillar(116, 6, 2); m.row(120, 5, "B1BRB"); m.put(121, 6, "O"); m.put(130, 2, "s")
+m.row(134, 4, "BBBB"); m.put(136, 5, "k")
+m.put(141, 3, "E")                                            # last pit (141-145)
+m.put(150, 2, "h"); m.put(155, 2, "S"); m.row(158, 5, "?B?B?")
+m.stairs(166, 6)
+m.put(182, 2, "G")
+write("Level3", "Worlde 1-3", "Ye Undercroft", "HERE YE KNYGHTES GOE DOWNE INTO YE UNDERCROFT", m,
+      [("shrub", 5), ("shrub", 178), ("tree", 196)],
+      "scenery/castle_round_tower", 190, "crypt", "backgrounds/crypt_far", "backgrounds/crypt_near")

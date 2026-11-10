@@ -93,7 +93,9 @@ namespace Tapestry
             }
 
             Body.Vel.y = Mathf.Max(Body.Vel.y - g * dt, -maxFall);
+            GameManager.I.CarryOnLift(Body);
             Body.Step(lv, dt);
+            GameManager.I.LandOnLifts(Body);
 
             if (Body.HitCeiling) GameManager.I.KnightHitBlock(Body.CeilX, Body.CeilY);
 

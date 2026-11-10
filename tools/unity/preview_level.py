@@ -25,9 +25,9 @@ def render(n):
       for x in range(W):
           if get(x, y) == "|": put(load("scenery/trunk"), x + 0.5, y)
   for key, x in props:
-      x = float(x); gy = next((y + 1 for y in range(H - 1, -1, -1) if get(int(x), y) in "#BXHT?t1MWR"), 0)
+      x = float(x); gy = next((y + 1 for y in range(H - 1, -1, -1) if get(int(x), y) in "#BXHT?t1MWRV" and not (get(int(x), y) == "V" and y >= 9)), 0)
       put(load(key), x, gy)
-  tiles = {c: "scenery/masonry" for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"
+  tiles = {c: "scenery/masonry" for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"; tiles["V"] = "scenery/vault"
   done = set()
   for y in range(H):
       for x in range(W):
@@ -36,6 +36,7 @@ def render(n):
           elif c in tiles: put(load(tiles[c]), x + 0.5, y)
           elif c == "=": put(load("scenery/plank"), x + 0.5, y + 1 - 18 / 48)
           elif c == "^": put(load("scenery/canopy"), x + 0.5, y + 1 - 26 / 48)
+          elif c in "LE": put(load("scenery/lift"), x + 1.5, y + 1 - 14 / 48)
           elif c in "Tt" and (x, y) not in done:
               done.add((x, y)); done.add((x + 1, y)); put(load("scenery/tower_top" if c == "T" else "scenery/tower_body"), x + 1, y)
   spr = {"s": ("enemies/snail_hound", 3), "S": ("enemies/snail_moss", 3), "h": ("enemies/killer_hare", 2), "l": ("enemies/fiery_lion", 3), "d": ("enemies/bayeux_hound", 2),

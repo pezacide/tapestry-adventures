@@ -150,5 +150,20 @@ def abbey():
     return s
 C["castle_abbey"] = dict(size=(288, 288), title="Ye Abbey in ye Wood", fn=abbey)
 
+# ---------- World 1-3: Ye Rounde Tower ----------
+def round_tower():
+    W, H = 240, 300
+    s = wall(10, 200, 230, 300, "grey", "dark") + crenels(10, 230, 200, "grey")   # curtain wall
+    t = "M64,300 L64,80 L176,80 L176,300 Z"
+    bands = "".join(fill(f"M64,{y} L176,{y} L176,{y + 16} L64,{y + 16} Z", ("buff", "ochre", "buff", "terra")[i % 4], 0, None) for i, y in enumerate(range(80, 300, 16)))
+    s += clip("rt", t, bands + stem(" ".join(f"M64,{y} L176,{y}" for y in range(96, 300, 16)), "dark", 0.7, False)) + stem(t, "dark", 1.8)
+    s += stem("M74,80 L74,300 M166,80 L166,300", "cream", 0.9, False)
+    s += crenels(60, 180, 80, "terra")
+    s += window(96, 120) + window(144, 120) + window(120, 164, 9, 16) + window(96, 210) + window(144, 210)
+    s += roof(120, 70, 128, 66, "green", "rtr") + pennant(120, 0, "terra", 22)
+    s += door(120, 300, 34, 58, True)
+    return s
+C["castle_round_tower"] = dict(size=(240, 300), title="Ye Rounde Tower", fn=round_tower)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

@@ -14,6 +14,7 @@ namespace Tapestry
     ///
     /// Map legend:  # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
     ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
+    ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
     ///              w wyvern  u unicorn  O man-faced owl  k soup cat</summary>
@@ -49,7 +50,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
-                        case '1': case 'M': case 'W': case 'R': case '^': case '|':
+                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V':
                             tiles[x, y] = c; break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
                         case 'G': GoalX = x + 0.5f; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y))); break;
@@ -76,7 +77,7 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': return true;
                 default: return false;
             }
         }
@@ -110,6 +111,7 @@ namespace Tapestry
                         case '=': key = "scenery/plank"; dy = 1f - 18f / Art.DesignPerTile; break;
                         case '^': key = "scenery/canopy"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case '|': key = "scenery/trunk"; break;
+                        case 'V': key = "scenery/vault"; break;
                         case 'T':
                         case 't':
                             // towers are two tiles wide: draw one sprite per pair, centred between the two tiles
@@ -154,6 +156,7 @@ namespace Tapestry
                     if (v != null) { Object.Destroy(v.gameObject); views.Remove(Key(x, y)); }
                     return BumpResult.Broke;
                 case 'X':
+                case 'V':
                     return BumpResult.Thud;
             }
             return BumpResult.None;

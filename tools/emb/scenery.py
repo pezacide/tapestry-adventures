@@ -249,6 +249,47 @@ def forest_near():
         items.append((x, g(shrub(), "translate(0 440) scale(1.2)")))
     return _wrap(items)
 
+# ---------------- undercroft (World 1-3) ----------------
+def vault():
+    """Unbreakable vault stone: dark dressed blocks."""
+    s = ""
+    for r, y in enumerate((0, 24)):
+        off = 12 if r else 0
+        for x in range(-off, 48, 24):
+            s += fill(f"M{x + 0.8},{y + 0.8} L{x + 23.2},{y + 0.8} L{x + 23.2},{y + 23.2} L{x + 0.8},{y + 23.2} Z", ("grey", "blue")[(x // 24 + r) % 2], 0, "dark", 1.4)
+    return clip("vc", "M0,0 L48,0 L48,48 L0,48 Z", s) + stem("M0.8,0.8 L47.2,0.8 L47.2,47.2 L0.8,47.2 Z", "dark", 1.6)
+S["vault"] = (T, T, vault, False)
+
+def lift():
+    """A hanging board that moves: 3 tiles wide, slung on ropes."""
+    s = stem("M12,0 L12,8 M132,0 L132,8", "brown", 1.6, False)
+    s += fill("M2,8 L142,8 L142,20 L2,20 Z", "ochre", 0, "dark", 1.5)
+    s += stem("M2,13 L142,13", "brown", 0.9, False)
+    for x in range(10, 140, 24):
+        s += stem(f"M{x},10 l4,2 l4,-2", "terra", 1, False)
+    return s
+S["lift"] = (144, 22, lift, False)
+
+def crypt_far():
+    """An opaque wall of vaulted arcades: it hides the linen, as a crypt would."""
+    s = fill(f"M0,0 L{BW},0 L{BW},{BH} L0,{BH} Z", "grey", 0, None)
+    for x in range(0, BW, 120):
+        s += fill(f"M{x + 14},{BH} L{x + 14},250 Q{x + 60},150 {x + 106},250 L{x + 106},{BH} Z", "indigo", 90, "dark", 1.4)
+        s += fill(f"M{x - 8},{BH} L{x - 8},240 L{x + 14},240 L{x + 14},{BH} Z", ("sage", "terra")[(x // 120) % 2], 90, "dark", 1.2)
+        s += stem(f"M{x + 10},252 Q{x + 60},144 {x + 110},252", "buff", 2, False)
+    for y in range(30, 230, 26):
+        s += stem(f"M0,{y} L{BW},{y}", "dark", 0.6, False)
+    return s
+
+def crypt_near():
+    """Hanging lamps between the arches."""
+    items = []
+    for x in range(60, BW, 240):
+        lamp = stem("M0,0 L0,150", "brown", 1.4, False) + fill("M-9,150 L9,150 L6,168 L-6,168 Z", "gold", 0, "dark", 1.1)
+        lamp += fill("M-3,150 Q0,136 3,150 Z", "terra", 0, None)
+        items.append((x, lamp))
+    return _wrap(items)
+
 # ---------------- border & inscription ----------------
 def bird(x, y, c1, c2, flip=False):
     b = fill("M0,0 Q6,-6 14,-2 Q18,0 16,4 Q8,8 0,4 Z", c1, 0, "dark", 1)
@@ -342,3 +383,6 @@ def build_svg(name):
 
 S["bg_forest_far"] = (BW, BH, forest_far, False)
 S["bg_forest_near"] = (BW, BH, forest_near, False)
+
+S["bg_crypt_far"] = (BW, BH, crypt_far, False)
+S["bg_crypt_near"] = (BW, BH, crypt_near, False)

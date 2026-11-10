@@ -98,6 +98,28 @@ def forest_theme():
     mix_into(buf, drone(freq("A2"), L + 1, 0.45, False) + drone(freq("E3"), L + 1, 0.25, False), 0)
     return finish(buf, L, 0.32)
 
+def crypt_theme():
+    """World 1-3: a slow, low tune in E Phrygian; lute ostinato, sparse recorder, a heartbeat on the tabor."""
+    bpm = 76; beat = 60 / bpm; bar = 4 * beat
+    A = ("E4:2 F4:1 G4:1 A4:3 G4:1 F4:1 E4:1 F4:1 G4:1 E4:4 "
+         "B4:2 C5:1 B4:1 A4:2 G4:2 A4:1 G4:1 F4:1 G4:1 E4:4")
+    B = ("E5:2 D5:1 C5:1 B4:3 A4:1 C5:1 B4:1 A4:1 G4:1 F4:4 "
+         "G4:1 A4:1 B4:1 C5:1 B4:2 A4:2 G4:1 F4:1 G4:1 F4:1 E4:4")
+    rA = ["E2", "A2", "F2", "E2", "E2", "A2", "D2", "E2"]
+    rB = ["C3", "G2", "A2", "F2", "G2", "A2", "D2", "E2"]
+    L = 16 * bar
+    buf = np.zeros(int((L + 3) * SR))
+    for k, (mel, roots) in enumerate(((A, rA), (B, rB))):
+        t0 = k * 8 * bar
+        play(buf, recorder, mel, bpm, t0, 0.7)
+        for i, r in enumerate(roots):
+            third = 16 if r[0] in "CFG" else 15
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (7, 1), (third, 1), (7, 1), (12, 1), (7, 1)], 0.45)
+            for b in (0, 0.45):   # heartbeat
+                mix_into(buf, tabor(0.3, 0.45 if b == 0 else 0.3), t0 + i * bar + b)
+    mix_into(buf, drone(freq("E2"), L + 1, 0.5, False) + drone(freq("B2"), L + 1, 0.25, False), 0)
+    return finish(buf, L, 0.5)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -200,7 +222,7 @@ def sfx():
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

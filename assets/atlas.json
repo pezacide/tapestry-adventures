@@ -521,6 +521,20 @@
       ],
       "file": "scenery/trunk.png"
     },
+    "vault": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/vault.png"
+    },
+    "lift": {
+      "size": [
+        144,
+        22
+      ],
+      "file": "scenery/lift.png"
+    },
     "border": {
       "size": [
         384,
@@ -577,6 +591,13 @@
       ],
       "file": "scenery/castle_abbey.png"
     },
+    "castle_round_tower": {
+      "size": [
+        240,
+        300
+      ],
+      "file": "scenery/castle_round_tower.png"
+    },
     "bezant": {
       "size": [
         24,
@@ -624,6 +645,20 @@
         540
       ],
       "file": "backgrounds/forest_near.png"
+    },
+    "crypt_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/crypt_far.png"
+    },
+    "crypt_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/crypt_near.png"
     }
   }
 }

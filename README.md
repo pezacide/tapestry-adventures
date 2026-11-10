@@ -22,7 +22,7 @@ The art imitates Bayeux wool embroidery: laid-and-couched fills, stem-stitch out
 Each PNG is rendered at **2x** its design size (see `scale` in the atlas). It is meant to be drawn at half size in a 960x540 game. Sprite sheets lay their frames out left to right, and sprites face right.
 
 ## The game (Unity)
-The playable game is in [`unity/`](unity/README.md): open that folder in Unity 6 and press Play. That README has the setup steps, controls and build notes. `assets/level1_preview.png` and `assets/level2_preview.png` show whole levels.
+The playable game is in [`unity/`](unity/README.md): open that folder in Unity 6 and press Play. That README has the setup steps, controls and build notes. `assets/levelN_preview.png` show whole levels.
 
 ## Regenerating
 All the art is code: `tools/emb/` holds SVG drawings plus an embroidery filter, and Chromium renders them.

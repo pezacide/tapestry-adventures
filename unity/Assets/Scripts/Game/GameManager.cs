@@ -26,6 +26,8 @@ namespace Tapestry
         readonly List<Bezant> bezants = new List<Bezant>();
         readonly List<Debris> debris = new List<Debris>();
         readonly List<Item> items = new List<Item>();
+        readonly List<Lift> lifts = new List<Lift>();
+        Lift riding;   // the lift the knight stands on
         string toast; float toastTime;
         class Popup { public Vector2 Pos; public string Text; public float T; }
         readonly List<Popup> popups = new List<Popup>();
@@ -114,7 +116,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); popups.Clear(); bayard = null; winPhase = 0; toast = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world);
@@ -134,6 +136,7 @@ namespace Tapestry
                     case 'G': Art.Make("scenery/goal_pole", world, p, 5); break;
                     case 's': kind = "snail_hound"; break;
                     case 'S': kind = "snail_moss"; break;
+                    case 'L': case 'E': lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), s.Key == 'E', world, lifts.Count * 1.3f)); break;
                     case 'h': kind = "killer_hare"; break;
                     case 'l': kind = "fiery_lion"; break;
                     case 'd': kind = "bayeux_hound"; break;
@@ -282,6 +285,7 @@ namespace Tapestry
             if (TapestryInput.PrevKnightPressed) SwitchKnight(-1);
 
             level.Tick(dt);
+            foreach (var l in lifts) l.Tick(dt);
             player.Tick(dt, level);
             TickEntities(dt);
             if (player.Dead) return;
@@ -461,6 +465,28 @@ namespace Tapestry
             }
         }
         public void AddScore(int n) { score += n; }
+
+        /// <summary>Move a body standing on a lift along with it (call before the body steps).</summary>
+        public void CarryOnLift(Body b)
+        {
+            if (riding != null) b.Pos += riding.Delta;
+        }
+
+        /// <summary>Land a falling body on any lift top it crosses (call after the body steps).</summary>
+        public void LandOnLifts(Body b)
+        {
+            riding = null;
+            if (b.Vel.y > 0f) return;
+            foreach (var l in lifts)
+            {
+                if (b.Right <= l.X0 + 0.05f || b.Left >= l.X1 - 0.05f) continue;
+                if (b.PrevBottom >= l.Top - 0.25f && b.Pos.y <= l.Top + 0.02f)
+                {
+                    b.Pos.y = l.Top; b.Vel.y = 0f; b.Grounded = true; riding = l;
+                    return;
+                }
+            }
+        }
         public void AddScore(int n, Vector2 at) { score += n; popups.Add(new Popup { Pos = at, Text = n.ToString() }); }
 
         /// <summary>The higher on the pole ye grasp it, the more glorie (Mario-fashion). The very top gives a lyfe.</summary>

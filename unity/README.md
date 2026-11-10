@@ -27,6 +27,7 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
 ## The levels
 - **Worlde 1-1, Ye Meadowe of Beastes:** an open meadow with towers, a sea pit and brick rows. It ends at the keep upon the motte.
 - **Worlde 1-2, Ye Foreste of Wyverns:** treetop platforms you can jump up through, three gaps bridged by trees, a stream, perching owls and wyverns. It has its own wandering tune in A Dorian and ends at the abbey in the wood.
+- **Worlde 1-3, Ye Undercroft:** a vaulted crypt with a stone ceiling, low arches, and lifts that glide sideways or rise and fall over dark pits. Soup Cats guard the kitchens. It has a slow tune in E Phrygian and ends by climbing out to ye Rounde Tower.
 
 Finishing a level rides on to the next one; lives, bezants and glory carry over.
 
