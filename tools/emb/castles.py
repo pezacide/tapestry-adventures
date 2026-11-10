@@ -238,5 +238,21 @@ def beacon():
     return s
 C["castle_beacon"] = dict(size=(216, 300), title="Ye Beacon", fn=beacon)
 
+# ---------- World 3-1: Ye Gate of Paradyse ----------
+def paradise_gate():
+    W, H = 240, 264
+    s = wall(10, 110, 230, 264, "buff")
+    s += fill("M60,264 L60,120 Q120,40 180,120 L180,264 Z", "ochre", 90, "dark", 1.6)   # the great arch
+    for i, r in enumerate((54, 44)):
+        s += stem(f"M{120 - r},{126} Q120,{126 - r * 1.5} {120 + r},126", ("terra", "green")[i], 4, False)
+    s += fill("M108,40 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0 Z", "gold", 0, "dark", 1.4)
+    s += stem("M120,18 L120,2 M113,8 L127,8", "gold", 2.4, False)
+    for x in (30, 210):
+        s += fill(f"M{x - 14},264 L{x - 14},96 L{x + 14},96 L{x + 14},264 Z", "green", 90, "dark", 1.3)
+        s += fill(f"M{x},70 a14,14 0 1,0 0.1,0 Z", "blue", 0, "dark", 1.2) + dot(x, 84, 4, "gold")
+    s += door(120, 264, 40, 76)
+    return s
+C["castle_paradise_gate"] = dict(size=(240, 264), title="Ye Gate of Paradyse", fn=paradise_gate)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

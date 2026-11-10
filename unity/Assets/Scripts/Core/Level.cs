@@ -17,6 +17,7 @@ namespace Tapestry
     ///              * fire pit (burns)  _ drawbridge (falls when the axe is struck)  F flail block (iron flail swings round it)
     ///              A the axe that drops the bridge  K the Cockatrice  J the Island-Whale  N the rescued monk  Q log pile (rolls logs)
     ///              g gull  x crab  f fish  z sea-serpent  m sea-monk  Y longship rocking at anchor  U longship sailing to and fro
+    ///              < wind-head blowing left  > wind-head blowing right  b bird of the air
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -136,7 +137,7 @@ namespace Tapestry
                         case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': key = skin.Brick; break;   // item bricks look like any other brick
                         case 'X': key = "scenery/roundel_used"; break;
                         case '~': key = "scenery/sea"; break;
-                        case '=': key = "scenery/plank"; dy = 1f - 18f / Art.DesignPerTile; break;
+                        case '=': key = skin.Plank; dy = 1f - Art.Sheet(skin.Plank).FrameH / Art.DesignPerTile; break;
                         case '^': key = "scenery/canopy"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case '|': key = "scenery/trunk"; break;
                         case 'V': case 'F': key = skin.Vault; break;

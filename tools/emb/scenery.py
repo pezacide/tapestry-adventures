@@ -376,6 +376,84 @@ def spout():
     return s
 S["spout"] = (48, 192, spout, False)
 
+# ---------------- the Tapestry of Creation (World 3) ----------------
+def cloud_top():
+    """Ground made of Romanesque cloud: scalloped bands of blue and white."""
+    s = fill("M0,12 L48,12 L48,48 L0,48 Z", "sky", 0, None)
+    for i, y in enumerate((22, 32, 42)):
+        s += stem(f"M0,{y} q6,-5 12,0 q6,-5 12,0 q6,-5 12,0 q6,-5 12,0", ("white", "blue", "white")[i], 1.6, False)
+    s += fill("M0,14 q6,-12 12,-2 q6,-12 12,0 q6,-12 12,-2 q6,-12 12,0 L48,16 L0,16 Z", "white", 0, "dark", 1.3)
+    return s
+S["cloud_top"] = (T, T, cloud_top, False)
+
+def cloud_fill():
+    s = fill("M0,0 L48,0 L48,48 L0,48 Z", "sky", 0, None)
+    for i, y in enumerate((8, 18, 28, 38, 48)):
+        s += stem(f"M0,{y} q6,-5 12,0 q6,-5 12,0 q6,-5 12,0 q6,-5 12,0", ("white", "blue")[i % 2], 1.6, False)
+    return s
+S["cloud_fill"] = (T, T, cloud_fill, False)
+
+def cloud_band():
+    """A thin cloud you can stand on and jump up through (the sky's plank)."""
+    s = fill("M0,14 q6,-12 12,-2 q6,-12 12,0 q6,-12 12,-2 q6,-12 12,0 L48,20 Q24,24 0,20 Z", "white", 0, "dark", 1.3)
+    s += stem("M2,15 q6,-4 11,0 q6,-4 11,0 q6,-4 11,0 q6,-4 11,0", "sky", 1.4, False)
+    return s
+S["cloud_band"] = (T, 24, cloud_band, False)
+
+def star_board():
+    """A gliding board of gold stars, 3 tiles wide (the sky's lift)."""
+    s = fill("M2,6 L142,6 L142,18 L2,18 Z", "indigo", 0, "dark", 1.4)
+    import math as _m
+    for cx in range(14, 140, 24):
+        pts = " ".join(f"{cx + _m.cos(a) * (8 if i % 2 == 0 else 3.5):.1f},{12 + _m.sin(a) * (8 if i % 2 == 0 else 3.5):.1f}" for i, a in enumerate([_m.pi / 2 + k * _m.pi / 5 for k in range(10)]))
+        s += f'<polygon points="{pts}" fill="{WOOL["gold"]}" stroke="{WOOL["dark"]}" stroke-width="0.8"/>'
+    return s
+S["star_board"] = (144, 22, star_board, False)
+
+def wind_head():
+    """One of the Winds, as on the Girona tapestry: a puffed-cheeked face blowing, in a green roundel. Blows to the right."""
+    s = fill("M48,4 a44,44 0 1,0 0.1,0 Z", "green", 0, "dark", 2)
+    s += f'<circle cx="48" cy="48" r="38" fill="none" stroke="{WOOL["gold"]}" stroke-width="2" stroke-dasharray="4 3"/>'
+    for i, a in enumerate(range(-150, -20, 20)):   # wild hair
+        import math as _m
+        r1, r2 = 26, 38
+        s += stem(f"M{48 + _m.cos(_m.radians(a)) * r1:.1f},{46 + _m.sin(_m.radians(a)) * r1:.1f} Q{48 + _m.cos(_m.radians(a + 10)) * 34:.1f},{46 + _m.sin(_m.radians(a + 10)) * 34:.1f} {48 + _m.cos(_m.radians(a)) * r2:.1f},{46 + _m.sin(_m.radians(a)) * r2:.1f}", ("ochre", "blue")[i % 2], 3, False)
+    s += fill("M28,48 Q26,26 48,24 Q70,26 68,48 Q68,70 48,72 Q28,70 28,48 Z", "buff", 0)
+    s += fill("M58,52 a8,8 0 1,0 0.1,0 Z", "rose", 0, None) + fill("M30,52 a7,7 0 1,0 0.1,0 Z", "rose", 0, None)   # puffed cheeks
+    s += dot(40, 42, 1.4, "dark") + dot(56, 42, 1.4, "dark") + stem("M36,38 L44,40 M52,40 L60,38", "brown", 1.2, False)
+    s += fill("M64,58 Q72,54 76,58 Q72,62 64,60 Z", "terra", 0, "dark", 1)                      # pursed lips
+    s += stem("M78,52 Q86,50 92,54 M78,60 Q88,62 94,58 M78,56 L95,56", "white", 1.8, False)      # his breath
+    return s
+S["wind_head"] = (96, 96, wind_head, False)
+
+def creation_far():
+    """The great wheel of creation: concentric bands and roundels of sun, moon and stars."""
+    import math as _m
+    s = ""
+    cx, cy = BW / 2, BH + 260
+    for i, r in enumerate((720, 620, 520)):
+        s += stem(f"M{cx - r},{cy} A{r},{r} 0 0,1 {cx + r},{cy}", ("ochre", "green", "terra")[i], 10, False)
+        s += stem(f"M{cx - r},{cy} A{r},{r} 0 0,1 {cx + r},{cy}", "dark", 0.8, False)
+    for k in range(9):   # spokes
+        a = _m.pi * (0.1 + k * 0.1)
+        s += stem(f"M{cx + _m.cos(a) * 520:.0f},{cy - _m.sin(a) * 520:.0f} L{cx + _m.cos(a) * 720:.0f},{cy - _m.sin(a) * 720:.0f}", "brown", 3, False)
+    for k in range(8):   # roundels between the spokes: sun, moon and stars in turn
+        a = _m.pi * (0.15 + k * 0.1)
+        x, y = cx + _m.cos(a) * 670, cy - _m.sin(a) * 670
+        s += fill(f"M{x - 36:.0f},{y:.0f} a36,36 0 1,0 72,0 a36,36 0 1,0 -72,0 Z", ("blue", "indigo")[k % 2], 0, "dark", 1.4)
+        if k % 3 == 0: s += fill(f"M{x - 18:.0f},{y:.0f} a18,18 0 1,0 36,0 a18,18 0 1,0 -36,0 Z", "gold", 0, "dark", 1)
+        elif k % 3 == 1: s += fill(f"M{x - 16:.0f},{y - 8:.0f} a18,18 0 1,0 30,22 a14,14 0 1,1 -30,-22 Z", "cream", 0, "dark", 1)
+        else:
+            for dx, dy in ((-14, -10), (12, -12), (0, 10), (-10, 14), (16, 8)): s += dot(x + dx, y + dy, 3, "gold")
+    return f'<g opacity="0.55">{s}</g>'
+
+def creation_near():
+    items = []
+    for x in range(60, BW, 200):
+        st = "".join(dot(x2, y2, 2.4, "gold") for x2, y2 in ((0, 120), (30, 80), (60, 140), (90, 60), (120, 110)))
+        items.append((x, st))
+    return _wrap(items)
+
 # ---------------- the crossing (World 2-3) ----------------
 def longship():
     """A Norman longship to stand on: 6 tiles wide, its deck 58 units below the top of the drawing."""
@@ -670,3 +748,6 @@ S["bg_deep_far"] = (BW, BH, deep_far, False)
 S["bg_deep_near"] = (BW, BH, deep_near, False)
 
 S["bg_sea_near"] = (BW, BH, sea_waves_near, False)
+
+S["bg_creation_far"] = (BW, BH, creation_far, False)
+S["bg_creation_near"] = (BW, BH, creation_near, False)

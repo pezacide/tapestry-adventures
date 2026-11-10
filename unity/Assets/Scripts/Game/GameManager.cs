@@ -37,6 +37,7 @@ namespace Tapestry
         // castles: flails, the boss, the axe that drops the bridge, and the rescued monk
         readonly List<Flail> flails = new List<Flail>();
         readonly List<Log> logs = new List<Log>();
+        readonly List<WindHead> winds = new List<WindHead>();
         readonly List<Vector2> logPiles = new List<Vector2>(); readonly List<float> logTimers = new List<float>();
         BossBase boss;
         bool toldOfBoss;
@@ -172,7 +173,7 @@ namespace Tapestry
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
-            flails.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); winds.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -194,6 +195,8 @@ namespace Tapestry
                     case 'S': kind = "snail_moss"; break;
                     case 'g': kind = "gull"; break;
                     case 'x': kind = "crab"; break;
+                    case 'b': kind = "bird"; break;
+                    case '<': case '>': winds.Add(new WindHead(p, s.Key == '>', world)); break;
                     case 'f': kind = "fish"; break;
                     case 'z': kind = "sea_serpent"; break;
                     case 'm': kind = "sea_monk"; break;
@@ -209,7 +212,7 @@ namespace Tapestry
                         break;
                     case 'L': case 'E': case 'Y': case 'U':
                         var kindL = s.Key == 'E' ? Lift.Kind.BoardUpDown : s.Key == 'Y' ? Lift.Kind.ShipRocking : s.Key == 'U' ? Lift.Kind.ShipSailing : Lift.Kind.BoardSideways;
-                        lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), kindL, world, lifts.Count * 1.3f));
+                        lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), kindL, world, lifts.Count * 1.3f, L.LiftSkin));
                         break;
                     case 'h': kind = "killer_hare"; break;
                     case 'l': kind = "fiery_lion"; break;
@@ -475,6 +478,7 @@ namespace Tapestry
             if (collapsing) TickCollapse(dt);
             player.Tick(dt, level);
             TickWindAndSea(dt);
+            foreach (var w in winds) w.Tick(dt, level, player);
             TickEntities(dt);
             if (player.Dead) return;
             UpdateRelicMusic();

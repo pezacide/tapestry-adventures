@@ -425,3 +425,19 @@ def sea_monk(f):
     return s
 C["sea_monk"] = dict(title="Sea-Monk", size=(48, 74), frames=2, build=sea_monk,
                      behaviour="the legendary monk of the sea: drifts down, then pulses after the knight; cannot be stomped under water")
+
+
+# ---------------- World 3: the birds of the air (Romanesque) ----------------
+def bird(f):
+    up = f == 0
+    s = ""
+    s += stem("M8,24 Q2,30 0,40 M10,24 Q6,32 6,42", "green", 2.4, False)   # long tail
+    wing = "M24,20 Q20,2 6,0 Q14,8 12,14 Q18,16 22,24 Z" if up else "M24,22 Q16,36 4,42 Q12,34 12,30 Q18,30 22,24 Z"
+    s += fill(wing, "terra", 40) + stem("M24,20 L8,2 M24,20 L14,14" if up else "M24,22 L6,40 M24,22 L14,31", "dark", 0.8, False)
+    s += fill("M8,22 Q20,12 36,16 Q44,20 42,26 Q32,30 18,28 Q8,27 8,22 Z", "ochre", 0) + clip("brd", "M8,22 Q20,12 36,16 Q44,20 42,26 Q32,30 18,28 Q8,27 8,22 Z", scales(6, 12, 46, 30, 4, "brown", 0.7))
+    s += stem("M8,22 Q20,12 36,16 Q44,20 42,26 Q32,30 18,28 Q8,27 8,22 Z", "dark", 1.3)
+    s += fill("M36,14 Q42,6 48,12 Q48,18 42,18 Z", "blue", 0, "dark", 1) + dot(44, 12, 0.9, "dark")
+    s += fill("M48,12 L54,14 L48,16 Z", "gold", 0, "dark", 0.7)
+    return s
+C["bird"] = dict(title="Bird of ye Air", size=(56, 44), frames=2, build=bird,
+                 behaviour="flies straight across the sky in a gentle wave; stompable")

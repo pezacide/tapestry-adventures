@@ -43,6 +43,7 @@ namespace Tapestry
                 case "wyvern": gravity = false; break;
                 case "owl_face": gravity = false; break;
                 case "gull": gravity = false; break;
+                case "bird": gravity = false; break;
                 case "fish": case "sea_serpent": case "sea_monk": case "leaper": gravity = false; break;
                 case "crab": speed = 2f; break;
                 case "soup_cat": speed = 0f; timer = 1.2f; break;
@@ -212,6 +213,12 @@ namespace Tapestry
                     if (Body.Pos.y < 2f && Body.Vel.y < 0f) Body.Vel.y = 0f;
                     if (Body.Pos.y + Body.H > 9.5f && Body.Vel.y > 0f) Body.Vel.y = 0f;
                     view.SetFrame(Body.Vel.y > 1f ? 1 : 0);
+                    break;
+
+                case "bird":   // flies straight across the sky toward the knight, in a gentle wave
+                    Body.Vel = new Vector2(-2.8f, Mathf.Cos(timer * 3f) * 1.2f);
+                    view.Face(false); WalkFrames(0, 1, 6f);
+                    if (Body.Pos.x < home.x - 40f) Remove();
                     break;
 
                 case "leaper":   // a fish leaping from the sea in an arc, then back in

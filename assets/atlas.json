@@ -332,6 +332,16 @@
       ],
       "frame_count": 2,
       "file": "enemies/sea_monk.png"
+    },
+    "bird": {
+      "title": "Bird of ye Air",
+      "behaviour": "flies straight across the sky in a gentle wave; stompable",
+      "frame": [
+        56,
+        44
+      ],
+      "frame_count": 2,
+      "file": "enemies/bird.png"
     }
   },
   "bosses": {
@@ -657,6 +667,41 @@
       ],
       "file": "scenery/spout.png"
     },
+    "cloud_top": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/cloud_top.png"
+    },
+    "cloud_fill": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/cloud_fill.png"
+    },
+    "cloud_band": {
+      "size": [
+        48,
+        24
+      ],
+      "file": "scenery/cloud_band.png"
+    },
+    "star_board": {
+      "size": [
+        144,
+        22
+      ],
+      "file": "scenery/star_board.png"
+    },
+    "wind_head": {
+      "size": [
+        96,
+        96
+      ],
+      "file": "scenery/wind_head.png"
+    },
     "longship": {
       "size": [
         288,
@@ -824,6 +869,13 @@
         300
       ],
       "file": "scenery/castle_beacon.png"
+    },
+    "castle_paradise_gate": {
+      "size": [
+        240,
+        264
+      ],
+      "file": "scenery/castle_paradise_gate.png"
     },
     "ui_joy_base": {
       "size": [
@@ -1009,6 +1061,20 @@
         540
       ],
       "file": "backgrounds/sea_near.png"
+    },
+    "creation_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/creation_far.png"
+    },
+    "creation_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/creation_near.png"
     }
   }
 }

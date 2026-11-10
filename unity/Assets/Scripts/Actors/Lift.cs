@@ -21,16 +21,16 @@ namespace Tapestry
 
         public enum Kind { BoardSideways, BoardUpDown, ShipRocking, ShipSailing }
 
-        public Lift(Vector2 tileLeftTop, Kind kind, Transform parent, float phase)
+        public Lift(Vector2 tileLeftTop, Kind kind, Transform parent, float phase, string boardSkin = "scenery/lift")
         {
             home = tileLeftTop; t = phase; Pos = home;
             string key;
             switch (kind)
             {
-                case Kind.BoardUpDown: key = "scenery/lift"; Width = 3f; ampY = 2.5f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
+                case Kind.BoardUpDown: key = boardSkin; Width = 3f; ampY = 2.5f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
                 case Kind.ShipRocking: key = "scenery/longship"; Width = 5.4f; ampY = 0.35f; speed = 1.6f; rock = 3f; spriteH = 110f; deckFromTop = 58f; break;
                 case Kind.ShipSailing: key = "scenery/longship"; Width = 5.4f; ampX = 3f; ampY = 0.25f; speed = 0.7f; rock = 2f; spriteH = 110f; deckFromTop = 58f; break;
-                default: key = "scenery/lift"; Width = 3f; ampX = 3f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
+                default: key = boardSkin; Width = 3f; ampX = 3f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
             }
             view = Art.Make(key, parent, Vector2.zero, kind == Kind.ShipRocking || kind == Kind.ShipSailing ? -2 : 2);
             Place();
