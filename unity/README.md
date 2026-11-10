@@ -2,7 +2,7 @@
 
 ## First run (on your computer)
 1. Install **Unity Hub** from unity.com/download, and sign in with a free Unity account (Unity Personal).
-2. In Unity Hub, go to **Installs → Install Editor** and choose the latest **Unity 6 LTS** (6000.0.x). Tick these modules:
+2. In Unity Hub, go to **Installs → Install Editor** and install **Unity 6** (the project is set to 6000.4.8f1, but any Unity 6 works). Tick these modules:
    - **Android Build Support** (with OpenJDK and Android SDK & NDK)
    - **iOS Build Support** (Mac only)
    - **Windows Build Support** or **Mac Build Support**, for the computer you're on
