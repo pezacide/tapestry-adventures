@@ -17,13 +17,21 @@ namespace Tapestry
 
         static bool prevMute, prevJump, prevRun, prevDown, prevStart, prevNext, prevPrev, prevLeft, prevRight;
 
-        // On-screen touch buttons, as fractions of the screen (x, y from top, w, h).
-        public static readonly Rect LeftButton = new Rect(0.02f, 0.74f, 0.11f, 0.22f);
-        public static readonly Rect RightButton = new Rect(0.15f, 0.74f, 0.11f, 0.22f);
-        public static readonly Rect DownButton = new Rect(0.085f, 0.52f, 0.11f, 0.18f);
-        public static readonly Rect RunButton = new Rect(0.72f, 0.74f, 0.12f, 0.22f);
-        public static readonly Rect JumpButton = new Rect(0.86f, 0.70f, 0.12f, 0.26f);
-        public static readonly Rect PauseButton = new Rect(0.90f, 0.14f, 0.08f, 0.10f);
+        // ---- on-screen touch controls (GUI coordinates, top-left origin), laid out inside the safe area ----
+        // a fixed joystick bottom-left; round JUMPE and RUNNE/SHOOTE buttons bottom-right; pause top-right
+        static float Unit { get { return Mathf.Min(Screen.height, Screen.width * 9f / 16f); } }
+        static Vector2 At(float fx, float fy) { var a = Safe; return new Vector2(a.x + fx * a.width, a.y + fy * a.height); }
+        public static Vector2 JoyCentre { get { return At(0.13f, 0.73f); } }
+        public static float JoyRadius { get { return Unit * 0.15f; } }
+        public static Vector2 JumpCentre { get { return At(0.915f, 0.70f); } }
+        public static float JumpRadius { get { return Unit * 0.135f; } }
+        public static Vector2 RunCentre { get { return At(0.80f, 0.845f); } }
+        public static float RunRadius { get { return Unit * 0.105f; } }
+        public static Vector2 PauseCentre { get { return At(0.955f, 0.19f); } }
+        public static float PauseRadius { get { return Unit * 0.05f; } }
+        public static Vector2 JoyKnob;             // where the joystick knob is pushed to, relative to its centre
+        public static bool TouchJump, TouchRun;    // for drawing the buttons pressed
+        static bool joyTaken, stickRun;
 
         public static bool ShowTouchControls { get { return TouchSeen || Application.isMobilePlatform; } }
 
@@ -32,6 +40,7 @@ namespace Tapestry
             float h = 0f;
             bool jump = false, run = false, down = false, start = false, next = false, prev = false, mute = false;
             TapPosition = null;
+            JoyKnob = Vector2.zero; joyTaken = false; stickRun = false; TouchJump = TouchRun = false;
 
 #if ENABLE_INPUT_SYSTEM
             var kb = Keyboard.current;
@@ -115,7 +124,8 @@ namespace Tapestry
 
             Horizontal = Mathf.Clamp(h, -1f, 1f);
             JumpPressed = jump && !prevJump; JumpHeld = jump; prevJump = jump;
-            RunHeld = run; RunPressed = run && !prevRun; prevRun = run;
+            // pushing the stick all the way runs, but only the button fires the crossbowe
+            RunHeld = run || stickRun; RunPressed = run && !prevRun; prevRun = run;
             DownPressed = down && !prevDown; prevDown = down;
             StartPressed = start && !prevStart; prevStart = start;
             NextKnightPressed = next && !prevNext; prevNext = next;
@@ -128,12 +138,22 @@ namespace Tapestry
 
         static void ApplyTouch(Vector2 gui, ref float h, ref bool jump, ref bool run, ref bool down, ref bool start)
         {
-            if (Hit(LeftButton, gui)) h -= 1f;
-            if (Hit(RightButton, gui)) h += 1f;
-            if (Hit(DownButton, gui)) down = true;
-            if (Hit(RunButton, gui)) run = true;
-            if (Hit(JumpButton, gui)) jump = true;
-            if (Hit(PauseButton, gui)) start = true;
+            var d = gui - JoyCentre;
+            if (!joyTaken && d.magnitude < JoyRadius * 1.9f)
+            {
+                // the fixed joystick: left/right walks, pushed to the rim runs, pulled down dismounts
+                joyTaken = true;
+                var k = Vector2.ClampMagnitude(d, JoyRadius);
+                JoyKnob = k;
+                float nx = k.x / JoyRadius, ny = k.y / JoyRadius;
+                if (Mathf.Abs(nx) > 0.25f) h += Mathf.Sign(nx);
+                if (Mathf.Abs(nx) > 0.85f) stickRun = true;
+                if (ny > 0.6f && Mathf.Abs(nx) < 0.7f) down = true;
+                return;
+            }
+            if ((gui - JumpCentre).magnitude < JumpRadius * 1.15f) { jump = true; TouchJump = true; }
+            if ((gui - RunCentre).magnitude < RunRadius * 1.15f) { run = true; TouchRun = true; }
+            if ((gui - PauseCentre).magnitude < PauseRadius * 1.4f) start = true;
         }
 
         /// <summary>The part of the screen clear of camera notches and rounded corners, in GUI coordinates (top-left origin).</summary>
@@ -153,6 +173,6 @@ namespace Tapestry
             return new Rect(a.x + frac.x * a.width, a.y + frac.y * a.height, frac.width * a.width, frac.height * a.height);
         }
 
-        static bool Hit(Rect frac, Vector2 gui) { return ToScreen(frac).Contains(gui); }
+
     }
 }

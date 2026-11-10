@@ -2,7 +2,7 @@
 import json, os, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from PIL import Image
-import knights, creatures, scenery, bosses, allies, items, castles  # castles adds itself to scenery
+import knights, creatures, scenery, bosses, allies, items, castles, ui  # castles and ui add themselves to scenery
 from embroider import doc
 
 ROOT = os.path.normpath(os.path.join(HERE, "..", "..", "assets"))

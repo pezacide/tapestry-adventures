@@ -684,6 +684,62 @@
       ],
       "file": "scenery/crypt_exit.png"
     },
+    "ui_joy_base": {
+      "size": [
+        180,
+        180
+      ],
+      "file": "scenery/ui_joy_base.png"
+    },
+    "ui_joy_knob": {
+      "size": [
+        80,
+        80
+      ],
+      "file": "scenery/ui_joy_knob.png"
+    },
+    "ui_run": {
+      "size": [
+        112,
+        112
+      ],
+      "file": "scenery/ui_run.png"
+    },
+    "ui_pause": {
+      "size": [
+        52,
+        52
+      ],
+      "file": "scenery/ui_pause.png"
+    },
+    "ui_jump_rubeus": {
+      "size": [
+        140,
+        140
+      ],
+      "file": "scenery/ui_jump_rubeus.png"
+    },
+    "ui_jump_azura": {
+      "size": [
+        140,
+        140
+      ],
+      "file": "scenery/ui_jump_azura.png"
+    },
+    "ui_jump_verdain": {
+      "size": [
+        140,
+        140
+      ],
+      "file": "scenery/ui_jump_verdain.png"
+    },
+    "ui_jump_aurelia": {
+      "size": [
+        140,
+        140
+      ],
+      "file": "scenery/ui_jump_aurelia.png"
+    },
     "fire": {
       "size": [
         48,

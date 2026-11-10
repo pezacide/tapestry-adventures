@@ -925,22 +925,25 @@ namespace Tapestry
 
         void TouchButtons()
         {
-            Button(TapestryInput.LeftButton, "<");
-            Button(TapestryInput.RightButton, ">");
-            Button(TapestryInput.DownButton, "v");
-            Button(TapestryInput.RunButton, player.HasCrossbow ? "SHOOTE" : "RUNNE");
-            Button(TapestryInput.JumpButton, "JUMPE");
-            Button(TapestryInput.PauseButton, "II");
+            // the fixed joystick: base, then the knob where the thumb has pushed it
+            DrawDisc("scenery/ui_joy_base", TapestryInput.JoyCentre, TapestryInput.JoyRadius, 82f / 90f, 1f);
+            DrawDisc("scenery/ui_joy_knob", TapestryInput.JoyCentre + TapestryInput.JoyKnob, TapestryInput.JoyRadius * 0.42f, 36f / 40f, 1f);
+            // JUMPE shows the knight being played; RUNNE/SHOOTE shows the crossbowe
+            DrawDisc("scenery/ui_jump_" + player.Def.Key, TapestryInput.JumpCentre, TapestryInput.JumpRadius, 64f / 70f, TapestryInput.TouchJump ? 0.7f : 1f);
+            DrawDisc("scenery/ui_run", TapestryInput.RunCentre, TapestryInput.RunRadius, 50f / 56f, TapestryInput.TouchRun ? 0.7f : 1f);
+            DrawDisc("scenery/ui_pause", TapestryInput.PauseCentre, TapestryInput.PauseRadius, 23f / 26f, 1f);
         }
 
-        void Button(Rect frac, string label)
+        /// <summary>Draw a round control: the disc fills discFrac of its square texture; brightness < 1 shows it pressed.</summary>
+        void DrawDisc(string key, Vector2 centre, float radius, float discFrac, float brightness)
         {
-            var r = TapestryInput.ToScreen(frac);
+            var tex = Art.Texture(key);
+            if (tex == null) return;
+            float size = 2f * radius / discFrac;
             var c = GUI.color;
-            GUI.color = new Color(0.2f, 0.145f, 0.114f, 0.28f);
-            GUI.DrawTexture(r, Texture2D.whiteTexture);
+            GUI.color = new Color(brightness, brightness, brightness, 0.95f);
+            GUI.DrawTexture(new Rect(centre.x - size * 0.5f, centre.y - size * 0.5f, size, size), tex);
             GUI.color = c;
-            GUI.Label(r, label, big);
         }
     }
 

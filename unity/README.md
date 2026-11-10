@@ -16,9 +16,9 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
 ## Controls
 | | Keyboard | Gamepad (Xbox / PlayStation / Switch) | Touch |
 |---|---|---|---|
-| Move | ← → or A D | left stick / d-pad | < > buttons |
-| Jump (hold to jump higher) | Space, Z, K, ↑ | A / Cross / B (Switch south button) | JUMPE |
-| Run (and shoot, with the crossbowe) | Shift, X, J | X / Square, or right trigger | RUNNE / SHOOTE |
+| Move | ← → or A D | left stick / d-pad | joystick (bottom left); push it to the rim to run |
+| Jump (hold to jump higher) | Space, Z, K, ↑ | A / Cross / B (Switch south button) | gold button showing your knight leaping |
+| Run (and shoot, with the crossbowe) | Shift, X, J | X / Square, or right trigger | blue crossbow button (pushing the joystick to the rim also runs, but only the button shoots) |
 | Get off Bayard | ↓ or S | stick down / d-pad down | v |
 | Change knight (testing) | Q / E or Tab | shoulder buttons | (none) |
 | Pause | Enter, Esc, P | Start / Options | II |
@@ -115,10 +115,10 @@ If Unity warns that Active Input Handling is "Both", switch it to **Input System
 If Unity says Android isn't installed, open Unity Hub and go to **Installs → (your Unity 6) → Manage → Add modules**. Tick **Android Build Support**, together with **OpenJDK** and **Android SDK & NDK Tools**.
 
 ### On the phone
-- The touch buttons sit inside the safe area, clear of camera notches:
-  - bottom-left: ◄ ► to move, and ▼ to get off Bayard;
-  - bottom-right: **RUNNE/SHOOTE** and **JUMPE**;
-  - top-right: **II** to pause.
+- The touch controls sit inside the safe area, clear of camera notches:
+  - bottom-left: a fixed **joystick**. Push it left or right to walk, push it to the rim to run, and pull it down to get off Bayard.
+  - bottom-right: two round buttons. The big gold **jump** button shows the knight you are playing, mid-leap. The blue **crossbow** button runs when held, shoots when tapped with the crossbowe, and carries a green shell when held. Slide your thumb between them to run and jump.
+  - top-right: a round **pause** button.
 - The pause menu has tap buttons: Continewe, Returne to ye beginnynge, and Silence ye musick.
 - The phone's **Back** button pauses the game.
 - The screen won't dim or sleep while you play.
