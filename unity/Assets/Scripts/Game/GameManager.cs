@@ -456,10 +456,10 @@ namespace Tapestry
                 if (f.Hits(pb)) player.Hurt();
             foreach (var lg in logs)
             {
-                if (lg.Removed || !pb.Overlaps(lg.Body)) continue;
+                if (lg.Removed || lg.Knocked || !pb.Overlaps(lg.Body)) continue;
                 if (player.Blessed) { lg.Destroy(); AddScore(200, lg.Body.Pos + new Vector2(0f, 1f)); continue; }
                 bool onTop = pb.Vel.y < 0f && pb.PrevBottom >= lg.Body.Pos.y + lg.Body.H * 0.5f;
-                if (onTop) { player.Bounce(); Audio.Play("bump", 0.6f); }   // bounce off it: logs can't be stomped flat
+                if (onTop) { player.Bounce(); lg.Knock(); Audio.Play("kick"); AddScore(100, lg.Body.Pos + new Vector2(0f, 1f)); }   // stomped: it tumbles away
                 else player.Hurt();
             }
             if (boss != null && boss.Active && !boss.Dead && pb.Overlaps(boss.Body))
@@ -702,6 +702,18 @@ namespace Tapestry
         public void AddScore(int n) { score += n; }
 
         /// <summary>Every tick of tyme left over at the goal is worth 50 glorie.</summary>
+        /// <summary>Roman numerals, as a scribe of 1066 would have written them (nulla for nought).</summary>
+        public static string Roman(int n)
+        {
+            if (n <= 0) return "N";
+            int[] v = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+            string[] r = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+            var sb = new System.Text.StringBuilder();
+            for (int i = 0; i < v.Length; i++)
+                while (n >= v[i]) { sb.Append(r[i]); n -= v[i]; }
+            return sb.ToString();
+        }
+
         void TymeBonus()
         {
             tymeBonus = Mathf.CeilToInt(Mathf.Max(0f, tymeLeft)) * 50;
@@ -993,7 +1005,7 @@ namespace Tapestry
             GUI.Label(new Rect(W * 0.62f, y, W * 0.2f, s * 1.2f), "Glorie " + score.ToString("000000"), small);
             var tc = small.normal.textColor;
             if (hurried) small.normal.textColor = new Color(0.66f, 0.26f, 0.18f);   // red when tyme is short
-            GUI.Label(new Rect(W * 0.82f, y, W * 0.16f, s * 1.2f), "Tyme " + Mathf.CeilToInt(Mathf.Max(0f, tymeLeft)).ToString("000"), small);
+            GUI.Label(new Rect(W * 0.80f, y, W * 0.2f, s * 1.2f), "Tyme " + Roman(Mathf.CeilToInt(Mathf.Max(0f, tymeLeft))), small);
             small.normal.textColor = tc;
             float ix = W * 0.02f + s * 6.4f;
             if (player.HasCrossbow) { DrawFrame("items/crossbow", 0, new Rect(ix, y + s * 1.15f, s * 1.3f, s)); ix += s * 1.5f; }

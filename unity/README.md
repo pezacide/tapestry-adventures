@@ -35,7 +35,7 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **The ending:** Brother Odo the monk thanks you: the Princess is in another castle.
   - It has its own castle march and boss music, and the boss has its own tapestry health bar.
 - **Worlde 2-1, Ye Shipwrights' Yarde** (World 2: the Bayeux Channel crossing): the Norman shore. It has sand underfoot and timber crates for bricks, with the fleet sailing past behind.
-  - **Log piles** roll logs at you. Jump them or bounce off their tops; bolts split them. Logs that roll off screen are gone for good.
+  - **Log piles** roll logs at you. Jump them, or stomp one to knock it loose so it tumbles away (100 glory); bolts split them. Logs that roll off screen are gone for good.
   - **Gulls** wheel overhead and dive at you; **crabs** scuttle and hop along the beach.
   - It has a rolling 6/8 sea dance (D Mixolydian) and ends at **Ye Harbour Gate**.
 
@@ -61,7 +61,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - A hit throws you off (instead of costing health); he rears and bolts. If he gallops into a pit he is lost, and you must find him again in another brick (three of the level's bricks hold him).
 - **Beasts:** Snail-Hound (red shell: stomp it, then kick the shell), Mossy Snail-Hound (green shell: stomp it, hold RUN to pick the shell up, carry it, and let go of RUN to hurl it; a held shell also fells the first beast it touches), Killer Hare, Fiery Lion (shoots fireballs), Bayeux Hound, Camel-Dragon, Wyvern, Spotted Unicorn (charges), Man-Faced Owl (swoops) and Soup Cat (throws soup).
 - **Chains (as in Mario):** a sliding shell, or the holy relique, doubles its glory for every beast it fells in a row: 100, 200, 400, 800, 1600, 3200, 6400, then 12800 for the 8th. Every beast after that earns a free life. The chain starts again when the shell stops or is picked up, or when the relique wears off.
-- **Tyme:** each level counts down from 300 (about 2½ a second, as in Mario).
+- **Tyme:** each level counts down in **Roman numerals** from CCC (300), about 2½ a second, as in Mario.
   - At 100 a warning appears, the counter turns red and the music quickens.
   - At 0 the knight is lost.
   - Each tick left at the goal is worth 50 glory.

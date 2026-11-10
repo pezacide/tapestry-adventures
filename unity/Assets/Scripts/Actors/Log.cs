@@ -10,6 +10,7 @@ namespace Tapestry
         public bool Removed;
         readonly Transform spin;
         float dir, angle;
+        bool knocked;   // stomped: it tumbles off the shore and away
 
         public Log(Vector2 pos, float dir, Transform parent)
         {
@@ -24,6 +25,15 @@ namespace Tapestry
         public void Tick(float dt, Level lv)
         {
             if (Removed) return;
+            if (knocked)
+            {
+                Body.Vel.y -= 40f * dt;
+                Body.Pos += Body.Vel * dt;
+                angle += dir * 720f * dt;
+                if (Body.Pos.y < -3f) { Destroy(); return; }
+                Place();
+                return;
+            }
             if (Body.HitWall) dir = -dir;
             Body.Vel.x = dir * 3.4f;
             Body.Vel.y = Mathf.Max(Body.Vel.y - 40f * dt, -16f);
@@ -37,6 +47,16 @@ namespace Tapestry
         {
             spin.localPosition = new Vector3(Body.Pos.x, Body.Pos.y + 0.5f, 0f);
             spin.localEulerAngles = new Vector3(0f, 0f, angle);
+        }
+
+        public bool Knocked { get { return knocked; } }
+
+        /// <summary>Stomped from above: the log is knocked loose and falls away.</summary>
+        public void Knock()
+        {
+            if (knocked) return;
+            knocked = true;
+            Body.Vel = new Vector2(dir * 2f, 5f);
         }
 
         public void Destroy() { if (Removed) return; Removed = true; Object.Destroy(spin.gameObject); }
