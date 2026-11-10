@@ -81,6 +81,7 @@ namespace Tapestry
             { "scenery/timber", new Sheet("Art/scenery/timber", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/log", new Sheet("Art/scenery/log", 48f, 48f, 1, 1f, 0.5f, 47f, 47.5f) },
             { "scenery/log_pile", new Sheet("Art/scenery/log_pile", 80f, 96f, 1, 0.5f, 13f, 79.5f, 95.5f) },
+            { "scenery/spout", new Sheet("Art/scenery/spout", 48f, 192f, 1, 2.5f, 0f, 44f, 192f) },
             { "scenery/longship", new Sheet("Art/scenery/longship", 288f, 110f, 1, 0f, 3.5f, 288f, 109.5f) },
             { "scenery/gust", new Sheet("Art/scenery/gust", 192f, 48f, 1, 2f, 1.5f, 184f, 45f) },
             { "scenery/searock", new Sheet("Art/scenery/searock", 48f, 48f, 1, 0f, 0f, 48f, 48f) },

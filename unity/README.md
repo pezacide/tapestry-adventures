@@ -49,6 +49,11 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **Wind gusts:** blue swirls blow across the screen and push you, more often against you than behind you.
   - **Leaping fish:** they burst from the waves in arcs. They *can* be stomped above water.
   - It has a brisk 6/8 crossing tune (A Dorian, with a shawm lead) and ends at **Ye Beacon** on the far shore.
+- **Worlde 2-4, Ye Landing and ye Sea-Castle:** the World 2 boss level.
+  - **The landing:** the Norman landing on the beach (crossbowe first, log pile, beasts, halfway banner).
+  - **The harbour:** longships moored over deep water, where **Aspidochelone, the Island-Whale**, hides below. It surfaces a few strides from your ship, spouts a column of water that hurls you skyward, snaps its jaws and dives.
+  - **Beating it:** stomp its back while it is up, or shoot it (three bolts to a stomp). Each blow sends it under; three and it sinks for good.
+  - **The end:** Brother Odo waits by **Ye Tower by ye Sea**, and won't let you finish until the whale is vanquished.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 

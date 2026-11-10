@@ -38,7 +38,8 @@ namespace Tapestry
         readonly List<Flail> flails = new List<Flail>();
         readonly List<Log> logs = new List<Log>();
         readonly List<Vector2> logPiles = new List<Vector2>(); readonly List<float> logTimers = new List<float>();
-        Boss boss;
+        BossBase boss;
+        bool toldOfBoss;
         bool bossMusic, deathFire;
         int relicCombo;   // beasts smitten in a row by the holy relique
         // the crossing: gusts of wind, and fish leaping from the sea
@@ -171,7 +172,7 @@ namespace Tapestry
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
-            flails.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -199,6 +200,7 @@ namespace Tapestry
                     case 'Q': logPiles.Add(p); logTimers.Add(1.5f); Art.Make("scenery/log_pile", world, p, 3); break;
                     case 'F': flails.Add(new Flail(p, world, flails.Count % 2 == 0, flails.Count * 1.7f)); break;
                     case 'K': boss = new Boss(p, world); break;
+                    case 'J': boss = new Whale(p, world); break;
                     case 'A': hasAxe = true; axePos = p; axeView = Art.Make("scenery/bridge_axe", world, p, 5); break;
                     case 'N': hasMonk = true; monkPos = p; monkView = Art.Make("allies/monk", world, p, 9); monkView.flipX = true; break;
                     case 'C':
@@ -515,7 +517,7 @@ namespace Tapestry
                 if (onTop) { player.Bounce(); lg.Knock(); Audio.Play("kick"); AddScore(100, lg.Body.Pos + new Vector2(0f, 1f)); }   // stomped: it tumbles away
                 else player.Hurt();
             }
-            if (boss != null && boss.Active && !boss.Dead && pb.Overlaps(boss.Body))
+            if (boss != null && boss.Touchable && pb.Overlaps(boss.Body))
             {
                 bool onCrown = pb.Vel.y < 0f && pb.PrevBottom >= boss.Body.Pos.y + boss.Body.H * 0.6f;
                 boss.OnKnight(player, onCrown);
@@ -532,7 +534,7 @@ namespace Tapestry
                     }
                     continue;
                 }
-                if (boss != null && boss.Active && !boss.Dead && s.Body.Overlaps(boss.Body)) { boss.Hit(0.34f); s.Destroy(); continue; }
+                if (boss != null && boss.Touchable && s.Body.Overlaps(boss.Body)) { boss.Hit(0.34f); s.Destroy(); continue; }
                 foreach (var lg in logs)   // a bolt splits a log
                     if (!lg.Removed && s.Body.Overlaps(lg.Body)) { lg.Destroy(); s.Destroy(); AddScore(200, lg.Body.Pos + new Vector2(0f, 1f)); break; }
                 if (s.Removed) continue;
@@ -564,7 +566,11 @@ namespace Tapestry
             }
 
             // the rescued monk ends a castle
-            if (hasMonk && !rescuedMonk && pb.Pos.x >= monkPos.x - 1.2f)
+            if (hasMonk && !rescuedMonk && boss != null && !boss.Dead && pb.Pos.x >= monkPos.x - 1.2f)
+            {
+                if (!toldOfBoss) { toldOfBoss = true; Toast("Brother Odo crieth: first vanquish " + boss.Title + "!"); }
+            }
+            else if (hasMonk && !rescuedMonk && pb.Pos.x >= monkPos.x - 1.2f)
             {
                 rescuedMonk = true;
                 if (monkView != null) monkView.sprite = Art.Frames("allies/monk")[1];
@@ -955,7 +961,7 @@ namespace Tapestry
                         Panel(new Rect(W * 0.15f, H * 0.24f, W * 0.7f, H * 0.57f));
                         GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HERE YE KNYGHTE IS VICTORIOUS", big);
                         GUI.Label(new Rect(W * 0.15f, H * 0.37f, W * 0.7f, H * 0.17f), hasMonk
-                            ? "Grammercy, good knyghte! Ye Cockatrice is slayne.\nYet ye Princesse Aelfgyva is held in another castel..." + (levelIndex + 1 < Levels.All.Length ? "\nPresse JUMPE to ryde on." : "\nMore of ye tapestrie is yet to be sewn...")
+                            ? "Grammercy, good knyghte! " + (boss != null ? boss.Title : "Ye beaste") + " is vanquished.\nYet ye Princesse Aelfgyva is held in another castel..." + (levelIndex + 1 < Levels.All.Length ? "\nPresse JUMPE to ryde on." : "\nMore of ye tapestrie is yet to be sewn...")
                             : levelIndex + 1 < Levels.All.Length
                             ? "Huzzah! Ye beastes are put to flyghte.\nYet ye Princesse Aelfgyva lyeth in another castel...\nPresse JUMPE to ryde on."
                             : "Huzzah! Thou hast passed every realme yet stitched.\nMore of ye tapestrie is yet to be sewn...", center);
@@ -1068,7 +1074,7 @@ namespace Tapestry
                 if (e != null && f != null)
                 {
                     GUI.DrawTexture(r, e);
-                    float k = Mathf.Clamp01(boss.Health / Boss.MaxHealth);
+                    float k = Mathf.Clamp01(boss.Health / boss.MaxHealth);
                     const float edge = 8f / 240f;
                     float u = edge + (1f - 2f * edge) * k;
                     if (k > 0f) GUI.DrawTextureWithTexCoords(new Rect(r.x, r.y, r.width * u, r.height), f, new Rect(0f, 0f, u, 1f));

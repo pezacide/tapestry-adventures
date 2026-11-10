@@ -365,6 +365,17 @@ def shore_near():
         items.append((x, st))
     return _wrap(items)
 
+def spout():
+    """The whale's spout: a column of water that hurls a knight skyward."""
+    s = ""
+    for i, (w, c) in enumerate(((18, "sky"), (12, "white"), (6, "cream"))):
+        d = f"M{24 - w},192 Q{24 - w * 1.2},100 {24 - w * 0.7},30 Q24,{14 + i * 4} {24 + w * 0.7},30 Q{24 + w * 1.2},100 {24 + w},192 Z"
+        s += fill(d, c, 90, "blue" if i == 0 else None, 1.2)
+    for x, y in ((6, 24), (40, 30), (14, 10), (34, 8), (24, 2)):
+        s += dot(x, y, 3, "white", "blue")
+    return s
+S["spout"] = (48, 192, spout, False)
+
 # ---------------- the crossing (World 2-3) ----------------
 def longship():
     """A Norman longship to stand on: 6 tiles wide, its deck 58 units below the top of the drawing."""

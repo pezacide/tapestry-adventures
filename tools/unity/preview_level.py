@@ -55,6 +55,7 @@ def render(n):
           elif c == "G": put(load("scenery/goal_pole"), x + 0.5, y)
           elif c == "C": put(load("scenery/checkpoint", 0, 2), x + 0.5, y)
           elif c == "K": put(load("bosses/cockatrice", 0, 2), x + 0.5, y)
+          elif c == "J": put(load("bosses/whale_boss", 0, 2), x + 0.5, 0.55)
           elif c == "A": put(load("scenery/bridge_axe"), x + 0.5, y)
           elif c == "N": put(load("allies/monk", 0, 2), x + 0.5, y)
           elif c == "F":

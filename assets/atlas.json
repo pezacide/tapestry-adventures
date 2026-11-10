@@ -650,6 +650,13 @@
       ],
       "file": "scenery/log_pile.png"
     },
+    "spout": {
+      "size": [
+        48,
+        192
+      ],
+      "file": "scenery/spout.png"
+    },
     "longship": {
       "size": [
         288,

@@ -2,15 +2,25 @@ using UnityEngine;
 
 namespace Tapestry
 {
+    /// <summary>What every boss shares: a body to touch, health, and being woken, struck and defeated.</summary>
+    public abstract class BossBase
+    {
+        public Body Body;
+        public float Health;
+        public abstract float MaxHealth { get; }
+        public bool Active, Dead, Removed;
+        public string Title;
+        public virtual bool Touchable { get { return Active && !Dead; } }   // false while out of reach (e.g. under the sea)
+        public abstract void Tick(float dt, Level lv, Knight player);
+        public abstract void OnKnight(Knight k, bool fromAbove);
+        public abstract void Hit(float amount);
+    }
+
     /// <summary>The Cockatrice, lord of World 1. Paces its drawbridge, hops, and glares a petrifying gaze.
     /// Three stomps on its crowned head (or bolts: three to a stomp) fell it - or strike the axe and drop the bridge.</summary>
-    public class Boss
+    public class Boss : BossBase
     {
-        public const float MaxHealth = 3f;
-        public readonly Body Body;
-        public float Health = MaxHealth;
-        public bool Active, Dead, Removed;
-        public string Title = "Ye Cockatrice";
+        public override float MaxHealth { get { return 3f; } }
 
         readonly SpriteView view;
         readonly float minX, maxX;
@@ -20,13 +30,14 @@ namespace Tapestry
         public Boss(Vector2 pos, Transform parent)
         {
             Body = new Body(pos, 1.9f, 2.5f);
+            Health = MaxHealth; Title = "Ye Cockatrice";
             view = new SpriteView("bosses/cockatrice", parent, 11);
             view.Face(false);
             minX = pos.x - 5f; maxX = pos.x + 3f;
             view.SetPosition(pos);
         }
 
-        public void Tick(float dt, Level lv, Knight player)
+        public override void Tick(float dt, Level lv, Knight player)
         {
             if (Removed) return;
             if (Dead)
@@ -71,7 +82,7 @@ namespace Tapestry
             view.SetPosition(Body.Pos);
         }
 
-        public void OnKnight(Knight k, bool fromAbove)
+        public override void OnKnight(Knight k, bool fromAbove)
         {
             if (Dead || k.Dead) return;
             if (k.Blessed) { Hit(1f); return; }
@@ -84,7 +95,7 @@ namespace Tapestry
             if (stun <= 0.6f) k.Hurt();
         }
 
-        public void Hit(float amount)
+        public override void Hit(float amount)
         {
             if (Dead || stun > 0f) return;
             Health -= amount;

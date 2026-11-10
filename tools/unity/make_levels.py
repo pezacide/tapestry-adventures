@@ -3,7 +3,7 @@ Legend:  # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding B
          1 brick hiding a golden chalice (life)   M roast capon (heart)   W crossbowe   R holy relique (star)
          Q log pile (rolls logs at the knight)   g gull   x crab   f fish   z sea-serpent   m sea-monk
          Y longship rocking at anchor   U longship sailing to and fro (deck one row above the letter)
-         * fire pit   _ drawbridge   F flail block   A axe (drops the bridge)   K boss   N rescued monk
+         * fire pit   _ drawbridge   F flail block   A axe (drops the bridge)   K Cockatrice   J Island-Whale   N rescued monk
          V vault stone (unbreakable)   L lift gliding sideways   E lift rising and falling (both 3 wide, from that tile)
          ^ treetop (one-way)   | tree trunk (scenery)   T/t tower top/body (2 wide)   ~ sea   o bezant
          P start   G goal pole   C halfway banner (respawn point)
@@ -276,3 +276,21 @@ write("Level7", "Worlde 2-3", "Ye Crossing", "HERE YE FLEETE CROSSETH YE SEA", m
       [("shrub", 4), ("shrub", 60), ("shrub", 102), ("shrub", 166)],
       "scenery/castle_beacon", 195, "crossing", "backgrounds/shore_far", "backgrounds/sea_near",
       skin=("scenery/sand_top", "scenery/sand_fill", "scenery/timber"), vault="scenery/searock", wind=True, leaping_fish=True)
+
+# ======================================================= 2-4  Ye Landing and ye Sea-Castle (boss: the Island-Whale)
+m = Map(156)
+m.ground(0, 61); m.water(62, 133); m.ground(134, 155)
+m.put(3, 2, "P")
+m.row(9, 5, "?W?"); m.put(15, 2, "x"); m.put(19, 7, "g")      # the crossbowe first: it is good against the whale
+m.put(24, 2, "Q"); m.row(30, 5, "BMB"); m.put(34, 2, "d")
+m.tower(38, 3); m.put(44, 2, "S"); m.put(48, 8, "g"); m.row(50, 5, "B?B?B")
+m.put(56, 2, "C")
+# the harbour: moored longships over deep water
+m.put(63, 2, "Y"); m.put(72, 3, "Y"); m.row(73, 7, "ooo"); m.put(81, 2, "Y")
+m.put(90, 2, "Y"); m.put(100, 3, "Y"); m.put(110, 2, "Y"); m.put(120, 3, "Y"); m.put(128, 2, "Y")
+m.put(106, 2, "J")                                            # Aspidochelone lurks beneath (it ignores the row)
+m.put(140, 2, "N")
+write("Level8", "Worlde 2-4", "Ye Landing and ye Sea-Castle", "HERE YE NORMANNES LANDE AND YE ISLAND-WHALE RISETH", m,
+      [("ship", 8), ("ship", 28), ("shrub", 46)],
+      "scenery/castle_sea_tower", 149, "shore", "backgrounds/shore_far", "backgrounds/sea_near",
+      skin=("scenery/sand_top", "scenery/sand_fill", "scenery/timber"), vault="scenery/searock")
