@@ -99,12 +99,12 @@ namespace Tapestry
             for (int i = 0; i < Input.touchCount; i++)
             {
                 var t = Input.GetTouch(i);
-                if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled) continue;
+                if (t.phase == UnityEngine.TouchPhase.Ended || t.phase == UnityEngine.TouchPhase.Canceled) continue;
                 touchCount++;
                 TouchSeen = true;
                 var gp = new Vector2(t.position.x, Screen.height - t.position.y);
                 ApplyTouch(gp, ref h, ref jump, ref run, ref down, ref start);
-                if (t.phase == TouchPhase.Began) TapPosition = gp;
+                if (t.phase == UnityEngine.TouchPhase.Began) TapPosition = gp;
             }
             if (Input.GetMouseButtonDown(0) && Input.touchCount == 0)
                 TapPosition = new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y);
