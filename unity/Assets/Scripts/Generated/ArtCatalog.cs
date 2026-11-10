@@ -53,6 +53,7 @@ namespace Tapestry
             { "scenery/tree", new Sheet("Art/scenery/tree", 96f, 160f, 1, 8.5f, 6.5f, 87.5f, 160f) },
             { "scenery/shrub", new Sheet("Art/scenery/shrub", 64f, 48f, 1, 4.5f, 5f, 61.5f, 48f) },
             { "scenery/gonfanon", new Sheet("Art/scenery/gonfanon", 48f, 144f, 1, 2.5f, 1.5f, 47.5f, 144f) },
+            { "scenery/goal_pole", new Sheet("Art/scenery/goal_pole", 64f, 384f, 1, 2.5f, 3f, 63.5f, 384f) },
             { "scenery/ship", new Sheet("Art/scenery/ship", 160f, 96f, 1, 2f, 2.5f, 158f, 89.5f) },
             { "scenery/hill", new Sheet("Art/scenery/hill", 160f, 64f, 1, 0f, 12f, 160f, 64f) },
             { "scenery/hall", new Sheet("Art/scenery/hall", 160f, 128f, 1, 3f, 2.5f, 157.5f, 128f) },

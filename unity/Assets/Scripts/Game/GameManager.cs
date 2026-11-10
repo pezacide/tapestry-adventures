@@ -24,11 +24,13 @@ namespace Tapestry
         readonly List<Enemy> enemies = new List<Enemy>();
         readonly List<Shot> shots = new List<Shot>();
         readonly List<Bezant> bezants = new List<Bezant>();
+        readonly List<Debris> debris = new List<Debris>();
         readonly List<Layer> layers = new List<Layer>();
 
         int knightIndex, bezantCount, lives = 3, score;
-        float stateTime, camX;
+        float stateTime, camX, winTime;
         bool deathFell;
+        int winPhase;   // 0 slide down the pole, 1 walk to the castle, 2 inside
 
         class Layer { public Transform[] Copies; public float Period, Speed; }
 
@@ -99,7 +101,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); bayard = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); bayard = null; winPhase = 0;
             world = new GameObject("World").transform;
             level = new Level(Level1.Map, world);
 
@@ -113,7 +115,7 @@ namespace Tapestry
                 switch (s.Key)
                 {
                     case 'o': bezants.Add(new Bezant(p + new Vector2(0f, 0.25f), world, false)); break;
-                    case 'G': Art.Make("scenery/gonfanon", world, p, 5); break;
+                    case 'G': Art.Make("scenery/goal_pole", world, p, 5); break;
                     case 's': kind = "snail_hound"; break;
                     case 'h': kind = "killer_hare"; break;
                     case 'l': kind = "fiery_lion"; break;
@@ -163,9 +165,10 @@ namespace Tapestry
                     }
                     break;
                 case State.Won:
+                    TickWin(dt);
                     player.Tick(dt, level);
                     TickEntities(dt);
-                    if (stateTime > 1.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
+                    if (winPhase == 2 && winTime > 1.2f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
                     { LoadLevel(); SetState(State.Title); }
                     break;
                 case State.GameOver:
@@ -176,6 +179,27 @@ namespace Tapestry
         }
 
         void SetState(State s) { state = s; stateTime = 0f; }
+
+        /// <summary>After touching the pole: slide down it, walk into the castle, then show the verse.</summary>
+        void TickWin(float dt)
+        {
+            var pb = player.Body;
+            winTime += dt;
+            float ground = level.GroundAt(pb.Pos.x);
+            if (winPhase == 0)
+            {
+                pb.Vel = Vector2.zero;
+                pb.Pos.y = Mathf.Max(ground, pb.Pos.y - 7f * dt);
+                if (pb.Pos.y <= ground && winTime > 0.4f) { winPhase = 1; winTime = 0f; pb.Pos.x = level.GoalX + pb.W * 0.5f + 0.1f; }
+            }
+            else if (winPhase == 1)
+            {
+                pb.Vel = new Vector2(3.2f, 0f);
+                pb.Pos.x += 3.2f * dt;
+                pb.Pos.y = level.GroundAt(pb.Pos.x);
+                if (winTime > 3f || pb.Pos.x > level.Width - 3f) { winPhase = 2; winTime = 0f; pb.Vel = Vector2.zero; player.Hide(); }
+            }
+        }
 
         void OnApplicationPause(bool paused) { if (paused && state == State.Playing) SetState(State.Paused); }
 
@@ -240,16 +264,20 @@ namespace Tapestry
 
             if (pb.Pos.y < -0.6f || level.Water(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f))) player.Die(true);
 
-            if (level.GoalX > 0f && pb.Pos.x >= level.GoalX - 0.2f && !player.Dead)
+            if (level.GoalX > 0f && pb.Right >= level.GoalX - 0.1f && !player.Dead)
             {
                 player.Freeze();
-                score += 1000;
+                player.FaceRight();
+                score += 100 * Mathf.Clamp(Mathf.RoundToInt(pb.Pos.y - 2f), 1, 9) * 5;   // higher grab, more glory
+                pb.Pos.x = level.GoalX - pb.W * 0.5f - 0.05f;
+                winPhase = 0; winTime = 0f;
                 SetState(State.Won);
             }
         }
 
         void TickEntities(float dt)
         {
+            Cleanup();
             float wake = camX + HalfWidth + 2f;
             foreach (var e in enemies)
             {
@@ -258,10 +286,17 @@ namespace Tapestry
             }
             foreach (var s in shots) s.Tick(dt, level);
             foreach (var b in bezants) b.Tick(dt);
+            foreach (var d in debris) d.Tick(dt);
             if (bayard != null) { bayard.Tick(dt, level); if (bayard.Removed) bayard = null; }
+            Cleanup();
+        }
+
+        void Cleanup()
+        {
             enemies.RemoveAll(e => e.Removed);
             shots.RemoveAll(s => s.Removed);
             bezants.RemoveAll(b => b.Removed);
+            debris.RemoveAll(d => d.Removed);
         }
 
         void LateUpdate()
@@ -286,7 +321,7 @@ namespace Tapestry
         // ------------------------------------------------------------------ called by actors
         public void KnightHitBlock(int x, int y)
         {
-            var r = level.HitFromBelow(x, y, player.Def.Breaker);
+            var r = level.HitFromBelow(x, y);
             var top = new Vector2(x + 0.5f, y + 1f);
             switch (r)
             {
@@ -296,7 +331,14 @@ namespace Tapestry
                     if (!player.Mounted && bayard == null) { bayard = new Bayard(top, world); bayard.Hop(); }
                     else { bezants.Add(new Bezant(top, world, true)); AddBezant(); }
                     break;
-                case Level.BumpResult.Broke: score += 50; break;
+                case Level.BumpResult.Broke:
+                    score += 50;
+                    var c = new Vector2(x + 0.5f, y + 0.3f);
+                    debris.Add(new Debris(c, new Vector2(-2.5f, 9f), world));
+                    debris.Add(new Debris(c, new Vector2(2.5f, 9f), world));
+                    debris.Add(new Debris(c, new Vector2(-1.8f, 6f), world));
+                    debris.Add(new Debris(c, new Vector2(1.8f, 6f), world));
+                    break;
             }
             if (r != Level.BumpResult.None)
                 foreach (var e in enemies)   // beasts standing on a bumped block are knocked flying
@@ -395,7 +437,7 @@ namespace Tapestry
                         GUI.Label(new Rect(0, H * 0.33f, W, H * 0.12f), "PAUSA", big);
                         GUI.Label(new Rect(0, H * 0.46f, W, H * 0.16f), "JUMP or Start to continue\nDOWN to return to the title", center);
                     }
-                    if (state == State.Won)
+                    if (state == State.Won && winPhase == 2)
                     {
                         Panel(new Rect(W * 0.15f, H * 0.24f, W * 0.7f, H * 0.5f));
                         GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HIC MILES VICIT", big);

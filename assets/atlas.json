@@ -410,6 +410,13 @@
       ],
       "file": "scenery/gonfanon.png"
     },
+    "goal_pole": {
+      "size": [
+        64,
+        384
+      ],
+      "file": "scenery/goal_pole.png"
+    },
     "ship": {
       "size": [
         160,

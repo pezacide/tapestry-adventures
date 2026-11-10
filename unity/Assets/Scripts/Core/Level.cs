@@ -101,8 +101,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': key = Get(x, y + 1) == '#' ? "scenery/ground_fill" : "scenery/ground_top"; break;
-                        case 'B': key = "scenery/masonry"; break;
-                        case '?': case 'H': key = "scenery/roundel_block"; break;
+                        case 'B': case '?': case 'H': key = "scenery/masonry"; break;   // item bricks look like any other brick
                         case 'X': key = "scenery/roundel_used"; break;
                         case '~': key = "scenery/sea"; break;
                         case '=': key = "scenery/plank"; dy = 1f - 18f / Art.DesignPerTile; break;
@@ -125,7 +124,7 @@ namespace Tapestry
         public enum BumpResult { None, Bezant, Bayard, Broke, Thud }
 
         /// <summary>A knight's head hit tile (x, y) from below.</summary>
-        public BumpResult HitFromBelow(int x, int y, bool canBreak)
+        public BumpResult HitFromBelow(int x, int y)
         {
             char c = Get(x, y);
             SpriteRenderer v;
@@ -139,14 +138,9 @@ namespace Tapestry
                     StartBump(v);
                     return c == '?' ? BumpResult.Bezant : BumpResult.Bayard;
                 case 'B':
-                    if (canBreak)
-                    {
-                        tiles[x, y] = ' ';
-                        if (v != null) { Object.Destroy(v.gameObject); views.Remove(Key(x, y)); }
-                        return BumpResult.Broke;
-                    }
-                    StartBump(v);
-                    return BumpResult.Thud;
+                    tiles[x, y] = ' ';
+                    if (v != null) { Object.Destroy(v.gameObject); views.Remove(Key(x, y)); }
+                    return BumpResult.Broke;
                 case 'X':
                     return BumpResult.Thud;
             }

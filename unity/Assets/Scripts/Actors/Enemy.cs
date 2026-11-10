@@ -258,6 +258,7 @@ namespace Tapestry
 
         public void Tick(float dt, Level lv)
         {
+            if (Removed) return;
             t += dt;
             if (gravity) Body.Vel.y -= 22f * dt;
             Body.Step(lv, dt);

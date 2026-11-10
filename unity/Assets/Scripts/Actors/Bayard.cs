@@ -34,6 +34,7 @@ namespace Tapestry
 
         public void Tick(float dt, Level lv)
         {
+            if (Removed) return;
             cooldown -= dt; anim += dt;
             if (rearTime > 0f)
             {
@@ -80,6 +81,7 @@ namespace Tapestry
 
         public void Tick(float dt)
         {
+            if (Removed) return;
             t += dt;
             view.SetFrame(((int)(t * (popping ? 16f : 7f))) % 4);
             if (popping)
@@ -96,5 +98,36 @@ namespace Tapestry
         }
 
         public void Destroy() { if (Removed) return; Removed = true; view.Destroy(); }
+    }
+}
+
+namespace Tapestry
+{
+    /// <summary>A shard of broken masonry tumbling away.</summary>
+    public class Debris
+    {
+        public bool Removed;
+        readonly Transform tf;
+        Vector2 pos, vel;
+        float spin, t;
+
+        public Debris(Vector2 p, Vector2 v, Transform parent)
+        {
+            pos = p; vel = v; spin = v.x * -120f;
+            var sr = Art.Make("scenery/masonry", parent, p, 25);
+            tf = sr.transform;
+            tf.localScale = new Vector3(0.45f, 0.45f, 1f);
+        }
+
+        public void Tick(float dt)
+        {
+            if (Removed) return;
+            t += dt;
+            vel.y -= 40f * dt;
+            pos += vel * dt;
+            tf.localPosition = new Vector3(pos.x, pos.y, 0f);
+            tf.localEulerAngles = new Vector3(0f, 0f, t * spin);
+            if (pos.y < -3f || t > 2f) { Removed = true; Object.Destroy(tf.gameObject); }
+        }
     }
 }

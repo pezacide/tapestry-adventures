@@ -21,7 +21,7 @@ for x0 in range(0, W * T, 960): out.alpha_composite(load("backgrounds/far"), (x0
 for key, x in props:
     x = float(x); gy = next((y + 1 for y in range(H - 1, -1, -1) if get(int(x), y) in "#BXHT?t"), 0)
     put(load(key), x, gy)
-tiles = {"B": "scenery/masonry", "?": "scenery/roundel_block", "H": "scenery/roundel_block", "~": "scenery/sea"}
+tiles = {"B": "scenery/masonry", "?": "scenery/masonry", "H": "scenery/masonry", "~": "scenery/sea"}
 done = set()
 for y in range(H):
     for x in range(W):
@@ -38,7 +38,7 @@ for y in range(H):
         c = get(x, y)
         if c in spr: put(load(spr[c][0], 0, spr[c][1]), x + 0.5, y)
         elif c == "o": put(load("scenery/bezant", 0, 4), x + 0.5, y + 0.25)
-        elif c == "G": put(load("scenery/gonfanon"), x + 0.5, y)
+        elif c == "G": put(load("scenery/goal_pole"), x + 0.5, y)
         elif c == "P": put(load("heroes/rubeus", 0, 5), x + 0.5, y)
 out.convert("RGB").save(os.path.join(A, "level1_preview.png"), optimize=True)
 print(out.size)

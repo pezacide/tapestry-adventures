@@ -142,6 +142,18 @@ def gonfanon():
     return s
 S["gonfanon"] = (48, 144, gonfanon, False)
 
+def goal_pole():
+    """The end-of-level pole, 8 tiles tall: stitched staff, gilt cross, gonfanon near the top, masonry plinth."""
+    s = stem("M24,22 L24,358", "brown", 4, False) + stem("M25.5,24 L25.5,356", "ochre", 1, False)
+    s += fill("M21,4 L27,4 L27,22 L21,22 Z M15,9 L33,9 L33,14 L15,14 Z", "gold", 0, "dark", 1)
+    flag = "M26,28 L62,28 L62,56 L56,50 L56,68 L49,58 L49,74 L42,64 L42,74 L26,74 Z"
+    s += fill(flag, "white", 0)
+    s += clip("gp", flag, stem("M26,28 L62,28 L62,74 L26,74", "blue", 6, False) + fill("M36,34 L41,34 L41,68 L36,68 Z M28,46 L52,46 L52,51 L28,51 Z", "terra", 0, "dark", 0.9))
+    s += stem(flag, "dark", 1.4)
+    s += fill("M4,358 L44,358 L44,384 L4,384 Z", "terra", 0, "dark", 1.4) + stem("M4,371 L44,371 M24,358 L24,371 M14,371 L14,384 M34,371 L34,384", "dark", 1, False)
+    return s
+S["goal_pole"] = (64, 384, goal_pole, False)
+
 def ship():
     s = stem("M76,64 L76,4", "brown", 3, False)
     sail = "M48,10 L104,10 Q108,34 102,56 L50,56 Q44,34 48,10 Z"

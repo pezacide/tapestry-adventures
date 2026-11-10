@@ -23,6 +23,7 @@ namespace Tapestry
         {
             Def = def;
             Body = new Body(pos, FootW, FootH);
+            Hearts = def.Hearts;
             view = new SpriteView(def.Sheet, parent, 20);
             view.SetPosition(pos);
         }
@@ -34,6 +35,8 @@ namespace Tapestry
         }
 
         public void Freeze() { frozen = true; Body.Vel = Vector2.zero; }
+        public void Hide() { view.Renderer.enabled = false; }
+        public void FaceRight() { view.Face(true); }
 
         public void Tick(float dt, Level lv)
         {
@@ -44,7 +47,7 @@ namespace Tapestry
                 view.SetPosition(Body.Pos);
                 return;
             }
-            if (frozen) { Animate(dt); view.SetPosition(Body.Pos); return; }
+            if (frozen) { Body.Grounded = true; Animate(dt); view.SetPosition(Body.Pos); return; }
 
             float h = TapestryInput.Horizontal;
             float speedMul = Mounted ? 1.2f : 1f;
