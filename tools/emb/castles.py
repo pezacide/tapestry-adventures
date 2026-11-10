@@ -254,5 +254,19 @@ def paradise_gate():
     return s
 C["castle_paradise_gate"] = dict(size=(240, 264), title="Ye Gate of Paradyse", fn=paradise_gate)
 
+# ---------- World 3-2: Ye Fountaine of Lyfe ----------
+def fountain():
+    W, H = 240, 240
+    s = fill("M20,240 L20,170 L220,170 L220,240 Z", "buff", 0, "dark", 1.6)                       # the basin
+    s += clip("fb", "M20,240 L20,170 L220,170 L220,240 Z", stem("M20,184 L220,184", "terra", 6, False) + stem("M20,198 L220,198", "green", 4, False))
+    s += fill("M100,240 L100,196 Q120,176 140,196 L140,240 Z", "dark", 0, "dark", 1.4)          # the way in, under the basin
+    s += fill("M108,170 L108,90 L132,90 L132,170 Z", "ochre", 90, "dark", 1.4)                    # the column
+    s += fill("M70,90 Q120,60 170,90 L160,100 Q120,80 80,100 Z", "gold", 0, "dark", 1.4)          # the upper bowl
+    for i, (x0, x1) in enumerate(((84, 40), (156, 200), (100, 70), (140, 170))):                 # four streams of the rivers of Paradise
+        s += stem(f"M{x0},96 Q{(x0 + x1) / 2},{60 + i * 6} {x1},168", ("sky", "blue")[i % 2], 4, False)
+    s += fill("M120,44 a14,14 0 1,0 0.1,0 Z", "sky", 0, "dark", 1.2) + stem("M120,58 L120,30", "white", 3, False)
+    return s
+C["castle_fountain"] = dict(size=(240, 240), title="Ye Fountaine of Lyfe", fn=fountain)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

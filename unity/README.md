@@ -53,12 +53,16 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **The landing:** the Norman landing on the beach (crossbowe first, log pile, beasts, halfway banner).
   - **The harbour:** longships moored over deep water, where **Aspidochelone, the Island-Whale**, hides below. It surfaces a few strides from your ship, spouts a column of water that hurls you skyward, snaps its jaws and dives.
   - **Beating it:** stomp its back while it is up, or shoot it (three bolts to a stomp). Each blow sends it under; three and it sinks for good.
-  - **The end:** Brother Odo waits by **Ye Tower by ye Sea**, and won't let you finish until the whale is vanquished.
+  - **The end:** Brother Odo waits by **Ye Tower by ye Sea**. While the whale lives, the screen stays on the harbour and you can't ride past it. Once it's vanquished, a pointing hand (a scribe's manicule) shows the way to him.
 - **Worlde 3-1, Ye Firmament** (World 3: the Tapestry of Creation, Girona): a sky level in Romanesque needlework, with the great wheel of creation and its sun, moon and star roundels behind.
   - **Footholds:** cloud islands, thin cloud bands you can jump up through, and gold **star boards** that glide or rise and fall over the gaps (falling is fatal).
   - **Wind-heads:** puffed-cheeked faces blow a steady wind across 12 tiles of sky, sometimes at your back and sometimes in your face.
   - **Birds of the air** fly across in waves; roundel blocks are this world's bricks.
   - It has a tune in the manner of early organum (a melody doubled a fifth below, with bells) and ends at **Ye Gate of Paradyse**.
+- **Worlde 3-2, Ye Waters Above:** swimming in the waters above the firmament, with the wheel of creation behind.
+  - **The way through:** white cloud walls and a cloud-reef tunnel to swim around.
+  - **Creatures:** the new **hippocamp** (the bestiary's sea-horse) paddles in place, then gallops through the water at you; fish, sea-serpents and sea-monks swim among the clouds. The crossbowe is right at the start.
+  - It has a slow 6/8 tune in G Dorian and ends at **Ye Fountaine of Lyfe**.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 

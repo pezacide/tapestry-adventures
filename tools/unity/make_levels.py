@@ -1,7 +1,7 @@
 """Lay out the levels and write each as an ASCII map in C# (unity/Assets/Scripts/Levels/LevelN.cs).
 Legend:  # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding Bayard   = plank (one-way)
          1 brick hiding a golden chalice (life)   M roast capon (heart)   W crossbowe   R holy relique (star)
-         Q log pile (rolls logs at the knight)   g gull   x crab   f fish   z sea-serpent   m sea-monk
+         Q log pile (rolls logs at the knight)   g gull   x crab   f fish   z sea-serpent   m sea-monk   e hippocamp
          Y longship rocking at anchor   U longship sailing to and fro (deck one row above the letter)
          < wind-head blowing left   > wind-head blowing right (12 tiles of wind)   b bird of the air
          * fire pit   _ drawbridge   F flail block   A axe (drops the bridge)   K Cockatrice   J Island-Whale   N rescued monk
@@ -323,3 +323,26 @@ m.put(182, 2, "G")
 write("Level9", "Worlde 3-1", "Ye Firmament", "HERE YE KNYGHTES CLYMBE YE FIRMAMENT OF HEVENE", m,
       [], "scenery/castle_paradise_gate", 192, "firmament", "backgrounds/creation_far", "backgrounds/creation_near",
       skin=("scenery/cloud_top", "scenery/cloud_fill", "scenery/roundel_block"), plank="scenery/cloud_band", lift="scenery/star_board")
+
+# ======================================================= 3-2  Ye Waters Above (swimming, Tapestry of Creation)
+m = Map(180)
+m.ground(0, 40); m.ground(48, 98); m.ground(106, 179)
+m.put(3, 2, "P")
+m.row(8, 5, "BWB"); m.row(13, 7, "ooo")                       # the crossbowe first
+m.put(18, 5, "f"); m.put(24, 4, "e")
+for y in range(2, 6): m.put(28, y, "V"); m.put(29, y, "V")
+for y in range(7, 10): m.put(34, y, "V"); m.put(35, y, "V")
+m.row(36, 5, "oooo"); m.put(42, 7, "m"); m.row(43, 4, "?M?")  # over the first abyss
+m.put(52, 2, "C")
+m.put(56, 6, "e"); m.put(62, 3, "f"); m.put(66, 8, "f")
+for x in range(70, 78):                                       # a long cloud-reef with a tunnel
+    for y in (2, 3, 7, 8, 9): m.put(x, y, "V")
+m.row(70, 5, "oooooooo"); m.put(82, 5, "z"); m.put(88, 7, "m"); m.row(92, 5, "B1B")
+m.put(98, 4, "e"); m.row(100, 7, "oooooo")                    # over the second abyss
+for y in range(2, 5): m.put(112, y, "V"); m.put(113, y, "V")
+for y in range(7, 10): m.put(118, y, "V"); m.put(119, y, "V")
+m.put(122, 6, "f"); m.put(126, 3, "e"); m.put(132, 7, "m"); m.put(138, 4, "z"); m.put(142, 6, "f")
+m.row(146, 5, "?R?"); m.put(152, 3, "e")
+write("Level10", "Worlde 3-2", "Ye Waters Above", "HERE YE KNYGHTES SWYMME IN YE WATERS ABOVE YE FIRMAMENT", m,
+      [], "scenery/castle_fountain", 168, "waters", "backgrounds/waters_far", "backgrounds/deep_near",
+      skin=("scenery/cloud_top", "scenery/cloud_fill", "scenery/roundel_block"), vault="scenery/cloud_block", underwater=True, end_at_door=True)

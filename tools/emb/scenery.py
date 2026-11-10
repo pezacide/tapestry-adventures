@@ -403,6 +403,14 @@ def cloud_fill():
     return s
 S["cloud_fill"] = (T, T, cloud_fill, False)
 
+def cloud_block():
+    """A solid block of white cloud (walls among the waters above)."""
+    s = fill("M0,0 L48,0 L48,48 L0,48 Z", "white", 0, None)
+    for i, y in enumerate((10, 22, 34, 46)):
+        s += stem(f"M0,{y} q6,-6 12,0 q6,-6 12,0 q6,-6 12,0 q6,-6 12,0", ("sky", "cream")[i % 2], 1.8, False)
+    return clip("cbk", "M0,0 L48,0 L48,48 L0,48 Z", s) + stem("M1,1 L47,1 L47,47 L1,47 Z", "dark", 1.6)
+S["cloud_block"] = (T, T, cloud_block, False)
+
 def cloud_band():
     """A thin cloud you can stand on and jump up through (the sky's plank)."""
     s = fill("M0,14 q6,-12 12,-2 q6,-12 12,0 q6,-12 12,-2 q6,-12 12,0 L48,20 Q24,24 0,20 Z", "white", 0, "dark", 1.3)
@@ -463,6 +471,15 @@ def creation_near():
         st = "".join(dot(x2, y2, 2.4, "gold") for x2, y2 in ((0, 120), (30, 80), (60, 140), (90, 60), (120, 110)))
         items.append((x, st))
     return _wrap(items)
+
+def waters_far():
+    """The waters above the firmament: blue water stitched in wavy bands, the wheel of creation faint behind."""
+    s = ""
+    for i, y in enumerate(range(0, BH + 30, 30)):
+        s += fill(f"M0,{y} L{BW},{y} L{BW},{y + 30} L0,{y + 30} Z", ("sky", "blue")[1 if i > 6 else 0], 0, None)
+        s += stem(f"M0,{y + 15} " + " ".join(f"q12,{-5 if (j + i) % 2 else 5} 24,0" for j in range(41)), ("white", "sky", "indigo")[i % 3], 1.4, False)
+    s += stem(f"M0,30 " + " ".join(f"q12,-6 24,0" for _ in range(41)), "white", 2.4, False)
+    return s + g(creation_far(), "")
 
 # ---------------- the crossing (World 2-3) ----------------
 def longship():
@@ -761,3 +778,5 @@ S["bg_sea_near"] = (BW, BH, sea_waves_near, False)
 
 S["bg_creation_far"] = (BW, BH, creation_far, False)
 S["bg_creation_near"] = (BW, BH, creation_near, False)
+
+S["bg_waters_far"] = (BW, BH, waters_far, False)

@@ -200,6 +200,7 @@ namespace Tapestry
                     case 'f': kind = "fish"; break;
                     case 'z': kind = "sea_serpent"; break;
                     case 'm': kind = "sea_monk"; break;
+                    case 'e': kind = "hippocamp"; break;
                     case 'Q': logPiles.Add(p); logTimers.Add(1.5f); Art.Make("scenery/log_pile", world, p, 3); break;
                     case 'F': flails.Add(new Flail(p, world, flails.Count % 2 == 0, flails.Count * 1.7f)); break;
                     case 'K': boss = new Boss(p, world); break;

@@ -16,7 +16,7 @@ namespace Tapestry
     ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
     ///              * fire pit (burns)  _ drawbridge (falls when the axe is struck)  F flail block (iron flail swings round it)
     ///              A the axe that drops the bridge  K the Cockatrice  J the Island-Whale  N the rescued monk  Q log pile (rolls logs)
-    ///              g gull  x crab  f fish  z sea-serpent  m sea-monk  Y longship rocking at anchor  U longship sailing to and fro
+    ///              g gull  x crab  f fish  z sea-serpent  m sea-monk  e hippocamp  Y longship rocking at anchor  U longship sailing to and fro
     ///              < wind-head blowing left  > wind-head blowing right  b bird of the air
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole

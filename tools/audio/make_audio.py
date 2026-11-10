@@ -246,6 +246,25 @@ def firmament_theme():
     mix_into(buf, drone(freq("D3"), L + 1, 0.45, False) + drone(freq("A3"), L + 1, 0.3, False), 0)
     return finish(buf, L, 0.55)
 
+def waters_theme():
+    """World 3-2, ye Waters Above: a slow, flowing 6/8 in G Dorian with organum fifths, harp-like lute and bells."""
+    eighth = 0.24; bar = 6 * eighth
+    A = ("G4:3 Bb4:2 C5:1 D5:3 F5:3 E5:2 D5:1 C5:2 Bb4:1 A4:6 "
+         "Bb4:3 C5:2 D5:1 F5:3 G5:3 F5:2 D5:1 C5:2 A4:1 G4:6")
+    roots = ["G2", "Bb2", "C3", "D3", "Bb2", "F2", "C3", "G2"]
+    L = 16 * bar
+    buf = np.zeros(int((L + 4) * SR))
+    for k in range(2):
+        t0 = k * 8 * bar
+        play(buf, recorder, A, 60 / eighth, t0, 0.65)
+        play(buf, recorder, " ".join(f"{up(n.split(':')[0], -7)}:{n.split(':')[1]}" for n in A.split()), 60 / eighth, t0, 0.3)
+        for i, r in enumerate(roots):
+            third = 16 if r[0] in "BFC" else 15
+            arp_bar(buf, r, t0 + i * bar, eighth, [(0, 1), (7, 1), (12, 1), (third, 1), (19, 1), (12, 1)], 0.4)
+            mix_into(buf, bell(freq(up(r, 36)), 1.4, 0.13), t0 + i * bar)
+    mix_into(buf, drone(freq("G2"), L + 1, 0.35, False) + drone(freq("D3"), L + 1, 0.2, False), 0)
+    return finish(buf, L, 0.6)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -348,7 +367,7 @@ def sfx():
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

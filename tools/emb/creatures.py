@@ -441,3 +441,21 @@ def bird(f):
     return s
 C["bird"] = dict(title="Bird of ye Air", size=(56, 44), frames=2, build=bird,
                  behaviour="flies straight across the sky in a gentle wave; stompable")
+
+
+def hippocamp(f):
+    """The bestiary's sea-horse: a horse in front, a coiling fish's tail behind."""
+    s = ""
+    tail = "M30,34 Q14,40 8,30 Q4,20 14,18 Q20,20 16,26" if f == 0 else "M30,34 Q14,30 8,40 Q4,48 14,48 Q20,46 16,40"
+    s += stem(tail, "green", 9, False) + stem(tail, "olive", 3, False) + stem(tail, "dark", 0.6, False)
+    s += fill("M16,26 L6,22 L10,30 Z" if f == 0 else "M16,40 L6,44 L10,36 Z", "sage", 0, "dark", 0.9)
+    body = "M26,26 Q40,18 54,24 L56,38 Q44,44 30,40 Q24,34 26,26 Z"
+    s += fill(body, "ochre", 0) + clip("hcb", body, scales(22, 18, 60, 46, 5, "brown", 0.8)) + stem(body, "dark", 1.4)
+    s += fill("M50,24 Q54,10 62,6 L70,8 Q74,12 70,16 L64,18 Q60,22 58,34 Z", "ochre", 0, "dark", 1.3)   # neck and head
+    s += stem("M52,22 Q54,12 60,8", "terra", 2.8, False)   # mane
+    s += fill("M60,6 L58,0 L64,4 Z", "ochre", 0, "dark", 0.8) + dot(66, 10, 1.1, "dark")
+    for x, a in ((48, (25 if f else -15)), (54, (-20 if f else 20))):   # galloping forelegs ending in fins
+        s += g(stem(f"M{x},38 L{x + 2},48", "ochre", 3, False) + fill(f"M{x - 2},48 L{x + 7},50 L{x + 1},53 Z", "sage", 0, "dark", 0.8), rot(a, x, 38))
+    return s
+C["hippocamp"] = dict(title="Hippocamp", size=(76, 56), frames=2, build=hippocamp,
+                      behaviour="the sea-horse of the bestiaries: paddles at rest, then gallops through the water at the knight; cannot be stomped under water")

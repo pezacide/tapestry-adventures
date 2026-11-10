@@ -44,7 +44,7 @@ namespace Tapestry
                 case "owl_face": gravity = false; break;
                 case "gull": gravity = false; break;
                 case "bird": gravity = false; break;
-                case "fish": case "sea_serpent": case "sea_monk": case "leaper": gravity = false; break;
+                case "fish": case "sea_serpent": case "sea_monk": case "leaper": case "hippocamp": gravity = false; break;
                 case "crab": speed = 2f; break;
                 case "soup_cat": speed = 0f; timer = 1.2f; break;
             }
@@ -200,6 +200,25 @@ namespace Tapestry
                     if (Body.Pos.x < home.x - 5f) dir = 1f; else if (Body.Pos.x > home.x + 5f) dir = -1f;
                     Body.Pos = new Vector2(Body.Pos.x + dir * 2.6f * dt, home.y + Mathf.Sin(timer * 1.6f) * 1.1f);
                     view.Face(dir > 0f); WalkFrames(0, 1, 3f);
+                    break;
+
+                case "hippocamp":   // paddles in place, then gallops through the water at the knight
+                    if (charging)
+                    {
+                        Body.Pos.x += dir * 6f * dt;
+                        Body.Pos.y = Mathf.MoveTowards(Body.Pos.y, p.Body.Pos.y + 0.3f, 1.5f * dt);
+                        WalkFrames(0, 1, 10f);
+                        if (timer > 1.6f) { charging = false; timer = 0f; }
+                    }
+                    else
+                    {
+                        Body.Pos.y = home.y + Mathf.Sin(anim * 2f) * 0.3f;
+                        Body.Pos.x = Mathf.MoveTowards(Body.Pos.x, home.x, 1.5f * dt);
+                        dir = dx > 0f ? 1f : -1f;
+                        WalkFrames(0, 1, 3f);
+                        if (Mathf.Abs(dx) < 8f && Mathf.Abs(p.Body.Pos.y - Body.Pos.y) < 3f && timer > 1.5f) { charging = true; timer = 0f; Audio.Play("mount", 0.4f); }
+                    }
+                    view.Face(dir > 0f);
                     break;
 
                 case "sea_monk":   // sinks slowly, then pulses toward the knight (like Mario's Blooper)

@@ -342,6 +342,16 @@
       ],
       "frame_count": 2,
       "file": "enemies/bird.png"
+    },
+    "hippocamp": {
+      "title": "Hippocamp",
+      "behaviour": "the sea-horse of the bestiaries: paddles at rest, then gallops through the water at the knight; cannot be stomped under water",
+      "frame": [
+        76,
+        56
+      ],
+      "frame_count": 2,
+      "file": "enemies/hippocamp.png"
     }
   },
   "bosses": {
@@ -688,6 +698,13 @@
       ],
       "file": "scenery/cloud_fill.png"
     },
+    "cloud_block": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/cloud_block.png"
+    },
     "cloud_band": {
       "size": [
         48,
@@ -883,6 +900,13 @@
         264
       ],
       "file": "scenery/castle_paradise_gate.png"
+    },
+    "castle_fountain": {
+      "size": [
+        240,
+        240
+      ],
+      "file": "scenery/castle_fountain.png"
     },
     "ui_joy_base": {
       "size": [
@@ -1082,6 +1106,13 @@
         540
       ],
       "file": "backgrounds/creation_near.png"
+    },
+    "waters_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/waters_far.png"
     }
   }
 }
