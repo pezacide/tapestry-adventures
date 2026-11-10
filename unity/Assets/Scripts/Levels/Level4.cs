@@ -19,7 +19,7 @@ namespace Tapestry
                 "                                                                  VVVVV",
                 "                                        F                         VVVVV",
                 "                                                          w       VVVVV                                   F",
-                "                BMB  F        ?W?                                 VVVVV                       B1B     BRB",
+                "                BMB  F        ?W?                                 VVVVV                       B1B     BMB",
                 "                                                                                    VV",
                 "                                       VV                                       VV",
                 "   P                      d            VV       l    h        C          F                S       d                    K      A           N",

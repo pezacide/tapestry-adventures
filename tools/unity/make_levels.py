@@ -183,7 +183,7 @@ m.put(62, 2, "C")                                             # halfway banner
 m.pillar(66, 5, 5); m.put(73, 2, "F")                         # low passage, then a flail on the floor
 m.fire(78, 85)
 m.put(80, 3, "V"); m.put(81, 3, "V"); m.put(84, 4, "V"); m.put(85, 4, "V")
-m.put(90, 2, "S"); m.row(94, 5, "B1B"); m.put(98, 2, "d"); m.row(102, 5, "BRB")
+m.put(90, 2, "S"); m.row(94, 5, "B1B"); m.put(98, 2, "d"); m.row(102, 5, "BMB")
 m.put(106, 6, "F")
 # the boss's drawbridge over the fire, the axe beyond it, and the monk
 m.fire(110, 124, 0)
