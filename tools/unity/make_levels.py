@@ -3,7 +3,7 @@ Legend:  # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding B
          1 brick hiding a golden chalice (life)   M roast capon (heart)   W crossbowe   R holy relique (star)
          ^ treetop (one-way)   | tree trunk (scenery)   T/t tower top/body (2 wide)   ~ sea   o bezant
          P start   G goal pole
-         s snail-hound  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
+         s snail-hound (red shell: kick it)  S mossy snail-hound (green shell: pick up and throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
          w wyvern  u unicorn  O man-faced owl  k soup cat"""
 import os
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "unity", "Assets", "Scripts", "Levels")
@@ -55,7 +55,7 @@ m = Map()
 m.ground(0, 29); m.ground(33, 69); m.ground(77, 139); m.ground(144, 199); m.water(70, 76)
 m.put(3, 2, "P")
 m.row(10, 5, "M"); m.row(14, 5, "B?BHB"); m.row(16, 8, "1")
-m.put(15, 2, "s"); m.put(26, 2, "h")
+m.put(15, 2, "s"); m.put(26, 2, "h"); m.put(35, 2, "S")
 m.tower(22, 2)
 m.row(37, 5, "===="); m.row(37, 7, "oooo")
 m.row(43, 5, "BWB"); m.put(48, 2, "l")
@@ -64,7 +64,7 @@ m.row(71, 4, "==="); m.row(74, 6, "==="); m.row(71, 6, "ooo")
 m.stairs(80, 5)
 m.put(88, 2, "c"); m.put(96, 7, "w")
 m.row(100, 5, "B?BRBHB"); m.row(101, 8, "o o o")
-m.put(112, 2, "u")
+m.put(112, 2, "u"); m.put(117, 2, "S")
 m.tower(124, 3); m.put(124, 5, "O")
 m.row(130, 4, "BBBB"); m.put(132, 5, "k")
 m.row(140, 5, "==="); m.row(140, 7, "ooo")
@@ -88,10 +88,10 @@ m.row(44, 5, "BMB?B")
 m.treetop(50, 4, 5); m.put(51, 6, "O")
 m.put(56, 2, "d")
 m.treetop(59, 4, 4); m.treetop(63, 4, 6); m.treetop(67, 3, 4); m.row(63, 8, "oooo"); m.put(65, 9, "w")   # over the stream
-m.put(74, 2, "h"); m.row(77, 5, "?W?"); m.put(82, 2, "d"); m.put(86, 2, "s")
+m.put(74, 2, "h"); m.put(71, 2, "S"); m.row(77, 5, "?W?"); m.put(82, 2, "d"); m.put(86, 2, "s")
 m.treetop(90, 5, 5); m.put(92, 6, "O"); m.treetop(96, 4, 7); m.row(96, 9, "oooo")
 m.treetop(100, 7, 5); m.put(103, 6, "h")                      # bridge over the second gap
-m.put(112, 2, "c"); m.row(116, 5, "BHB"); m.put(122, 2, "d")
+m.put(112, 2, "c"); m.put(109, 2, "S"); m.row(116, 5, "BHB"); m.put(122, 2, "d")
 m.treetop(126, 5, 5); m.row(126, 7, "ooooo"); m.row(132, 5, "BRB"); m.put(137, 2, "l")
 m.treetop(140, 3, 4); m.treetop(144, 3, 6); m.put(143, 9, "w")   # over the third gap
 m.treetop(148, 4, 5); m.row(149, 8, "1")

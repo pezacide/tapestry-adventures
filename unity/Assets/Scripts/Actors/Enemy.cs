@@ -9,7 +9,11 @@ namespace Tapestry
         public readonly Body Body;
         public bool Alive = true, Active, Removed;
         public bool IsShell { get { return shell; } }
-        public bool ShellMoving { get { return shell && shellVx != 0f; } }
+        public bool ShellMoving { get { return shell && shellVx != 0f && !carried; } }
+        public bool Carried { get { return carried; } }
+        bool IsSnail { get { return Kind == "snail_hound" || Kind == "snail_moss"; } }
+        bool carried;      // a green (mossy) shell held by a knight
+        Knight carrier;
 
         readonly SpriteView view;
         readonly Vector2 home;
@@ -29,7 +33,7 @@ namespace Tapestry
             view.Face(false);
             switch (kind)
             {
-                case "snail_hound": speed = 1.1f; break;
+                case "snail_hound": case "snail_moss": speed = 1.1f; break;
                 case "killer_hare": speed = 0f; break;
                 case "fiery_lion": speed = 1.4f; timer = 1f; break;
                 case "bayeux_hound": speed = 4.2f; break;
@@ -47,6 +51,7 @@ namespace Tapestry
             if (Removed) return;
             if (!Alive) { TickDead(dt); return; }
             timer += dt; anim += dt; kickGrace -= dt;
+            if (carried) { TickCarried(); return; }
             Think(dt, lv, player);
             if (gravity)
             {
@@ -76,6 +81,7 @@ namespace Tapestry
             switch (Kind)
             {
                 case "snail_hound":
+                case "snail_moss":
                     if (shell)
                     {
                         view.SetFrame(2);
@@ -178,12 +184,18 @@ namespace Tapestry
         public void OnKnight(Knight k, bool fromAbove)
         {
             if (!Alive || k.Dead) return;
-            if (Kind == "snail_hound" && shell)
+            if (IsSnail && shell)
             {
                 if (ShellMoving)
                 {
                     if (fromAbove) { shellVx = 0f; k.Bounce(); }
                     else if (kickGrace <= 0f) k.Hurt();
+                }
+                else if (Kind == "snail_moss" && TapestryInput.RunHeld && !k.Mounted && k.Carrying == null)
+                {
+                    // hold RUN against a green shell to pick it up
+                    carried = true; carrier = k; k.Carrying = this; shellVx = 0f;
+                    Audio.Play("select");
                 }
                 else
                 {
@@ -198,14 +210,36 @@ namespace Tapestry
             if (k.Mounted) { k.Bounce(); Squash(); return; }   // Bayard's hooves crush every beast, burning or not
             if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return; }   // burning mane
             k.Bounce();
-            if (Kind == "snail_hound")
+            if (IsSnail)
             {
                 shell = true; Body.Vel.x = 0f; Body.H *= 0.8f; view.SetFrame(2);
                 Audio.Play("stomp");
-                GameManager.I.AddScore(100);
+                GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
                 return;
             }
             Squash();
+        }
+
+        /// <summary>Held in front of the knight; letting go of RUN hurls it.</summary>
+        void TickCarried()
+        {
+            var k = carrier;
+            float d = k.FacingRight ? 1f : -1f;
+            Body.Pos = k.Body.Pos + new Vector2(d * (k.Body.W * 0.5f + Body.W * 0.5f - 0.05f), k.Mounted ? 0.9f : 0.45f);
+            Body.Vel = Vector2.zero;
+            view.SetFrame(2);
+            view.SetPosition(Body.Pos);
+            if (k.Dead) Release(0f);
+            else if (!TapestryInput.RunHeld) { Release(d * 11f); Audio.Play("kick"); }
+        }
+
+        void Release(float vx)
+        {
+            carried = false;
+            if (carrier != null && carrier.Carrying == this) carrier.Carrying = null;
+            carrier = null;
+            shellVx = vx; kickGrace = 0.4f;
+            if (vx != 0f) Body.Vel.y = 2f;
         }
 
         public void Squash()
@@ -213,18 +247,19 @@ namespace Tapestry
             Alive = false; squashed = true; deadTimer = 0f;
             Audio.Play("stomp");
             view.Root.transform.localScale = new Vector3(1f, 0.45f, 1f);
-            GameManager.I.AddScore(100);
+            GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
         }
 
         /// <summary>Knocked out by a shell or a bumped block: flips over and falls off the screen.</summary>
         public void Flip()
         {
             if (!Alive) return;
+            if (carried) Release(0f);
             Alive = false; flipped = true;
             Audio.Play("kick", 0.8f);
             view.Renderer.flipY = true;
             Body.Vel = new Vector2(Body.Vel.x * 0.3f, 8f);
-            GameManager.I.AddScore(200);
+            GameManager.I.AddScore(200, Body.Pos + new Vector2(0f, Body.H));
         }
 
         void TickDead(float dt)

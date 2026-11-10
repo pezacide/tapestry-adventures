@@ -48,29 +48,36 @@ def limb(x, y, length, w, color, angle=0, foot=None, footc="dark"):
 C = {}
 
 # ---------------- Snail-Hound: dog's head on a coiled snail body ----------------
-def snail_hound(f):
-    shell_only = f == 2
-    bob = (0, -1.2, 0)[f]
-    s = fill("M6,60 Q30,57 58,60 L58,62.5 L6,62.5 Z", "buff", 0, "dark", 1) if not shell_only else ""
-    if not shell_only:
-        s += g(fill("M30,34 Q35,18 44,13 L52,19 Q44,26 42,44 Z", "rose", 100), f"translate(0 {bob})")
-    shell = "M24,20 a20,20 0 1,0 0.1,0 Z"
-    s += fill("M24,20 a20,20 0 1,0 0.1,0 Z".replace("M24,20", "M24,20"), "terra", 20)
-    s += stem(spiral(24, 40, 2, 19, 2.6, math.pi), "dark", 1.4, False)
-    s += stem(spiral(24, 40, 3.6, 20.6, 2.6, math.pi), "cream", 0.9, False).replace('stroke-width="0.90"', 'stroke-width="0.9"').replace("stroke-dasharray", "data-x") \
-        if False else f'<path d="{spiral(24, 40, 4.5, 21.5, 2.45, math.pi)}" fill="none" stroke="{WOOL["cream"]}" stroke-width="1.1" stroke-dasharray="0.1 2.6" stroke-linecap="round"/>'
-    s += stem(shell, "dark", 1.6)
-    if shell_only:
-        s += dot(40, 48, 1.2, "dark") + stem("M37,45.5 L42,46.5", "dark", 0.9, False)
-        return s
-    head = fill("M42,10 Q45,4.5 51,5.5 L59.5,9 Q63.5,11 62.5,14.5 L57,17.5 Q50,20 44.5,18 Q40,15 42,10 Z", "sky", 0)
-    head += fill("M45.5,7.5 L45,0.5 L50.5,5.5 Z", "sky", 90, "dark", 1)
-    head += dot(52.5, 10, 1.1, "dark")
-    head += stem("M53,14.8 L62,13.6", "dark", 1, False)
-    head += f'<path d="M54,14.6 l1,1.6 l1,-1.7 l1,1.6 l1,-1.7 l1,1.6 l1,-1.7" fill="none" stroke="{WOOL["white"]}" stroke-width="0.9"/>'
-    return s + g(head, f"translate(0 {bob})")
+def make_snail(shell_c="terra", neck_c="rose", head_c="sky", dot_c="cream"):
+  def snail_hound(f):
+      shell_only = f == 2
+      bob = (0, -1.2, 0)[f]
+      s = fill("M6,60 Q30,57 58,60 L58,62.5 L6,62.5 Z", "buff", 0, "dark", 1) if not shell_only else ""
+      if not shell_only:
+          s += g(fill("M30,34 Q35,18 44,13 L52,19 Q44,26 42,44 Z", neck_c, 100), f"translate(0 {bob})")
+      shell = "M24,20 a20,20 0 1,0 0.1,0 Z"
+      s += fill("M24,20 a20,20 0 1,0 0.1,0 Z", shell_c, 20)
+      s += stem(spiral(24, 40, 2, 19, 2.6, math.pi), "dark", 1.4, False)
+      s += stem(spiral(24, 40, 3.6, 20.6, 2.6, math.pi), "cream", 0.9, False).replace('stroke-width="0.90"', 'stroke-width="0.9"').replace("stroke-dasharray", "data-x") \
+          if False else f'<path d="{spiral(24, 40, 4.5, 21.5, 2.45, math.pi)}" fill="none" stroke="{WOOL[dot_c]}" stroke-width="1.1" stroke-dasharray="0.1 2.6" stroke-linecap="round"/>'
+      s += stem(shell, "dark", 1.6)
+      if shell_only:
+          s += dot(40, 48, 1.2, "dark") + stem("M37,45.5 L42,46.5", "dark", 0.9, False)
+          return s
+      head = fill("M42,10 Q45,4.5 51,5.5 L59.5,9 Q63.5,11 62.5,14.5 L57,17.5 Q50,20 44.5,18 Q40,15 42,10 Z", head_c, 0)
+      head += fill("M45.5,7.5 L45,0.5 L50.5,5.5 Z", head_c, 90, "dark", 1)
+      head += dot(52.5, 10, 1.1, "dark")
+      head += stem("M53,14.8 L62,13.6", "dark", 1, False)
+      head += f'<path d="M54,14.6 l1,1.6 l1,-1.7 l1,1.6 l1,-1.7 l1,1.6 l1,-1.7" fill="none" stroke="{WOOL["white"]}" stroke-width="0.9"/>'
+      return s + g(head, f"translate(0 {bob})")
+  return snail_hound
+
+snail_hound = make_snail()
+
 C["snail_hound"] = dict(title="Snail-Hound", size=(64, 64), frames=3, build=snail_hound,
-                        behaviour="walker; stomp it and it hides in its shell - kick the shell to bowl over other beasts")
+                        behaviour="walker; stomp it and it hides in its red shell - kick the shell to bowl over other beasts")
+C["snail_moss"] = dict(title="Mossy Snail-Hound", size=(64, 64), frames=3, build=make_snail("green", "sage", "ochre", "gold"),
+                       behaviour="walker; stomp it into its green shell, then hold RUN to pick the shell up, carry it, and let go of RUN to hurl it at other beasts")
 
 # ---------------- Owl with a man's face ----------------
 OWL = "M22,22 Q36,13 50,22 Q58,44 47,62 Q36,67 25,62 Q14,44 22,22 Z"

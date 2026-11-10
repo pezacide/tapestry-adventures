@@ -172,13 +172,23 @@
   "enemies": {
     "snail_hound": {
       "title": "Snail-Hound",
-      "behaviour": "walker; stomp it and it hides in its shell - kick the shell to bowl over other beasts",
+      "behaviour": "walker; stomp it and it hides in its red shell - kick the shell to bowl over other beasts",
       "frame": [
         64,
         64
       ],
       "frame_count": 3,
       "file": "enemies/snail_hound.png"
+    },
+    "snail_moss": {
+      "title": "Mossy Snail-Hound",
+      "behaviour": "walker; stomp it into its green shell, then hold RUN to pick the shell up, carry it, and let go of RUN to hurl it at other beasts",
+      "frame": [
+        64,
+        64
+      ],
+      "frame_count": 3,
+      "file": "enemies/snail_moss.png"
     },
     "owl_face": {
       "title": "Man-Faced Owl",

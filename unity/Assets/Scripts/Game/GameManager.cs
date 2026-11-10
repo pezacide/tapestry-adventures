@@ -27,6 +27,8 @@ namespace Tapestry
         readonly List<Debris> debris = new List<Debris>();
         readonly List<Item> items = new List<Item>();
         string toast; float toastTime;
+        class Popup { public Vector2 Pos; public string Text; public float T; }
+        readonly List<Popup> popups = new List<Popup>();
         readonly List<Layer> layers = new List<Layer>();
 
         int knightIndex, bezantCount, lives = 3, score, levelIndex;
@@ -112,7 +114,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); bayard = null; winPhase = 0; toast = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); popups.Clear(); bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world);
@@ -131,6 +133,7 @@ namespace Tapestry
                     case 'o': bezants.Add(new Bezant(p + new Vector2(0f, 0.25f), world, false)); break;
                     case 'G': Art.Make("scenery/goal_pole", world, p, 5); break;
                     case 's': kind = "snail_hound"; break;
+                    case 'S': kind = "snail_moss"; break;
                     case 'h': kind = "killer_hare"; break;
                     case 'l': kind = "fiery_lion"; break;
                     case 'd': kind = "bayeux_hound"; break;
@@ -287,7 +290,7 @@ namespace Tapestry
             var pb = player.Body;
             foreach (var e in enemies)
             {
-                if (!e.Active || !e.Alive || !pb.Overlaps(e.Body)) continue;
+                if (!e.Active || !e.Alive || e.Carried || !pb.Overlaps(e.Body)) continue;
                 // a stomp if we were falling and our feet were in the top half of the beast last frame
                 if (player.Blessed) { e.Flip(); continue; }   // the holy relique smites any beast it touches
                 bool fromAbove = pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);
@@ -296,9 +299,13 @@ namespace Tapestry
             }
             foreach (var s in enemies)
             {
-                if (!s.Alive || !s.ShellMoving) continue;
+                if (!s.Alive || !(s.ShellMoving || s.Carried)) continue;
                 foreach (var o in enemies)
-                    if (o != s && o.Alive && o.Active && s.Body.Overlaps(o.Body)) o.Flip();
+                    if (o != s && o.Alive && o.Active && !o.Carried && s.Body.Overlaps(o.Body))
+                    {
+                        o.Flip();
+                        if (s.Carried) { s.Flip(); break; }   // a held shell is spent on the first beast it strikes
+                    }
             }
             foreach (var s in shots)
             {
@@ -309,7 +316,7 @@ namespace Tapestry
                     continue;
                 }
                 foreach (var e in enemies)   // a crossbowe bolt fells any beast, burning lions too
-                    if (e.Active && e.Alive && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
+                    if (e.Active && e.Alive && !e.Carried && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
             }
             foreach (var it in items)
                 if (!it.Removed && it.Ready && it.Body.Overlaps(pb)) { Collect(it); it.Destroy(); }
@@ -328,7 +335,7 @@ namespace Tapestry
             {
                 player.Freeze();
                 player.FaceRight();
-                score += 100 * Mathf.Clamp(Mathf.RoundToInt(pb.Pos.y - 2f), 1, 9) * 5;   // higher grab, more glory
+                PoleScore(pb.Pos.y - level.GroundAt(level.GoalX), new Vector2(level.GoalX, pb.Pos.y + pb.H));
                 pb.Pos.x = level.GoalX - pb.W * 0.5f - 0.05f;
                 winPhase = 0; winTime = 0f;
                 SetState(State.Won);
@@ -358,6 +365,8 @@ namespace Tapestry
                 }
             }
             if (toastTime > 0f) toastTime -= dt;
+            foreach (var p in popups) p.T += dt;
+            popups.RemoveAll(p => p.T > 1.1f);
             Cleanup();
         }
 
@@ -452,6 +461,22 @@ namespace Tapestry
             }
         }
         public void AddScore(int n) { score += n; }
+        public void AddScore(int n, Vector2 at) { score += n; popups.Add(new Popup { Pos = at, Text = n.ToString() }); }
+
+        /// <summary>The higher on the pole ye grasp it, the more glorie (Mario-fashion). The very top gives a lyfe.</summary>
+        void PoleScore(float height, Vector2 at)
+        {
+            if (height >= 7f)
+            {
+                lives++; score += 5000;
+                popups.Add(new Popup { Pos = at, Text = "1 LYFE!" });
+                Audio.Play("oneup");
+                Toast("Ye toppe of ye pole! A lyfe is thyne.");
+                return;
+            }
+            int pts = height >= 5.5f ? 5000 : height >= 4f ? 2000 : height >= 2.5f ? 800 : height >= 1.2f ? 400 : height >= 0.4f ? 200 : 100;
+            AddScore(pts, at);
+        }
         public void PlayerDied(bool fell) { deathFell = fell; SetState(State.Dying); }
 
         void AddBezant()
@@ -462,7 +487,7 @@ namespace Tapestry
         }
 
         // ------------------------------------------------------------------ GUI
-        GUIStyle big, small, center;
+        GUIStyle big, small, center, popupStyle;
 
         /// <summary>GUI unit: screen height, or less when the window is narrower than 16:9.</summary>
         static float U { get { return Mathf.Min(Screen.height, Screen.width * 9f / 16f); } }
@@ -475,6 +500,8 @@ namespace Tapestry
             small = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(U / 30f) };
             small.normal.textColor = Thread;
             center = new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, wordWrap = true };
+            popupStyle = new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
+            popupStyle.normal.textColor = new Color(0.66f, 0.26f, 0.18f);
         }
 
         void DrawFrame(string key, int frame, Rect r)
@@ -562,8 +589,20 @@ namespace Tapestry
             }
         }
 
+        void Popups()
+        {
+            foreach (var p in popups)
+            {
+                var sp = cam.WorldToScreenPoint(new Vector3(p.Pos.x, p.Pos.y + p.T * 1.4f, 0f));
+                var c = GUI.color; GUI.color = new Color(1f, 1f, 1f, Mathf.Clamp01(1.6f - p.T * 1.4f));
+                GUI.Label(new Rect(sp.x - U * 0.15f, Screen.height - sp.y - U * 0.03f, U * 0.3f, U * 0.06f), p.Text, popupStyle);
+                GUI.color = c;
+            }
+        }
+
         void Hud(float W, float H)
         {
+            Popups();
             float y = H * 0.125f, s = U * 0.05f;
             GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon Bayard" : ""), small);
             for (int i = 0; i < player.Hearts; i++)

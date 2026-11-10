@@ -38,7 +38,7 @@ def render(n):
           elif c == "^": put(load("scenery/canopy"), x + 0.5, y + 1 - 26 / 48)
           elif c in "Tt" and (x, y) not in done:
               done.add((x, y)); done.add((x + 1, y)); put(load("scenery/tower_top" if c == "T" else "scenery/tower_body"), x + 1, y)
-  spr = {"s": ("enemies/snail_hound", 3), "h": ("enemies/killer_hare", 2), "l": ("enemies/fiery_lion", 3), "d": ("enemies/bayeux_hound", 2),
+  spr = {"s": ("enemies/snail_hound", 3), "S": ("enemies/snail_moss", 3), "h": ("enemies/killer_hare", 2), "l": ("enemies/fiery_lion", 3), "d": ("enemies/bayeux_hound", 2),
          "c": ("enemies/camel_dragon", 2), "w": ("enemies/wyvern", 2), "u": ("enemies/unicorn", 2), "O": ("enemies/owl_face", 2), "k": ("enemies/soup_cat", 3)}
   for y in range(H):
       for x in range(W):

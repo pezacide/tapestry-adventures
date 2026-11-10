@@ -15,7 +15,7 @@ namespace Tapestry
     /// Map legend:  # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
     ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
-    ///              s snail-hound  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
+    ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
     ///              w wyvern  u unicorn  O man-faced owl  k soup cat</summary>
     public class Level
     {

@@ -27,6 +27,7 @@ namespace Tapestry
             { "mounts/bayard", new Sheet("Art/mounts/bayard", 104f, 84f, 5, 0f, 0f, 100.5f, 82.5f) },
             { "princess/aelfgyva", new Sheet("Art/princess/aelfgyva", 52f, 100f, 3, 0.5f, 1.5f, 52f, 99f) },
             { "enemies/snail_hound", new Sheet("Art/enemies/snail_hound", 64f, 64f, 3, 2.5f, 0f, 64f, 63.5f) },
+            { "enemies/snail_moss", new Sheet("Art/enemies/snail_moss", 64f, 64f, 3, 2.5f, 0f, 64f, 63.5f) },
             { "enemies/owl_face", new Sheet("Art/enemies/owl_face", 72f, 72f, 2, 1f, 4f, 71f, 71.5f) },
             { "enemies/soup_cat", new Sheet("Art/enemies/soup_cat", 72f, 82f, 3, 0f, 1.5f, 72f, 81f) },
             { "enemies/unicorn", new Sheet("Art/enemies/unicorn", 80f, 64f, 2, 0f, 0f, 80f, 62f) },

@@ -18,6 +18,7 @@ namespace Tapestry
         public float RelicTime;     // > 0: the holy relique protects the knight and smites beasts
         public bool Blessed { get { return RelicTime > 0f; } }
         SpriteRenderer crossbowView;
+        public Enemy Carrying;      // a green shell held in front of the knight
 
         readonly SpriteView view;
         float invuln, coyote, jumpBuffer, flutterTime, anim;
@@ -97,7 +98,7 @@ namespace Tapestry
             if (Body.HitCeiling) GameManager.I.KnightHitBlock(Body.CeilX, Body.CeilY);
 
             // the crossbowe: RUN shoots (as Mario throws fireballs with the run button)
-            if (HasCrossbow && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
+            if (HasCrossbow && Carrying == null && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
             {
                 GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, Mounted ? 1.45f : 0.95f), FacingRight);
                 Audio.Play("crossbow", 0.8f);
