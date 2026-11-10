@@ -41,6 +41,9 @@ namespace Tapestry
         Boss boss;
         bool bossMusic, deathFire;
         int relicCombo;   // beasts smitten in a row by the holy relique
+        // the level's tyme: counts down Mario-fashion; at 100 the musick quickens; at 0 the knight is lost
+        const float TymeTick = 0.4f;
+        float tymeLeft; bool hurried, deathTyme; int tymeBonus;
         SpriteRenderer axeView; Vector2 axePos; bool hasAxe, collapsing;
         List<Vector2Int> collapseTiles; float collapseT, collapseDoneT;
         SpriteRenderer monkView; Vector2 monkPos; bool hasMonk, rescuedMonk;
@@ -163,6 +166,7 @@ namespace Tapestry
         {
             if (world != null) Destroy(world.gameObject);
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
+            tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
@@ -397,6 +401,17 @@ namespace Tapestry
         void TickPlay(float dt)
         {
             if (TapestryInput.StartPressed) { SetState(State.Paused); return; }
+            if (!collapsing && !rescuedMonk)
+            {
+                tymeLeft -= dt / TymeTick;
+                if (!hurried && tymeLeft <= 100f)
+                {
+                    hurried = true;
+                    Audio.Play("pause"); Audio.MusicPitch(1.15f);
+                    Toast("Make haste! Ye tyme groweth shorte!");
+                }
+                if (tymeLeft <= 0f && !player.Dead) { tymeLeft = 0f; deathTyme = true; player.Die(); return; }
+            }
             if (TapestryInput.NextKnightPressed) SwitchKnight(1);
             if (TapestryInput.PrevKnightPressed) SwitchKnight(-1);
 
@@ -503,6 +518,7 @@ namespace Tapestry
                 player.Freeze(); player.FaceRight();
                 PlayerPrefs.SetInt(PassedKey(L.Title), 1); PlayerPrefs.Save();
                 score += 1000;
+                TymeBonus();
                 winPhase = 2; winTime = 0f;
                 SetState(State.Won);
                 return;
@@ -527,6 +543,7 @@ namespace Tapestry
             {
                 player.Freeze();
                 player.FaceRight();
+                TymeBonus();
                 PoleScore(pb.Pos.y - level.GroundAt(level.GoalX), new Vector2(level.GoalX, pb.Pos.y + pb.H));
                 pb.Pos.x = level.GoalX - pb.W * 0.5f - 0.05f;
                 winPhase = 0; winTime = 0f;
@@ -570,7 +587,11 @@ namespace Tapestry
                     Audio.Play("bump", 0.5f);
                 }
             }
-            foreach (var lg in logs) lg.Tick(dt, level);
+            foreach (var lg in logs)
+            {
+                lg.Tick(dt, level);
+                if (!lg.Removed && Mathf.Abs(lg.Body.Pos.x - camX) > HalfWidth + 1f) lg.Destroy();   // rolled off screen: gone, never to rebound
+            }
             foreach (var it in items) it.Tick(dt, level);
             if (bayard != null)
             {
@@ -679,6 +700,14 @@ namespace Tapestry
             }
         }
         public void AddScore(int n) { score += n; }
+
+        /// <summary>Every tick of tyme left over at the goal is worth 50 glorie.</summary>
+        void TymeBonus()
+        {
+            tymeBonus = Mathf.CeilToInt(Mathf.Max(0f, tymeLeft)) * 50;
+            score += tymeBonus;
+            Audio.MusicPitch(1f);
+        }
 
         public void BossDefeated()
         {
@@ -846,7 +875,8 @@ namespace Tapestry
                     }
                     if (state == State.Won && winPhase == 2)
                     {
-                        Panel(new Rect(W * 0.15f, H * 0.24f, W * 0.7f, H * 0.5f));
+                        if (tymeBonus > 0) GUI.Label(new Rect(0, H * 0.73f, W, H * 0.06f), "Tyme bonus: " + tymeBonus + " glorie", center);
+                        Panel(new Rect(W * 0.15f, H * 0.24f, W * 0.7f, H * 0.57f));
                         GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HERE YE KNYGHTE IS VICTORIOUS", big);
                         GUI.Label(new Rect(W * 0.15f, H * 0.37f, W * 0.7f, H * 0.17f), hasMonk
                             ? "Grammercy, good knyghte! Ye Cockatrice is slayne.\nYet ye Princesse Aelfgyva is held in another castel..." + (levelIndex + 1 < Levels.All.Length ? "\nPresse JUMPE to ryde on." : "\nMore of ye tapestrie is yet to be sewn...")
@@ -859,8 +889,8 @@ namespace Tapestry
                     if (state == State.Dying)
                     {
                         Panel(new Rect(W * 0.25f, H * 0.32f, W * 0.5f, H * 0.22f));
-                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.1f), deathFire ? "ALAS, HE IS BURNT!" : deathFell ? "ALAS, HE IS FALLEN!" : "ALAS, HE IS SLAYNE!", big);
-                        GUI.Label(new Rect(0, H * 0.44f, W, H * 0.08f), (deathFire ? "Ye knyghte hath fallen into ye fyre. " : deathFell ? "Ye knyghte hath fallen into ye pitte. " : "Ye knyghte is struck downe. ") + (lives > 1 ? (lives - 1) + " lyves yet remayne." : "No lyves remayne..."), center);
+                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.1f), deathTyme ? "YE TYME IS UP!" : deathFire ? "ALAS, HE IS BURNT!" : deathFell ? "ALAS, HE IS FALLEN!" : "ALAS, HE IS SLAYNE!", big);
+                        GUI.Label(new Rect(0, H * 0.44f, W, H * 0.08f), (deathTyme ? "Ye knyghte tarried too long. " : deathFire ? "Ye knyghte hath fallen into ye fyre. " : deathFell ? "Ye knyghte hath fallen into ye pitte. " : "Ye knyghte is struck downe. ") + (lives > 1 ? (lives - 1) + " lyves yet remayne." : "No lyves remayne..."), center);
                     }
                     if (state == State.GameOver)
                     {
@@ -957,10 +987,14 @@ namespace Tapestry
             W = safe.width;
             GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon Bayard" : ""), small);
             HealthBar(new Rect(W * 0.02f, y + s * 1.25f, s * 6f, s * 0.75f));
-            DrawFrame("scenery/bezant", 0, new Rect(W * 0.40f, y + s * 0.1f, s, s));
-            GUI.Label(new Rect(W * 0.40f + s * 1.2f, y, W * 0.15f, s * 1.2f), "× " + bezantCount, small);
-            GUI.Label(new Rect(W * 0.58f, y, W * 0.2f, s * 1.2f), "Lyves × " + lives, small);
-            GUI.Label(new Rect(W * 0.76f, y, W * 0.22f, s * 1.2f), "Glorie " + score.ToString("000000"), small);
+            DrawFrame("scenery/bezant", 0, new Rect(W * 0.34f, y + s * 0.1f, s, s));
+            GUI.Label(new Rect(W * 0.34f + s * 1.2f, y, W * 0.12f, s * 1.2f), "× " + bezantCount, small);
+            GUI.Label(new Rect(W * 0.47f, y, W * 0.15f, s * 1.2f), "Lyves × " + lives, small);
+            GUI.Label(new Rect(W * 0.62f, y, W * 0.2f, s * 1.2f), "Glorie " + score.ToString("000000"), small);
+            var tc = small.normal.textColor;
+            if (hurried) small.normal.textColor = new Color(0.66f, 0.26f, 0.18f);   // red when tyme is short
+            GUI.Label(new Rect(W * 0.82f, y, W * 0.16f, s * 1.2f), "Tyme " + Mathf.CeilToInt(Mathf.Max(0f, tymeLeft)).ToString("000"), small);
+            small.normal.textColor = tc;
             float ix = W * 0.02f + s * 6.4f;
             if (player.HasCrossbow) { DrawFrame("items/crossbow", 0, new Rect(ix, y + s * 1.15f, s * 1.3f, s)); ix += s * 1.5f; }
             if (player.Blessed) DrawFrame("items/relic", 1, new Rect(ix, y + s * 1.1f, s * 1.1f, s * 1.1f));

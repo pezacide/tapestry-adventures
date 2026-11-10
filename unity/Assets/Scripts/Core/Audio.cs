@@ -41,6 +41,7 @@ namespace Tapestry
             if (music.clip != null) music.Play();
         }
 
+        public static void MusicPitch(float p) { if (music != null) music.pitch = p; }
         public static void PauseMusic() { if (music != null) music.Pause(); }
         public static void ResumeMusic() { if (music != null) music.UnPause(); }
 

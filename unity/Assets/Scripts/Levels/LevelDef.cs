@@ -13,6 +13,7 @@ namespace Tapestry
         public string Music;          // Resources/Audio/music/<name>
         public string FarLayer = "backgrounds/far", NearLayer = "backgrounds/near";
         public string GroundTop = "scenery/ground_top", GroundFill = "scenery/ground_fill", Brick = "scenery/masonry";   // per-level skins
+        public int Time = 300;        // the level's tyme, counted down Mario-fashion (about 0.4 s a tick)
         public bool Entrance;         // a short lead-in: no pole; walking into the building goes straight on to the next part
     }
 
