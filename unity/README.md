@@ -39,7 +39,7 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **Gulls** wheel overhead and dive at you; **crabs** scuttle and hop along the beach.
   - It has a rolling 6/8 sea dance (D Mixolydian) and ends at **Ye Harbour Gate**.
 - **Worlde 2-2, Beneath ye Waves:** an underwater level. Bayard waits on the shore.
-  - **Swimming:** tap JUMPE to stroke upward; you sink slowly and can't rise past the surface.
+  - **Swimming:** tap JUMPE to stroke upward; you sink slowly and can't rise past the surface. The knight swims lying flat, head first, and stands up to walk when he reaches the sea-bed (if there is headroom).
   - **Sea creatures** can't be stomped, so dodge them or shoot them with the crossbowe, which is found right at the start: the **Bayeux fish** swims in waves, the **sea-serpent** patrols in coils, and the **sea-monk** sinks and then pulses after you.
   - **The way through:** rock pillars and a reef tunnel to swim through, and two abysses.
   - It has a slow 3/4 waltz in F Lydian. Swim into **Ye Wrecke**, a sunken longship, to finish.

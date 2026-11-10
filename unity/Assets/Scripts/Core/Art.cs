@@ -112,12 +112,37 @@ namespace Tapestry
             Place();
         }
 
+        Vector2 baseLocal;
+        float tilt, tiltCentreY;
+
         void Place()
         {
             Renderer.flipX = !FacingRight;
             float cx = (sheet.MinX + sheet.MaxX) * 0.5f - sheet.FrameW * 0.5f;
             float bottomPad = sheet.FrameH - sheet.MaxY;
-            Renderer.transform.localPosition = new Vector3((FacingRight ? -cx : cx) / Art.DesignPerTile, -bottomPad / Art.DesignPerTile, 0f);
+            baseLocal = new Vector2((FacingRight ? -cx : cx) / Art.DesignPerTile, -bottomPad / Art.DesignPerTile);
+            ApplyTilt();
+        }
+
+        /// <summary>Turn the drawing by `degrees` about its own middle, and set that middle at height `centreY`
+        /// above the body's feet (e.g. a knight lying flat to swim). Zero degrees puts it back upright.</summary>
+        public void SetTilt(float degrees, float centreY)
+        {
+            tilt = degrees; tiltCentreY = centreY;
+            ApplyTilt();
+        }
+
+        void ApplyTilt()
+        {
+            var t = Renderer.transform;
+            if (tilt == 0f) { t.localPosition = new Vector3(baseLocal.x, baseLocal.y, 0f); t.localEulerAngles = Vector3.zero; return; }
+            // the drawing's visible middle, measured up from its own feet
+            float hc = (sheet.FrameH - (sheet.MinY + sheet.MaxY) * 0.5f) / Art.DesignPerTile;
+            float a = tilt * Mathf.Deg2Rad, c = Mathf.Cos(a), s = Mathf.Sin(a);
+            var v = new Vector2(baseLocal.x, -hc);   // from the middle back to the sprite's pivot
+            var r = new Vector2(v.x * c - v.y * s, v.x * s + v.y * c);
+            t.localPosition = new Vector3(r.x, tiltCentreY + r.y, 0f);
+            t.localEulerAngles = new Vector3(0f, 0f, tilt);
         }
 
         public void SetPosition(Vector2 p) { Root.transform.localPosition = new Vector3(p.x, p.y, 0f); }

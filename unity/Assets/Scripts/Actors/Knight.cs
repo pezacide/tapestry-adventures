@@ -56,7 +56,7 @@ namespace Tapestry
                 view.SetPosition(Body.Pos);
                 return;
             }
-            if (frozen) { Body.Grounded = true; Animate(dt); view.SetPosition(Body.Pos); return; }
+            if (frozen) { Body.Grounded = true; Animate(dt); if (lying) { SetLying(false); view.SetTilt(0f, 0f); } view.SetPosition(Body.Pos); return; }
 
             if (Petrified > 0f) Petrified -= dt;
             bool stone = Petrified > 0f;
@@ -112,7 +112,7 @@ namespace Tapestry
             // the crossbowe: RUN shoots (as Mario throws fireballs with the run button)
             if (!stone && HasCrossbow && Carrying == null && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
             {
-                GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, Mounted ? 1.45f : 0.95f), FacingRight);
+                GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, lying ? 0.35f : Mounted ? 1.45f : 0.95f), FacingRight);
                 Audio.Play("crossbow", 0.8f);
             }
 
@@ -126,10 +126,32 @@ namespace Tapestry
             else view.Renderer.color = stone ? new Color(0.55f, 0.56f, 0.6f) : Color.white;   // grey as stone while petrified
             PlaceCrossbow();
             Animate(dt);
+            view.SetTilt(lying ? (FacingRight ? -80f : 80f) : 0f, Body.H * 0.5f);
             view.SetPosition(Body.Pos);
         }
 
         float stroke;   // time since the last swimming stroke
+        bool lying;     // swimming flat, head first (the body is low and long while so)
+        const float SwimW = 1.2f, SwimH = 0.75f;
+
+        /// <summary>Is there room above the knight's feet to stand up straight?</summary>
+        bool RoomToStand(Level lv)
+        {
+            int x0 = Mathf.FloorToInt(Body.Pos.x - FootW * 0.5f), x1 = Mathf.FloorToInt(Body.Pos.x + FootW * 0.5f);
+            int y0 = Mathf.FloorToInt(Body.Pos.y + 0.05f), y1 = Mathf.FloorToInt(Body.Pos.y + FootH - 0.05f);
+            for (int x = x0; x <= x1; x++)
+                for (int y = y0; y <= y1; y++)
+                    if (lv.Solid(x, y)) return false;
+            return Body.Pos.y + FootH <= 9.6f;
+        }
+
+        void SetLying(bool on)
+        {
+            if (on == lying) return;
+            lying = on;
+            if (on) { Body.W = SwimW; Body.H = SwimH; }
+            else { Body.W = FootW; Body.H = FootH; }
+        }
 
         /// <summary>Under the waves: tap JUMPE to stroke upward; the knight sinks slowly and cannot rise past the surface.</summary>
         void Swim(float dt, Level lv, bool stone)
@@ -149,6 +171,8 @@ namespace Tapestry
             Body.Step(lv, dt);
             const float surface = 9.6f;   // the water's surface: no swimming out of the level
             if (Body.Top > surface) { Body.Pos.y = surface - Body.H; if (Body.Vel.y > 0f) Body.Vel.y = 0f; }
+            // flat and head first while swimming; upright to walk the sea-bed (if there is headroom)
+            SetLying(!(Body.Grounded && RoomToStand(lv)));
         }
 
         void Animate(float dt)
@@ -206,6 +230,7 @@ namespace Tapestry
             if (Mounted) { Mounted = false; view.SetSheet(Def.Sheet); }
             view.Renderer.enabled = true;
             RelicTime = 0f; ShowGlory(false); HasCrossbow = false; PlaceCrossbow();
+            if (lying) { SetLying(false); view.SetTilt(0f, 0f); }
             view.SetFrame(3);
             view.Renderer.flipY = true;
             Body.Vel = new Vector2(0f, fell ? 17f : 11f);
@@ -286,7 +311,8 @@ namespace Tapestry
             if (crossbowView == null) return;
             crossbowView.enabled = HasCrossbow && view.Renderer.enabled && !Dead;
             crossbowView.flipX = !FacingRight;
-            crossbowView.transform.localPosition = new Vector3(FacingRight ? 0.3f : -0.3f, Mounted ? 1.3f : 0.75f, 0f);
+            crossbowView.transform.localPosition = lying ? new Vector3(FacingRight ? 0.75f : -0.75f, 0.2f, 0f)
+                : new Vector3(FacingRight ? 0.3f : -0.3f, Mounted ? 1.3f : 0.75f, 0f);
         }
 
         public void Destroy() { view.Destroy(); }
