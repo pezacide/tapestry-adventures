@@ -285,6 +285,7 @@ namespace Tapestry
         public readonly Body Body;
         public bool Removed;
         public readonly bool Friendly;   // a knight's crossbowe bolt (hurts beasts, not knights)
+        public readonly string Kind;
         readonly SpriteView view;
         readonly bool gravity;
         readonly float life;
@@ -295,6 +296,7 @@ namespace Tapestry
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
             gravity = kind == "soup_glob";
             Friendly = kind == "bolt";
+            Kind = kind;
             life = Friendly ? 1.1f : 4f;
             view = new SpriteView("projectiles/" + kind, parent, 15);
             view.Face(vel.x >= 0f);

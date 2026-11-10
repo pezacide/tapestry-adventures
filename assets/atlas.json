@@ -167,6 +167,19 @@
       ],
       "file": "princess/aelfgyva.png",
       "note": "Named after the mysterious lady in the Bayeux Tapestry. Held captive behind the Cat King's throne; idle, wave, joy (rescued)."
+    },
+    "monk": {
+      "title": "Brother Odo, the rescued monk",
+      "frame": [
+        44,
+        76
+      ],
+      "frames": [
+        "idle",
+        "wave"
+      ],
+      "file": "allies/monk.png",
+      "note": "waits at the end of each castle to tell ye knyghte that ye Princesse is in another castel"
     }
   },
   "enemies": {
@@ -314,6 +327,16 @@
     }
   },
   "projectiles": {
+    "gaze": {
+      "title": "Petrifying Gaze",
+      "behaviour": "the Cockatrice's glare: turns a knight to stone for a moment",
+      "frame": [
+        40,
+        12
+      ],
+      "frame_count": 2,
+      "file": "projectiles/gaze.png"
+    },
     "bolt": {
       "title": "Crossbowe Bolt",
       "behaviour": "shot by a knight who carries the crossbowe",
@@ -542,6 +565,34 @@
       ],
       "file": "scenery/aura.png"
     },
+    "drawbridge": {
+      "size": [
+        48,
+        26
+      ],
+      "file": "scenery/drawbridge.png"
+    },
+    "bridge_axe": {
+      "size": [
+        48,
+        96
+      ],
+      "file": "scenery/bridge_axe.png"
+    },
+    "flail_ball": {
+      "size": [
+        24,
+        24
+      ],
+      "file": "scenery/flail_ball.png"
+    },
+    "chain_link": {
+      "size": [
+        12,
+        12
+      ],
+      "file": "scenery/chain_link.png"
+    },
     "vault": {
       "size": [
         48,
@@ -633,6 +684,15 @@
       ],
       "file": "scenery/crypt_exit.png"
     },
+    "fire": {
+      "size": [
+        48,
+        48
+      ],
+      "frame_count": 2,
+      "file": "scenery/fire.png",
+      "note": "burning pit (kills), flickers between two frames"
+    },
     "checkpoint": {
       "size": [
         44,
@@ -703,6 +763,20 @@
         540
       ],
       "file": "backgrounds/crypt_near.png"
+    },
+    "castle_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/castle_far.png"
+    },
+    "castle_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/castle_near.png"
     }
   }
 }

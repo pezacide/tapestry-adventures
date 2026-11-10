@@ -26,6 +26,7 @@ namespace Tapestry
             { "heroes/aurelia_mounted", new Sheet("Art/heroes/aurelia_mounted", 104f, 128f, 5, 0f, 0f, 100.5f, 126.5f) },
             { "mounts/bayard", new Sheet("Art/mounts/bayard", 104f, 84f, 5, 0f, 0f, 100.5f, 82.5f) },
             { "princess/aelfgyva", new Sheet("Art/princess/aelfgyva", 52f, 100f, 3, 0.5f, 1.5f, 52f, 99f) },
+            { "allies/monk", new Sheet("Art/allies/monk", 44f, 76f, 2, 3f, 3.5f, 44f, 75.5f) },
             { "enemies/snail_hound", new Sheet("Art/enemies/snail_hound", 64f, 64f, 3, 2.5f, 0f, 64f, 63.5f) },
             { "enemies/snail_moss", new Sheet("Art/enemies/snail_moss", 64f, 64f, 3, 2.5f, 0f, 64f, 63.5f) },
             { "enemies/owl_face", new Sheet("Art/enemies/owl_face", 72f, 72f, 2, 1f, 4f, 71f, 71.5f) },
@@ -40,6 +41,7 @@ namespace Tapestry
             { "bosses/great_dragon", new Sheet("Art/bosses/great_dragon", 300f, 160f, 3, 5f, 1f, 300f, 151f) },
             { "bosses/cat_king", new Sheet("Art/bosses/cat_king", 164f, 170f, 2, 18.5f, 0f, 164f, 170f) },
             { "bosses/whale_boss", new Sheet("Art/bosses/whale_boss", 256f, 168f, 2, 0f, 29f, 256f, 168f) },
+            { "projectiles/gaze", new Sheet("Art/projectiles/gaze", 40f, 12f, 2, 0f, 2.5f, 39.5f, 9.5f) },
             { "projectiles/bolt", new Sheet("Art/projectiles/bolt", 24f, 8f, 1, 0.5f, 1f, 24f, 7.5f) },
             { "projectiles/fireball", new Sheet("Art/projectiles/fireball", 24f, 16f, 2, 4f, 4.5f, 24f, 11.5f) },
             { "projectiles/soup_glob", new Sheet("Art/projectiles/soup_glob", 16f, 16f, 2, 1f, 1f, 15f, 15f) },
@@ -69,6 +71,10 @@ namespace Tapestry
             { "scenery/health_empty", new Sheet("Art/scenery/health_empty", 240f, 30f, 1, 0.5f, 2.5f, 239.5f, 27.5f) },
             { "scenery/health_full", new Sheet("Art/scenery/health_full", 240f, 30f, 1, 0.5f, 2.5f, 239.5f, 27.5f) },
             { "scenery/aura", new Sheet("Art/scenery/aura", 128f, 152f, 1, 1.5f, 13.5f, 126.5f, 139f) },
+            { "scenery/drawbridge", new Sheet("Art/scenery/drawbridge", 48f, 26f, 1, 0f, 0.5f, 48f, 25.5f) },
+            { "scenery/bridge_axe", new Sheet("Art/scenery/bridge_axe", 48f, 96f, 1, 0.5f, 3f, 47.5f, 94.5f) },
+            { "scenery/flail_ball", new Sheet("Art/scenery/flail_ball", 24f, 24f, 1, 0f, 0f, 24f, 24f) },
+            { "scenery/chain_link", new Sheet("Art/scenery/chain_link", 12f, 12f, 1, 1.5f, 1.5f, 10.5f, 10.5f) },
             { "scenery/vault", new Sheet("Art/scenery/vault", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/lift", new Sheet("Art/scenery/lift", 144f, 22f, 1, 0.5f, 0f, 143.5f, 21f) },
             { "scenery/border", new Sheet("Art/scenery/border", 384f, 64f, 1, 0f, 1.5f, 384f, 62.5f) },
@@ -82,6 +88,7 @@ namespace Tapestry
             { "scenery/castle_round_tower", new Sheet("Art/scenery/castle_round_tower", 240f, 300f, 1, 8.5f, 0f, 231.5f, 300f) },
             { "scenery/crypt_entrance", new Sheet("Art/scenery/crypt_entrance", 192f, 216f, 1, 11f, 12.5f, 181f, 216f) },
             { "scenery/crypt_exit", new Sheet("Art/scenery/crypt_exit", 144f, 288f, 1, 2.5f, 0f, 141.5f, 288f) },
+            { "scenery/fire", new Sheet("Art/scenery/fire", 48f, 48f, 2, 0f, 3.5f, 48f, 48f) },
             { "scenery/checkpoint", new Sheet("Art/scenery/checkpoint", 44f, 96f, 2, 1f, 3.5f, 41.5f, 96f) },
             { "scenery/bezant", new Sheet("Art/scenery/bezant", 24f, 24f, 4, 1.5f, 1.5f, 22.5f, 22.5f) },
             { "backgrounds/linen", new Sheet("Art/backgrounds/linen", 960f, 540f, 1, 0f, 0f, 960f, 540f) },
@@ -91,6 +98,8 @@ namespace Tapestry
             { "backgrounds/forest_near", new Sheet("Art/backgrounds/forest_near", 960f, 540f, 1, 0f, 339f, 960f, 540f) },
             { "backgrounds/crypt_far", new Sheet("Art/backgrounds/crypt_far", 960f, 540f, 1, 0f, 0f, 960f, 540f) },
             { "backgrounds/crypt_near", new Sheet("Art/backgrounds/crypt_near", 960f, 540f, 1, 50.5f, 0f, 790f, 169f) },
+            { "backgrounds/castle_far", new Sheet("Art/backgrounds/castle_far", 960f, 540f, 1, 0f, 0f, 960f, 540f) },
+            { "backgrounds/castle_near", new Sheet("Art/backgrounds/castle_near", 960f, 540f, 1, 111f, 299.5f, 849f, 361f) },
         };
     }
 }

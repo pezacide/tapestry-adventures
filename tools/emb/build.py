@@ -37,8 +37,13 @@ for n, it in items.I.items():
     w, h = it["size"]
     sheets[f"items/{n}"] = [job(items.build_svg(it, f), f"item_{n}_{f}", w, h) for f in range(it["frames"])]
     atlas["items"][n] = dict(title=it["title"], behaviour=it["effect"], frame=[w, h], frame_count=it["frames"], file=f"items/{n}.png")
+sheets["projectiles/gaze"] = [job(items.build_svg(items.GAZE, f), f"gaze_{f}", 40, 12) for f in range(2)]
+atlas["projectiles"]["gaze"] = dict(title="Petrifying Gaze", behaviour="the Cockatrice's glare: turns a knight to stone for a moment", frame=[40, 12], frame_count=2, file="projectiles/gaze.png")
 sheets["projectiles/bolt"] = [job(items.build_svg(items.BOLT, 0), "bolt", 24, 8)]
 atlas["projectiles"]["bolt"] = dict(title="Crossbowe Bolt", behaviour="shot by a knight who carries the crossbowe", frame=[24, 8], frame_count=1, file="projectiles/bolt.png")
+sheets["allies/monk"] = [job(doc(allies.MW, allies.MH, allies.monk(p)), f"monk_{p}", allies.MW, allies.MH) for p in allies.M_POSES]
+atlas["princess"]["monk"] = dict(title="Brother Odo, the rescued monk", frame=[allies.MW, allies.MH], frames=allies.M_POSES, file="allies/monk.png",
+    note="waits at the end of each castle to tell ye knyghte that ye Princesse is in another castel")
 for n, bb in bosses.B.items():
     w, h = bb["size"]
     sheets[f"bosses/{n}"] = [job(bosses.build_svg(n, f), f"{n}_{f}", w, h) for f in range(bb["frames"])]
@@ -51,13 +56,15 @@ for n, c in creatures.C.items():
     atlas[cat][n] = dict(title=c["title"], behaviour=c["behaviour"], frame=[w, h], frame_count=c["frames"], file=f"{cat}/{n}.png")
 
 for n, (w, h, fn, bg) in scenery.S.items():
-    if n.startswith("bezant_") or n.startswith("checkpoint_"):
+    if n.startswith("bezant_") or n.startswith("checkpoint_") or n.startswith("fire_"):
         continue
     folder = "backgrounds" if n.startswith("bg_") else "scenery"
     name = n[3:] if n.startswith("bg_") else n
     sheets[f"{folder}/{name}"] = [job(scenery.build_svg(n), n, w, h)]
     atlas[folder][name] = dict(size=[w, h], file=f"{folder}/{name}.png")
 sheets["scenery/bezant"] = [job(scenery.build_svg(f"bezant_{i}"), f"bezant_{i}", 24, 24) for i in range(4)]
+sheets["scenery/fire"] = [job(scenery.build_svg(f"fire_{i}"), f"fire_{i}", 48, 48) for i in range(2)]
+atlas["scenery"]["fire"] = dict(size=[48, 48], frame_count=2, file="scenery/fire.png", note="burning pit (kills), flickers between two frames")
 sheets["scenery/checkpoint"] = [job(scenery.build_svg(f"checkpoint_{i}"), f"checkpoint_{i}", 44, 96) for i in range(2)]
 atlas["scenery"]["checkpoint"] = dict(size=[44, 96], frame_count=2, file="scenery/checkpoint.png", note="halfway banner: unclaimed, claimed")
 atlas["scenery"]["bezant"] = dict(size=[24, 24], frame_count=4, file="scenery/bezant.png", note="spinning gold bezant (the coin)")

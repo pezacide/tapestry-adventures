@@ -67,3 +67,18 @@ MOUNT_PAD = 44   # extra headroom above the horse in mounted frames
 def mounted(knight_body):
     """Horse + rider in one frame (HW x HH+MOUNT_PAD), for each horse pose."""
     return {p: doc(HW, HH + MOUNT_PAD, g(horse(p, rider=knight_body), f"translate(0 {MOUNT_PAD})")) for p in POSES}
+
+# ---------------- the rescued monk (end of each castle) ----------------
+MW, MH = 44, 76
+M_POSES = ["idle", "wave"]
+def monk(pose):
+    s = fill("M10,28 Q22,22 34,28 L40,74 L4,74 Z", "brown", 90)
+    s += stem("M12,46 L32,46", "cream", 1.6, False)   # rope girdle
+    if pose == "wave":
+        s += fill("M30,32 L42,12 L46,16 L35,38 Z", "brown", 70, "dark", 1.1) + dot(43.5, 11, 2.4, "buff", "dark")
+    else:
+        s += fill("M30,32 L36,50 L30,52 L27,38 Z", "brown", 100, "dark", 1.1) + dot(32.5, 52, 2.2, "buff", "dark")
+    s += fill("M12,18 Q12,6 22,6 Q32,6 32,18 Q32,28 22,29 Q12,28 12,18 Z", "buff", 0)
+    s += fill("M12,14 Q14,4 22,4 Q30,4 32,14 Q22,9 12,14 Z", "brown", 0, "dark", 1)   # tonsure ring
+    s += dot(18.5, 17, 0.9, "dark") + dot(25.5, 17, 0.9, "dark") + stem("M19,23 Q22,25 25,23", "terra", 0.9, False)
+    return s

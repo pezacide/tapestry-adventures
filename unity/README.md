@@ -28,6 +28,12 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
 - **Worlde 1-1, Ye Meadowe of Beastes:** an open meadow with towers, a sea pit and brick rows. It ends at the keep upon the motte.
 - **Worlde 1-2, Ye Foreste of Wyverns:** treetop platforms you can jump up through, three gaps bridged by trees, a stream, perching owls and wyverns. It has its own wandering tune in A Dorian and ends at the abbey in the wood.
 - **Worlde 1-3, Ye Crypte Gate and Ye Undercroft:** it starts above ground; walk through the door of ye Way Downe and you descend into a vaulted crypt. At its far end a stair climbs back up into daylight (Ye Lyght of Daye), where the flag and ye Rounde Tower wait with a stone ceiling, low arches, and lifts that glide sideways or rise and fall over dark pits. Soup Cats guard the kitchens. The crypt has a slow tune in E Phrygian.
+- **Worlde 1-4, Ye Cockatrice's Keepe:** the World 1 castle. It is a stone hall hung with tapestries and lit by torches.
+  - **Hazards:** fire pits with stone stepping blocks, and iron flails swinging round their blocks (Mario's fire bars).
+  - **The boss:** the **Cockatrice** paces a drawbridge over the fire. It hops, and glares a petrifying gaze that turns you to stone for a moment.
+  - **Beating it:** stomp its crowned head three times, or shoot it (three bolts count as one stomp), or slip past it and strike the axe beyond. The bridge falls and the Cockatrice with it.
+  - **The ending:** Brother Odo the monk thanks you: the Princess is in another castle.
+  - It has its own castle march and boss music, and the boss has its own tapestry health bar.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 

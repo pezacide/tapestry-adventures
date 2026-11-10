@@ -16,6 +16,9 @@ namespace Tapestry
         public bool FacingRight { get { return view.FacingRight; } }
         public bool HasCrossbow { get; private set; }
         public float RelicTime;     // > 0: the holy relique protects the knight and smites beasts
+        public float Petrified;     // > 0: turned to stone by the Cockatrice's gaze
+        public void Petrify(float t) { if (!Blessed && !Dead) { Petrified = Mathf.Max(Petrified, t); Audio.Play("bump"); } }
+        public void Unfreeze() { frozen = false; }
         public bool Blessed { get { return RelicTime > 0f; } }
         SpriteRenderer crossbowView;
         Transform auraPivot; SpriteRenderer auraView;
@@ -55,7 +58,9 @@ namespace Tapestry
             }
             if (frozen) { Body.Grounded = true; Animate(dt); view.SetPosition(Body.Pos); return; }
 
-            float h = TapestryInput.Horizontal;
+            if (Petrified > 0f) Petrified -= dt;
+            bool stone = Petrified > 0f;
+            float h = stone ? 0f : TapestryInput.Horizontal;
             float speedMul = Mounted ? 1.2f : 1f;
             float target = h * (TapestryInput.RunHeld ? Def.Run : Def.Walk) * speedMul;
             float accel;
@@ -69,7 +74,7 @@ namespace Tapestry
             // jump with coyote time and a jump buffer, so it feels forgiving
             if (Body.Grounded) { coyote = 0.1f; flutterUsed = false; }
             else coyote -= dt;
-            if (TapestryInput.JumpPressed) jumpBuffer = 0.12f; else jumpBuffer -= dt;
+            if (TapestryInput.JumpPressed && !stone) jumpBuffer = 0.12f; else jumpBuffer -= dt;
             if (jumpBuffer > 0f && coyote > 0f)
             {
                 Body.Vel.y = Def.Jump + Mathf.Abs(Body.Vel.x) * 0.12f + (Mounted ? 1.4f : 0f);
@@ -101,7 +106,7 @@ namespace Tapestry
             if (Body.HitCeiling) GameManager.I.KnightHitBlock(Body.CeilX, Body.CeilY);
 
             // the crossbowe: RUN shoots (as Mario throws fireballs with the run button)
-            if (HasCrossbow && Carrying == null && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
+            if (!stone && HasCrossbow && Carrying == null && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
             {
                 GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, Mounted ? 1.45f : 0.95f), FacingRight);
                 Audio.Play("crossbow", 0.8f);
@@ -114,6 +119,7 @@ namespace Tapestry
                 RelicTime -= dt;
                 ShowGlory(RelicTime > 0f);
             }
+            else view.Renderer.color = stone ? new Color(0.55f, 0.56f, 0.6f) : Color.white;   // grey as stone while petrified
             PlaceCrossbow();
             Animate(dt);
             view.SetPosition(Body.Pos);

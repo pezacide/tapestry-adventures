@@ -34,6 +34,13 @@ namespace Tapestry
         bool hasCheckpoint, checkpointClaimed;
         // what the knight carries on into the next level
         bool carry; int carryHearts; bool carryCrossbow, carryMounted;
+        // castles: flails, the boss, the axe that drops the bridge, and the rescued monk
+        readonly List<Flail> flails = new List<Flail>();
+        Boss boss;
+        bool bossMusic, deathFire;
+        SpriteRenderer axeView; Vector2 axePos; bool hasAxe, collapsing;
+        List<Vector2Int> collapseTiles; float collapseT, collapseDoneT;
+        SpriteRenderer monkView; Vector2 monkPos; bool hasMonk, rescuedMonk;
         // title screen: 0 = choose a knight, 1 = choose a realme (only realmes already passed)
         int titleStep, realmChoice;
         readonly List<int> realmStarts = new List<int>();
@@ -152,7 +159,8 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null; bayard = null; winPhase = 0; toast = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
+            flails.Clear(); boss = null; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world);
@@ -160,7 +168,7 @@ namespace Tapestry
             foreach (var d in L.Props)
                 Art.Make(d.Key, world, new Vector2(d.X, level.GroundAt(d.X)), -20);
             // the castle at the end, centred on its doorway; drawn behind the knight, who walks in and vanishes
-            Art.Make(L.Castle, world, new Vector2(L.CastleX, level.GroundAt(L.CastleX)), -5);
+            if (!string.IsNullOrEmpty(L.Castle)) Art.Make(L.Castle, world, new Vector2(L.CastleX, level.GroundAt(L.CastleX)), -5);
 
             foreach (var s in level.Spawns)
             {
@@ -172,6 +180,10 @@ namespace Tapestry
                     case 'G': Art.Make("scenery/goal_pole", world, p, 5); break;
                     case 's': kind = "snail_hound"; break;
                     case 'S': kind = "snail_moss"; break;
+                    case 'F': flails.Add(new Flail(p, world, flails.Count % 2 == 0, flails.Count * 1.7f)); break;
+                    case 'K': boss = new Boss(p, world); break;
+                    case 'A': hasAxe = true; axePos = p; axeView = Art.Make("scenery/bridge_axe", world, p, 5); break;
+                    case 'N': hasMonk = true; monkPos = p; monkView = Art.Make("allies/monk", world, p, 9); monkView.flipX = true; break;
                     case 'C':
                         hasCheckpoint = true; checkpointPos = p;
                         checkpointView = Art.Make("scenery/checkpoint", world, p, 4, checkpointClaimed ? 1 : 0);
@@ -247,7 +259,7 @@ namespace Tapestry
             }
         }
 
-        string LevelMusic { get { return L.Music; } }
+        string LevelMusic { get { return bossMusic ? "boss" : L.Music; } }
         bool relicMusic;
 
         void NextLevel()
@@ -368,6 +380,8 @@ namespace Tapestry
 
             level.Tick(dt);
             foreach (var l in lifts) l.Tick(dt);
+            foreach (var f in flails) f.Tick(dt);
+            if (collapsing) TickCollapse(dt);
             player.Tick(dt, level);
             TickEntities(dt);
             if (player.Dead) return;
@@ -393,14 +407,26 @@ namespace Tapestry
                         if (s.Carried) { s.Flip(); break; }   // a held shell is spent on the first beast it strikes
                     }
             }
+            foreach (var f in flails)
+                if (f.Hits(pb)) player.Hurt();
+            if (boss != null && boss.Active && !boss.Dead && pb.Overlaps(boss.Body))
+            {
+                bool onCrown = pb.Vel.y < 0f && pb.PrevBottom >= boss.Body.Pos.y + boss.Body.H * 0.6f;
+                boss.OnKnight(player, onCrown);
+            }
             foreach (var s in shots)
             {
                 if (s.Removed) continue;
                 if (!s.Friendly)
                 {
-                    if (s.Body.Overlaps(pb)) { player.Hurt(); s.Destroy(); }
+                    if (s.Body.Overlaps(pb))
+                    {
+                        if (s.Kind == "gaze") player.Petrify(1.3f); else player.Hurt();
+                        s.Destroy();
+                    }
                     continue;
                 }
+                if (boss != null && boss.Active && !boss.Dead && s.Body.Overlaps(boss.Body)) { boss.Hit(0.34f); s.Destroy(); continue; }
                 foreach (var e in enemies)   // a crossbowe bolt fells any beast, burning lions too
                     if (e.Active && e.Alive && !e.Carried && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
             }
@@ -415,7 +441,31 @@ namespace Tapestry
                 bayard = null;
             }
 
-            if (pb.Pos.y < -0.6f || level.Water(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f))) player.Die(true);
+            deathFire = level.Fire(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f));
+            if (pb.Pos.y < -0.6f || deathFire || level.Water(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f))) { player.Die(true); return; }
+
+            // strike the axe: the drawbridge falls, and whatever stands on it
+            if (hasAxe && !collapsing && pb.Right > axePos.x - 0.4f && pb.Left < axePos.x + 0.4f && pb.Pos.y < axePos.y + 2f)
+            {
+                collapsing = true; collapseT = collapseDoneT = 0f;
+                collapseTiles = level.BridgeTiles();
+                player.Freeze();
+                if (axeView != null) Destroy(axeView.gameObject);
+                Audio.Play("kick");
+            }
+
+            // the rescued monk ends a castle
+            if (hasMonk && !rescuedMonk && pb.Pos.x >= monkPos.x - 1.2f)
+            {
+                rescuedMonk = true;
+                if (monkView != null) monkView.sprite = Art.Frames("allies/monk")[1];
+                player.Freeze(); player.FaceRight();
+                PlayerPrefs.SetInt(PassedKey(L.Title), 1); PlayerPrefs.Save();
+                score += 1000;
+                winPhase = 2; winTime = 0f;
+                SetState(State.Won);
+                return;
+            }
 
             if (hasCheckpoint && !checkpointClaimed && pb.Pos.x >= checkpointPos.x - 0.3f)
             {
@@ -448,6 +498,15 @@ namespace Tapestry
         {
             Cleanup();
             float wake = camX + HalfWidth + 2f;
+            if (boss != null)
+            {
+                if (!boss.Active && boss.Body.Pos.x < wake - 2f)
+                {
+                    boss.Active = true; bossMusic = true; Audio.Music("boss");
+                    Toast(boss.Title + " barreth thy way!");
+                }
+                if (boss.Active) boss.Tick(dt, level, player);
+            }
             foreach (var e in enemies)
             {
                 if (!e.Active && e.Body.Pos.x < wake) e.Active = true;
@@ -563,6 +622,30 @@ namespace Tapestry
             }
         }
         public void AddScore(int n) { score += n; }
+
+        public void BossDefeated()
+        {
+            bossMusic = false;
+            Audio.Music(L.Music);
+            Toast("Huzzah! " + (boss != null ? boss.Title : "Ye beaste") + " is slayne!");
+        }
+
+        void TickCollapse(float dt)
+        {
+            collapseT += dt;
+            while (collapseT > 0.07f && collapseTiles.Count > 0)
+            {
+                collapseT -= 0.07f;
+                var t = collapseTiles[0]; collapseTiles.RemoveAt(0);
+                level.RemoveTile(t.x, t.y);
+                if (collapseTiles.Count % 3 == 0) Audio.Play("brick", 0.6f);
+            }
+            if (collapseTiles.Count == 0)
+            {
+                collapseDoneT += dt;
+                if (collapseDoneT > 1.2f) { collapsing = false; hasAxe = false; player.Unfreeze(); }
+            }
+        }
 
         /// <summary>Move a body standing on a lift along with it (call before the body steps).</summary>
         public void CarryOnLift(Body b)
@@ -698,16 +781,19 @@ namespace Tapestry
                     {
                         Panel(new Rect(W * 0.15f, H * 0.24f, W * 0.7f, H * 0.5f));
                         GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HERE YE KNYGHTE IS VICTORIOUS", big);
-                        GUI.Label(new Rect(W * 0.15f, H * 0.37f, W * 0.7f, H * 0.17f), levelIndex + 1 < Levels.All.Length
+                        GUI.Label(new Rect(W * 0.15f, H * 0.37f, W * 0.7f, H * 0.17f), hasMonk
+                            ? "Grammercy, good knyghte! Ye Cockatrice is slayne.\nYet ye Princesse Aelfgyva is held in another castel..." + (levelIndex + 1 < Levels.All.Length ? "\nPresse JUMPE to ryde on." : "\nMore of ye tapestrie is yet to be sewn...")
+                            : levelIndex + 1 < Levels.All.Length
                             ? "Huzzah! Ye beastes are put to flyghte.\nYet ye Princesse Aelfgyva lyeth in another castel...\nPresse JUMPE to ryde on."
                             : "Huzzah! Thou hast passed every realme yet stitched.\nMore of ye tapestrie is yet to be sewn...", center);
+                        if (hasMonk) DrawFrame("allies/monk", 1, new Rect(W * 0.5f - H * 0.05f, H * 0.56f, H * 0.1f, H * 0.17f)); else
                         DrawFrame("princess/aelfgyva", 1, new Rect(W * 0.5f - H * 0.05f, H * 0.54f, H * 0.1f, H * 0.19f));
                     }
                     if (state == State.Dying)
                     {
                         Panel(new Rect(W * 0.25f, H * 0.32f, W * 0.5f, H * 0.22f));
-                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.1f), deathFell ? "ALAS, HE IS FALLEN!" : "ALAS, HE IS SLAYNE!", big);
-                        GUI.Label(new Rect(0, H * 0.44f, W, H * 0.08f), (deathFell ? "Ye knyghte hath fallen into ye pitte. " : "Ye knyghte is struck downe. ") + (lives > 1 ? (lives - 1) + " lyves yet remayne." : "No lyves remayne..."), center);
+                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.1f), deathFire ? "ALAS, HE IS BURNT!" : deathFell ? "ALAS, HE IS FALLEN!" : "ALAS, HE IS SLAYNE!", big);
+                        GUI.Label(new Rect(0, H * 0.44f, W, H * 0.08f), (deathFire ? "Ye knyghte hath fallen into ye fyre. " : deathFell ? "Ye knyghte hath fallen into ye pitte. " : "Ye knyghte is struck downe. ") + (lives > 1 ? (lives - 1) + " lyves yet remayne." : "No lyves remayne..."), center);
                     }
                     if (state == State.GameOver)
                     {
@@ -778,6 +864,20 @@ namespace Tapestry
         void Hud(float W, float H)
         {
             Popups();
+            if (boss != null && boss.Active && !boss.Dead)
+            {
+                var r = new Rect(W * 0.5f - U * 0.3f, H * 0.2f, U * 0.6f, U * 0.05f);
+                GUI.Label(new Rect(r.x, r.y - U * 0.055f, r.width, U * 0.05f), boss.Title, center);
+                var e = Art.Texture("scenery/health_empty"); var f = Art.Texture("scenery/health_full");
+                if (e != null && f != null)
+                {
+                    GUI.DrawTexture(r, e);
+                    float k = Mathf.Clamp01(boss.Health / Boss.MaxHealth);
+                    const float edge = 8f / 240f;
+                    float u = edge + (1f - 2f * edge) * k;
+                    if (k > 0f) GUI.DrawTextureWithTexCoords(new Rect(r.x, r.y, r.width * u, r.height), f, new Rect(0f, 0f, u, 1f));
+                }
+            }
             float y = H * 0.125f, s = U * 0.05f;
             GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon Bayard" : ""), small);
             HealthBar(new Rect(W * 0.02f, y + s * 1.25f, s * 6f, s * 0.75f));

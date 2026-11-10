@@ -50,3 +50,9 @@ BOLT = dict(title="Crossbowe Bolt", size=(24, 8), frames=1, build=bolt)
 def build_svg(spec, f):
     w, h = spec["size"]
     return doc(w, h, spec["build"](f), seed=41 + f)
+
+def gaze(f):
+    s = stem("M2,6 Q8,1 14,6 T26,6 T38,6" if f == 0 else "M2,6 Q8,11 14,6 T26,6 T38,6", "gold", 2.4, False)
+    s += stem("M2,6 L38,6", "cream", 0.8, False) + dot(36, 6, 3, "gold", "dark")
+    return s
+GAZE = dict(title="Petrifying Gaze", size=(40, 12), frames=2, build=gaze)

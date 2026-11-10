@@ -120,6 +120,43 @@ def crypt_theme():
     mix_into(buf, drone(freq("E2"), L + 1, 0.5, False) + drone(freq("B2"), L + 1, 0.25, False), 0)
     return finish(buf, L, 0.5)
 
+def castle_theme():
+    """World 1-4: a tense march in D (Aeolian), low shawm over a pounding tabor and drone."""
+    bpm = 118; beat = 60 / bpm; bar = 4 * beat
+    mel = ("D4:1 D4:.5 F4:.5 A4:1 G4:1 F4:1 E4:1 D4:2 "
+           "C4:1 C4:.5 E4:.5 G4:1 F4:1 E4:1 D4:1 E4:2 "
+           "D4:1 F4:1 A4:1 C5:1 Bb4:1.5 A4:.5 G4:2 "
+           "F4:1 E4:1 D4:1 C4:1 D4:4 ")
+    L = 8 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 8 * bar
+        play(buf, shawm, mel, bpm, t0, 0.7)
+        if k: play(buf, recorder, " ".join(f"{up(n.split(':')[0], 12)}:{n.split(':')[1]}" for n in mel.split()), bpm, t0, 0.3)
+        for i, r in enumerate(["D2", "D2", "C2", "C2", "D2", "Bb1", "F2", "D2"]):
+            for b in range(4):
+                mix_into(buf, tabor(0.25, 0.6 if b % 2 == 0 else 0.35, b % 2 == 0), t0 + i * bar + b * beat)
+                mix_into(buf, lute(freq(up(r, 12 if b % 2 else 0)), beat, 0.45), t0 + i * bar + b * beat)
+    mix_into(buf, drone(freq("D2"), L + 1, 0.5) + drone(freq("A2"), L + 1, 0.3), 0)
+    return finish(buf, L, 0.3)
+
+def boss_theme():
+    """The Cockatrice: a fast, driving shawm riff and drums."""
+    eighth = 0.2 * 0.62; bar = 8 * eighth
+    riff = ("D4:1 D4:1 F4:1 D4:1 G4:1 F4:1 E4:1 C4:1 D4:1 D4:1 F4:1 A4:1 G#4:2 A4:2 "
+            "Bb4:1 A4:1 G4:1 F4:1 E4:1 F4:1 G4:1 E4:1 D4:2 A3:2 D4:4 ")
+    L = 8 * bar
+    buf = np.zeros(int((L + 2) * SR))
+    for k in range(2):
+        play(buf, shawm, riff, 60 / eighth, k * 4 * bar, 0.9)
+    play(buf, shawm, " ".join(f"{up(n.split(':')[0], -12)}:{n.split(':')[1]}" for n in (riff * 2).split()), 60 / eighth, 0, 0.4)
+    for i in range(8):
+        for e in range(8):
+            mix_into(buf, tabor(0.18, 0.6 if e % 4 == 0 else 0.35, e % 2 == 0), i * bar + e * eighth)
+        mix_into(buf, jingle(0.15, 0.7), i * bar + 4 * eighth)
+    mix_into(buf, drone(freq("D2"), L + 1, 0.55), 0)
+    return finish(buf, L, 0.15)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -222,7 +259,7 @@ def sfx():
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

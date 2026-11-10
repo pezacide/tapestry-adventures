@@ -302,6 +302,77 @@ def aura():
     return s
 S["aura"] = (128, 152, aura, False)
 
+# ---------------- castle (World 1-4) ----------------
+def fire_pit(f):
+    def fn():
+        s = fill("M0,30 L48,30 L48,48 L0,48 Z", "dark", 0, None)
+        for i, x in enumerate((4, 16, 28, 40)):   # glowing coals
+            s += fill(f"M{x - 5},48 Q{x - 6},36 {x},34 Q{x + 6},36 {x + 5},48 Z", ("terra", "ochre")[(i + f) % 2], 0, "dark", 0.9)
+        for i, x in enumerate((6, 18, 30, 42)):   # flames licking up
+            h = (22, 30, 18, 28)[(i + f * 2) % 4]
+            s += fill(f"M{x - 6},34 Q{x - 7},{34 - h * 0.6} {x + (2 if f else -2)},{34 - h} Q{x + 7},{34 - h * 0.6} {x + 6},34 Z", ("terra", "ochre", "terra", "gold")[(i + f) % 4], 90, "dark", 0.9)
+            s += fill(f"M{x - 2.5},34 Q{x - 3},{34 - h * 0.4} {x},{34 - h * 0.6} Q{x + 3},{34 - h * 0.4} {x + 2.5},34 Z", "gold", 90, None)
+        return s
+    return fn
+S["fire_0"] = (T, T, fire_pit(0), False)
+S["fire_1"] = (T, T, fire_pit(1), False)
+
+def drawbridge():
+    s = fill("M0,2 L48,2 L48,22 L0,22 Z", "brown", 0, "dark", 1.4)
+    s += stem("M0,8 L48,8 M0,15 L48,15", "ochre", 1, False) + stem("M16,2 L16,22 M32,2 L32,22", "dark", 0.9, False)
+    s += dot(8, 5, 1.2, "grey", "dark") + dot(40, 18, 1.2, "grey", "dark")
+    s += stem("M0,24 L48,24", "grey", 2.4, False)   # the chain along its edge
+    return s
+S["drawbridge"] = (T, 26, drawbridge, False)
+
+def bridge_axe():
+    s = stem("M24,24 L24,92", "brown", 4, False) + stem("M25.5,26 L25.5,90", "ochre", 1, False)
+    s += fill("M24,10 Q44,6 46,28 Q44,46 24,40 Z", "grey", 60, "dark", 1.4)
+    s += fill("M24,10 Q4,6 2,28 Q4,46 24,40 Z", "grey", 120, "dark", 1.4)
+    s += stem("M24,10 Q44,6 46,28 Q44,46 24,40 M24,10 Q4,6 2,28 Q4,46 24,40", "white", 0.8, False)
+    s += fill("M20,4 L28,4 L28,12 L20,12 Z", "gold", 0, "dark", 1)
+    return s
+S["bridge_axe"] = (T, 96, bridge_axe, False)
+
+def flail_ball():
+    s = ""
+    import math as _m
+    for i in range(8):
+        a = i * _m.pi / 4
+        s += fill(f"M{12 + _m.cos(a - 0.3) * 7:.1f},{12 + _m.sin(a - 0.3) * 7:.1f} L{12 + _m.cos(a) * 12:.1f},{12 + _m.sin(a) * 12:.1f} L{12 + _m.cos(a + 0.3) * 7:.1f},{12 + _m.sin(a + 0.3) * 7:.1f} Z", "grey", 0, "dark", 0.8)
+    s += fill("M12,4 a8,8 0 1,0 0.1,0 Z", "grey", 45, "dark", 1.3) + stem("M8,9 Q11,6 14,7", "white", 0.9, False)
+    return s
+S["flail_ball"] = (24, 24, flail_ball, False)
+
+def chain_link():
+    return fill("M6,2 a4,4 0 1,0 0.1,0 Z", "grey", 0, "dark", 1.1) + dot(6, 6, 1.4, "dark")
+S["chain_link"] = (12, 12, chain_link, False)
+
+def castle_far():
+    """The great hall's walls, hung with tapestries - a tapestry within the tapestry."""
+    s = fill(f"M0,0 L{BW},0 L{BW},{BH} L0,{BH} Z", "grey", 0, None)
+    lines = []
+    for r, y in enumerate(range(20, BH, 28)):
+        lines.append(f"M0,{y} L{BW},{y}")
+        for x in range(14 * (r % 2), BW, 56): lines.append(f"M{x},{y - 27} L{x},{y - 1}")
+    s += stem(" ".join(lines), "dark", 0.7, False)
+    for i, x in enumerate(range(60, BW, 240)):
+        hang = f"M{x},120 L{x + 110},120 L{x + 110},330 L{x + 55},350 L{x},330 Z"
+        s += fill(hang, ("terra", "blue", "green", "terra")[i % 4], 90)
+        s += clip(f"tp{x}", hang, stem(f"M{x},132 L{x + 110},132 M{x},318 L{x + 110},318", "gold", 2, False))
+        s += beast(x + 34, 220, "ochre", "dark") if i % 2 == 0 else bird(x + 40, 225, "gold", "cream")
+        s += stem(hang, "dark", 1.6) + stem(f"M{x - 8},118 L{x + 118},118", "brown", 4, False)
+        s += fill(f"M{x + 150},180 L{x + 166},180 L{x + 166},250 L{x + 150},250 Z", "dark", 0, "dark", 1)   # arrow slit
+    return s
+
+def castle_near():
+    items = []
+    for x in range(120, BW, 240):   # wall torches
+        t = fill("M-5,330 L5,330 L3,360 L-3,360 Z", "brown", 90, "dark", 1)
+        t += fill("M-8,330 Q-9,312 0,300 Q9,312 8,330 Z", "terra", 90, "dark", 1) + fill("M-4,330 Q-4,318 0,310 Q4,318 4,330 Z", "gold", 90, None)
+        items.append((x, t))
+    return _wrap(items)
+
 # ---------------- undercroft (World 1-3) ----------------
 def vault():
     """Unbreakable vault stone: dark dressed blocks."""
@@ -439,3 +510,6 @@ S["bg_forest_near"] = (BW, BH, forest_near, False)
 
 S["bg_crypt_far"] = (BW, BH, crypt_far, False)
 S["bg_crypt_near"] = (BW, BH, crypt_near, False)
+
+S["bg_castle_far"] = (BW, BH, castle_far, False)
+S["bg_castle_near"] = (BW, BH, castle_near, False)

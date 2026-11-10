@@ -14,6 +14,8 @@ namespace Tapestry
     ///
     /// Map legend:  # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
     ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
+    ///              * fire pit (burns)  _ drawbridge (falls when the axe is struck)  F flail block (iron flail swings round it)
+    ///              A the axe that drops the bridge  K the boss  N the rescued monk
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -50,8 +52,9 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
-                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V':
+                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_':
                             tiles[x, y] = c; break;
+                        case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
                         case 'G': GoalX = x + 0.5f; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y))); break;
                         case ' ': break;
@@ -77,13 +80,34 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': return true;
                 default: return false;
             }
         }
 
         public bool Platform(int x, int y) { char c = Get(x, y); return c == '=' || c == '^'; }
         public bool Water(int x, int y) { return Get(x, y) == '~'; }
+        public bool Fire(int x, int y) { return Get(x, y) == '*'; }
+
+        readonly List<SpriteRenderer> fires = new List<SpriteRenderer>();
+        float fireT;
+
+        /// <summary>Every drawbridge tile, nearest the axe (rightmost) first, for collapsing.</summary>
+        public List<Vector2Int> BridgeTiles()
+        {
+            var list = new List<Vector2Int>();
+            for (int x = Width - 1; x >= 0; x--)
+                for (int y = 0; y < Height; y++)
+                    if (tiles[x, y] == '_') list.Add(new Vector2Int(x, y));
+            return list;
+        }
+
+        public void RemoveTile(int x, int y)
+        {
+            tiles[x, y] = ' ';
+            SpriteRenderer v;
+            if (views.TryGetValue(Key(x, y), out v)) { if (v != null) Object.Destroy(v.gameObject); views.Remove(Key(x, y)); }
+        }
 
         /// <summary>Height of the top surface in a column, scanning down from the top of the map.</summary>
         public float GroundAt(float x)
@@ -111,7 +135,9 @@ namespace Tapestry
                         case '=': key = "scenery/plank"; dy = 1f - 18f / Art.DesignPerTile; break;
                         case '^': key = "scenery/canopy"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case '|': key = "scenery/trunk"; break;
-                        case 'V': key = "scenery/vault"; break;
+                        case 'V': case 'F': key = "scenery/vault"; break;
+                        case '*': key = "scenery/fire"; break;
+                        case '_': key = "scenery/drawbridge"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case 'T':
                         case 't':
                             // towers are two tiles wide: draw one sprite per pair, centred between the two tiles
@@ -124,7 +150,10 @@ namespace Tapestry
                             break;
                     }
                     if (key != null)
-                        views[Key(x, y)] = Art.Make(key, root, new Vector2(x + 0.5f, y + dy), c == '~' ? 6 : c == '|' ? -6 : c == '^' ? 1 : 0);
+                    {
+                        views[Key(x, y)] = Art.Make(key, root, new Vector2(x + 0.5f, y + dy), c == '~' ? 6 : c == '*' ? 6 : c == '|' ? -6 : c == '^' ? 1 : 0, c == '*' ? (x + y) % 2 : 0);
+                        if (c == '*') fires.Add(views[Key(x, y)]);
+                    }
                 }
         }
 
@@ -157,6 +186,7 @@ namespace Tapestry
                     return BumpResult.Broke;
                 case 'X':
                 case 'V':
+                case 'F':
                     return BumpResult.Thud;
             }
             return BumpResult.None;
@@ -171,6 +201,13 @@ namespace Tapestry
 
         public void Tick(float dt)
         {
+            fireT += dt;
+            if (fireT > 0.16f)   // the flames flicker
+            {
+                fireT = 0f;
+                var f = Art.Frames("scenery/fire");
+                foreach (var v in fires) if (v != null) v.sprite = v.sprite == f[0] ? f[1] : f[0];
+            }
             for (int i = bumps.Count - 1; i >= 0; i--)
             {
                 var b = bumps[i];

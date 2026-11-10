@@ -27,7 +27,7 @@ def render(n):
   for key, x in props:
       x = float(x); gy = next((y + 1 for y in range(H - 1, -1, -1) if get(int(x), y) in "#BXHT?t1MWRV" and not (get(int(x), y) == "V" and y >= 9)), 0)
       put(load(key), x, gy)
-  tiles = {c: "scenery/masonry" for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"; tiles["V"] = "scenery/vault"
+  tiles = {c: "scenery/masonry" for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"; tiles["V"] = "scenery/vault"; tiles["F"] = "scenery/vault"
   done = set()
   for y in range(H):
       for x in range(W):
@@ -36,6 +36,8 @@ def render(n):
           elif c in tiles: put(load(tiles[c]), x + 0.5, y)
           elif c == "=": put(load("scenery/plank"), x + 0.5, y + 1 - 18 / 48)
           elif c == "^": put(load("scenery/canopy"), x + 0.5, y + 1 - 26 / 48)
+          elif c == "*": put(load("scenery/fire", (x + y) % 2, 2), x + 0.5, y)
+          elif c == "_": put(load("scenery/drawbridge"), x + 0.5, y + 1 - 26 / 48)
           elif c in "LE": put(load("scenery/lift"), x + 1.5, y + 1 - 14 / 48)
           elif c in "Tt" and (x, y) not in done:
               done.add((x, y)); done.add((x + 1, y)); put(load("scenery/tower_top" if c == "T" else "scenery/tower_body"), x + 1, y)
@@ -48,9 +50,15 @@ def render(n):
           elif c == "o": put(load("scenery/bezant", 0, 4), x + 0.5, y + 0.25)
           elif c == "G": put(load("scenery/goal_pole"), x + 0.5, y)
           elif c == "C": put(load("scenery/checkpoint", 0, 2), x + 0.5, y)
+          elif c == "K": put(load("bosses/cockatrice", 0, 2), x + 0.5, y)
+          elif c == "A": put(load("scenery/bridge_axe"), x + 0.5, y)
+          elif c == "N": put(load("allies/monk", 0, 2), x + 0.5, y)
+          elif c == "F":
+              b = load("scenery/flail_ball")
+              for k in range(1, 5): put(b, x + 0.5 + k * 0.45, y + 0.3)
           elif c == "P": put(load("heroes/rubeus", 0, 5), x + 0.5, y)
-  cast = re.search(r'Castle = "([^"]+)"', src).group(1); cx = float(re.search(r"CastleX = ([0-9.]+)f", src).group(1))
-  put(load(cast), cx, 2)
+  cm = re.search(r'Castle = "([^"]+)"', src)
+  if cm: put(load(cm.group(1)), float(re.search(r"CastleX = ([0-9.]+)f", src).group(1)), 2)
   out.convert("RGB").save(os.path.join(A, f"level{n}_preview.png"), optimize=True)
   print(out.size)
 
