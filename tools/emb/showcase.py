@@ -53,4 +53,13 @@ put(m.crop((3 * fw, 0, 4 * fw, m.height)), 120, GY - 128 - 10)
 put(fr("mounts", "bayard", 0), 20, GY - 84)
 put(fr("projectiles", "fireball", 0), 225, GY - 50)
 sc.convert("RGB").save(os.path.join(R, "showcase_cast.png"), optimize=True)
+
+# ---- the four end-of-world castles side by side ----
+names = ("castle_keep", "castle_sea_tower", "castle_stone", "castle_great_hall")
+ims = [L(f"scenery/{n}.png") for n in names]
+sc = Image.new("RGBA", (sum(i.width for i in ims) + 40 * (len(ims) + 1), max(i.height for i in ims) + 60), (236, 226, 201, 255))
+x = 40
+for i in ims:
+    sc.alpha_composite(i, (x, sc.height - 30 - i.height)); x += i.width + 40
+sc.convert("RGB").save(os.path.join(R, "castles.png"), optimize=True)
 print("ok")

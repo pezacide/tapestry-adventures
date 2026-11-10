@@ -109,6 +109,8 @@ namespace Tapestry
 
             foreach (var d in Level1.Props)
                 Art.Make(d.Key, world, new Vector2(d.X, level.GroundAt(d.X)), -20);
+            // the castle at the end, centred on its doorway; drawn behind the knight, who walks in and vanishes
+            Art.Make(Level1.Castle, world, new Vector2(Level1.CastleX, level.GroundAt(Level1.CastleX)), -5);
 
             foreach (var s in level.Spawns)
             {
@@ -199,7 +201,7 @@ namespace Tapestry
                 pb.Vel = new Vector2(3.2f, 0f);
                 pb.Pos.x += 3.2f * dt;
                 pb.Pos.y = level.GroundAt(pb.Pos.x);
-                if (winTime > 3f || pb.Pos.x > level.Width - 3f) { winPhase = 2; winTime = 0f; pb.Vel = Vector2.zero; player.Hide(); }
+                if (pb.Pos.x >= Level1.CastleX || winTime > 6f) { winPhase = 2; winTime = 0f; pb.Vel = Vector2.zero; player.Hide(); }
             }
         }
 

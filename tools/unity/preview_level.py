@@ -40,5 +40,7 @@ for y in range(H):
         elif c == "o": put(load("scenery/bezant", 0, 4), x + 0.5, y + 0.25)
         elif c == "G": put(load("scenery/goal_pole"), x + 0.5, y)
         elif c == "P": put(load("heroes/rubeus", 0, 5), x + 0.5, y)
+cast = re.search(r'Castle = "([^"]+)"', src).group(1); cx = float(re.search(r"CastleX = ([0-9.]+)f", src).group(1))
+put(load(cast), cx, 2)
 out.convert("RGB").save(os.path.join(A, "level1_preview.png"), optimize=True)
 print(out.size)

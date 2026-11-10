@@ -518,6 +518,34 @@
       ],
       "file": "scenery/title.png"
     },
+    "castle_keep": {
+      "size": [
+        288,
+        264
+      ],
+      "file": "scenery/castle_keep.png"
+    },
+    "castle_sea_tower": {
+      "size": [
+        240,
+        288
+      ],
+      "file": "scenery/castle_sea_tower.png"
+    },
+    "castle_stone": {
+      "size": [
+        336,
+        264
+      ],
+      "file": "scenery/castle_stone.png"
+    },
+    "castle_great_hall": {
+      "size": [
+        336,
+        288
+      ],
+      "file": "scenery/castle_great_hall.png"
+    },
     "bezant": {
       "size": [
         24,

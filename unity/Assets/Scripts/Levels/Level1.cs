@@ -4,6 +4,8 @@ namespace Tapestry
     public static class Level1
     {
         public const string Name = "Ye Meadowe of Beastes";
+        public const string Castle = "scenery/castle_keep";   // the building at the end of the level
+        public const float CastleX = 187f;                    // its doorway, in tiles
         public const string Inscription = "HERE YE KNYGHTES RYDE INTO YE MEADOWE OF BEASTES";
         // Top row first. Legend in tools/unity/make_level1.py and Level.cs.
         public static readonly string[] Map =
@@ -27,7 +29,7 @@ namespace Tapestry
         {
             new Decor("scenery/tree", 6), new Decor("scenery/shrub", 12), new Decor("scenery/hill", 25), new Decor("scenery/tree", 34), new Decor("scenery/shrub", 45),
             new Decor("scenery/tree", 66), new Decor("scenery/hill", 86), new Decor("scenery/tree", 95), new Decor("scenery/shrub", 110), new Decor("scenery/hill", 128),
-            new Decor("scenery/shrub", 138), new Decor("scenery/tree", 150), new Decor("scenery/motte", 186), new Decor("scenery/tree", 172),
+            new Decor("scenery/shrub", 138), new Decor("scenery/tree", 150), new Decor("scenery/tree", 172),
         };
     }
 }
