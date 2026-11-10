@@ -10,12 +10,12 @@ namespace Tapestry
     public static class TapestryInput
     {
         public static float Horizontal;
-        public static bool JumpHeld, JumpPressed, RunHeld, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed;
+        public static bool JumpHeld, JumpPressed, RunHeld, RunPressed, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed;
         public static bool LeftPressed, RightPressed;
         public static bool TouchSeen;
         public static Vector2? TapPosition;    // GUI coordinates (top-left origin) of a new touch/click this frame
 
-        static bool prevJump, prevDown, prevStart, prevNext, prevPrev, prevLeft, prevRight;
+        static bool prevJump, prevRun, prevDown, prevStart, prevNext, prevPrev, prevLeft, prevRight;
 
         // On-screen touch buttons, as fractions of the screen (x, y from top, w, h).
         public static readonly Rect LeftButton = new Rect(0.02f, 0.74f, 0.11f, 0.22f);
@@ -112,7 +112,7 @@ namespace Tapestry
 
             Horizontal = Mathf.Clamp(h, -1f, 1f);
             JumpPressed = jump && !prevJump; JumpHeld = jump; prevJump = jump;
-            RunHeld = run;
+            RunHeld = run; RunPressed = run && !prevRun; prevRun = run;
             DownPressed = down && !prevDown; prevDown = down;
             StartPressed = start && !prevStart; prevStart = start;
             NextKnightPressed = next && !prevNext; prevNext = next;

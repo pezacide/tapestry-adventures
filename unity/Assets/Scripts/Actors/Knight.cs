@@ -14,6 +14,10 @@ namespace Tapestry
         public bool Dead { get; private set; }
         public int Hearts = 3;
         public bool FacingRight { get { return view.FacingRight; } }
+        public bool HasCrossbow { get; private set; }
+        public float RelicTime;     // > 0: the holy relique protects the knight and smites beasts
+        public bool Blessed { get { return RelicTime > 0f; } }
+        SpriteRenderer crossbowView;
 
         readonly SpriteView view;
         float invuln, coyote, jumpBuffer, flutterTime, anim;
@@ -91,8 +95,20 @@ namespace Tapestry
 
             if (Body.HitCeiling) GameManager.I.KnightHitBlock(Body.CeilX, Body.CeilY);
 
+            // the crossbowe: RUN shoots (as Mario throws fireballs with the run button)
+            if (HasCrossbow && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
+                GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, Mounted ? 1.45f : 0.95f), FacingRight);
+
             if (invuln > 0f) invuln -= dt;
             view.Renderer.enabled = invuln <= 0f || Mathf.Repeat(invuln, 0.16f) > 0.08f;
+            if (RelicTime > 0f)
+            {
+                RelicTime -= dt;
+                float k = Mathf.Repeat(Time.time * 6f, 1f);
+                view.Renderer.color = Color.Lerp(new Color(1f, 0.85f, 0.35f), Color.white, k);
+                if (RelicTime <= 0f) view.Renderer.color = Color.white;
+            }
+            PlaceCrossbow();
             Animate(dt);
             view.SetPosition(Body.Pos);
         }
@@ -117,7 +133,7 @@ namespace Tapestry
             flutterUsed = false;
         }
 
-        public bool Invulnerable { get { return invuln > 0f || Dead; } }
+        public bool Invulnerable { get { return invuln > 0f || Dead || Blessed; } }
 
         public void Hurt()
         {
@@ -130,6 +146,7 @@ namespace Tapestry
             }
             Hearts--;
             invuln = 1.6f;
+            if (HasCrossbow) { HasCrossbow = false; PlaceCrossbow(); }   // like losing the fire flower
             if (Hearts <= 0) Die();
         }
 
@@ -140,6 +157,7 @@ namespace Tapestry
             Dead = true;
             if (Mounted) { Mounted = false; view.SetSheet(Def.Sheet); }
             view.Renderer.enabled = true;
+            RelicTime = 0f; view.Renderer.color = Color.white; HasCrossbow = false; PlaceCrossbow();
             view.SetFrame(3);
             view.Renderer.flipY = true;
             Body.Vel = new Vector2(0f, fell ? 17f : 11f);
@@ -162,6 +180,27 @@ namespace Tapestry
             GameManager.I.ReleaseBayard(Body.Pos, FacingRight, thrown);
             Body.Vel.y = thrown ? 10f : 7f;
             Body.Vel.x = thrown ? (FacingRight ? -3f : 3f) : 0f;
+        }
+
+        public void GiveCrossbow()
+        {
+            HasCrossbow = true;
+            if (crossbowView == null)
+            {
+                crossbowView = Art.Make("items/crossbow", view.Root.transform, Vector2.zero, 21);
+                crossbowView.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+            }
+            PlaceCrossbow();
+        }
+
+        public void Heal() { Hearts = Mathf.Min(Hearts + 1, Def.Hearts); }
+
+        void PlaceCrossbow()
+        {
+            if (crossbowView == null) return;
+            crossbowView.enabled = HasCrossbow && view.Renderer.enabled && !Dead;
+            crossbowView.flipX = !FacingRight;
+            crossbowView.transform.localPosition = new Vector3(FacingRight ? 0.3f : -0.3f, Mounted ? 1.3f : 0.75f, 0f);
         }
 
         public void Destroy() { view.Destroy(); }

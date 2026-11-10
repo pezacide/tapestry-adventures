@@ -233,9 +233,9 @@ def border():
     return s
 S["border"] = (384, 64, border, False)
 
-def inscription(text="HIC MILITES PUGNANT CUM BESTIIS"):
+def inscription(text="HERE YE KNYGHTES DOE BATTEL WYTH YE BEASTES"):
     def f():
-        cols = ("indigo", "terra", "green", "indigo", "terra")
+        cols = ("indigo", "terra", "green", "indigo", "terra", "green", "indigo")
         parts = []
         for i, wd in enumerate(text.split()):
             if i: parts.append(f'<tspan fill="{WOOL["dark"]}" stroke="{WOOL["dark"]}"> · </tspan>')
@@ -244,7 +244,7 @@ def inscription(text="HIC MILITES PUGNANT CUM BESTIIS"):
         return (f'<text x="6" y="34" font-family="DejaVu Serif, serif" font-size="28" letter-spacing="1.5" stroke-width="0.6">'
                 + "".join(parts) + "</text>")
     return f
-S["inscription"] = (760, 44, inscription(), False)
+S["inscription"] = (900, 44, inscription(), False)
 S["title"] = (500, 44, inscription("TAPESTRY ADVENTURES"), False)
 
 # ---------------- parallax layers (960x540) ----------------

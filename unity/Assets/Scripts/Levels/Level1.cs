@@ -3,18 +3,18 @@ namespace Tapestry
 {
     public static class Level1
     {
-        public const string Name = "The Meadow of Beasts";
-        public const string Inscription = "HIC MILITES INTRANT PRATUM BESTIARUM";
+        public const string Name = "Ye Meadowe of Beastes";
+        public const string Inscription = "HERE YE KNYGHTES RYDE INTO YE MEADOWE OF BEASTES";
         // Top row first. Legend in tools/unity/make_level1.py and Level.cs.
         public static readonly string[] Map =
         {
             "",
             "",
             "",
-            "                ?                                                                                    o o o",
+            "                1                                                                                    o o o",
             "                                     oooo                                                       w                                           ooo    w                 B",
             "                                                                       ooo===       B                                                                               BB",
-            "          ?   B?BHB                  ====                                          BB               B?B?B?B                 O       k       ===                    BBB",
+            "          M   B?BHB                  ====  BWB                                     BB               B?BRBHB                 O       k       ===     BHB?           BBB",
             "                                                      TT      TT       ===        BBB                                       TT    BBBB                            BBBB",
             "                      TT                              tt      tt                 BBBB                                       tt                                   BBBBB",
             "   P           s      tt  h                     l     tt  d   tt                BBBBB   c                       u           tt                        s   h     BBBBBB          G",

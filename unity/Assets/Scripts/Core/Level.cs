@@ -12,7 +12,8 @@ namespace Tapestry
     /// <summary>The tile grid: builds the stitched tiles, answers collision queries, and handles block bumps.
     /// One world unit = one 48-design-unit tile. Tile (x, y) covers [x, x+1] x [y, y+1]; y = 0 is the bottom row.
     ///
-    /// Map legend:  # earth  B masonry  ? roundel (bezant)  H roundel (Bayard)  X used roundel  = plank (one-way)
+    /// Map legend:  # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
+    ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
     ///              T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal banner
     ///              s snail-hound  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
     ///              w wyvern  u unicorn  O man-faced owl  k soup cat</summary>
@@ -48,6 +49,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
+                        case '1': case 'M': case 'W': case 'R':
                             tiles[x, y] = c; break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
                         case 'G': GoalX = x + 0.5f; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y))); break;
@@ -73,7 +75,8 @@ namespace Tapestry
             if (x < 0 || x >= Width) return true;
             switch (Get(x, y))
             {
-                case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't': return true;
+                case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
+                case '1': case 'M': case 'W': case 'R': return true;
                 default: return false;
             }
         }
@@ -101,7 +104,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': key = Get(x, y + 1) == '#' ? "scenery/ground_fill" : "scenery/ground_top"; break;
-                        case 'B': case '?': case 'H': key = "scenery/masonry"; break;   // item bricks look like any other brick
+                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': key = "scenery/masonry"; break;   // item bricks look like any other brick
                         case 'X': key = "scenery/roundel_used"; break;
                         case '~': key = "scenery/sea"; break;
                         case '=': key = "scenery/plank"; dy = 1f - 18f / Art.DesignPerTile; break;
@@ -121,7 +124,7 @@ namespace Tapestry
                 }
         }
 
-        public enum BumpResult { None, Bezant, Bayard, Broke, Thud }
+        public enum BumpResult { None, Bezant, Bayard, Chalice, Capon, Crossbow, Relic, Broke, Thud }
 
         /// <summary>A knight's head hit tile (x, y) from below.</summary>
         public BumpResult HitFromBelow(int x, int y)
@@ -131,12 +134,19 @@ namespace Tapestry
             views.TryGetValue(Key(x, y), out v);
             switch (c)
             {
-                case '?':
-                case 'H':
-                    tiles[x, y] = 'X';
+                case '?': case 'H': case '1': case 'M': case 'W': case 'R':
+                    tiles[x, y] = 'X';   // an item brick gives its item and leaves a used block behind
                     if (v != null) v.sprite = Art.Single("scenery/roundel_used");
                     StartBump(v);
-                    return c == '?' ? BumpResult.Bezant : BumpResult.Bayard;
+                    switch (c)
+                    {
+                        case 'H': return BumpResult.Bayard;
+                        case '1': return BumpResult.Chalice;
+                        case 'M': return BumpResult.Capon;
+                        case 'W': return BumpResult.Crossbow;
+                        case 'R': return BumpResult.Relic;
+                        default: return BumpResult.Bezant;
+                    }
                 case 'B':
                     tiles[x, y] = ' ';
                     if (v != null) { Object.Destroy(v.gameObject); views.Remove(Key(x, y)); }

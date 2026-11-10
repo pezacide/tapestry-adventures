@@ -9,7 +9,7 @@ h = ['<!doctype html><meta charset=utf-8><meta name=viewport content="width=devi
      '<h1>Tapestry Adventures &middot; Asset Gallery</h1><img class=hero src=showcase.png alt="Level scene"><img class=hero src=showcase_cast.png alt="Cast scene">']
 def card(t, f, s, w): return f'<div class=c><b>{t}</b><img src="{f}" style="width:{int(min(w, 1000))}px"><small>{s}</small></div>'
 def frames_w(v): return v["frame"][0] * len(v.get("frames", [None] * v.get("frame_count", 1))) * 1.5
-for cat, label in (("heroes", "Heroes"), ("mounts", "Mount"), ("princess", "Princess"), ("enemies", "Antagonists"), ("bosses", "Bosses"), ("projectiles", "Projectiles")):
+for cat, label in (("heroes", "Heroes"), ("mounts", "Mount"), ("princess", "Princess"), ("enemies", "Antagonists"), ("bosses", "Bosses"), ("items", "Power-ups"), ("projectiles", "Projectiles")):
     h.append(f"<h2>{label}</h2><div class=g>")
     for v in a[cat].values():
         desc = v.get("trait") or v.get("behaviour") or v.get("note", "")

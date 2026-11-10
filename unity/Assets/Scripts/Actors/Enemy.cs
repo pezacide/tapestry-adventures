@@ -243,14 +243,18 @@ namespace Tapestry
     {
         public readonly Body Body;
         public bool Removed;
+        public readonly bool Friendly;   // a knight's crossbowe bolt (hurts beasts, not knights)
         readonly SpriteView view;
         readonly bool gravity;
+        readonly float life;
         float t;
 
         public Shot(string kind, Vector2 pos, Vector2 vel, Transform parent)
         {
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
             gravity = kind == "soup_glob";
+            Friendly = kind == "bolt";
+            life = Friendly ? 1.1f : 4f;
             view = new SpriteView("projectiles/" + kind, parent, 15);
             view.Face(vel.x >= 0f);
             view.SetPosition(pos);
@@ -264,7 +268,7 @@ namespace Tapestry
             Body.Step(lv, dt);
             view.SetFrame(((int)(t * 10f)) % 2);
             view.SetPosition(Body.Pos);
-            if (Body.HitWall || Body.Grounded || Body.HitCeiling || t > 4f || Body.Pos.y < -2f) Destroy();
+            if (Body.HitWall || Body.Grounded || Body.HitCeiling || t > life || Body.Pos.y < -2f) Destroy();
         }
 
         public void Destroy() { if (Removed) return; Removed = true; view.Destroy(); }

@@ -2,14 +2,14 @@
 import json, os, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from PIL import Image
-import knights, creatures, scenery, bosses, allies
+import knights, creatures, scenery, bosses, allies, items
 from embroider import doc
 
 ROOT = os.path.normpath(os.path.join(HERE, "..", "..", "assets"))
 SCALE = 2   # every PNG is rendered at 2x its design size; draw at 0.5 in a 960x540 game
 TMP = tempfile.mkdtemp()
 jobs, sheets, atlas = [], {}, {"scale": SCALE, "note": "sizes are design units; PNG pixels = size x scale",
-                               "heroes": {}, "mounts": {}, "princess": {}, "enemies": {}, "bosses": {}, "projectiles": {}, "scenery": {}, "backgrounds": {}}
+                               "heroes": {}, "mounts": {}, "princess": {}, "enemies": {}, "bosses": {}, "projectiles": {}, "items": {}, "scenery": {}, "backgrounds": {}}
 
 def job(svg, key, w, h):
     p = os.path.join(TMP, key.replace("/", "_"))
@@ -33,6 +33,12 @@ atlas["mounts"]["bayard"] = dict(title="Bayard, the magic horse", frame=[allies.
 sheets["princess/aelfgyva"] = [job(doc(allies.PW, allies.PH, allies.princess(p)), f"aelf_{p}", allies.PW, allies.PH) for p in allies.P_POSES]
 atlas["princess"]["aelfgyva"] = dict(title="Princess Aelfgyva", frame=[allies.PW, allies.PH], frames=allies.P_POSES, file="princess/aelfgyva.png",
     note="Named after the mysterious lady in the Bayeux Tapestry. Held captive behind the Cat King's throne; idle, wave, joy (rescued).")
+for n, it in items.I.items():
+    w, h = it["size"]
+    sheets[f"items/{n}"] = [job(items.build_svg(it, f), f"item_{n}_{f}", w, h) for f in range(it["frames"])]
+    atlas["items"][n] = dict(title=it["title"], behaviour=it["effect"], frame=[w, h], frame_count=it["frames"], file=f"items/{n}.png")
+sheets["projectiles/bolt"] = [job(items.build_svg(items.BOLT, 0), "bolt", 24, 8)]
+atlas["projectiles"]["bolt"] = dict(title="Crossbowe Bolt", behaviour="shot by a knight who carries the crossbowe", frame=[24, 8], frame_count=1, file="projectiles/bolt.png")
 for n, bb in bosses.B.items():
     w, h = bb["size"]
     sheets[f"bosses/{n}"] = [job(bosses.build_svg(n, f), f"{n}_{f}", w, h) for f in range(bb["frames"])]

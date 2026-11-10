@@ -25,6 +25,8 @@ namespace Tapestry
         readonly List<Shot> shots = new List<Shot>();
         readonly List<Bezant> bezants = new List<Bezant>();
         readonly List<Debris> debris = new List<Debris>();
+        readonly List<Item> items = new List<Item>();
+        string toast; float toastTime;
         readonly List<Layer> layers = new List<Layer>();
 
         int knightIndex, bezantCount, lives = 3, score;
@@ -101,7 +103,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); bayard = null; winPhase = 0;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); bayard = null; winPhase = 0; toast = null;
             world = new GameObject("World").transform;
             level = new Level(Level1.Map, world);
 
@@ -241,6 +243,7 @@ namespace Tapestry
             {
                 if (!e.Active || !e.Alive || !pb.Overlaps(e.Body)) continue;
                 // a stomp if we were falling and our feet were in the top half of the beast last frame
+                if (player.Blessed) { e.Flip(); continue; }   // the holy relique smites any beast it touches
                 bool fromAbove = pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);
                 e.OnKnight(player, fromAbove);
                 if (player.Dead) return;
@@ -252,7 +255,18 @@ namespace Tapestry
                     if (o != s && o.Alive && o.Active && s.Body.Overlaps(o.Body)) o.Flip();
             }
             foreach (var s in shots)
-                if (!s.Removed && s.Body.Overlaps(pb)) { player.Hurt(); s.Destroy(); }
+            {
+                if (s.Removed) continue;
+                if (!s.Friendly)
+                {
+                    if (s.Body.Overlaps(pb)) { player.Hurt(); s.Destroy(); }
+                    continue;
+                }
+                foreach (var e in enemies)   // a crossbowe bolt fells any beast, burning lions too
+                    if (e.Active && e.Alive && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
+            }
+            foreach (var it in items)
+                if (!it.Removed && it.Ready && it.Body.Overlaps(pb)) { Collect(it); it.Destroy(); }
             foreach (var b in bezants)
                 if (!b.Removed && b.Touches(pb)) { b.Destroy(); AddBezant(); }
             if (bayard != null && !bayard.Removed && !player.Mounted && bayard.CanMount && pb.Overlaps(bayard.Body))
@@ -287,7 +301,17 @@ namespace Tapestry
             foreach (var s in shots) s.Tick(dt, level);
             foreach (var b in bezants) b.Tick(dt);
             foreach (var d in debris) d.Tick(dt);
-            if (bayard != null) { bayard.Tick(dt, level); if (bayard.Removed) bayard = null; }
+            foreach (var it in items) it.Tick(dt, level);
+            if (bayard != null)
+            {
+                bayard.Tick(dt, level);
+                if (bayard.Removed)
+                {
+                    if (bayard.Lost) Toast("Alas! Bayard is loste. Seeke him agayne in ye bryckes.");
+                    bayard = null;
+                }
+            }
+            if (toastTime > 0f) toastTime -= dt;
             Cleanup();
         }
 
@@ -297,6 +321,7 @@ namespace Tapestry
             shots.RemoveAll(s => s.Removed);
             bezants.RemoveAll(b => b.Removed);
             debris.RemoveAll(d => d.Removed);
+            items.RemoveAll(i => i.Removed);
         }
 
         void LateUpdate()
@@ -331,6 +356,10 @@ namespace Tapestry
                     if (!player.Mounted && bayard == null) { bayard = new Bayard(top, world); bayard.Hop(); }
                     else { bezants.Add(new Bezant(top, world, true)); AddBezant(); }
                     break;
+                case Level.BumpResult.Chalice: items.Add(new Item("chalice", top, world, player.FacingRight)); break;
+                case Level.BumpResult.Capon: items.Add(new Item("capon", top, world, player.FacingRight)); break;
+                case Level.BumpResult.Crossbow: items.Add(new Item("crossbow", top, world, player.FacingRight)); break;
+                case Level.BumpResult.Relic: items.Add(new Item("relic", top, world, player.FacingRight)); break;
                 case Level.BumpResult.Broke:
                     score += 50;
                     var c = new Vector2(x + 0.5f, y + 0.3f);
@@ -353,6 +382,22 @@ namespace Tapestry
         }
 
         public void SpawnShot(string kind, Vector2 pos, Vector2 vel) { shots.Add(new Shot(kind, pos, vel, world)); }
+        public void SpawnBolt(Vector2 pos, bool right) { shots.Add(new Shot("bolt", pos, new Vector2(right ? 13f : -13f, 0f), world)); }
+        public int BoltCount { get { int n = 0; foreach (var s in shots) if (s.Friendly && !s.Removed) n++; return n; } }
+
+        public void Toast(string text) { toast = text; toastTime = 3f; }
+
+        void Collect(Item it)
+        {
+            score += 1000;
+            switch (it.Kind)
+            {
+                case "chalice": lives++; Toast("A golden chalice! One more lyfe is thyne."); break;
+                case "capon": player.Heal(); Toast("A roaste capon! Thy herte is mended."); break;
+                case "crossbow": player.GiveCrossbow(); Toast("A crossbowe! Presse RUNNE to loose a bolte."); break;
+                case "relic": player.RelicTime = 9f; Toast("A holy relique! No beaste may harme thee for a whyle."); break;
+            }
+        }
         public void AddScore(int n) { score += n; }
         public void PlayerDied(bool fell) { deathFell = fell; SetState(State.Dying); }
 
@@ -408,7 +453,7 @@ namespace Tapestry
                     float y = H * 0.14f;
                     var t = Art.Texture("scenery/title");
                     if (t != null) { float tw = Mathf.Min(W * 0.9f, U * 1.3f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th; }
-                    GUI.Label(new Rect(0, y, W, U * 0.07f), "World 1-1 · " + Level1.Name, center);
+                    GUI.Label(new Rect(0, y, W, U * 0.07f), "Ye Firste Realme · " + Level1.Name, center);
                     for (int i = 0; i < Knights.All.Length; i++)
                     {
                         var r = PortraitRect(i);
@@ -422,7 +467,7 @@ namespace Tapestry
                     GUI.Label(new Rect(0, y, W, U * 0.08f), def.Title, big); y += U * 0.09f;
                     GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.07f), def.Trait, center); y += U * 0.07f;
                     GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.1f),
-                        TapestryInput.ShowTouchControls ? "Tap a knight to choose, tap again to ride out" : "LEFT / RIGHT to choose your knight  -  JUMP or Enter to begin", center);
+                        TapestryInput.ShowTouchControls ? "Touche a knyghte to chuse, and touche agayne to ryde forth" : "LEFTE or RYGHTE to chuse thy knyghte  -  JUMPE or Entre to ryde forth", center);
                     break;
 
                 case State.Playing:
@@ -434,27 +479,27 @@ namespace Tapestry
                     if (state == State.Paused)
                     {
                         Panel(new Rect(W * 0.25f, H * 0.3f, W * 0.5f, H * 0.36f));
-                        GUI.Label(new Rect(0, H * 0.33f, W, H * 0.12f), "PAUSA", big);
-                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.16f), "JUMP or Start to continue\nDOWN to return to the title", center);
+                        GUI.Label(new Rect(0, H * 0.33f, W, H * 0.12f), "THOU ART AT REST", big);
+                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.16f), "JUMPE or Starte to continewe\nDOWNE to returne unto ye beginnynge", center);
                     }
                     if (state == State.Won && winPhase == 2)
                     {
                         Panel(new Rect(W * 0.15f, H * 0.24f, W * 0.7f, H * 0.5f));
-                        GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HIC MILES VICIT", big);
-                        GUI.Label(new Rect(W * 0.2f, H * 0.38f, W * 0.6f, H * 0.12f), "Here the knight is victorious!\nBut Princess Aelfgyva is held in another castle...", center);
+                        GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HERE YE KNYGHTE IS VICTORIOUS", big);
+                        GUI.Label(new Rect(W * 0.2f, H * 0.38f, W * 0.6f, H * 0.12f), "Huzzah! Ye beastes are put to flyghte.\nYet ye Princesse Aelfgyva lyeth in another castel...", center);
                         DrawFrame("princess/aelfgyva", 1, new Rect(W * 0.5f - H * 0.06f, H * 0.5f, H * 0.12f, H * 0.23f));
                     }
                     if (state == State.Dying)
                     {
                         Panel(new Rect(W * 0.25f, H * 0.32f, W * 0.5f, H * 0.22f));
-                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.1f), deathFell ? "CECIDIT!" : "VULNERATUS EST!", big);
-                        GUI.Label(new Rect(0, H * 0.44f, W, H * 0.08f), (deathFell ? "The knight has fallen. " : "The knight is struck down. ") + (lives > 1 ? (lives - 1) + " lives remain." : "No lives remain..."), center);
+                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.1f), deathFell ? "ALAS, HE IS FALLEN!" : "ALAS, HE IS SLAYNE!", big);
+                        GUI.Label(new Rect(0, H * 0.44f, W, H * 0.08f), (deathFell ? "Ye knyghte hath fallen into ye pitte. " : "Ye knyghte is struck downe. ") + (lives > 1 ? (lives - 1) + " lyves yet remayne." : "No lyves remayne..."), center);
                     }
                     if (state == State.GameOver)
                     {
                         Panel(new Rect(W * 0.25f, H * 0.3f, W * 0.5f, H * 0.3f));
-                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.12f), "FINIS", big);
-                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.1f), "The beasts have won this day. Press JUMP.", center);
+                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.12f), "HERE ENDETH YE TALE", big);
+                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.1f), "Ye beastes have wonne this daye. Presse JUMPE.", center);
                     }
                     if (state == State.Playing && TapestryInput.ShowTouchControls) TouchButtons();
                     break;
@@ -464,13 +509,23 @@ namespace Tapestry
         void Hud(float W, float H)
         {
             float y = H * 0.125f, s = U * 0.05f;
-            GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " on Bayard" : ""), small);
+            GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon Bayard" : ""), small);
             for (int i = 0; i < player.Hearts; i++)
                 DrawFrame("scenery/roundel_block", 0, new Rect(W * 0.02f + i * s * 1.1f, y + s * 1.2f, s, s));
             DrawFrame("scenery/bezant", 0, new Rect(W * 0.40f, y + s * 0.1f, s, s));
             GUI.Label(new Rect(W * 0.40f + s * 1.2f, y, W * 0.15f, s * 1.2f), "× " + bezantCount, small);
-            GUI.Label(new Rect(W * 0.58f, y, W * 0.2f, s * 1.2f), "Vitae × " + lives, small);
-            GUI.Label(new Rect(W * 0.76f, y, W * 0.22f, s * 1.2f), "Gloria " + score.ToString("000000"), small);
+            GUI.Label(new Rect(W * 0.58f, y, W * 0.2f, s * 1.2f), "Lyves × " + lives, small);
+            GUI.Label(new Rect(W * 0.76f, y, W * 0.22f, s * 1.2f), "Glorie " + score.ToString("000000"), small);
+            float ix = W * 0.02f + Mathf.Max(player.Hearts, 3) * s * 1.1f + s * 0.4f;
+            if (player.HasCrossbow) { DrawFrame("items/crossbow", 0, new Rect(ix, y + s * 1.15f, s * 1.3f, s)); ix += s * 1.5f; }
+            if (player.Blessed) DrawFrame("items/relic", 1, new Rect(ix, y + s * 1.1f, s * 1.1f, s * 1.1f));
+            if (toast != null && toastTime > 0f)
+            {
+                var c = GUI.color; GUI.color = new Color(1f, 1f, 1f, Mathf.Clamp01(toastTime));
+                Panel(new Rect(W * 0.2f, y + s * 2.6f, W * 0.6f, s * 1.4f));
+                GUI.Label(new Rect(W * 0.2f, y + s * 2.6f, W * 0.6f, s * 1.4f), toast, center);
+                GUI.color = c;
+            }
         }
 
         void TouchButtons()
@@ -478,8 +533,8 @@ namespace Tapestry
             Button(TapestryInput.LeftButton, "<");
             Button(TapestryInput.RightButton, ">");
             Button(TapestryInput.DownButton, "v");
-            Button(TapestryInput.RunButton, "RUN");
-            Button(TapestryInput.JumpButton, "JUMP");
+            Button(TapestryInput.RunButton, player.HasCrossbow ? "SHOOTE" : "RUNNE");
+            Button(TapestryInput.JumpButton, "JUMPE");
             Button(TapestryInput.PauseButton, "II");
         }
 

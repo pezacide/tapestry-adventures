@@ -6,7 +6,7 @@ namespace Tapestry
     public class Bayard
     {
         public readonly Body Body;
-        public bool Removed;
+        public bool Removed, Lost;   // Lost: he galloped into a pit
         readonly SpriteView view;
         float fleeTime, cooldown, anim, rearTime;
         float dir = 1f;
@@ -44,8 +44,7 @@ namespace Tapestry
             {
                 fleeTime -= dt;
                 if (Body.HitWall) dir = -dir;
-                if (Body.Grounded && !Body.FloorAhead(lv, dir)) dir = -dir;   // a good horse won't run into a pit
-                Body.Vel.x = dir * 7f;
+                Body.Vel.x = dir * 7f;   // in his panic he gallops straight on - even into a pit
                 view.SetFrame(1 + ((int)(anim * 9f) % 2));
             }
             else
@@ -56,7 +55,7 @@ namespace Tapestry
             view.Face(dir > 0f);
             Body.Vel.y = Mathf.Max(Body.Vel.y - 40f * dt, -16f);
             Body.Step(lv, dt);
-            if (Body.Pos.y < -3f) Destroy();
+            if (Body.Pos.y < -3f) { Lost = true; Destroy(); return; }
             view.SetPosition(Body.Pos);
         }
 

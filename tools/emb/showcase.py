@@ -11,7 +11,7 @@ sc = L("backgrounds/linen.png")
 def put(im, x, y): sc.alpha_composite(im, (int(x * K), int(y * K)))
 put(L("backgrounds/far.png"), 0, 0); put(L("backgrounds/near.png"), 0, -40)
 for x in range(0, 960, 384): put(L("scenery/border.png"), x, 0)
-put(L("scenery/inscription.png"), 100, 70)
+put(L("scenery/inscription.png"), 30, 70)
 GY = 444
 for x in range(0, 672, 48):
     put(L("scenery/ground_top.png"), x, GY); put(L("scenery/ground_fill.png"), x, GY + 48)
@@ -38,7 +38,7 @@ sc.convert("RGB").save(os.path.join(R, "showcase.png"), optimize=True)
 sc = L("backgrounds/linen.png")
 put(L("backgrounds/far.png"), 0, 0)
 for x in range(0, 960, 384): put(L("scenery/border.png"), x, 0)
-put(L("scenery/inscription.png"), 100, 70)
+put(L("scenery/inscription.png"), 30, 70)
 GY = 470
 for x in range(0, 960, 48):
     put(L("scenery/ground_top.png"), x, GY); put(L("scenery/ground_fill.png"), x, GY + 48)

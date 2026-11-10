@@ -304,6 +304,16 @@
     }
   },
   "projectiles": {
+    "bolt": {
+      "title": "Crossbowe Bolt",
+      "behaviour": "shot by a knight who carries the crossbowe",
+      "frame": [
+        24,
+        8
+      ],
+      "frame_count": 1,
+      "file": "projectiles/bolt.png"
+    },
     "fireball": {
       "title": "Fireball",
       "behaviour": "projectile from the Fiery Lion and the Great Dragon",
@@ -323,6 +333,48 @@
       ],
       "frame_count": 2,
       "file": "projectiles/soup_glob.png"
+    }
+  },
+  "items": {
+    "chalice": {
+      "title": "Golden Chalice",
+      "behaviour": "one more lyfe (the 1-up)",
+      "frame": [
+        32,
+        32
+      ],
+      "frame_count": 2,
+      "file": "items/chalice.png"
+    },
+    "capon": {
+      "title": "Roast Capon",
+      "behaviour": "mends one herte (the mushroom)",
+      "frame": [
+        32,
+        32
+      ],
+      "frame_count": 1,
+      "file": "items/capon.png"
+    },
+    "crossbow": {
+      "title": "Crossbowe",
+      "behaviour": "shoote bolts with RUN (the fire flower)",
+      "frame": [
+        36,
+        28
+      ],
+      "frame_count": 1,
+      "file": "items/crossbow.png"
+    },
+    "relic": {
+      "title": "Holy Relique",
+      "behaviour": "no beaste may harme thee for a whyle (the star)",
+      "frame": [
+        32,
+        32
+      ],
+      "frame_count": 2,
+      "file": "items/relic.png"
     }
   },
   "scenery": {
@@ -454,7 +506,7 @@
     },
     "inscription": {
       "size": [
-        760,
+        900,
         44
       ],
       "file": "scenery/inscription.png"

@@ -23,7 +23,7 @@ def add(key, fw, fh, n):
             x0, y0, x1, y1 = min(x0, bb[0]), min(y0, bb[1]), max(x1, bb[2]), max(y1, bb[3])
     entries.append((key, fw, fh, n, x0 / K, y0 / K, x1 / K, y1 / K))
 
-for cat in ("heroes", "mounts", "princess", "enemies", "bosses", "projectiles"):
+for cat in ("heroes", "mounts", "princess", "enemies", "bosses", "projectiles", "items"):
     for name, v in atlas[cat].items():
         n = len(v["frames"]) if "frames" in v else v.get("frame_count", 1)
         add(v["file"][:-4], v["frame"][0], v["frame"][1], n)
