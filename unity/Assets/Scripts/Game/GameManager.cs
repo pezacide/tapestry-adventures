@@ -34,6 +34,36 @@ namespace Tapestry
         bool hasCheckpoint, checkpointClaimed;
         // what the knight carries on into the next level
         bool carry; int carryHearts; bool carryCrossbow, carryMounted;
+        // title screen: 0 = choose a knight, 1 = choose a realme (only realmes already passed)
+        int titleStep, realmChoice;
+        readonly List<int> realmStarts = new List<int>();
+
+        static string PassedKey(string title) { return "passed:" + title; }
+        static bool Passed(string title) { return PlayerPrefs.GetInt(PassedKey(title), 0) == 1; }
+
+        /// <summary>The first level of each realme (e.g. 1-3 starts at Ye Crypte Gate) that may be chosen:
+        /// 1-1 always, and any realme already passed.</summary>
+        void FindRealms()
+        {
+            realmStarts.Clear();
+            string seen = null;
+            for (int i = 0; i < Levels.All.Length; i++)
+            {
+                var t = Levels.All[i].Title;
+                if (t == seen) continue;
+                seen = t;
+                if (i == 0 || Passed(t)) realmStarts.Add(i);
+            }
+        }
+
+        void StartAt(int index)
+        {
+            levelIndex = index; checkpointClaimed = false;
+            LoadLevel();
+            player.SetKnight(Knights.All[knightIndex]);
+            Audio.Play("confirm");
+            SetState(State.Playing);
+        }
         string toast; float toastTime;
         class Popup { public Vector2 Pos; public string Text; public float T; }
         readonly List<Popup> popups = new List<Popup>();
@@ -232,6 +262,7 @@ namespace Tapestry
         void SetState(State s)
         {
             var was = state;
+            if (s == State.Title) titleStep = 0;
             state = s; stateTime = 0f;
             switch (s)
             {
@@ -280,6 +311,7 @@ namespace Tapestry
 
         void TickTitle()
         {
+            if (titleStep == 1) { TickRealmSelect(); return; }
             int n = Knights.All.Length;
             if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
             if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
@@ -296,11 +328,36 @@ namespace Tapestry
             }
             if (go)
             {
-                if (levelIndex != 0 || checkpointClaimed) { levelIndex = 0; checkpointClaimed = false; LoadLevel(); }
-                player.SetKnight(Knights.All[knightIndex]);
-                Audio.Play("confirm");
-                SetState(State.Playing);
+                FindRealms();
+                if (realmStarts.Count <= 1) { StartAt(0); return; }
+                titleStep = 1; realmChoice = realmStarts.Count - 1; stateTime = 0f;   // offer the furthest realme first
+                Audio.Play("select");
             }
+        }
+
+        void TickRealmSelect()
+        {
+            int n = realmStarts.Count;
+            if (TapestryInput.LeftPressed) { realmChoice = (realmChoice + n - 1) % n; Audio.Play("select"); }
+            if (TapestryInput.RightPressed) { realmChoice = (realmChoice + 1) % n; Audio.Play("select"); }
+            if (TapestryInput.RunPressed) { titleStep = 0; Audio.Play("select"); return; }   // back to the knights
+            bool go = stateTime > 0.25f && (TapestryInput.JumpPressed || TapestryInput.StartPressed);
+            if (TapestryInput.TapPosition.HasValue)
+                for (int i = 0; i < n; i++)
+                    if (RealmRect(i).Contains(TapestryInput.TapPosition.Value))
+                    {
+                        if (i == realmChoice) go = true; else Audio.Play("select");
+                        realmChoice = i;
+                    }
+            if (go) { titleStep = 0; StartAt(realmStarts[realmChoice]); }
+        }
+
+        Rect RealmRect(int i)
+        {
+            int n = realmStarts.Count;
+            float w = Mathf.Min(Screen.width * 0.9f / n - 10f, U * 0.42f), h = U * 0.16f;
+            float total = n * w + (n - 1) * 10f;
+            return new Rect((Screen.width - total) * 0.5f + i * (w + 10f), Screen.height * 0.42f, w, h);
         }
 
         void TickPlay(float dt)
@@ -382,6 +439,7 @@ namespace Tapestry
                 PoleScore(pb.Pos.y - level.GroundAt(level.GoalX), new Vector2(level.GoalX, pb.Pos.y + pb.H));
                 pb.Pos.x = level.GoalX - pb.W * 0.5f - 0.05f;
                 winPhase = 0; winTime = 0f;
+                PlayerPrefs.SetInt(PassedKey(L.Title), 1); PlayerPrefs.Save();   // unlocks it in the level select
                 SetState(State.Won);
             }
         }
@@ -597,6 +655,7 @@ namespace Tapestry
             {
                 case State.Title:
                     Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
+                    if (titleStep == 1) { DrawRealmSelect(W, H); break; }
                     float y = H * 0.14f;
                     var t = Art.Texture("scenery/title");
                     if (t != null) { float tw = Mathf.Min(W * 0.9f, U * 1.3f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th; }
@@ -692,6 +751,28 @@ namespace Tapestry
                 GUI.Label(new Rect(sp.x - U * 0.15f, Screen.height - sp.y - U * 0.03f, U * 0.3f, U * 0.06f), p.Text, popupStyle);
                 GUI.color = c;
             }
+        }
+
+        void DrawRealmSelect(float W, float H)
+        {
+            var t = Art.Texture("scenery/title");
+            float y = H * 0.14f;
+            if (t != null) { float tw = Mathf.Min(W * 0.9f, U * 1.3f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); }
+            GUI.Label(new Rect(0, H * 0.3f, W, U * 0.08f), "Chuse thy realme", big);
+            for (int i = 0; i < realmStarts.Count; i++)
+            {
+                var r = RealmRect(i);
+                var def = Levels.All[realmStarts[i]];
+                var c = GUI.color;
+                GUI.color = i == realmChoice ? new Color(0.66f, 0.26f, 0.18f, 0.4f) : new Color(0.2f, 0.145f, 0.114f, 0.12f);
+                GUI.DrawTexture(r, Texture2D.whiteTexture);
+                GUI.color = c;
+                GUI.Label(new Rect(r.x, r.y + r.height * 0.08f, r.width, r.height * 0.45f), def.Title, big);
+                GUI.Label(new Rect(r.x, r.y + r.height * 0.55f, r.width, r.height * 0.4f), def.Name, center);
+            }
+            GUI.Label(new Rect(0, H * 0.62f, W, U * 0.08f), Knights.All[knightIndex].Title + " shall ryde", center);
+            GUI.Label(new Rect(W * 0.05f, H * 0.78f, W * 0.9f, U * 0.1f),
+                TapestryInput.ShowTouchControls ? "Touche a realme, and touche agayne to ryde" : "LEFTE or RYGHTE to chuse  -  JUMPE to ryde  -  RUNNE to chuse another knyghte", center);
         }
 
         void Hud(float W, float H)

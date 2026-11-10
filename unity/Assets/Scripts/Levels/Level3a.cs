@@ -26,7 +26,7 @@ namespace Tapestry
                 "################################################################",
                 "################################################################",
             },
-            Props = new[]
+            Props = new Decor[]
             {
                 new Decor("scenery/tree", 6),
                 new Decor("scenery/shrub", 15),

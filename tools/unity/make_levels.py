@@ -52,7 +52,7 @@ def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=
     if entrance: cs.append('            Entrance = true,   // no pole: walking into the building leads on to the next part')
     cs.append("            Map = new[]"); cs.append("            {")
     cs += [f'                "{r}",' for r in m.rows()]
-    cs += ["            },", "            Props = new[]", "            {"]
+    cs += ["            },", "            Props = new Decor[]", "            {"]
     cs += [f'                new Decor("scenery/{k}", {x}),' for k, x in props]
     cs += ["            },", "        };", "    }", "}", ""]
     os.makedirs(OUT, exist_ok=True)
@@ -121,10 +121,10 @@ write("Level3a", "Worlde 1-3", "Ye Crypte Gate", "HERE YE KNYGHTES FYNDE YE WAY 
       [("tree", 6), ("shrub", 15), ("hill", 27), ("tree", 42), ("shrub", 49)],
       "scenery/crypt_entrance", 55, "meadow", entrance=True)
 
-# ======================================================= 1-3b  Ye Undercroft
+# ======================================================= 1-3b  Ye Undercroft (ends at ye stair back up)
 m = Map()
 m.ground(0, 30); m.ground(41, 70); m.ground(82, 96); m.ground(108, 140); m.ground(146, 199)
-m.vault(0, 163)                                               # the crypt ceiling (rows 9-11); open sky over the end stairs
+m.vault(0, 199)                                               # the crypt ceiling (rows 9-11), all the way along
 m.put(3, 2, "P")
 m.row(16, 5, "B?BMB"); m.put(20, 2, "s"); m.put(26, 2, "S")
 m.pillar(24, 6, 2)                                            # low arch: 4 rows of headroom under it
@@ -142,8 +142,17 @@ m.put(112, 2, "c"); m.pillar(116, 6, 2); m.row(120, 5, "B1BRB"); m.put(121, 6, "
 m.row(134, 4, "BBBB"); m.put(136, 5, "k")
 m.put(141, 2, "E")                                            # last pit (141-145)
 m.put(150, 2, "h"); m.put(155, 2, "S"); m.row(158, 5, "?B?B?")
-m.stairs(166, 6)
-m.put(182, 2, "G")
+m.put(170, 2, "d"); m.row(174, 5, "?B?")
 write("Level3", "Worlde 1-3", "Ye Undercroft", "HERE YE KNYGHTES GOE DOWNE INTO YE UNDERCROFT", m,
-      [("shrub", 178), ("tree", 196)],
-      "scenery/castle_round_tower", 190, "crypt", "backgrounds/crypt_far", "backgrounds/crypt_near")
+      [], "scenery/crypt_exit", 188, "crypt", "backgrounds/crypt_far", "backgrounds/crypt_near", entrance=True)
+
+# ======================================================= 1-3c  Ye Lyght of Daye (back on the surface)
+m = Map(72)
+m.ground(0, 71)
+m.put(5, 2, "P")
+m.put(14, 2, "h"); m.row(17, 5, "BMB"); m.put(22, 2, "S")
+m.stairs(27, 6)
+m.put(44, 2, "G")
+write("Level3c", "Worlde 1-3", "Ye Lyght of Daye", "HERE YE KNYGHTES CLYMBE BACK INTO YE LYGHT", m,
+      [("crypt_entrance", 2), ("tree", 38), ("shrub", 50)],
+      "scenery/castle_round_tower", 60, "meadow")

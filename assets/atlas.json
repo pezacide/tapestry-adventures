@@ -535,6 +535,13 @@
       ],
       "file": "scenery/health_full.png"
     },
+    "aura": {
+      "size": [
+        128,
+        152
+      ],
+      "file": "scenery/aura.png"
+    },
     "vault": {
       "size": [
         48,
@@ -618,6 +625,13 @@
         216
       ],
       "file": "scenery/crypt_entrance.png"
+    },
+    "crypt_exit": {
+      "size": [
+        144,
+        288
+      ],
+      "file": "scenery/crypt_exit.png"
     },
     "checkpoint": {
       "size": [

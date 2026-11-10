@@ -180,5 +180,18 @@ def crypt_entrance():
     return s
 C["crypt_entrance"] = dict(size=(192, 216), title="Ye Way Downe", fn=crypt_entrance)
 
+# ---------- end of the undercroft: ye stair back up to ye light ----------
+def crypt_exit():
+    W, H = 144, 288
+    s = wall(4, 0, 140, 288, "grey", "dark")
+    arch = "M30,288 L30,90 Q72,40 114,90 L114,288 Z"
+    s += fill(arch, "cream", 90, "dark", 1.6)                          # daylight at the top of the stair
+    s += clip("cx", arch, fill("M30,170 L114,170 L114,288 L30,288 Z", "dark", 0, None)
+              + "".join(stem(f"M{30 + i * 6},{288 - i * 16} L{114 - i * 6},{288 - i * 16}", "grey", 2.2, False) for i in range(8))
+              + "".join(stem(f"M{50 + i * 12},70 L{44 + i * 14},150", "gold", 1.2, False) for i in range(4)))   # shafts of light
+    s += stem("M26,288 L26,88 Q72,34 118,88 L118,288", "ochre", 2.2, False)
+    return s
+C["crypt_exit"] = dict(size=(144, 288), title="Ye Stair to ye Lyght", fn=crypt_exit)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

@@ -18,6 +18,7 @@ namespace Tapestry
         public float RelicTime;     // > 0: the holy relique protects the knight and smites beasts
         public bool Blessed { get { return RelicTime > 0f; } }
         SpriteRenderer crossbowView;
+        Transform auraPivot; SpriteRenderer auraView;
         public Enemy Carrying;      // a green shell held in front of the knight
 
         readonly SpriteView view;
@@ -111,9 +112,7 @@ namespace Tapestry
             if (RelicTime > 0f)
             {
                 RelicTime -= dt;
-                float k = Mathf.Repeat(Time.time * 6f, 1f);
-                view.Renderer.color = Color.Lerp(new Color(1f, 0.85f, 0.35f), Color.white, k);
-                if (RelicTime <= 0f) view.Renderer.color = Color.white;
+                ShowGlory(RelicTime > 0f);
             }
             PlaceCrossbow();
             Animate(dt);
@@ -151,10 +150,18 @@ namespace Tapestry
                 invuln = 1.4f;
                 return;
             }
+            if (HasCrossbow)
+            {
+                // like losing the fire flower: the crossbowe is knocked away, but no health is lost
+                HasCrossbow = false; PlaceCrossbow();
+                invuln = 1.4f;
+                Audio.Play("hurt", 0.6f);
+                GameManager.I.Toast("Thy crossbowe is knocked from thy hande!");
+                return;
+            }
             Hearts--;
             invuln = 1.6f;
             Audio.Play("hurt");
-            if (HasCrossbow) { HasCrossbow = false; PlaceCrossbow(); }   // like losing the fire flower
             if (Hearts <= 0) Die();
         }
 
@@ -165,7 +172,7 @@ namespace Tapestry
             Dead = true;
             if (Mounted) { Mounted = false; view.SetSheet(Def.Sheet); }
             view.Renderer.enabled = true;
-            RelicTime = 0f; view.Renderer.color = Color.white; HasCrossbow = false; PlaceCrossbow();
+            RelicTime = 0f; ShowGlory(false); HasCrossbow = false; PlaceCrossbow();
             view.SetFrame(3);
             view.Renderer.flipY = true;
             Body.Vel = new Vector2(0f, fell ? 17f : 11f);
@@ -204,6 +211,34 @@ namespace Tapestry
         }
 
         public void Heal() { Hearts = Mathf.Min(Hearts + 1, Def.Hearts); }
+
+        static readonly Color[] gloryColours =
+        {
+            new Color(1f, 0.82f, 0.15f), Color.white, new Color(1f, 0.55f, 0.2f), new Color(1f, 1f, 0.6f),
+        };
+
+        /// <summary>The holy relique's glory: a pulsing golden aura of rays, and the knight flickers gold and white.
+        /// It flickers more slowly in the last two seconds, as a warning that it is ending.</summary>
+        void ShowGlory(bool on)
+        {
+            if (auraPivot == null)
+            {
+                auraPivot = new GameObject("aura").transform;
+                auraPivot.SetParent(view.Root.transform, false);
+                auraView = Art.Make("scenery/aura", auraPivot, new Vector2(0f, -76f / Art.DesignPerTile), 19);
+            }
+            auraPivot.gameObject.SetActive(on);
+            if (!on) { view.Renderer.color = Color.white; return; }
+            float rate = RelicTime > 2f ? 14f : 6f;
+            int i = (int)(Time.time * rate) % gloryColours.Length;
+            view.Renderer.color = gloryColours[i];
+            float pulse = 1f + 0.12f * Mathf.Sin(Time.time * 12f);
+            float size = Mounted ? 1.45f : 1f;
+            auraPivot.localPosition = new Vector3(0f, Body.H * 0.5f, 0f);
+            auraPivot.localScale = new Vector3(pulse * size, pulse * size, 1f);
+            auraPivot.localEulerAngles = new Vector3(0f, 0f, Time.time * 40f);
+            auraView.color = new Color(1f, 1f, 1f, i % 2 == 0 ? 1f : 0.65f);
+        }
 
         /// <summary>Carry the knight's state on into the next level or part.</summary>
         public void ApplyCarry(int hearts, bool crossbow, bool mounted)

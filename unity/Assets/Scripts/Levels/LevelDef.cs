@@ -18,6 +18,6 @@ namespace Tapestry
     public static class Levels
     {
         /// <summary>The levels in order. Add new ones here.</summary>
-        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def };
+        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def };
     }
 }

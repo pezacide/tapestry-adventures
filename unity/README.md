@@ -27,9 +27,11 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
 ## The levels
 - **Worlde 1-1, Ye Meadowe of Beastes:** an open meadow with towers, a sea pit and brick rows. It ends at the keep upon the motte.
 - **Worlde 1-2, Ye Foreste of Wyverns:** treetop platforms you can jump up through, three gaps bridged by trees, a stream, perching owls and wyverns. It has its own wandering tune in A Dorian and ends at the abbey in the wood.
-- **Worlde 1-3, Ye Crypte Gate and Ye Undercroft:** it starts above ground; walk through the door of ye Way Downe and you descend into a vaulted crypt with a stone ceiling, low arches, and lifts that glide sideways or rise and fall over dark pits. Soup Cats guard the kitchens. It has a slow tune in E Phrygian and ends by climbing out to ye Rounde Tower.
+- **Worlde 1-3, Ye Crypte Gate and Ye Undercroft:** it starts above ground; walk through the door of ye Way Downe and you descend into a vaulted crypt. At its far end a stair climbs back up into daylight (Ye Lyght of Daye), where the flag and ye Rounde Tower wait with a stone ceiling, low arches, and lifts that glide sideways or rise and fall over dark pits. Soup Cats guard the kitchens. The crypt has a slow tune in E Phrygian.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
+
+**Level select:** once you have passed a realme, the title screen lets you choose it (after choosing your knight). Progress is saved.
 
 The longer levels have a **halfway banner**. Touch it and it turns red; if you die after that, you rise again at the banner instead of the start.
 
@@ -40,13 +42,13 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - **Bayard**, the horse (Mario's Yoshi)
   - a **Golden Chalice**: one more life (the 1-Up). It slides along, so chase it.
   - a **Roast Capon**: mends one heart (the mushroom). It also slides along.
-  - a **Crossbowe**: RUN shoots bolts, at most two in the air at once (the fire flower). Bolts fell any beast, even the burning lion. You lose the crossbowe if you take a hit.
-  - a **Holy Relique**: about nine seconds in which no beast can harm you and any beast you touch is smitten (the star). It bounces about.
+  - a **Crossbowe**: RUN shoots bolts, at most two in the air at once (the fire flower). Bolts fell any beast, even the burning lion. A hit knocks the crossbowe away instead of costing health.
+  - a **Holy Relique**: about nine seconds in which no beast can harm you and any beast you touch is smitten (the star). It bounces about. While it lasts, the knight flickers gold and white inside a spinning aura of golden rays; the flicker slows in the last two seconds.
 - **Bayard:**
   - Riding him makes you faster and lets you jump higher.
   - Hold JUMP while falling for a flutter-leap.
   - He crushes any beast he lands on.
-  - A hit throws you off; he rears and bolts. If he gallops into a pit he is lost, and you must find him again in another brick (three of the level's bricks hold him).
+  - A hit throws you off (instead of costing health); he rears and bolts. If he gallops into a pit he is lost, and you must find him again in another brick (three of the level's bricks hold him).
 - **Beasts:** Snail-Hound (red shell: stomp it, then kick the shell), Mossy Snail-Hound (green shell: stomp it, hold RUN to pick the shell up, carry it, and let go of RUN to hurl it; a held shell also fells the first beast it touches), Killer Hare, Fiery Lion (shoots fireballs), Bayeux Hound, Camel-Dragon, Wyvern, Spotted Unicorn (charges), Man-Faced Owl (swoops) and Soup Cat (throws soup).
 - **Rules:** health is shown as a long strip of tapestry, stitched in three segments (Verdain has four), and you have three lives. 100 bezants earn an extra life. The sea and pits kill. Touch the goal pole, slide down it and walk into the castle. The higher you grasp the pole, the more glory: 100, 200, 400, 800, 2000 or 5000, and the very top gives an extra life. Points float up wherever they are won.
 - **Text:** all the on-screen writing is in olde English.

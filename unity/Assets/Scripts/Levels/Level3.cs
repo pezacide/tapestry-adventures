@@ -8,28 +8,27 @@ namespace Tapestry
             Title = "Worlde 1-3",
             Name = "Ye Undercroft",
             Inscription = "HERE YE KNYGHTES GOE DOWNE INTO YE UNDERCROFT",
-            Castle = "scenery/castle_round_tower", CastleX = 190f,
+            Castle = "scenery/crypt_exit", CastleX = 188f,
             Music = "crypt",
             FarLayer = "backgrounds/crypt_far", NearLayer = "backgrounds/crypt_near",
+            Entrance = true,   // no pole: walking into the building leads on to the next part
             Map = new[]
             {
-                "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
-                "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
-                "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
+                "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
+                "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
+                "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
                 "                        VV                                     VVV                                                  VV",
-                "                        VV                                     VVV                                                  VV                                                     B",
-                "                        VV       ooo                           VVV       oo                        oooo             VV   O                                                BB",
-                "                B?BMB                             ?W?                                   BHB                             B1BRB           k                     ?B?B?      BBB",
-                "                                                            B                                                                         BBBB                              BBBB",
-                "                                                           BB                L                                                                                         BBBBB",
-                "   P                s     S     L             h        k  BBB     S     E             d      l    L   E       C c                 s          E        h    S          BBBBBB          G",
+                "                        VV                                     VVV                                                  VV",
+                "                        VV       ooo                           VVV       oo                        oooo             VV   O",
+                "                B?BMB                             ?W?                                   BHB                             B1BRB           k                     ?B?B?           ?B?",
+                "                                                            B                                                                         BBBB",
+                "                                                           BB                L",
+                "   P                s     S     L             h        k  BBB     S     E             d      l    L   E       C c                 s          E        h    S              d",
                 "###############################          ##############################           ###############           #################################     ######################################################",
                 "###############################          ##############################           ###############           #################################     ######################################################",
             },
-            Props = new[]
+            Props = new Decor[]
             {
-                new Decor("scenery/shrub", 178),
-                new Decor("scenery/tree", 196),
             },
         };
     }

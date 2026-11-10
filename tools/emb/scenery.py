@@ -285,6 +285,23 @@ def health(full):
 S["health_empty"] = (240, 30, health(False), False)
 S["health_full"] = (240, 30, health(True), False)
 
+def aura():
+    """The holy relique's glory: a ring of golden rays (drawn behind the knight)."""
+    import math as _m
+    cx, cy = 64, 76
+    s = ""
+    for i in range(16):
+        a = i * 2 * _m.pi / 16
+        L = 62 if i % 2 == 0 else 46
+        x1, y1 = cx + _m.cos(a) * L, cy + _m.sin(a) * L
+        xa, ya = cx + _m.cos(a + 0.22) * 18, cy + _m.sin(a + 0.22) * 18
+        xb, yb = cx + _m.cos(a - 0.22) * 18, cy + _m.sin(a - 0.22) * 18
+        s += fill(f"M{xa:.1f},{ya:.1f} L{x1:.1f},{y1:.1f} L{xb:.1f},{yb:.1f} Z", ("gold", "cream")[i % 2], 0, "ochre", 0.8)
+    s += f'<ellipse cx="{cx}" cy="{cy}" rx="34" ry="44" fill="{WOOL["cream"]}" opacity="0.55"/>'
+    s += f'<ellipse cx="{cx}" cy="{cy}" rx="38" ry="48" fill="none" stroke="{WOOL["gold"]}" stroke-width="3"/>'
+    return s
+S["aura"] = (128, 152, aura, False)
+
 # ---------------- undercroft (World 1-3) ----------------
 def vault():
     """Unbreakable vault stone: dark dressed blocks."""
