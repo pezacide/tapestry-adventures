@@ -87,3 +87,43 @@ Everything is built from code at runtime, so there are no prefabs to keep in syn
   - the Nintendo Developer Portal, at developer.nintendo.com.
 
   Once approved, each one gives you its own Unity build support, under NDA, and the code here carries over. Approval usually needs a playable build and a short pitch, which this game is building toward.
+
+## Android: test build on your phone
+The project is set up as **Ye Tapestrie Adventures**:
+
+| Setting | Value |
+|---|---|
+| Developer | pezacide |
+| Package ID | `com.pezacide.tapestryadventures` (permanent once published) |
+| Version | 0.1.0 |
+| Code | 64-bit (IL2CPP, ARM64) |
+| Minimum Android | 8.0 |
+| Screen | landscape only |
+| Icon | `Assets/Icons/icon.png` (made by `tools/emb/icon.py`) |
+
+### One-time phone setup
+1. On the phone, open **Settings → About phone** and tap **Build number** 7 times. This turns on Developer options.
+2. Open **Settings → System → Developer options** and turn on **USB debugging**.
+3. Plug the phone into the PC with a USB cable. When the phone asks *Allow USB debugging?*, tap **Allow**.
+
+### Build and play
+- **Easiest:** in Unity, choose **Tapestry → Android → Build and Run on Connected Phone**. The first build takes 10–20 minutes, because IL2CPP compiles everything to native code; later builds are quicker. The game then starts on the phone by itself.
+- **Without a cable:** choose **Tapestry → Android → Build Test APK**. The folder holding `YeTapestrieAdventures.apk` opens when it finishes. Copy the file to the phone (for example by Google Drive or email), tap it, and allow *Install unknown apps* for that app when asked.
+
+If Unity says Android isn't installed, open Unity Hub and go to **Installs → (your Unity 6) → Manage → Add modules**. Tick **Android Build Support**, together with **OpenJDK** and **Android SDK & NDK Tools**.
+
+### On the phone
+- The touch buttons sit inside the safe area, clear of camera notches:
+  - bottom-left: ◄ ► to move, and ▼ to get off Bayard;
+  - bottom-right: **RUNNE/SHOOTE** and **JUMPE**;
+  - top-right: **II** to pause.
+- The pause menu has tap buttons: Continewe, Returne to ye beginnynge, and Silence ye musick.
+- The phone's **Back** button pauses the game.
+- The screen won't dim or sleep while you play.
+
+### Before the Google Play Store (later)
+- **Earning money:** choose how the game will make money (ads, paid, or World 1 free with later worlds unlocked). The ads and unlock options need extra work built in.
+- **An upload key:** create one (a keystore). Keep it backed up; losing it means losing the ability to update the game.
+- **Build an .aab:** the Play Store needs an `.aab` file rather than an `.apk`, and the version code goes up by one for every upload.
+- **Google Play Console:** create a developer account (one-time fee).
+- **The store listing:** screenshots, a 1024×500 feature graphic, a privacy policy and the content-rating questionnaire.

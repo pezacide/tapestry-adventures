@@ -136,9 +136,21 @@ namespace Tapestry
             if (Hit(PauseButton, gui)) start = true;
         }
 
+        /// <summary>The part of the screen clear of camera notches and rounded corners, in GUI coordinates (top-left origin).</summary>
+        public static Rect Safe
+        {
+            get
+            {
+                var s = Screen.safeArea;
+                if (s.width <= 0f || s.height <= 0f) return new Rect(0, 0, Screen.width, Screen.height);
+                return new Rect(s.x, Screen.height - s.y - s.height, s.width, s.height);
+            }
+        }
+
         public static Rect ToScreen(Rect frac)
         {
-            return new Rect(frac.x * Screen.width, frac.y * Screen.height, frac.width * Screen.width, frac.height * Screen.height);
+            var a = Safe;
+            return new Rect(a.x + frac.x * a.width, a.y + frac.y * a.height, frac.width * a.width, frac.height * a.height);
         }
 
         static bool Hit(Rect frac, Vector2 gui) { return ToScreen(frac).Contains(gui); }

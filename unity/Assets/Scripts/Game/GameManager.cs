@@ -90,7 +90,7 @@ namespace Tapestry
         {
             if (I != null && I != this) { Destroy(gameObject); return; }
             I = this;
-            if (Application.isMobilePlatform) Application.targetFrameRate = 60;
+            if (Application.isMobilePlatform) { Application.targetFrameRate = 60; Screen.sleepTimeout = SleepTimeout.NeverSleep; }
             SetupCamera();
             Audio.Init(gameObject);
             SetupBackdrop();
@@ -227,6 +227,12 @@ namespace Tapestry
                 case State.Title: TickTitle(); break;
                 case State.Playing: TickPlay(dt); break;
                 case State.Paused:
+                    if (TapestryInput.TapPosition.HasValue)
+                    {
+                        if (PauseButtonRect(0).Contains(TapestryInput.TapPosition.Value)) { SetState(State.Playing); break; }
+                        if (PauseButtonRect(1).Contains(TapestryInput.TapPosition.Value)) { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); break; }
+                        if (PauseButtonRect(2).Contains(TapestryInput.TapPosition.Value)) { Audio.ToggleMute(); break; }
+                    }
                     if (TapestryInput.StartPressed || TapestryInput.JumpPressed) SetState(State.Playing);
                     else if (TapestryInput.DownPressed) { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     break;
@@ -773,9 +779,19 @@ namespace Tapestry
                     }
                     if (state == State.Paused)
                     {
-                        Panel(new Rect(W * 0.25f, H * 0.3f, W * 0.5f, H * 0.36f));
-                        GUI.Label(new Rect(0, H * 0.33f, W, H * 0.12f), "THOU ART AT REST", big);
-                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.16f), "JUMPE or Starte to continewe\nDOWNE to returne unto ye beginnynge\nM (or Selecte) to silence ye musick", center);
+                        Panel(new Rect(W * 0.2f, H * 0.26f, W * 0.6f, H * 0.5f));
+                        GUI.Label(new Rect(0, H * 0.28f, W, H * 0.1f), "THOU ART AT REST", big);
+                        if (TapestryInput.ShowTouchControls)
+                        {
+                            string[] labels = { "Continewe", "Returne to ye beginnynge", Audio.Muted ? "Unsilence ye musick" : "Silence ye musick" };
+                            for (int i = 0; i < 3; i++)
+                            {
+                                var r = PauseButtonRect(i);
+                                var bc = GUI.color; GUI.color = new Color(0.66f, 0.26f, 0.18f, 0.3f); GUI.DrawTexture(r, Texture2D.whiteTexture); GUI.color = bc;
+                                GUI.Label(r, labels[i], center);
+                            }
+                        }
+                        else GUI.Label(new Rect(0, H * 0.42f, W, H * 0.2f), "JUMPE or Starte to continewe\nDOWNE to returne unto ye beginnynge\nM (or Selecte) to silence ye musick", center);
                     }
                     if (state == State.Won && winPhase == 2)
                     {
@@ -826,6 +842,12 @@ namespace Tapestry
                 GUI.DrawTexture(new Rect(x - 1f, r.y + r.height * 0.12f, 2f, r.height * 0.76f), Texture2D.whiteTexture);
             }
             GUI.color = c;
+        }
+
+        Rect PauseButtonRect(int i)
+        {
+            float w = Screen.width * 0.44f, h = Screen.height * 0.085f;
+            return new Rect((Screen.width - w) * 0.5f, Screen.height * 0.4f + i * h * 1.2f, w, h);
         }
 
         void Popups()
@@ -879,6 +901,9 @@ namespace Tapestry
                 }
             }
             float y = H * 0.125f, s = U * 0.05f;
+            var safe = TapestryInput.Safe;   // keep the HUD clear of camera notches and rounded corners
+            GUI.BeginGroup(new Rect(safe.x, 0, safe.width, H));
+            W = safe.width;
             GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon Bayard" : ""), small);
             HealthBar(new Rect(W * 0.02f, y + s * 1.25f, s * 6f, s * 0.75f));
             DrawFrame("scenery/bezant", 0, new Rect(W * 0.40f, y + s * 0.1f, s, s));
@@ -895,6 +920,7 @@ namespace Tapestry
                 GUI.Label(new Rect(W * 0.2f, y + s * 2.6f, W * 0.6f, s * 1.4f), toast, center);
                 GUI.color = c;
             }
+            GUI.EndGroup();
         }
 
         void TouchButtons()

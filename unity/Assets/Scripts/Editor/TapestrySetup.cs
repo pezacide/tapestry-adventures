@@ -41,7 +41,8 @@ namespace Tapestry.EditorTools
         [MenuItem("Tapestry/Apply Player Settings")]
         public static void ApplyPlayerSettings()
         {
-            PlayerSettings.productName = "Tapestry Adventures";
+            PlayerSettings.productName = AndroidBuild.AppName;
+            PlayerSettings.companyName = AndroidBuild.Company;
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
             PlayerSettings.allowedAutorotateToPortrait = false;
             PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
