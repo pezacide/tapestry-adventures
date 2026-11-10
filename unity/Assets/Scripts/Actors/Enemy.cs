@@ -192,7 +192,8 @@ namespace Tapestry
                 return;
             }
             if (!fromAbove) { k.Hurt(); return; }
-            if (Kind == "fiery_lion" && !k.Mounted) { k.Hurt(); k.Bounce(); return; }   // burning mane
+            if (k.Mounted) { k.Bounce(); Squash(); return; }   // Bayard's hooves crush every beast, burning or not
+            if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return; }   // burning mane
             k.Bounce();
             if (Kind == "snail_hound")
             {

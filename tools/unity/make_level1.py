@@ -34,7 +34,7 @@ row(100, 5, "B?B?B?B"); row(101, 8, "o o o")
 put(112, 2, "u")
 tower(124, 3); put(124, 5, "O")
 row(130, 4, "BBBB"); put(132, 5, "k")
-row(140, 6, "==="); row(140, 8, "ooo")
+row(140, 5, "==="); row(140, 7, "ooo")
 put(150, 2, "s"); put(154, 2, "h"); put(147, 7, "w")
 for i in range(6):                          # Mario-style end staircase
     for y in range(2, 2 + i + 1): put(160 + i, y, "B")

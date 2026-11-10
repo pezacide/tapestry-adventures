@@ -28,6 +28,7 @@ namespace Tapestry
 
         int knightIndex, bezantCount, lives = 3, score;
         float stateTime, camX;
+        bool deathFell;
 
         class Layer { public Transform[] Copies; public float Period, Speed; }
 
@@ -154,7 +155,7 @@ namespace Tapestry
                     break;
                 case State.Dying:
                     player.Tick(dt, level);
-                    if (stateTime > 2.2f)
+                    if (stateTime > 2.6f)
                     {
                         lives--;
                         if (lives > 0) { LoadLevel(); SetState(State.Playing); }
@@ -215,7 +216,8 @@ namespace Tapestry
             foreach (var e in enemies)
             {
                 if (!e.Active || !e.Alive || !pb.Overlaps(e.Body)) continue;
-                bool fromAbove = pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Top - 0.35f;
+                // a stomp if we were falling and our feet were in the top half of the beast last frame
+                bool fromAbove = pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);
                 e.OnKnight(player, fromAbove);
                 if (player.Dead) return;
             }
@@ -236,7 +238,7 @@ namespace Tapestry
                 bayard = null;
             }
 
-            if (pb.Pos.y < -1.5f || level.Water(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f))) player.Die();
+            if (pb.Pos.y < -0.6f || level.Water(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f))) player.Die(true);
 
             if (level.GoalX > 0f && pb.Pos.x >= level.GoalX - 0.2f && !player.Dead)
             {
@@ -310,7 +312,7 @@ namespace Tapestry
 
         public void SpawnShot(string kind, Vector2 pos, Vector2 vel) { shots.Add(new Shot(kind, pos, vel, world)); }
         public void AddScore(int n) { score += n; }
-        public void PlayerDied() { SetState(State.Dying); }
+        public void PlayerDied(bool fell) { deathFell = fell; SetState(State.Dying); }
 
         void AddBezant()
         {
@@ -321,12 +323,15 @@ namespace Tapestry
         // ------------------------------------------------------------------ GUI
         GUIStyle big, small, center;
 
+        /// <summary>GUI unit: screen height, or less when the window is narrower than 16:9.</summary>
+        static float U { get { return Mathf.Min(Screen.height, Screen.width * 9f / 16f); } }
+
         void Styles()
         {
-            if (big != null && big.fontSize == Mathf.RoundToInt(Screen.height / 16f)) return;
-            big = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(Screen.height / 16f), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
+            if (big != null && big.fontSize == Mathf.RoundToInt(U / 16f)) return;
+            big = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(U / 16f), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
             big.normal.textColor = Thread;
-            small = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(Screen.height / 30f) };
+            small = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(U / 30f) };
             small.normal.textColor = Thread;
             center = new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, wordWrap = true };
         }
@@ -341,9 +346,11 @@ namespace Tapestry
 
         Rect PortraitRect(int i)
         {
-            float h = Screen.height * 0.34f, w = h * 64f / 96f, gap = w * 0.35f;
+            // four portraits + three gaps must fit in 92% of the width, and in a third of the height
+            float w = Mathf.Min(Screen.height * 0.32f * 64f / 96f, Screen.width * 0.92f / (Knights.All.Length + (Knights.All.Length - 1) * 0.35f));
+            float h = w * 96f / 64f, gap = w * 0.35f;
             float total = Knights.All.Length * w + (Knights.All.Length - 1) * gap;
-            return new Rect((Screen.width - total) * 0.5f + i * (w + gap), Screen.height * 0.38f, w, h);
+            return new Rect((Screen.width - total) * 0.5f + i * (w + gap), Screen.height * 0.36f, w, h);
         }
 
         void Panel(Rect r) { var c = GUI.color; GUI.color = new Color(Linen.r, Linen.g, Linen.b, 0.88f); GUI.DrawTexture(r, Texture2D.whiteTexture); GUI.color = c; }
@@ -356,9 +363,10 @@ namespace Tapestry
             {
                 case State.Title:
                     Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
+                    float y = H * 0.14f;
                     var t = Art.Texture("scenery/title");
-                    if (t != null) { float tw = Mathf.Min(W * 0.8f, H * 0.95f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, H * 0.15f, tw, th), t); }
-                    GUI.Label(new Rect(0, H * 0.26f, W, H * 0.07f), "World 1-1 · " + Level1.Name, center);
+                    if (t != null) { float tw = Mathf.Min(W * 0.9f, U * 1.3f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th; }
+                    GUI.Label(new Rect(0, y, W, U * 0.07f), "World 1-1 · " + Level1.Name, center);
                     for (int i = 0; i < Knights.All.Length; i++)
                     {
                         var r = PortraitRect(i);
@@ -368,9 +376,10 @@ namespace Tapestry
                         GUI.color = Color.white;
                     }
                     var def = Knights.All[knightIndex];
-                    GUI.Label(new Rect(0, H * 0.74f, W, H * 0.07f), def.Title, big);
-                    GUI.Label(new Rect(W * 0.1f, H * 0.81f, W * 0.8f, H * 0.06f), def.Trait, center);
-                    GUI.Label(new Rect(W * 0.1f, H * 0.88f, W * 0.8f, H * 0.08f),
+                    y = PortraitRect(0).yMax + U * 0.03f;
+                    GUI.Label(new Rect(0, y, W, U * 0.08f), def.Title, big); y += U * 0.09f;
+                    GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.07f), def.Trait, center); y += U * 0.07f;
+                    GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.1f),
                         TapestryInput.ShowTouchControls ? "Tap a knight to choose, tap again to ride out" : "LEFT / RIGHT to choose your knight  -  JUMP or Enter to begin", center);
                     break;
 
@@ -393,6 +402,12 @@ namespace Tapestry
                         GUI.Label(new Rect(W * 0.2f, H * 0.38f, W * 0.6f, H * 0.12f), "Here the knight is victorious!\nBut Princess Aelfgyva is held in another castle...", center);
                         DrawFrame("princess/aelfgyva", 1, new Rect(W * 0.5f - H * 0.06f, H * 0.5f, H * 0.12f, H * 0.23f));
                     }
+                    if (state == State.Dying)
+                    {
+                        Panel(new Rect(W * 0.25f, H * 0.32f, W * 0.5f, H * 0.22f));
+                        GUI.Label(new Rect(0, H * 0.34f, W, H * 0.1f), deathFell ? "CECIDIT!" : "VULNERATUS EST!", big);
+                        GUI.Label(new Rect(0, H * 0.44f, W, H * 0.08f), (deathFell ? "The knight has fallen. " : "The knight is struck down. ") + (lives > 1 ? (lives - 1) + " lives remain." : "No lives remain..."), center);
+                    }
                     if (state == State.GameOver)
                     {
                         Panel(new Rect(W * 0.25f, H * 0.3f, W * 0.5f, H * 0.3f));
@@ -406,7 +421,7 @@ namespace Tapestry
 
         void Hud(float W, float H)
         {
-            float y = H * 0.125f, s = H * 0.05f;
+            float y = H * 0.125f, s = U * 0.05f;
             GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " on Bayard" : ""), small);
             for (int i = 0; i < player.Hearts; i++)
                 DrawFrame("scenery/roundel_block", 0, new Rect(W * 0.02f + i * s * 1.1f, y + s * 1.2f, s, s));

@@ -5,7 +5,7 @@ namespace Tapestry
     /// <summary>The player: Mario-style running and jumping, plus riding Bayard.</summary>
     public class Knight
     {
-        const float FootW = 0.62f, FootH = 1.72f, RideW = 1.25f, RideH = 2.3f;
+        const float FootW = 0.62f, FootH = 1.72f, RideW = 1.25f, RideH = 1.9f;
         const float RiseGravity = 24f, FallGravity = 60f, MaxFall = 17f;
 
         public readonly Body Body;
@@ -130,7 +130,8 @@ namespace Tapestry
             if (Hearts <= 0) Die();
         }
 
-        public void Die()
+        /// <summary>fell = dropped into a pit or the sea: pop back up into view so the death is seen.</summary>
+        public void Die(bool fell = false)
         {
             if (Dead) return;
             Dead = true;
@@ -138,8 +139,9 @@ namespace Tapestry
             view.Renderer.enabled = true;
             view.SetFrame(3);
             view.Renderer.flipY = true;
-            Body.Vel = new Vector2(0f, 11f);
-            GameManager.I.PlayerDied();
+            Body.Vel = new Vector2(0f, fell ? 17f : 11f);
+            if (fell) Body.Pos.y = Mathf.Min(Body.Pos.y, -1.6f);
+            GameManager.I.PlayerDied(fell);
         }
 
         public void Mount()
