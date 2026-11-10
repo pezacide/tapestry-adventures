@@ -376,6 +376,16 @@ def spout():
     return s
 S["spout"] = (48, 192, spout, False)
 
+def manicule():
+    """A manicule: the pointing hand scribes drew in the margins to say 'look here' (points right)."""
+    s = fill("M4,22 L28,22 L30,40 L4,40 Z", "terra", 90, "dark", 1.4)                 # the sleeve
+    s += stem("M4,26 L28,26 M4,36 L28,36", "gold", 1.4, False)
+    s += fill("M28,20 Q36,14 44,18 L82,18 Q88,22 82,26 L52,26 L54,30 Q56,36 50,38 L54,42 Q54,48 46,48 L36,48 Q28,46 28,40 Z", "buff", 0, "dark", 1.6)
+    s += stem("M52,26 L44,28 M50,38 L42,38 M46,48 L40,46", "brown", 1, False)          # the curled fingers
+    s += stem("M60,18 L60,26 M72,18 L72,26", "brown", 0.8, False)                     # the knuckles of the pointing finger
+    return s
+S["manicule"] = (90, 56, manicule, False)
+
 # ---------------- the Tapestry of Creation (World 3) ----------------
 def cloud_top():
     """Ground made of Romanesque cloud: scalloped bands of blue and white."""

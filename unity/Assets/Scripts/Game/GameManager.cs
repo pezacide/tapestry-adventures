@@ -173,7 +173,7 @@ namespace Tapestry
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
-            flails.Clear(); winds.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); winds.Clear(); logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -511,6 +511,7 @@ namespace Tapestry
                         if (s.Carried) { s.Flip(); break; }   // a held shell is spent on the first beast it strikes
                     }
             }
+            if (BossHoldsArena && pb.Right > boss.ArenaMax) { pb.Pos.x = boss.ArenaMax - pb.W * 0.5f; if (pb.Vel.x > 0f) pb.Vel.x = 0f; }
             foreach (var f in flails)
                 if (f.Hits(pb)) player.Hurt();
             foreach (var lg in logs)
@@ -576,7 +577,7 @@ namespace Tapestry
             }
             else if (hasMonk && !rescuedMonk && pb.Pos.x >= monkPos.x - 1.2f)
             {
-                rescuedMonk = true;
+                rescuedMonk = true; showManicule = false;
                 if (monkView != null) monkView.sprite = Art.Frames("allies/monk")[1];
                 player.Freeze(); player.FaceRight();
                 PlayerPrefs.SetInt(PassedKey(L.Title), 1); PlayerPrefs.Save();
@@ -697,8 +698,13 @@ namespace Tapestry
             if (player == null || level == null) return;
             if (state == State.Playing || state == State.Won)
             {
-                float target = player.Body.Pos.x + (player.FacingRight ? 1.5f : -1.5f);
-                camX = Mathf.Lerp(camX, ClampCam(target), 1f - Mathf.Exp(-6f * Mathf.Min(Time.deltaTime, 0.05f)));
+                float target = ClampCam(player.Body.Pos.x + (player.FacingRight ? 1.5f : -1.5f));
+                if (BossHoldsArena)   // the screen stays on the fight until the boss is beaten
+                {
+                    // never scroll past the far side of the arena (the knight is held back there too)
+                    target = Mathf.Min(target, Mathf.Max(boss.ArenaMax - HalfWidth, boss.ArenaMin + HalfWidth));
+                }
+                camX = Mathf.Lerp(camX, target, 1f - Mathf.Exp(-6f * Mathf.Min(Time.deltaTime, 0.05f)));
             }
             camX = ClampCam(camX);
             PlaceCamera();
@@ -795,8 +801,13 @@ namespace Tapestry
             Audio.MusicPitch(1f);
         }
 
+        bool BossHoldsArena { get { return boss != null && boss.Active && !boss.Dead; } }
+        bool showManicule;
+
         public void BossDefeated()
         {
+            showManicule = hasMonk;
+            if (hasMonk) Toast("Ryde on to Brother Odo!");
             bossMusic = false;
             Audio.Music(L.Music);
             Toast("Huzzah! " + (boss != null ? boss.Title : "Ye beaste") + " is slayne!");
@@ -1066,9 +1077,23 @@ namespace Tapestry
                 TapestryInput.ShowTouchControls ? "Touche a realme, and touche agayne to ryde" : "LEFTE or RYGHTE to chuse  -  JUMPE to ryde  -  RUNNE to chuse another knyghte", center);
         }
 
+        void Manicule()
+        {
+            if (!showManicule || state != State.Playing) return;
+            var tex = Art.Texture("scenery/manicule");
+            if (tex == null) return;
+            var safe = TapestryInput.Safe;
+            float w = U * 0.16f, h = w * tex.height / tex.width;
+            float bob = Mathf.Sin(Time.time * 6f) * w * 0.12f;
+            var c = GUI.color; GUI.color = new Color(1f, 1f, 1f, 0.6f + 0.4f * Mathf.Abs(Mathf.Sin(Time.time * 3f)));
+            GUI.DrawTexture(new Rect(safe.xMax - w * 1.25f + bob, Screen.height * 0.42f, w, h), tex);
+            GUI.color = c;
+        }
+
         void Hud(float W, float H)
         {
             Gusts();
+            Manicule();
             Popups();
             if (boss != null && boss.Active && !boss.Dead)
             {

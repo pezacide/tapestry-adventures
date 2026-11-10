@@ -10,6 +10,7 @@ namespace Tapestry
         public abstract float MaxHealth { get; }
         public bool Active, Dead, Removed;
         public string Title;
+        public float ArenaMin, ArenaMax;   // while the boss lives, the screen and the knight are held within these
         public virtual bool Touchable { get { return Active && !Dead; } }   // false while out of reach (e.g. under the sea)
         public abstract void Tick(float dt, Level lv, Knight player);
         public abstract void OnKnight(Knight k, bool fromAbove);
@@ -31,6 +32,7 @@ namespace Tapestry
         {
             Body = new Body(pos, 1.9f, 2.5f);
             Health = MaxHealth; Title = "Ye Cockatrice";
+            ArenaMin = pos.x - 12f; ArenaMax = pos.x + 9f;   // the bridge and the axe beyond it
             view = new SpriteView("bosses/cockatrice", parent, 11);
             view.Face(false);
             minX = pos.x - 5f; maxX = pos.x + 3f;

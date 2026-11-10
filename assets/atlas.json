@@ -667,6 +667,13 @@
       ],
       "file": "scenery/spout.png"
     },
+    "manicule": {
+      "size": [
+        90,
+        56
+      ],
+      "file": "scenery/manicule.png"
+    },
     "cloud_top": {
       "size": [
         48,

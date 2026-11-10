@@ -25,6 +25,7 @@ namespace Tapestry
             Health = MaxHealth;
             x = pos.x; sy = DownY;
             minX = pos.x - 13f; maxX = pos.x + 13f;
+            ArenaMin = pos.x - 17f; ArenaMax = pos.x + 19f;   // the moored ships of the harbour
             Body = new Body(new Vector2(x, -20f), 4.2f, 1.35f);
             view = new SpriteView("bosses/whale_boss", parent, 5);
             spoutView = Art.Make("scenery/spout", parent, Vector2.zero, 4);

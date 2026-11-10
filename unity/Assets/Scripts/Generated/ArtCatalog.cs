@@ -83,6 +83,7 @@ namespace Tapestry
             { "scenery/log", new Sheet("Art/scenery/log", 48f, 48f, 1, 1f, 0.5f, 47f, 47.5f) },
             { "scenery/log_pile", new Sheet("Art/scenery/log_pile", 80f, 96f, 1, 0.5f, 13f, 79.5f, 95.5f) },
             { "scenery/spout", new Sheet("Art/scenery/spout", 48f, 192f, 1, 2.5f, 0f, 44f, 192f) },
+            { "scenery/manicule", new Sheet("Art/scenery/manicule", 90f, 56f, 1, 2.5f, 15.5f, 86.5f, 49.5f) },
             { "scenery/cloud_top", new Sheet("Art/scenery/cloud_top", 48f, 48f, 1, 0f, 3.5f, 48f, 48f) },
             { "scenery/cloud_fill", new Sheet("Art/scenery/cloud_fill", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/cloud_band", new Sheet("Art/scenery/cloud_band", 48f, 24f, 1, 0f, 3.5f, 48f, 23f) },
