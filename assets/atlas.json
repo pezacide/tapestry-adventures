@@ -302,6 +302,36 @@
       ],
       "frame_count": 2,
       "file": "enemies/crab.png"
+    },
+    "fish": {
+      "title": "Bayeux Fish",
+      "behaviour": "swims to and fro in a gentle wave; cannot be stomped under water - dodge it or shoot it",
+      "frame": [
+        52,
+        32
+      ],
+      "frame_count": 2,
+      "file": "enemies/fish.png"
+    },
+    "sea_serpent": {
+      "title": "Sea-Serpent",
+      "behaviour": "patrols back and forth in long coils; cannot be stomped under water",
+      "frame": [
+        108,
+        44
+      ],
+      "frame_count": 2,
+      "file": "enemies/sea_serpent.png"
+    },
+    "sea_monk": {
+      "title": "Sea-Monk",
+      "behaviour": "the legendary monk of the sea: drifts down, then pulses after the knight; cannot be stomped under water",
+      "frame": [
+        48,
+        74
+      ],
+      "frame_count": 2,
+      "file": "enemies/sea_monk.png"
     }
   },
   "bosses": {
@@ -620,6 +650,20 @@
       ],
       "file": "scenery/log_pile.png"
     },
+    "searock": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/searock.png"
+    },
+    "seaweed": {
+      "size": [
+        48,
+        96
+      ],
+      "file": "scenery/seaweed.png"
+    },
     "drawbridge": {
       "size": [
         48,
@@ -745,6 +789,13 @@
         264
       ],
       "file": "scenery/castle_harbour_gate.png"
+    },
+    "wreck": {
+      "size": [
+        288,
+        216
+      ],
+      "file": "scenery/wreck.png"
     },
     "ui_joy_base": {
       "size": [
@@ -909,6 +960,20 @@
         540
       ],
       "file": "backgrounds/shore_near.png"
+    },
+    "deep_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/deep_far.png"
+    },
+    "deep_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/deep_near.png"
     }
   }
 }

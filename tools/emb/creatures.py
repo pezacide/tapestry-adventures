@@ -381,3 +381,47 @@ def crab(f):
     return s
 C["crab"] = dict(title="Sea Crab", size=(56, 42), frames=2, build=crab,
                  behaviour="walker; scuttles sideways along the shore and hops; stompable")
+
+
+# ---------------- World 2-2: beneath the waves ----------------
+def fish(f):
+    body = "M8,16 Q22,2 42,10 Q50,14 50,17 Q42,26 22,28 Q10,26 8,16 Z"
+    s = fill(("M10,16 L0,6 L3,16 L0,26 Z" if f == 0 else "M10,16 L1,9 L5,16 L1,23 Z"), "terra", 0, "dark", 1)   # tail flick
+    s += fill(body, "ochre", 0) + clip("fb", body, scales(6, 4, 52, 30, 5, "brown", 0.8)) + stem(body, "dark", 1.4)
+    s += fill("M24,8 Q30,0 36,8 Z", "terra", 0, "dark", 0.9) + fill("M24,26 Q30,32 36,25 Z", "terra", 0, "dark", 0.9)
+    s += dot(42, 14, 1.8, "white", "dark") + dot(42.5, 14, 0.8, "dark") + stem("M46,19 Q48,20 50,18", "dark", 0.8, False)
+    return s
+C["fish"] = dict(title="Bayeux Fish", size=(52, 32), frames=2, build=fish,
+                 behaviour="swims to and fro in a gentle wave; cannot be stomped under water - dodge it or shoot it")
+
+def sea_serpent(f):
+    s = ""
+    pts = [(6 + i * 9, 22 + (6 if (i + f) % 2 else -6)) for i in range(9)]
+    d = f"M{pts[0][0]},{pts[0][1]}"
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):   # smooth coils through each crest
+        d += f" Q{x0 + 4.5},{y1} {(x0 + x1) / 2},{(y0 + y1) / 2} T{x1},{y1}"
+    s += stem(d, "green", 11, False) + stem(d, "olive", 4, False) + stem(d, "dark", 0.6, False)
+    for x, y in pts[1:-1]: s += dot(x, y, 1.6, "gold")
+    hx, hy = pts[-1]
+    s += fill(f"M{hx - 4},{hy - 6} Q{hx + 6},{hy - 12} {hx + 16},{hy - 4} L{hx + 20},{hy} L{hx + 12},{hy + 4} Q{hx},{hy + 6} {hx - 4},{hy + 4} Z", "green", 0, "dark", 1.2)
+    s += dot(hx + 8, hy - 5, 1.4, "gold", "dark") + stem(f"M{hx + 20},{hy} l4,-1 M{hx + 20},{hy} l4,1", "terra", 1, False)
+    s += fill(f"M{hx},{hy - 8} L{hx - 2},{hy - 16} L{hx + 5},{hy - 9} Z", "terra", 0, "dark", 0.8)
+    return s
+C["sea_serpent"] = dict(title="Sea-Serpent", size=(108, 44), frames=2, build=sea_serpent,
+                        behaviour="patrols back and forth in long coils; cannot be stomped under water")
+
+def sea_monk(f):
+    wide = f == 1
+    s = ""
+    robe = ("M12,26 Q24,20 36,26 L40,58 Q24,64 8,58 Z" if not wide else "M10,26 Q24,20 38,26 L46,54 Q24,60 2,54 Z")
+    s += fill(robe, "sage", 90) + clip("smr", robe, scales(0, 24, 48, 64, 5, "green", 0.8)) + stem(robe, "dark", 1.4)
+    for side in (-1, 1):   # finned arms
+        x = 24 + side * (14 if not wide else 20)
+        s += fill(f"M{x},30 L{x + side * 10},{40 if not wide else 30} L{x + side * 2},44 Z", "sky", 0, "dark", 1)
+    s += fill("M24,62 L16,72 L24,68 L32,72 Z", "sky", 0, "dark", 1)   # tail
+    s += fill("M14,16 Q14,4 24,4 Q34,4 34,16 Q34,26 24,27 Q14,26 14,16 Z", "buff", 0)
+    s += fill("M14,12 Q16,3 24,3 Q32,3 34,12 Q24,8 14,12 Z", "brown", 0, "dark", 1)   # tonsure
+    s += dot(20, 15, 1, "dark") + dot(28, 15, 1, "dark") + stem("M21,21 Q24,19 27,21", "dark", 0.9, False)
+    return s
+C["sea_monk"] = dict(title="Sea-Monk", size=(48, 74), frames=2, build=sea_monk,
+                     behaviour="the legendary monk of the sea: drifts down, then pulses after the knight; cannot be stomped under water")

@@ -2,6 +2,7 @@
 from embroider import fill, stem, dot, g, WOOL
 from creatures import clip, scales
 import scenery
+from scenery import seaweed
 
 C = {}
 
@@ -205,6 +206,21 @@ def harbour_gate():
     s += door(132, 264, 44, 78, True)
     return s
 C["castle_harbour_gate"] = dict(size=(264, 264), title="Ye Harbour Gate", fn=harbour_gate)
+
+# ---------- World 2-2: ye Wrecke on ye sea-bed ----------
+def wreck():
+    W, H = 288, 216
+    hull = "M14,140 L274,124 Q262,186 214,204 L74,214 Q26,206 14,140 Z"
+    s = stem("M150,130 L190,12", "brown", 4, False) + fill("M160,30 L214,22 Q220,52 208,82 L168,88 Q162,58 160,30 Z", "white", 80) \
+        + clip("ws", "M160,30 L214,22 Q220,52 208,82 L168,88 Q162,58 160,30 Z", "".join(fill(f"M{x},0 L{x + 8},0 L{x + 8},100 L{x},100 Z", "terra", 80, None) for x in range(160, 220, 16))) \
+        + stem("M160,30 L214,22 Q220,52 208,82 L168,88 Q162,58 160,30 Z", "dark", 1.2)   # the torn sail
+    s += fill(hull, "ochre", 0) + clip("wh", hull, stem("M0,156 L288,140", "terra", 5, False) + stem("M0,172 L288,158", "blue", 5, False) + stem("M0,188 L288,176", "green", 4, False)) + stem(hull, "dark", 1.8)
+    s += fill("M14,140 Q2,110 12,86 Q22,82 24,90 Q16,96 18,106 Q20,124 26,140 Z", "ochre", 80)   # stern post
+    s += fill("M120,216 L120,170 Q144,146 168,170 L168,216 Z", "dark", 0, "dark", 1.6)          # the way in, through a split in the hull
+    s += stem("M116,216 L116,168 Q144,140 172,168 L172,216", "brown", 2, False)
+    for x in (40, 90, 210, 250): s += g(seaweed(), f"translate({x - 24} 120) scale(1.0)")
+    return s
+C["wreck"] = dict(size=(288, 216), title="Ye Wrecke", fn=wreck)
 
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

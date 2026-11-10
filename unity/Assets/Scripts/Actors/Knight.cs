@@ -60,6 +60,9 @@ namespace Tapestry
 
             if (Petrified > 0f) Petrified -= dt;
             bool stone = Petrified > 0f;
+            if (GameManager.I.Underwater) Swim(dt, lv, stone);
+            else
+            {
             float h = stone ? 0f : TapestryInput.Horizontal;
             float speedMul = Mounted ? 1.2f : 1f;
             float target = h * (TapestryInput.RunHeld ? Def.Run : Def.Walk) * speedMul;
@@ -102,6 +105,7 @@ namespace Tapestry
             GameManager.I.CarryOnLift(Body);
             Body.Step(lv, dt);
             GameManager.I.LandOnLifts(Body);
+            }
 
             if (Body.HitCeiling) GameManager.I.KnightHitBlock(Body.CeilX, Body.CeilY);
 
@@ -125,10 +129,33 @@ namespace Tapestry
             view.SetPosition(Body.Pos);
         }
 
+        float stroke;   // time since the last swimming stroke
+
+        /// <summary>Under the waves: tap JUMPE to stroke upward; the knight sinks slowly and cannot rise past the surface.</summary>
+        void Swim(float dt, Level lv, bool stone)
+        {
+            float h = stone ? 0f : TapestryInput.Horizontal;
+            float max = TapestryInput.RunHeld ? 4.2f : 3.0f;
+            Body.Vel.x = Mathf.MoveTowards(Body.Vel.x, h * max, 9f * dt);
+            if (h > 0.1f) view.Face(true); else if (h < -0.1f) view.Face(false);
+            stroke += dt;
+            if (TapestryInput.JumpPressed && !stone)
+            {
+                Body.Vel.y = Mathf.Min(Mathf.Max(Body.Vel.y, 0f) + 4.2f, 5f);
+                stroke = 0f;
+                Audio.Play("jump", 0.25f);
+            }
+            Body.Vel.y = Mathf.Max(Body.Vel.y - 7f * dt, -2.4f);
+            Body.Step(lv, dt);
+            const float surface = 9.6f;   // the water's surface: no swimming out of the level
+            if (Body.Top > surface) { Body.Pos.y = surface - Body.H; if (Body.Vel.y > 0f) Body.Vel.y = 0f; }
+        }
+
         void Animate(float dt)
         {
             int frame;
-            if (!Body.Grounded && !frozen) frame = 3;
+            if (GameManager.I.Underwater && !Body.Grounded && !frozen) frame = stroke < 0.25f ? 1 : 3;   // a kick, then a glide
+            else if (!Body.Grounded && !frozen) frame = 3;
             else if (Mathf.Abs(Body.Vel.x) < 0.3f) frame = 0;
             else
             {

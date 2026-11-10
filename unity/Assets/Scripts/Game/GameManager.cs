@@ -41,6 +41,7 @@ namespace Tapestry
         Boss boss;
         bool bossMusic, deathFire;
         int relicCombo;   // beasts smitten in a row by the holy relique
+        public bool Underwater { get { return L.Underwater; } }
         // the level's tyme: counts down Mario-fashion; at 100 the musick quickens; at 0 the knight is lost
         const float TymeTick = 0.4f;
         float tymeLeft; bool hurried, deathTyme; int tymeBonus;
@@ -189,6 +190,9 @@ namespace Tapestry
                     case 'S': kind = "snail_moss"; break;
                     case 'g': kind = "gull"; break;
                     case 'x': kind = "crab"; break;
+                    case 'f': kind = "fish"; break;
+                    case 'z': kind = "sea_serpent"; break;
+                    case 'm': kind = "sea_monk"; break;
                     case 'Q': logPiles.Add(p); logTimers.Add(1.5f); Art.Make("scenery/log_pile", world, p, 3); break;
                     case 'F': flails.Add(new Flail(p, world, flails.Count % 2 == 0, flails.Count * 1.7f)); break;
                     case 'K': boss = new Boss(p, world); break;
@@ -212,7 +216,12 @@ namespace Tapestry
             }
             var start = hasCheckpoint && checkpointClaimed ? checkpointPos : level.Start;
             player = new Knight(Knights.All[knightIndex], start, world);
-            if (carry) { player.ApplyCarry(carryHearts, carryCrossbow, carryMounted); carry = false; }
+            if (carry)
+            {
+                if (carryMounted && L.Underwater) Toast("Bayard waiteth on ye shore. Swimme on!");
+                player.ApplyCarry(carryHearts, carryCrossbow, carryMounted && !L.Underwater);   // no horse beneath the waves
+                carry = false;
+            }
             camX = ClampCam(start.x + 4f);
             PlaceCamera();
         }
@@ -436,7 +445,7 @@ namespace Tapestry
                     ChainKill(++relicCombo, at);
                     continue;
                 }
-                bool fromAbove = pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);
+                bool fromAbove = !Underwater && pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);   // under water nothing can be stomped
                 e.OnKnight(player, fromAbove);
                 if (player.Dead) return;
             }
@@ -530,6 +539,17 @@ namespace Tapestry
                 if (checkpointView != null) checkpointView.sprite = Art.Frames("scenery/checkpoint")[1];
                 Audio.Play("item_appear");
                 Toast("Ye halfway banner is raysed! Here shalt thou ryse agayne.");
+            }
+
+            if (L.EndAtDoor && !rescuedMonk && pb.Pos.x >= L.CastleX - 0.3f && pb.Pos.y < 4f)
+            {
+                rescuedMonk = true;   // (reused as 'level finished')
+                player.Freeze(); player.Hide();
+                PlayerPrefs.SetInt(PassedKey(L.Title), 1); PlayerPrefs.Save();
+                TymeBonus();
+                winPhase = 2; winTime = 0f;
+                SetState(State.Won);
+                return;
             }
 
             if (L.Entrance && pb.Pos.x >= L.CastleX - 0.2f && pb.Grounded)

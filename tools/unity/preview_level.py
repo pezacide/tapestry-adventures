@@ -29,7 +29,7 @@ def render(n):
       put(load(key), x, gy)
   sk = lambda k, d: (re.search(k + r' = "([^"]+)"', src) or re.search("(" + d + ")", d)).group(1)
   brick, gtop, gfill = sk("Brick", "scenery/masonry"), sk("GroundTop", "scenery/ground_top"), sk("GroundFill", "scenery/ground_fill")
-  tiles = {c: brick for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"; tiles["V"] = "scenery/vault"; tiles["F"] = "scenery/vault"
+  tiles = {c: brick for c in "B?H1MWR"}; tiles["~"] = "scenery/sea"; tiles["V"] = sk("Vault", "scenery/vault"); tiles["F"] = tiles["V"]
   done = set()
   for y in range(H):
       for x in range(W):
@@ -43,7 +43,7 @@ def render(n):
           elif c in "LE": put(load("scenery/lift"), x + 1.5, y + 1 - 14 / 48)
           elif c in "Tt" and (x, y) not in done:
               done.add((x, y)); done.add((x + 1, y)); put(load("scenery/tower_top" if c == "T" else "scenery/tower_body"), x + 1, y)
-  spr = {"s": ("enemies/snail_hound", 3), "S": ("enemies/snail_moss", 3), "g": ("enemies/gull", 2), "x": ("enemies/crab", 2), "Q": ("scenery/log_pile", 1), "h": ("enemies/killer_hare", 2), "l": ("enemies/fiery_lion", 3), "d": ("enemies/bayeux_hound", 2),
+  spr = {"s": ("enemies/snail_hound", 3), "S": ("enemies/snail_moss", 3), "g": ("enemies/gull", 2), "x": ("enemies/crab", 2), "f": ("enemies/fish", 2), "z": ("enemies/sea_serpent", 2), "m": ("enemies/sea_monk", 2), "Q": ("scenery/log_pile", 1), "h": ("enemies/killer_hare", 2), "l": ("enemies/fiery_lion", 3), "d": ("enemies/bayeux_hound", 2),
          "c": ("enemies/camel_dragon", 2), "w": ("enemies/wyvern", 2), "u": ("enemies/unicorn", 2), "O": ("enemies/owl_face", 2), "k": ("enemies/soup_cat", 3)}
   for y in range(H):
       for x in range(W):

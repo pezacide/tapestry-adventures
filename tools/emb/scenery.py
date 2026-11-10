@@ -365,6 +365,46 @@ def shore_near():
         items.append((x, st))
     return _wrap(items)
 
+# ---------------- beneath the waves (World 2-2) ----------------
+def searock():
+    """Unbreakable sea rock, grown over with weed."""
+    s = fill("M0,0 L48,0 L48,48 L0,48 Z", "grey", 40, None)
+    for i, (x, y, r) in enumerate(((10, 12, 9), (34, 10, 10), (22, 32, 12), (42, 38, 7), (6, 40, 7))):
+        s += fill(f"M{x - r},{y} a{r},{r} 0 1,0 {2 * r},0 a{r},{r} 0 1,0 {-2 * r},0 Z", ("grey", "brown", "grey", "olive", "brown")[i], 30 * i, "dark", 1)
+    s += stem("M4,2 q4,6 0,12 M28,0 q-4,6 0,10 M44,4 q4,6 0,12", "green", 1.6, False)
+    return clip("sr", "M0,0 L48,0 L48,48 L0,48 Z", s) + stem("M0.8,0.8 L47.2,0.8 L47.2,47.2 L0.8,47.2 Z", "dark", 1.4)
+S["searock"] = (T, T, searock, False)
+
+def seaweed():
+    s = ""
+    for i, x in enumerate((12, 24, 36)):
+        h = (80, 92, 72)[i]
+        d = f"M{x},96 q-8,-{h * 0.25} 0,-{h * 0.5} q8,-{h * 0.25} 0,-{h * 0.5}"
+        s += stem(d, ("green", "sage", "olive")[i], 4, False) + stem(d, "dark", 0.6, False)
+        for k in range(3):
+            yy = 96 - h * (0.25 + k * 0.25)
+            s += fill(f"M{x},{yy} q{(-1) ** k * 10},-4 {(-1) ** k * 12},-12 q{(-1) ** k * -6},6 {(-1) ** k * -12},12 Z", ("green", "sage")[k % 2], 30, "dark", 0.8)
+    return s
+S["seaweed"] = (48, 96, seaweed, False)
+
+def deep_far():
+    """Deep water: bands of blue, shafts of light from the surface, far rocks."""
+    s = ""
+    for i, y in enumerate(range(0, BH + 40, 40)):
+        s += fill(f"M0,{y} L{BW},{y} L{BW},{y + 40} L0,{y + 40} Z", ("sky", "blue", "blue", "indigo")[min(3, i // 4)], 0, None)
+    s += stem(f"M0,40 " + " ".join(f"q12,-6 24,0" for _ in range(41)), "white", 2, False)   # the surface, seen from below
+    for x in range(40, BW, 180):
+        s += f'<path d="M{x},40 L{x + 60},40 L{x + 140},{BH} L{x + 70},{BH} Z" fill="{WOOL["cream"]}" opacity="0.10"/>'
+    for x in range(0, BW, 240):
+        s += fill(f"M{x},{BH} Q{x + 40},{BH - 120} {x + 110},{BH - 90} Q{x + 160},{BH - 160} {x + 220},{BH} Z", "indigo", 20, "dark", 1)
+    return s
+
+def deep_near():
+    items = []
+    for x in range(30, BW, 160):
+        items.append((x, g(seaweed(), "translate(0 420) scale(1.2)")))
+    return _wrap(items)
+
 # ---------------- castle (World 1-4) ----------------
 def fire_pit(f):
     def fn():
@@ -579,3 +619,6 @@ S["bg_castle_near"] = (BW, BH, castle_near, False)
 
 S["bg_shore_far"] = (BW, BH, shore_far, False)
 S["bg_shore_near"] = (BW, BH, shore_near, False)
+
+S["bg_deep_far"] = (BW, BH, deep_far, False)
+S["bg_deep_near"] = (BW, BH, deep_near, False)

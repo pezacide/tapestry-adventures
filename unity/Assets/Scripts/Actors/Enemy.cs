@@ -43,6 +43,7 @@ namespace Tapestry
                 case "wyvern": gravity = false; break;
                 case "owl_face": gravity = false; break;
                 case "gull": gravity = false; break;
+                case "fish": case "sea_serpent": case "sea_monk": gravity = false; break;
                 case "crab": speed = 2f; break;
                 case "soup_cat": speed = 0f; timer = 1.2f; break;
             }
@@ -184,6 +185,33 @@ namespace Tapestry
                         view.Face(Body.Vel.x > 0f);
                         if (timer > 0.7f || Body.Pos.y < p.Body.Pos.y + 0.6f) { swooping = false; timer = 0f; }   // pull up and climb back
                     }
+                    break;
+
+                case "fish":   // swims to and fro in a gentle wave, turning at rocks
+                    if (Body.Pos.x < home.x - 7f) dir = 1f; else if (Body.Pos.x > home.x + 7f) dir = -1f;
+                    Body.Vel = new Vector2(dir * 2.2f, Mathf.Cos(timer * 2f) * 0.9f);
+                    Body.Step(lv, dt); if (Body.HitWall) dir = -dir;
+                    Body.Vel = Vector2.zero;
+                    view.Face(dir > 0f); WalkFrames(0, 1, 4f);
+                    break;
+
+                case "sea_serpent":   // long patrols in coils
+                    if (Body.Pos.x < home.x - 5f) dir = 1f; else if (Body.Pos.x > home.x + 5f) dir = -1f;
+                    Body.Pos = new Vector2(Body.Pos.x + dir * 2.6f * dt, home.y + Mathf.Sin(timer * 1.6f) * 1.1f);
+                    view.Face(dir > 0f); WalkFrames(0, 1, 3f);
+                    break;
+
+                case "sea_monk":   // sinks slowly, then pulses toward the knight (like Mario's Blooper)
+                    if (timer > 1.1f && Mathf.Abs(dx) < 9f)
+                    {
+                        timer = 0f;
+                        var to = (p.Body.Pos + new Vector2(0f, 1f) - Body.Pos);
+                        Body.Vel = new Vector2(Mathf.Clamp(to.x, -1f, 1f) * 3.5f, to.y > -0.5f ? 4.5f : 1.5f);
+                    }
+                    Body.Vel = Vector2.MoveTowards(Body.Vel, new Vector2(0f, -0.7f), 4f * dt);
+                    if (Body.Pos.y < 2f && Body.Vel.y < 0f) Body.Vel.y = 0f;
+                    if (Body.Pos.y + Body.H > 9.5f && Body.Vel.y > 0f) Body.Vel.y = 0f;
+                    view.SetFrame(Body.Vel.y > 1f ? 1 : 0);
                     break;
 
                 case "crab":

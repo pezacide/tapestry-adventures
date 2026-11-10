@@ -12,14 +12,16 @@ namespace Tapestry
         public float CastleX;         // its doorway, in tiles
         public string Music;          // Resources/Audio/music/<name>
         public string FarLayer = "backgrounds/far", NearLayer = "backgrounds/near";
-        public string GroundTop = "scenery/ground_top", GroundFill = "scenery/ground_fill", Brick = "scenery/masonry";   // per-level skins
+        public string GroundTop = "scenery/ground_top", GroundFill = "scenery/ground_fill", Brick = "scenery/masonry", Vault = "scenery/vault";   // per-level skins
         public int Time = 300;        // the level's tyme, counted down Mario-fashion (about 0.4 s a tick)
+        public bool Underwater;       // the whole level is beneath the waves: swim, and sea beasts cannot be stomped
+        public bool EndAtDoor;        // no pole: entering the end building completes the level
         public bool Entrance;         // a short lead-in: no pole; walking into the building goes straight on to the next part
     }
 
     public static class Levels
     {
         /// <summary>The levels in order. Add new ones here.</summary>
-        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def };
+        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def, Level6.Def };
     }
 }

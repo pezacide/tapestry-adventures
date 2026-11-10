@@ -39,6 +39,9 @@ namespace Tapestry
             { "enemies/camel_dragon", new Sheet("Art/enemies/camel_dragon", 84f, 64f, 2, 3.5f, 0f, 81.5f, 63f) },
             { "enemies/gull", new Sheet("Art/enemies/gull", 66f, 48f, 2, 3f, 1f, 64.5f, 44.5f) },
             { "enemies/crab", new Sheet("Art/enemies/crab", 56f, 42f, 2, 0f, 0f, 56f, 42f) },
+            { "enemies/fish", new Sheet("Art/enemies/fish", 52f, 32f, 2, 0f, 3f, 51f, 29.5f) },
+            { "enemies/sea_serpent", new Sheet("Art/enemies/sea_serpent", 108f, 44f, 2, 1f, 0f, 103f, 34f) },
+            { "enemies/sea_monk", new Sheet("Art/enemies/sea_monk", 48f, 74f, 2, 0f, 2f, 48f, 73f) },
             { "bosses/cockatrice", new Sheet("Art/bosses/cockatrice", 160f, 150f, 2, 10.5f, 0f, 159.5f, 141f) },
             { "bosses/great_dragon", new Sheet("Art/bosses/great_dragon", 300f, 160f, 3, 5f, 1f, 300f, 151f) },
             { "bosses/cat_king", new Sheet("Art/bosses/cat_king", 164f, 170f, 2, 18.5f, 0f, 164f, 170f) },
@@ -78,6 +81,8 @@ namespace Tapestry
             { "scenery/timber", new Sheet("Art/scenery/timber", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/log", new Sheet("Art/scenery/log", 48f, 48f, 1, 1f, 0.5f, 47f, 47.5f) },
             { "scenery/log_pile", new Sheet("Art/scenery/log_pile", 80f, 96f, 1, 0.5f, 13f, 79.5f, 95.5f) },
+            { "scenery/searock", new Sheet("Art/scenery/searock", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
+            { "scenery/seaweed", new Sheet("Art/scenery/seaweed", 48f, 96f, 1, 0f, 2f, 48f, 96f) },
             { "scenery/drawbridge", new Sheet("Art/scenery/drawbridge", 48f, 26f, 1, 0f, 0.5f, 48f, 25.5f) },
             { "scenery/bridge_axe", new Sheet("Art/scenery/bridge_axe", 48f, 96f, 1, 0.5f, 3f, 47.5f, 94.5f) },
             { "scenery/flail_ball", new Sheet("Art/scenery/flail_ball", 24f, 24f, 1, 0f, 0f, 24f, 24f) },
@@ -96,6 +101,7 @@ namespace Tapestry
             { "scenery/crypt_entrance", new Sheet("Art/scenery/crypt_entrance", 192f, 216f, 1, 11f, 12.5f, 181f, 216f) },
             { "scenery/crypt_exit", new Sheet("Art/scenery/crypt_exit", 144f, 288f, 1, 2.5f, 0f, 141.5f, 288f) },
             { "scenery/castle_harbour_gate", new Sheet("Art/scenery/castle_harbour_gate", 264f, 264f, 1, 12.5f, 1f, 251.5f, 264f) },
+            { "scenery/wreck", new Sheet("Art/scenery/wreck", 288f, 216f, 1, 6f, 10f, 275f, 216f) },
             { "scenery/ui_joy_base", new Sheet("Art/scenery/ui_joy_base", 180f, 180f, 1, 6f, 6f, 174f, 174f) },
             { "scenery/ui_joy_knob", new Sheet("Art/scenery/ui_joy_knob", 80f, 80f, 1, 2.5f, 2f, 78f, 78f) },
             { "scenery/ui_run", new Sheet("Art/scenery/ui_run", 112f, 112f, 1, 4.5f, 4.5f, 108f, 108f) },
@@ -118,6 +124,8 @@ namespace Tapestry
             { "backgrounds/castle_near", new Sheet("Art/backgrounds/castle_near", 960f, 540f, 1, 111f, 299.5f, 849f, 361f) },
             { "backgrounds/shore_far", new Sheet("Art/backgrounds/shore_far", 960f, 540f, 1, 0f, 288.5f, 960f, 540f) },
             { "backgrounds/shore_near", new Sheet("Art/backgrounds/shore_near", 960f, 540f, 1, 40.5f, 442.5f, 869.5f, 526f) },
+            { "backgrounds/deep_far", new Sheet("Art/backgrounds/deep_far", 960f, 540f, 1, 0f, 0f, 960f, 540f) },
+            { "backgrounds/deep_near", new Sheet("Art/backgrounds/deep_near", 960f, 540f, 1, 29.5f, 421.5f, 888.5f, 538.5f) },
         };
     }
 }

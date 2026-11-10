@@ -38,6 +38,11 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **Log piles** roll logs at you. Jump them, or stomp one to knock it loose so it tumbles away (100 glory); bolts split them. Logs that roll off screen are gone for good.
   - **Gulls** wheel overhead and dive at you; **crabs** scuttle and hop along the beach.
   - It has a rolling 6/8 sea dance (D Mixolydian) and ends at **Ye Harbour Gate**.
+- **Worlde 2-2, Beneath ye Waves:** an underwater level. Bayard waits on the shore.
+  - **Swimming:** tap JUMPE to stroke upward; you sink slowly and can't rise past the surface.
+  - **Sea creatures** can't be stomped, so dodge them or shoot them with the crossbowe, which is found right at the start: the **Bayeux fish** swims in waves, the **sea-serpent** patrols in coils, and the **sea-monk** sinks and then pulses after you.
+  - **The way through:** rock pillars and a reef tunnel to swim through, and two abysses.
+  - It has a slow 3/4 waltz in F Lydian. Swim into **Ye Wrecke**, a sunken longship, to finish.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 
