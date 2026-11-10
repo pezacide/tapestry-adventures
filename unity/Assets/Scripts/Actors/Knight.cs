@@ -40,7 +40,7 @@ namespace Tapestry
         }
 
         public void Freeze() { frozen = true; Body.Vel = Vector2.zero; }
-        public void Hide() { view.Renderer.enabled = false; }
+        public void Hide() { view.Renderer.enabled = false; if (crossbowView != null) crossbowView.enabled = false; }
         public void FaceRight() { view.Face(true); }
 
         public void Tick(float dt, Level lv)
@@ -173,11 +173,11 @@ namespace Tapestry
             GameManager.I.PlayerDied(fell);
         }
 
-        public void Mount()
+        public void Mount(bool silent = false)
         {
             Mounted = true;
             Body.W = RideW; Body.H = RideH;
-            Audio.Play("mount", 0.9f);
+            if (!silent) Audio.Play("mount", 0.9f);
             view.SetSheet(Def.MountedSheet);
         }
 
@@ -204,6 +204,14 @@ namespace Tapestry
         }
 
         public void Heal() { Hearts = Mathf.Min(Hearts + 1, Def.Hearts); }
+
+        /// <summary>Carry the knight's state on into the next level or part.</summary>
+        public void ApplyCarry(int hearts, bool crossbow, bool mounted)
+        {
+            Hearts = Mathf.Clamp(hearts, 1, Def.Hearts);
+            if (crossbow) GiveCrossbow();
+            if (mounted) Mount(true);
+        }
 
         void PlaceCrossbow()
         {

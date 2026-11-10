@@ -47,11 +47,12 @@ def render(n):
           if c in spr: put(load(spr[c][0], 0, spr[c][1]), x + 0.5, y)
           elif c == "o": put(load("scenery/bezant", 0, 4), x + 0.5, y + 0.25)
           elif c == "G": put(load("scenery/goal_pole"), x + 0.5, y)
+          elif c == "C": put(load("scenery/checkpoint", 0, 2), x + 0.5, y)
           elif c == "P": put(load("heroes/rubeus", 0, 5), x + 0.5, y)
   cast = re.search(r'Castle = "([^"]+)"', src).group(1); cx = float(re.search(r"CastleX = ([0-9.]+)f", src).group(1))
   put(load(cast), cx, 2)
   out.convert("RGB").save(os.path.join(A, f"level{n}_preview.png"), optimize=True)
   print(out.size)
 
-nums = sys.argv[1:] or sorted(re.findall(r"Level(\d+)\.cs", " ".join(os.listdir(os.path.join(ROOT, "unity/Assets/Scripts/Levels")))))
+nums = sys.argv[1:] or sorted(re.findall(r"Level(\d+[a-z]?)\.cs", " ".join(os.listdir(os.path.join(ROOT, "unity/Assets/Scripts/Levels")))))
 for n in nums: render(n)

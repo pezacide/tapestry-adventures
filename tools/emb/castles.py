@@ -165,5 +165,20 @@ def round_tower():
     return s
 C["castle_round_tower"] = dict(size=(240, 300), title="Ye Rounde Tower", fn=round_tower)
 
+# ---------- World 1-3 (above ground): ye way down into ye undercroft ----------
+def crypt_entrance():
+    W, H = 192, 216
+    s = wall(20, 96, 172, 216, "grey", "dark")
+    s += fill("M12,98 L96,40 L180,98 Z", "blue", 0, None) + clip("cer", "M12,98 L96,40 L180,98 Z", scales(8, 36, 184, 100, 7, "dark", 0.8)) + stem("M12,98 L96,40 L180,98 Z", "dark", 1.8)
+    s += stem("M96,40 L96,14 M88,22 L104,22", "gold", 2.4, False)
+    s += fill("M68,216 L68,140 Q96,112 124,140 L124,216 Z", "dark", 0, "dark", 1.6)
+    for i, y in enumerate(range(150, 216, 11)):   # steps going down into the dark
+        s += stem(f"M{72 + i * 2},{y} L{120 - i * 2},{y}", "grey", 2, False)
+    s += stem("M64,216 L64,138 Q96,106 128,138 L128,216", "ochre", 2, False)
+    s += window(44, 140) + window(148, 140)
+    s += fill("M30,104 L50,104 L50,216 L30,216 Z", "terra", 90, "dark", 1.1) + fill("M142,104 L162,104 L162,216 L142,216 Z", "terra", 90, "dark", 1.1)
+    return s
+C["crypt_entrance"] = dict(size=(192, 216), title="Ye Way Downe", fn=crypt_entrance)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

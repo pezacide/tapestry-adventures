@@ -521,6 +521,20 @@
       ],
       "file": "scenery/trunk.png"
     },
+    "health_empty": {
+      "size": [
+        240,
+        30
+      ],
+      "file": "scenery/health_empty.png"
+    },
+    "health_full": {
+      "size": [
+        240,
+        30
+      ],
+      "file": "scenery/health_full.png"
+    },
     "vault": {
       "size": [
         48,
@@ -597,6 +611,22 @@
         300
       ],
       "file": "scenery/castle_round_tower.png"
+    },
+    "crypt_entrance": {
+      "size": [
+        192,
+        216
+      ],
+      "file": "scenery/crypt_entrance.png"
+    },
+    "checkpoint": {
+      "size": [
+        44,
+        96
+      ],
+      "frame_count": 2,
+      "file": "scenery/checkpoint.png",
+      "note": "halfway banner: unclaimed, claimed"
     },
     "bezant": {
       "size": [

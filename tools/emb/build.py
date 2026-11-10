@@ -51,13 +51,15 @@ for n, c in creatures.C.items():
     atlas[cat][n] = dict(title=c["title"], behaviour=c["behaviour"], frame=[w, h], frame_count=c["frames"], file=f"{cat}/{n}.png")
 
 for n, (w, h, fn, bg) in scenery.S.items():
-    if n.startswith("bezant_"):
+    if n.startswith("bezant_") or n.startswith("checkpoint_"):
         continue
     folder = "backgrounds" if n.startswith("bg_") else "scenery"
     name = n[3:] if n.startswith("bg_") else n
     sheets[f"{folder}/{name}"] = [job(scenery.build_svg(n), n, w, h)]
     atlas[folder][name] = dict(size=[w, h], file=f"{folder}/{name}.png")
 sheets["scenery/bezant"] = [job(scenery.build_svg(f"bezant_{i}"), f"bezant_{i}", 24, 24) for i in range(4)]
+sheets["scenery/checkpoint"] = [job(scenery.build_svg(f"checkpoint_{i}"), f"checkpoint_{i}", 44, 96) for i in range(2)]
+atlas["scenery"]["checkpoint"] = dict(size=[44, 96], frame_count=2, file="scenery/checkpoint.png", note="halfway banner: unclaimed, claimed")
 atlas["scenery"]["bezant"] = dict(size=[24, 24], frame_count=4, file="scenery/bezant.png", note="spinning gold bezant (the coin)")
 for n in ("far", "near"):
     atlas["backgrounds"][n]["tileable_x"] = True

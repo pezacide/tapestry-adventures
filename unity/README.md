@@ -27,9 +27,11 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
 ## The levels
 - **Worlde 1-1, Ye Meadowe of Beastes:** an open meadow with towers, a sea pit and brick rows. It ends at the keep upon the motte.
 - **Worlde 1-2, Ye Foreste of Wyverns:** treetop platforms you can jump up through, three gaps bridged by trees, a stream, perching owls and wyverns. It has its own wandering tune in A Dorian and ends at the abbey in the wood.
-- **Worlde 1-3, Ye Undercroft:** a vaulted crypt with a stone ceiling, low arches, and lifts that glide sideways or rise and fall over dark pits. Soup Cats guard the kitchens. It has a slow tune in E Phrygian and ends by climbing out to ye Rounde Tower.
+- **Worlde 1-3, Ye Crypte Gate and Ye Undercroft:** it starts above ground; walk through the door of ye Way Downe and you descend into a vaulted crypt with a stone ceiling, low arches, and lifts that glide sideways or rise and fall over dark pits. Soup Cats guard the kitchens. It has a slow tune in E Phrygian and ends by climbing out to ye Rounde Tower.
 
-Finishing a level rides on to the next one; lives, bezants and glory carry over.
+Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
+
+The longer levels have a **halfway banner**. Touch it and it turns red; if you die after that, you rise again at the banner instead of the start.
 
 ## What's in the game
 - **Knights:** all four, chosen on the title screen. Azura glides, Verdain has four hearts, and Aurelia is fastest.
@@ -46,7 +48,7 @@ Finishing a level rides on to the next one; lives, bezants and glory carry over.
   - He crushes any beast he lands on.
   - A hit throws you off; he rears and bolts. If he gallops into a pit he is lost, and you must find him again in another brick (three of the level's bricks hold him).
 - **Beasts:** Snail-Hound (red shell: stomp it, then kick the shell), Mossy Snail-Hound (green shell: stomp it, hold RUN to pick the shell up, carry it, and let go of RUN to hurl it; a held shell also fells the first beast it touches), Killer Hare, Fiery Lion (shoots fireballs), Bayeux Hound, Camel-Dragon, Wyvern, Spotted Unicorn (charges), Man-Faced Owl (swoops) and Soup Cat (throws soup).
-- **Rules:** three hearts (Verdain has four) and three lives. 100 bezants earn an extra life. The sea and pits kill. Touch the goal pole, slide down it and walk into the castle. The higher you grasp the pole, the more glory: 100, 200, 400, 800, 2000 or 5000, and the very top gives an extra life. Points float up wherever they are won.
+- **Rules:** health is shown as a long strip of tapestry, stitched in three segments (Verdain has four), and you have three lives. 100 bezants earn an extra life. The sea and pits kill. Touch the goal pole, slide down it and walk into the castle. The higher you grasp the pole, the more glory: 100, 200, 400, 800, 2000 or 5000, and the very top gives an extra life. Points float up wherever they are won.
 - **Text:** all the on-screen writing is in olde English.
 - **Music and sound:** original tunes in medieval modes on a synthesized band of recorder, lute, hurdy-gurdy drone, shawm and tabor.
   - **Tunes:** a stately title theme (D Dorian), a lively meadow dance (G Mixolydian), a fast shawm-and-drum tune while the relique lasts, and short victory, death and game-over pieces.

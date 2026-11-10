@@ -9,7 +9,7 @@ namespace Tapestry
     {
         public static GameManager I { get; private set; }
 
-        enum State { Title, Playing, Paused, Dying, Won, GameOver }
+        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering }
         State state = State.Title;
 
         const float ViewHalfHeight = 5.625f;           // 540 design px tall = 11.25 tiles
@@ -28,6 +28,12 @@ namespace Tapestry
         readonly List<Item> items = new List<Item>();
         readonly List<Lift> lifts = new List<Lift>();
         Lift riding;   // the lift the knight stands on
+        // halfway banner
+        SpriteRenderer checkpointView;
+        Vector2 checkpointPos;
+        bool hasCheckpoint, checkpointClaimed;
+        // what the knight carries on into the next level
+        bool carry; int carryHearts; bool carryCrossbow, carryMounted;
         string toast; float toastTime;
         class Popup { public Vector2 Pos; public string Text; public float T; }
         readonly List<Popup> popups = new List<Popup>();
@@ -116,7 +122,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); bayard = null; winPhase = 0; toast = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world);
@@ -136,6 +142,10 @@ namespace Tapestry
                     case 'G': Art.Make("scenery/goal_pole", world, p, 5); break;
                     case 's': kind = "snail_hound"; break;
                     case 'S': kind = "snail_moss"; break;
+                    case 'C':
+                        hasCheckpoint = true; checkpointPos = p;
+                        checkpointView = Art.Make("scenery/checkpoint", world, p, 4, checkpointClaimed ? 1 : 0);
+                        break;
                     case 'L': case 'E': lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), s.Key == 'E', world, lifts.Count * 1.3f)); break;
                     case 'h': kind = "killer_hare"; break;
                     case 'l': kind = "fiery_lion"; break;
@@ -148,8 +158,10 @@ namespace Tapestry
                 }
                 if (kind != null) enemies.Add(new Enemy(kind, p, world));
             }
-            player = new Knight(Knights.All[knightIndex], level.Start, world);
-            camX = ClampCam(level.Start.x + 4f);
+            var start = hasCheckpoint && checkpointClaimed ? checkpointPos : level.Start;
+            player = new Knight(Knights.All[knightIndex], start, world);
+            if (carry) { player.ApplyCarry(carryHearts, carryCrossbow, carryMounted); carry = false; }
+            camX = ClampCam(start.x + 4f);
             PlaceCamera();
         }
 
@@ -174,7 +186,7 @@ namespace Tapestry
                 case State.Playing: TickPlay(dt); break;
                 case State.Paused:
                     if (TapestryInput.StartPressed || TapestryInput.JumpPressed) SetState(State.Playing);
-                    else if (TapestryInput.DownPressed) { levelIndex = 0; LoadLevel(); SetState(State.Title); }
+                    else if (TapestryInput.DownPressed) { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     break;
                 case State.Dying:
                     player.Tick(dt, level);
@@ -191,19 +203,31 @@ namespace Tapestry
                     TickEntities(dt);
                     if (winPhase == 2 && winTime > 1.2f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
                     {
-                        if (levelIndex + 1 < Levels.All.Length) { levelIndex++; LoadLevel(); SetState(State.Playing); }
-                        else { levelIndex = 0; LoadLevel(); SetState(State.Title); }
+                        if (levelIndex + 1 < Levels.All.Length) NextLevel();
+                        else { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     }
+                    break;
+                case State.Entering:   // walked into the crypt door: fade, then on to the next part
+                    if (stateTime > 1.1f) NextLevel();
                     break;
                 case State.GameOver:
                     if (stateTime > 1.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
-                    { lives = 3; bezantCount = 0; score = 0; levelIndex = 0; LoadLevel(); SetState(State.Title); }
+                    { lives = 3; bezantCount = 0; score = 0; levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     break;
             }
         }
 
         string LevelMusic { get { return L.Music; } }
         bool relicMusic;
+
+        void NextLevel()
+        {
+            carry = true; carryHearts = player.Hearts; carryCrossbow = player.HasCrossbow; carryMounted = player.Mounted;
+            levelIndex++;
+            checkpointClaimed = false;
+            LoadLevel();
+            SetState(State.Playing);
+        }
 
         void SetState(State s)
         {
@@ -219,6 +243,7 @@ namespace Tapestry
                 case State.Paused: Audio.PauseMusic(); Audio.Play("pause"); break;
                 case State.Dying: Audio.Music("death", false); break;
                 case State.Won: Audio.Play("pole"); Audio.Music("victory", false); break;
+                case State.Entering: Audio.Play("pole", 0.7f); break;
                 case State.GameOver: Audio.Music("game_over", false); break;
             }
         }
@@ -271,7 +296,7 @@ namespace Tapestry
             }
             if (go)
             {
-                if (levelIndex != 0) { levelIndex = 0; LoadLevel(); }
+                if (levelIndex != 0 || checkpointClaimed) { levelIndex = 0; checkpointClaimed = false; LoadLevel(); }
                 player.SetKnight(Knights.All[knightIndex]);
                 Audio.Play("confirm");
                 SetState(State.Playing);
@@ -334,6 +359,21 @@ namespace Tapestry
             }
 
             if (pb.Pos.y < -0.6f || level.Water(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f))) player.Die(true);
+
+            if (hasCheckpoint && !checkpointClaimed && pb.Pos.x >= checkpointPos.x - 0.3f)
+            {
+                checkpointClaimed = true;
+                if (checkpointView != null) checkpointView.sprite = Art.Frames("scenery/checkpoint")[1];
+                Audio.Play("item_appear");
+                Toast("Ye halfway banner is raysed! Here shalt thou ryse agayne.");
+            }
+
+            if (L.Entrance && pb.Pos.x >= L.CastleX - 0.2f && pb.Grounded)
+            {
+                player.Freeze(); player.Hide();
+                SetState(State.Entering);
+                return;
+            }
 
             if (level.GoalX > 0f && pb.Right >= level.GoalX - 0.1f && !player.Dead)
             {
@@ -582,7 +622,13 @@ namespace Tapestry
                 case State.Dying:
                 case State.Won:
                 case State.GameOver:
+                case State.Entering:
                     Hud(W, H);
+                    if (state == State.Entering)
+                    {
+                        var fc = GUI.color; GUI.color = new Color(0.12f, 0.09f, 0.07f, Mathf.Clamp01(stateTime / 0.9f));
+                        GUI.DrawTexture(new Rect(0, 0, W, H), Texture2D.whiteTexture); GUI.color = fc;
+                    }
                     if (state == State.Paused)
                     {
                         Panel(new Rect(W * 0.25f, H * 0.3f, W * 0.5f, H * 0.36f));
@@ -615,6 +661,28 @@ namespace Tapestry
             }
         }
 
+        /// <summary>A long strip of tapestry: the embroidered part is the knight's health, stitched in segments.</summary>
+        void HealthBar(Rect r)
+        {
+            var empty = Art.Texture("scenery/health_empty");
+            var full = Art.Texture("scenery/health_full");
+            if (empty == null || full == null) return;
+            int max = Mathf.Max(1, player.Def.Hearts);
+            float frac = Mathf.Clamp01(player.Hearts / (float)max);
+            GUI.DrawTexture(r, empty);
+            // the fringe takes the first and last 8/240 of the strip; fill between them
+            const float edge = 8f / 240f;
+            float k = edge + (1f - 2f * edge) * frac;
+            if (frac > 0f) GUI.DrawTextureWithTexCoords(new Rect(r.x, r.y, r.width * k, r.height), full, new Rect(0f, 0f, k, 1f));
+            var c = GUI.color; GUI.color = Thread;
+            for (int i = 1; i < max; i++)
+            {
+                float x = r.x + r.width * (edge + (1f - 2f * edge) * i / max);
+                GUI.DrawTexture(new Rect(x - 1f, r.y + r.height * 0.12f, 2f, r.height * 0.76f), Texture2D.whiteTexture);
+            }
+            GUI.color = c;
+        }
+
         void Popups()
         {
             foreach (var p in popups)
@@ -631,13 +699,12 @@ namespace Tapestry
             Popups();
             float y = H * 0.125f, s = U * 0.05f;
             GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon Bayard" : ""), small);
-            for (int i = 0; i < player.Hearts; i++)
-                DrawFrame("scenery/roundel_block", 0, new Rect(W * 0.02f + i * s * 1.1f, y + s * 1.2f, s, s));
+            HealthBar(new Rect(W * 0.02f, y + s * 1.25f, s * 6f, s * 0.75f));
             DrawFrame("scenery/bezant", 0, new Rect(W * 0.40f, y + s * 0.1f, s, s));
             GUI.Label(new Rect(W * 0.40f + s * 1.2f, y, W * 0.15f, s * 1.2f), "× " + bezantCount, small);
             GUI.Label(new Rect(W * 0.58f, y, W * 0.2f, s * 1.2f), "Lyves × " + lives, small);
             GUI.Label(new Rect(W * 0.76f, y, W * 0.22f, s * 1.2f), "Glorie " + score.ToString("000000"), small);
-            float ix = W * 0.02f + Mathf.Max(player.Hearts, 3) * s * 1.1f + s * 0.4f;
+            float ix = W * 0.02f + s * 6.4f;
             if (player.HasCrossbow) { DrawFrame("items/crossbow", 0, new Rect(ix, y + s * 1.15f, s * 1.3f, s)); ix += s * 1.5f; }
             if (player.Blessed) DrawFrame("items/relic", 1, new Rect(ix, y + s * 1.1f, s * 1.1f, s * 1.1f));
             if (toast != null && toastTime > 0f)

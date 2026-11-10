@@ -249,6 +249,42 @@ def forest_near():
         items.append((x, g(shrub(), "translate(0 440) scale(1.2)")))
     return _wrap(items)
 
+# ---------------- halfway banner + health bar ----------------
+def checkpoint(claimed):
+    def f():
+        s = stem("M10,10 L10,92", "brown", 2.4, False) + dot(10, 7, 3, "gold", "dark")
+        flag = "M11,12 L40,16 L34,24 L40,32 L11,36 Z"
+        s += fill(flag, "terra" if claimed else "buff", 0)
+        if claimed:
+            s += fill("M19,19 L23,19 L23,23 L27,23 L27,27 L23,27 L23,31 L19,31 L19,27 L15,27 L15,23 L19,23 Z", "gold", 0, "dark", 0.7)
+        s += stem(flag, "dark", 1.3)
+        s += fill("M2,90 L18,90 L18,96 L2,96 Z", "grey", 0, "dark", 1)
+        return s
+    return f
+S["checkpoint_0"] = (44, 96, checkpoint(False), False)
+S["checkpoint_1"] = (44, 96, checkpoint(True), False)
+
+def health(full):
+    """The health bar: a long strip of tapestry with fringed ends; the full one is embroidered."""
+    def f():
+        w, h = 240, 30
+        band = f"M8,4 L{w - 8},4 L{w - 8},{h - 4} L8,{h - 4} Z"
+        s = ""
+        for x in list(range(2, 9, 3)) + list(range(w - 8, w - 1, 3)):   # fringe
+            s += stem(f"M{x},6 L{x},{h - 6}", "buff", 1.2, False)
+        if full:
+            s += fill(band, "terra", 0, None)
+            s += clip("hb", band, stem(f"M8,7 L{w - 8},7 M8,{h - 7} L{w - 8},{h - 7}", "gold", 1.4, False)
+                      + "".join(fill(f"M{x},{h / 2} L{x + 7},8.5 L{x + 14},{h / 2} L{x + 7},{h - 8.5} Z", ("gold", "blue")[(x // 20) % 2], 0, "dark", 0.8) for x in range(12, w - 16, 20)))
+        else:
+            s += fill(band, "cream", 0, None)
+            s += clip("hbe", band, "".join(stem(f"M{x},6 L{x + 10},{h - 6}", "buff", 0.7, False) for x in range(8, w, 8)))
+        s += stem(band, "dark", 1.6)
+        return s
+    return f
+S["health_empty"] = (240, 30, health(False), False)
+S["health_full"] = (240, 30, health(True), False)
+
 # ---------------- undercroft (World 1-3) ----------------
 def vault():
     """Unbreakable vault stone: dark dressed blocks."""
