@@ -38,6 +38,7 @@ namespace Tapestry
         readonly List<Flail> flails = new List<Flail>();
         Boss boss;
         bool bossMusic, deathFire;
+        int relicCombo;   // beasts smitten in a row by the holy relique
         SpriteRenderer axeView; Vector2 axePos; bool hasAxe, collapsing;
         List<Vector2Int> collapseTiles; float collapseT, collapseDoneT;
         SpriteRenderer monkView; Vector2 monkPos; bool hasMonk, rescuedMonk;
@@ -298,8 +299,18 @@ namespace Tapestry
         }
 
         /// <summary>The holy relique has its own tune while it lasts.</summary>
+        /// <summary>Mario-fashion chains: 100, 200, 400 ... 12800 for the 8th beast in a row; every one after that is a free lyfe.</summary>
+        void ChainKill(int n, Vector2 at)
+        {
+            if (n <= 8) { AddScore(100 << (n - 1), at); return; }
+            lives++;
+            popups.Add(new Popup { Pos = at, Text = "1 LYFE!" });
+            Audio.Play("oneup");
+        }
+
         void UpdateRelicMusic()
         {
+            if (!player.Blessed) relicCombo = 0;
             if (player.Blessed && !relicMusic) { relicMusic = true; Audio.Music("relic"); }
             else if (!player.Blessed && relicMusic) { relicMusic = false; Audio.Music(LevelMusic); }
         }
@@ -398,7 +409,13 @@ namespace Tapestry
             {
                 if (!e.Active || !e.Alive || e.Carried || !pb.Overlaps(e.Body)) continue;
                 // a stomp if we were falling and our feet were in the top half of the beast last frame
-                if (player.Blessed) { e.Flip(); continue; }   // the holy relique smites any beast it touches
+                if (player.Blessed)   // the holy relique smites any beast it touches - and the glory doubles each time
+                {
+                    var at = e.Body.Pos + new Vector2(0f, e.Body.H);
+                    e.Flip(false);
+                    ChainKill(++relicCombo, at);
+                    continue;
+                }
                 bool fromAbove = pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);
                 e.OnKnight(player, fromAbove);
                 if (player.Dead) return;
@@ -409,7 +426,9 @@ namespace Tapestry
                 foreach (var o in enemies)
                     if (o != s && o.Alive && o.Active && !o.Carried && s.Body.Overlaps(o.Body))
                     {
-                        o.Flip();
+                        var at = o.Body.Pos + new Vector2(0f, o.Body.H);
+                        o.Flip(false);
+                        ChainKill(++s.ShellCombo, at);     // a sliding shell's glory doubles with every beast in a row
                         if (s.Carried) { s.Flip(); break; }   // a held shell is spent on the first beast it strikes
                     }
             }

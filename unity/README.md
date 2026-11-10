@@ -56,6 +56,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - He crushes any beast he lands on.
   - A hit throws you off (instead of costing health); he rears and bolts. If he gallops into a pit he is lost, and you must find him again in another brick (three of the level's bricks hold him).
 - **Beasts:** Snail-Hound (red shell: stomp it, then kick the shell), Mossy Snail-Hound (green shell: stomp it, hold RUN to pick the shell up, carry it, and let go of RUN to hurl it; a held shell also fells the first beast it touches), Killer Hare, Fiery Lion (shoots fireballs), Bayeux Hound, Camel-Dragon, Wyvern, Spotted Unicorn (charges), Man-Faced Owl (swoops) and Soup Cat (throws soup).
+- **Chains (as in Mario):** a sliding shell, or the holy relique, doubles its glory for every beast it fells in a row: 100, 200, 400, 800, 1600, 3200, 6400, then 12800 for the 8th. Every beast after that earns a free life. The chain starts again when the shell stops or is picked up, or when the relique wears off.
 - **Rules:** health is shown as a long strip of tapestry, stitched in three segments (Verdain has four), and you have three lives. 100 bezants earn an extra life. The sea and pits kill. Touch the goal pole, slide down it and walk into the castle. The higher you grasp the pole, the more glory: 100, 200, 400, 800, 2000 or 5000, and the very top gives an extra life. Points float up wherever they are won.
 - **Text:** all the on-screen writing is in olde English.
 - **Music and sound:** original tunes in medieval modes on a synthesized band of recorder, lute, hurdy-gurdy drone, shawm and tabor.
@@ -116,7 +117,7 @@ If Unity says Android isn't installed, open Unity Hub and go to **Installs → (
 
 ### On the phone
 - The touch controls sit inside the safe area, clear of camera notches:
-  - bottom-left: a fixed **joystick**. Push it left or right to walk, push it to the rim to run, and pull it down to get off Bayard.
+  - bottom-left corner: a fixed **joystick**. Push it left or right to walk, push it to the rim to run, and pull it down to get off Bayard.
   - bottom-right: two round buttons. The big gold **jump** button shows the knight you are playing, mid-leap. The blue **crossbow** button runs when held, shoots when tapped with the crossbowe, and carries a green shell when held. Slide your thumb between them to run and jump.
   - top-right: a round **pause** button.
 - The pause menu has tap buttons: Continewe, Returne to ye beginnynge, and Silence ye musick.

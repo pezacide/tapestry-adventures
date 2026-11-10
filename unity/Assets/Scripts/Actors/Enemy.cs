@@ -13,6 +13,7 @@ namespace Tapestry
         public bool Carried { get { return carried; } }
         bool IsSnail { get { return Kind == "snail_hound" || Kind == "snail_moss"; } }
         bool carried;      // a green (mossy) shell held by a knight
+        public int ShellCombo;   // beasts this shell has felled in a row (the score doubles each time)
         Knight carrier;
 
         readonly SpriteView view;
@@ -188,19 +189,19 @@ namespace Tapestry
             {
                 if (ShellMoving)
                 {
-                    if (fromAbove) { shellVx = 0f; k.Bounce(); }
+                    if (fromAbove) { shellVx = 0f; ShellCombo = 0; k.Bounce(); }
                     else if (kickGrace <= 0f) k.Hurt();
                 }
                 else if (Kind == "snail_moss" && TapestryInput.RunHeld && !k.Mounted && k.Carrying == null)
                 {
                     // hold RUN against a green shell to pick it up
-                    carried = true; carrier = k; k.Carrying = this; shellVx = 0f;
+                    carried = true; carrier = k; k.Carrying = this; shellVx = 0f; ShellCombo = 0;
                     Audio.Play("select");
                 }
                 else
                 {
                     float d = k.Body.Pos.x < Body.Pos.x ? 1f : -1f;
-                    shellVx = d * 10f; kickGrace = 0.3f;
+                    shellVx = d * 10f; kickGrace = 0.3f; ShellCombo = 0;
                     Audio.Play("kick");
                     if (fromAbove) k.Bounce();
                 }
@@ -238,7 +239,7 @@ namespace Tapestry
             carried = false;
             if (carrier != null && carrier.Carrying == this) carrier.Carrying = null;
             carrier = null;
-            shellVx = vx; kickGrace = 0.4f;
+            shellVx = vx; kickGrace = 0.4f; ShellCombo = 0;
             if (vx != 0f) Body.Vel.y = 2f;
         }
 
@@ -251,7 +252,7 @@ namespace Tapestry
         }
 
         /// <summary>Knocked out by a shell or a bumped block: flips over and falls off the screen.</summary>
-        public void Flip()
+        public void Flip(bool award = true)
         {
             if (!Alive) return;
             if (carried) Release(0f);
@@ -259,7 +260,7 @@ namespace Tapestry
             Audio.Play("kick", 0.8f);
             view.Renderer.flipY = true;
             Body.Vel = new Vector2(Body.Vel.x * 0.3f, 8f);
-            GameManager.I.AddScore(200, Body.Pos + new Vector2(0f, Body.H));
+            if (award) GameManager.I.AddScore(200, Body.Pos + new Vector2(0f, Body.H));
         }
 
         void TickDead(float dt)
