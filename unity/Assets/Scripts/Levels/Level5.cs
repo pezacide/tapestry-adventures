@@ -20,7 +20,7 @@ namespace Tapestry
                 "                               ooo                                                                                    g",
                 "              g                                     g                                                                                ooo                  g              B",
                 "                                                                                 ooo===                                                                                 BB",
-                "         B?BMB                BB?BB                                   ?W?                           BHB             B1BRB            ===                               BBB",
+                "         B?BMB                BB?BB                                   ?W?                           BHB             B1B              ===          BRB                  BBB",
                 "                                        ===                       B              ===                                                                                  BBBB",
                 "                                                                 BB                                                                                                  BBBBB",
                 "   P              x     Q                      x          Q     BBB        s                C   x         Q     S           x                 Q       d       x     BBBBBB        G",

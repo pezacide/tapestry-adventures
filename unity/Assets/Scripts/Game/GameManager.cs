@@ -325,10 +325,10 @@ namespace Tapestry
         }
 
         /// <summary>The holy relique has its own tune while it lasts.</summary>
-        /// <summary>Mario-fashion chains: 100, 200, 400 ... 12800 for the 8th beast in a row; every one after that is a free lyfe.</summary>
+        /// <summary>Mario-fashion chains: 100, 200, 400, 800 for the first four beasts in a row; the 5th and every one after is a free lyfe.</summary>
         void ChainKill(int n, Vector2 at)
         {
-            if (n <= 8) { AddScore(100 << (n - 1), at); return; }
+            if (n <= 4) { AddScore(100 << (n - 1), at); return; }
             lives++;
             popups.Add(new Popup { Pos = at, Text = "1 LYFE!" });
             Audio.Play("oneup");

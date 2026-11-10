@@ -76,7 +76,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - He crushes any beast he lands on.
   - A hit throws you off (instead of costing health); he rears and bolts. If he gallops into a pit he is lost, and you must find him again in another brick (three of the level's bricks hold him).
 - **Beasts:** Snail-Hound (red shell: stomp it, then kick the shell), Mossy Snail-Hound (green shell: stomp it, hold RUN to pick the shell up, carry it, and let go of RUN to hurl it; a held shell also fells the first beast it touches), Killer Hare, Fiery Lion (shoots fireballs), Bayeux Hound, Camel-Dragon, Wyvern, Spotted Unicorn (charges), Man-Faced Owl (swoops) and Soup Cat (throws soup).
-- **Chains (as in Mario):** a sliding shell, or the holy relique, doubles its glory for every beast it fells in a row: 100, 200, 400, 800, 1600, 3200, 6400, then 12800 for the 8th. Every beast after that earns a free life. The chain starts again when the shell stops or is picked up, or when the relique wears off.
+- **Chains (as in Mario):** a sliding shell, or the holy relique, doubles its glory for every beast it fells in a row: 100, 200, 400, 800. The 5th beast in a row, and every one after it, earns a free life. The chain starts again when the shell stops or is picked up, or when the relique wears off.
 - **Tyme:** each level counts down in **Roman numerals** from CCC (300), about 2½ a second, as in Mario.
   - At 100 a warning appears, the counter turns red and the music quickens.
   - At 0 the knight is lost.
