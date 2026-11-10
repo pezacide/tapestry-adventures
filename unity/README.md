@@ -110,6 +110,8 @@ The project is set up as **Ye Tapestrie Adventures**:
 - **Easiest:** in Unity, choose **Tapestry → Android → Build and Run on Connected Phone**. The first build takes 10–20 minutes, because IL2CPP compiles everything to native code; later builds are quicker. The game then starts on the phone by itself.
 - **Without a cable:** choose **Tapestry → Android → Build Test APK**. The folder holding `YeTapestrieAdventures.apk` opens when it finishes. Copy the file to the phone (for example by Google Drive or email), tap it, and allow *Install unknown apps* for that app when asked.
 
+If Unity warns that Active Input Handling is "Both", switch it to **Input System Package (New)** (Edit → Project Settings → Player → Other Settings) and restart Unity. The build menu now does this for you.
+
 If Unity says Android isn't installed, open Unity Hub and go to **Installs → (your Unity 6) → Manage → Add modules**. Tick **Android Build Support**, together with **OpenJDK** and **Android SDK & NDK Tools**.
 
 ### On the phone

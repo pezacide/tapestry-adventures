@@ -47,8 +47,28 @@ namespace Tapestry.EditorTools
         [MenuItem("Tapestry/Android/Build and Run on Connected Phone")]
         public static void BuildAndRun() { Build(true); }
 
+        /// <summary>Android needs exactly one input system. The game reads the new Input System (and the old one
+        /// only if it is the one switched on), so "Both" is switched to "Input System Package (New)".
+        /// Returns false if Unity must restart before building.</summary>
+        static bool EnsureSingleInputSystem()
+        {
+            var assets = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
+            if (assets == null || assets.Length == 0) return true;
+            var so = new SerializedObject(assets[0]);
+            var prop = so.FindProperty("activeInputHandler");   // 0 = old, 1 = new, 2 = both
+            if (prop == null || prop.intValue != 2) return true;
+            prop.intValue = 1;
+            so.ApplyModifiedProperties();
+            AssetDatabase.SaveAssets();
+            EditorUtility.DisplayDialog("Ye Tapestrie Adventures",
+                "Active Input Handling was set to \"Both\", which Android does not support.\n\n" +
+                "It is now \"Input System Package (New)\". Please close and reopen Unity, then build again.", "Very well");
+            return false;
+        }
+
         static void Build(bool run)
         {
+            if (!EnsureSingleInputSystem()) return;
             ApplySettings();
             if (!File.Exists(ScenePath)) TapestrySetup.CreateMainScene();
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
