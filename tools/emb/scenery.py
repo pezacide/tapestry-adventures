@@ -365,6 +365,41 @@ def shore_near():
         items.append((x, st))
     return _wrap(items)
 
+# ---------------- the crossing (World 2-3) ----------------
+def longship():
+    """A Norman longship to stand on: 6 tiles wide, its deck 58 units below the top of the drawing."""
+    s = stem("M150,58 L150,6", "brown", 3.4, False)
+    sail = "M112,10 L188,10 Q194,32 186,52 L114,52 Q106,32 112,10 Z"
+    s += fill(sail, "white", 90) + clip("lss", sail, "".join(fill(f"M{x},0 L{x + 9},0 L{x + 9},60 L{x},60 Z", "terra", 90, None) for x in range(112, 192, 18)))
+    s += stem(sail, "dark", 1.3) + stem("M106,10 L194,10", "brown", 2.4, False)
+    hull = "M14,58 L274,58 Q266,92 228,104 L60,104 Q22,92 14,58 Z"
+    s += fill(hull, "ochre", 0)
+    s += clip("lsh", hull, stem("M0,70 L288,70", "terra", 5, False) + stem("M0,82 L288,82", "blue", 5, False) + stem("M0,94 L288,94", "green", 4, False))
+    s += stem(hull, "dark", 1.8) + stem("M14,58 L274,58", "brown", 2.6, False)
+    for i, x in enumerate(range(40, 260, 26)):   # shields along the gunwale
+        s += fill(f"M{x - 7},58 a7,7 0 1,1 14,0 Z", ("terra", "gold", "blue", "green")[i % 4], 0, "dark", 1)
+    s += fill("M14,58 Q2,40 10,18 Q20,14 22,22 Q14,26 16,34 Q16,48 22,58 Z", "ochre", 80)      # stern
+    s += fill("M274,58 Q288,36 280,14 Q272,8 264,12 L268,18 Q274,18 274,24 Q272,44 266,58 Z", "ochre", 100)   # dragon prow
+    s += dot(272, 15, 1.2, "dark") + stem("M264,12 L256,9", "terra", 1.2, False)
+    s += stem("M0,108 " + " ".join(f"q12,-5 24,0" for _ in range(12)), "white", 1.6, False)   # bow wave at the waterline
+    return s
+S["longship"] = (288, 110, longship, False)
+
+def gust():
+    """A gust of wind: stitched curls, like the breath of the winds in old maps."""
+    s = stem("M4,28 Q40,14 80,26 T156,22 Q176,20 182,10 Q184,2 176,4 Q170,8 176,14", "blue", 3.4, False)
+    s += stem("M30,40 Q70,32 110,40 T180,36", "sky", 2.4, False) + stem("M60,14 Q90,6 120,12", "blue", 2, False)
+    return s
+S["gust"] = (192, 48, gust, False)
+
+def sea_waves_near():
+    """Foreground wave crests along the bottom of the screen."""
+    items = []
+    for x in range(0, BW, 96):
+        w = stem("M0,520 q24,-14 48,0 q24,14 48,0", "white", 2.4, False) + stem("M10,530 q20,-8 40,0", "sky", 2, False)
+        items.append((x, w))
+    return _wrap(items)
+
 # ---------------- beneath the waves (World 2-2) ----------------
 def searock():
     """Unbreakable sea rock, grown over with weed."""
@@ -622,3 +657,5 @@ S["bg_shore_near"] = (BW, BH, shore_near, False)
 
 S["bg_deep_far"] = (BW, BH, deep_far, False)
 S["bg_deep_near"] = (BW, BH, deep_near, False)
+
+S["bg_sea_near"] = (BW, BH, sea_waves_near, False)

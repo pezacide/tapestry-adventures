@@ -41,6 +41,8 @@ namespace Tapestry
         Boss boss;
         bool bossMusic, deathFire;
         int relicCombo;   // beasts smitten in a row by the holy relique
+        // the crossing: gusts of wind, and fish leaping from the sea
+        float windT, wind, leapT; bool windToldOf;
         public bool Underwater { get { return L.Underwater; } }
         // the level's tyme: counts down Mario-fashion; at 100 the musick quickens; at 0 the knight is lost
         const float TymeTick = 0.4f;
@@ -167,6 +169,7 @@ namespace Tapestry
         {
             if (world != null) Destroy(world.gameObject);
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
+            windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); logs.Clear(); logPiles.Clear(); logTimers.Clear(); boss = null; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
@@ -202,7 +205,10 @@ namespace Tapestry
                         hasCheckpoint = true; checkpointPos = p;
                         checkpointView = Art.Make("scenery/checkpoint", world, p, 4, checkpointClaimed ? 1 : 0);
                         break;
-                    case 'L': case 'E': lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), s.Key == 'E', world, lifts.Count * 1.3f)); break;
+                    case 'L': case 'E': case 'Y': case 'U':
+                        var kindL = s.Key == 'E' ? Lift.Kind.BoardUpDown : s.Key == 'Y' ? Lift.Kind.ShipRocking : s.Key == 'U' ? Lift.Kind.ShipSailing : Lift.Kind.BoardSideways;
+                        lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), kindL, world, lifts.Count * 1.3f));
+                        break;
                     case 'h': kind = "killer_hare"; break;
                     case 'l': kind = "fiery_lion"; break;
                     case 'd': kind = "bayeux_hound"; break;
@@ -326,6 +332,43 @@ namespace Tapestry
             Audio.Play("oneup");
         }
 
+        /// <summary>Gusts: calm for a while, then the wind blows (alternately from ahead and behind) for a couple of seconds.
+        /// Leaping fish: every so often a fish bursts from the sea near the knight.</summary>
+        void TickWindAndSea(float dt)
+        {
+            if (L.Wind && !player.Dead)
+            {
+                windT -= dt;
+                if (windT <= 0f)
+                {
+                    if (wind == 0f)
+                    {
+                        wind = Random.value < 0.6f ? -2.4f : 2.0f;   // more often against you
+                        windT = 2.2f;
+                        Audio.Play("fireball", 0.5f);
+                        if (!windToldOf) { windToldOf = true; Toast("Ye wynde bloweth! Brace thyself."); }
+                    }
+                    else { wind = 0f; windT = 3.5f + Random.value * 2f; }
+                }
+                if (wind != 0f) player.Body.Nudge(level, wind * dt);
+            }
+            if (L.LeapingFish && !player.Dead)
+            {
+                leapT -= dt;
+                if (leapT <= 0f)
+                {
+                    leapT = 1.4f + Random.value * 1.2f;
+                    float x = player.Body.Pos.x + (Random.value * 2f - 1f) * HalfWidth * 0.8f;
+                    float d = Random.value < 0.5f ? -1f : 1f;
+                    var e = new Enemy("leaper", new Vector2(x, -1.5f), world);
+                    e.Active = true;
+                    e.Body.Vel = new Vector2(d * 2.6f, 13.5f);
+                    enemies.Add(e);
+                    Audio.Play("soup", 0.4f);
+                }
+            }
+        }
+
         void UpdateRelicMusic()
         {
             if (!player.Blessed) relicCombo = 0;
@@ -429,6 +472,7 @@ namespace Tapestry
             foreach (var f in flails) f.Tick(dt);
             if (collapsing) TickCollapse(dt);
             player.Tick(dt, level);
+            TickWindAndSea(dt);
             TickEntities(dt);
             if (player.Dead) return;
             UpdateRelicMusic();
@@ -963,6 +1007,22 @@ namespace Tapestry
             return new Rect((Screen.width - w) * 0.5f, Screen.height * 0.4f + i * h * 1.2f, w, h);
         }
 
+        void Gusts()
+        {
+            if (wind == 0f || state != State.Playing) return;
+            var tex = Art.Texture("scenery/gust");
+            if (tex == null) return;
+            float w = U * 0.4f, h = w * tex.height / tex.width;
+            for (int i = 0; i < 4; i++)
+            {
+                float speed = Screen.width * 0.9f;
+                float x = Mathf.Repeat(Time.time * speed * Mathf.Sign(wind) + i * Screen.width * 0.3f, Screen.width + w) - w;
+                float y = Screen.height * (0.28f + 0.14f * i);
+                var r = wind < 0f ? new Rect(x + w, y, -w, h) : new Rect(x, y, w, h);   // mirrored when blowing from the right
+                var c = GUI.color; GUI.color = new Color(1f, 1f, 1f, 0.8f); GUI.DrawTexture(r, tex); GUI.color = c;
+            }
+        }
+
         void Popups()
         {
             foreach (var p in popups)
@@ -998,6 +1058,7 @@ namespace Tapestry
 
         void Hud(float W, float H)
         {
+            Gusts();
             Popups();
             if (boss != null && boss.Active && !boss.Dead)
             {

@@ -26,11 +26,11 @@ namespace Tapestry
         {
             Kind = kind;
             home = pos;
-            var sheet = Art.Sheet("enemies/" + kind);
+            var sheet = Art.Sheet("enemies/" + (kind == "leaper" ? "fish" : kind));
             float w = (sheet.MaxX - sheet.MinX) / Art.DesignPerTile * 0.62f;
             float h = (sheet.MaxY - sheet.MinY) / Art.DesignPerTile * 0.78f;
             Body = new Body(pos, w, h);
-            view = new SpriteView("enemies/" + kind, parent, 10);
+            view = new SpriteView("enemies/" + (kind == "leaper" ? "fish" : kind), parent, 10);
             view.Face(false);
             switch (kind)
             {
@@ -43,7 +43,7 @@ namespace Tapestry
                 case "wyvern": gravity = false; break;
                 case "owl_face": gravity = false; break;
                 case "gull": gravity = false; break;
-                case "fish": case "sea_serpent": case "sea_monk": gravity = false; break;
+                case "fish": case "sea_serpent": case "sea_monk": case "leaper": gravity = false; break;
                 case "crab": speed = 2f; break;
                 case "soup_cat": speed = 0f; timer = 1.2f; break;
             }
@@ -212,6 +212,13 @@ namespace Tapestry
                     if (Body.Pos.y < 2f && Body.Vel.y < 0f) Body.Vel.y = 0f;
                     if (Body.Pos.y + Body.H > 9.5f && Body.Vel.y > 0f) Body.Vel.y = 0f;
                     view.SetFrame(Body.Vel.y > 1f ? 1 : 0);
+                    break;
+
+                case "leaper":   // a fish leaping from the sea in an arc, then back in
+                    Body.Vel.y -= 20f * dt;
+                    view.Face(Body.Vel.x > 0f); WalkFrames(0, 1, 8f);
+                    view.Renderer.transform.localEulerAngles = new Vector3(0f, 0f, Mathf.Atan2(Body.Vel.y, Mathf.Abs(Body.Vel.x)) * Mathf.Rad2Deg * (Body.Vel.x > 0f ? 1f : -1f) * 0.6f);
+                    if (Body.Pos.y < -2f && Body.Vel.y < 0f) Remove();
                     break;
 
                 case "crab":

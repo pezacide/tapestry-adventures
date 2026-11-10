@@ -43,6 +43,12 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **Sea creatures** can't be stomped, so dodge them or shoot them with the crossbowe, which is found right at the start: the **Bayeux fish** swims in waves, the **sea-serpent** patrols in coils, and the **sea-monk** sinks and then pulses after you.
   - **The way through:** rock pillars and a reef tunnel to swim through, and two abysses.
   - It has a slow 3/4 waltz in F Lydian. Swim into **Ye Wrecke**, a sunken longship, to finish.
+- **Worlde 2-3, Ye Crossing:** the fleet crossing the open sea; falling in is fatal.
+  - **Longships:** leap between them. Some rock at anchor and some sail to and fro, carrying you with them.
+  - **Footholds:** sea-rock stacks and three islets, including a halfway banner and Bayard on the middle islet.
+  - **Wind gusts:** blue swirls blow across the screen and push you, more often against you than behind you.
+  - **Leaping fish:** they burst from the waves in arcs. They *can* be stomped above water.
+  - It has a brisk 6/8 crossing tune (A Dorian, with a shawm lead) and ends at **Ye Beacon** on the far shore.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 

@@ -81,6 +81,8 @@ namespace Tapestry
             { "scenery/timber", new Sheet("Art/scenery/timber", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/log", new Sheet("Art/scenery/log", 48f, 48f, 1, 1f, 0.5f, 47f, 47.5f) },
             { "scenery/log_pile", new Sheet("Art/scenery/log_pile", 80f, 96f, 1, 0.5f, 13f, 79.5f, 95.5f) },
+            { "scenery/longship", new Sheet("Art/scenery/longship", 288f, 110f, 1, 0f, 3.5f, 288f, 109.5f) },
+            { "scenery/gust", new Sheet("Art/scenery/gust", 192f, 48f, 1, 2f, 1.5f, 184f, 45f) },
             { "scenery/searock", new Sheet("Art/scenery/searock", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/seaweed", new Sheet("Art/scenery/seaweed", 48f, 96f, 1, 0f, 2f, 48f, 96f) },
             { "scenery/drawbridge", new Sheet("Art/scenery/drawbridge", 48f, 26f, 1, 0f, 0.5f, 48f, 25.5f) },
@@ -102,6 +104,7 @@ namespace Tapestry
             { "scenery/crypt_exit", new Sheet("Art/scenery/crypt_exit", 144f, 288f, 1, 2.5f, 0f, 141.5f, 288f) },
             { "scenery/castle_harbour_gate", new Sheet("Art/scenery/castle_harbour_gate", 264f, 264f, 1, 12.5f, 1f, 251.5f, 264f) },
             { "scenery/wreck", new Sheet("Art/scenery/wreck", 288f, 216f, 1, 6f, 10f, 275f, 216f) },
+            { "scenery/castle_beacon", new Sheet("Art/scenery/castle_beacon", 216f, 300f, 1, 3f, 5.5f, 213f, 300f) },
             { "scenery/ui_joy_base", new Sheet("Art/scenery/ui_joy_base", 180f, 180f, 1, 6f, 6f, 174f, 174f) },
             { "scenery/ui_joy_knob", new Sheet("Art/scenery/ui_joy_knob", 80f, 80f, 1, 2.5f, 2f, 78f, 78f) },
             { "scenery/ui_run", new Sheet("Art/scenery/ui_run", 112f, 112f, 1, 4.5f, 4.5f, 108f, 108f) },
@@ -126,6 +129,7 @@ namespace Tapestry
             { "backgrounds/shore_near", new Sheet("Art/backgrounds/shore_near", 960f, 540f, 1, 40.5f, 442.5f, 869.5f, 526f) },
             { "backgrounds/deep_far", new Sheet("Art/backgrounds/deep_far", 960f, 540f, 1, 0f, 0f, 960f, 540f) },
             { "backgrounds/deep_near", new Sheet("Art/backgrounds/deep_near", 960f, 540f, 1, 29.5f, 421.5f, 888.5f, 538.5f) },
+            { "backgrounds/sea_near", new Sheet("Art/backgrounds/sea_near", 960f, 540f, 1, 0f, 512f, 960f, 531f) },
         };
     }
 }

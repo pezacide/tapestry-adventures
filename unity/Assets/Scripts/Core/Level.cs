@@ -16,7 +16,7 @@ namespace Tapestry
     ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
     ///              * fire pit (burns)  _ drawbridge (falls when the axe is struck)  F flail block (iron flail swings round it)
     ///              A the axe that drops the bridge  K the boss  N the rescued monk  Q log pile (rolls logs)
-    ///              g gull  x crab  f fish  z sea-serpent  m sea-monk
+    ///              g gull  x crab  f fish  z sea-serpent  m sea-monk  Y longship rocking at anchor  U longship sailing to and fro
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -257,6 +257,9 @@ namespace Tapestry
                 MoveY(lv, dy / n);
             }
         }
+
+        /// <summary>Push the body sideways through the grid (wind).</summary>
+        public void Nudge(Level lv, float dx) { MoveX(lv, dx); }
 
         void MoveX(Level lv, float dx)
         {

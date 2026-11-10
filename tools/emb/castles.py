@@ -222,5 +222,21 @@ def wreck():
     return s
 C["wreck"] = dict(size=(288, 216), title="Ye Wrecke", fn=wreck)
 
+# ---------- World 2-3: Ye Beacon ----------
+def beacon():
+    W, H = 216, 300
+    rock = "M4,300 Q12,250 52,240 Q100,224 150,236 Q200,244 212,300 Z"
+    s = fill(rock, "grey", 30) + stem(rock, "dark", 1.6)
+    t = "M62,244 L70,90 L146,90 L154,244 Z"
+    bands = "".join(fill(f"M40,{y} L180,{y} L180,{y + 18} L40,{y + 18} Z", ("buff", "terra")[i % 2], 0, None) for i, y in enumerate(range(90, 250, 18)))
+    s += clip("bt", t, bands) + stem(t, "dark", 1.8)
+    s += window(108, 130) + window(108, 180)
+    s += fill("M58,90 L158,90 L158,74 L58,74 Z", "grey", 0, "dark", 1.4) + crenels(58, 158, 74, "grey", 9, 7, 8)
+    for i, (x, h) in enumerate(((80, 40), (96, 56), (108, 64), (120, 52), (136, 40))):   # the beacon fire
+        s += fill(f"M{x - 9},70 Q{x - 11},{70 - h * 0.6} {x},{70 - h} Q{x + 11},{70 - h * 0.6} {x + 9},70 Z", ("terra", "ochre", "gold", "ochre", "terra")[i], 90, "dark", 1)
+    s += door(108, 300, 34, 56)
+    return s
+C["castle_beacon"] = dict(size=(216, 300), title="Ye Beacon", fn=beacon)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

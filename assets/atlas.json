@@ -650,6 +650,20 @@
       ],
       "file": "scenery/log_pile.png"
     },
+    "longship": {
+      "size": [
+        288,
+        110
+      ],
+      "file": "scenery/longship.png"
+    },
+    "gust": {
+      "size": [
+        192,
+        48
+      ],
+      "file": "scenery/gust.png"
+    },
     "searock": {
       "size": [
         48,
@@ -796,6 +810,13 @@
         216
       ],
       "file": "scenery/wreck.png"
+    },
+    "castle_beacon": {
+      "size": [
+        216,
+        300
+      ],
+      "file": "scenery/castle_beacon.png"
     },
     "ui_joy_base": {
       "size": [
@@ -974,6 +995,13 @@
         540
       ],
       "file": "backgrounds/deep_near.png"
+    },
+    "sea_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/sea_near.png"
     }
   }
 }
