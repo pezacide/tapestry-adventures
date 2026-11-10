@@ -443,7 +443,7 @@ namespace Tapestry
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Boot()
         {
-            if (Object.FindFirstObjectByType<GameManager>() == null)
+            if (Object.FindAnyObjectByType<GameManager>() == null)
                 new GameObject("Tapestry Game").AddComponent<GameManager>();
         }
     }
