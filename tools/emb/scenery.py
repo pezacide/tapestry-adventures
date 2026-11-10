@@ -202,6 +202,53 @@ def motte():   # castle on a mound, as at Dol, Rennes and Dinan
     return s
 S["motte"] = (128, 128, motte, False)
 
+# ---------------- forest (World 1-2) ----------------
+def canopy():
+    """A treetop you can stand on (and jump up through), 48 wide, tiles horizontally."""
+    s = ""
+    for i, cx in enumerate((-6, 12, 30, 48)):
+        d = f"M{cx - 12},20 Q{cx - 13},6 {cx},4 Q{cx + 13},6 {cx + 12},20 Z"
+        s += fill(d, ("green", "sage", "green", "sage")[i], 60 + i * 30, "dark", 1.2)
+    s += fill("M0,14 L48,14 L48,24 Q24,27 0,24 Z", "green", 0, None)
+    s += stem("M0,23 Q24,27 48,23", "dark", 1.4, False)
+    for x, y in ((6, 10), (20, 8), (34, 11), (42, 7), (14, 16), (28, 17)):
+        s += dot(x, y, 1.3, ("terra", "gold")[(x // 7) % 2])
+    return clip("cn", "M0,0 L48,0 L48,30 L0,30 Z", s)
+S["canopy"] = (48, 26, canopy, False)
+
+def trunk():
+    s = fill("M16,0 L32,0 L32,48 L16,48 Z", "brown", 90, None)
+    s += stem("M16,0 L16,48 M32,0 L32,48", "dark", 1.4, False)
+    s += stem("M21,4 Q19,14 22,24 M27,22 Q29,32 26,44 M23,30 L23,38", "olive", 1, False)
+    return s
+S["trunk"] = (48, 48, trunk, False)
+
+def forest_tree(cols, scale=1.0, trunk_c="brown"):
+    """A Bayeux tree in other colours, for the forest backdrops."""
+    s = ""
+    for d, c in (("M46,96 Q28,86 24,66 Q22,50 34,44", trunk_c), ("M50,96 Q68,84 72,64 Q74,50 62,44", trunk_c),
+                 ("M48,92 Q36,70 52,52 Q62,40 50,26", "olive"), ("M48,92 Q60,70 44,52 Q34,40 46,22", "olive")):
+        s += stem(d, c, 5, False) + stem(d, "dark", 0.7, False)
+    s += fill("M42,160 Q46,128 44,92 L53,92 Q51,128 57,160 Z", trunk_c, 90)
+    s += palmette(34, 44, -40, cols) + palmette(62, 44, 40, cols) + palmette(50, 26, 10, cols[::-1]) + palmette(46, 22, -10, cols)
+    s += palmette(24, 66, -80, cols) + palmette(72, 64, 80, cols)
+    return g(s, f"scale({scale})")
+
+def forest_far():
+    items = []
+    for i, x in enumerate(range(0, 960, 80)):
+        items.append((x, g(underdraw(forest_tree(("green", "sage"), 1.0)), f"translate(0 {250 + (i % 3) * 25}) scale(1.6)")))
+    return _wrap(items)
+
+def forest_near():
+    items = []
+    palettes = (("green", "sage", "terra"), ("sage", "green", "gold"), ("green", "olive", "sage"))
+    for i, x in enumerate(range(10, 960, 150)):
+        items.append((x, g(forest_tree(palettes[i % 3], 1.0), f"translate(0 {330 + (i % 2) * 20}) scale(1.35)")))
+    for x in range(70, 960, 150):
+        items.append((x, g(shrub(), "translate(0 440) scale(1.2)")))
+    return _wrap(items)
+
 # ---------------- border & inscription ----------------
 def bird(x, y, c1, c2, flip=False):
     b = fill("M0,0 Q6,-6 14,-2 Q18,0 16,4 Q8,8 0,4 Z", c1, 0, "dark", 1)
@@ -292,3 +339,6 @@ S["bg_near"] = (BW, BH, near_layer, False)
 def build_svg(name):
     w, h, fn, bg = S[name]
     return doc(w, h, fn(), bg=bg, seed=21)
+
+S["bg_forest_far"] = (BW, BH, forest_far, False)
+S["bg_forest_near"] = (BW, BH, forest_near, False)

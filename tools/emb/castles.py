@@ -132,5 +132,23 @@ def great_hall():
     return s
 C["castle_great_hall"] = dict(size=(336, 288), title="Ye Greate Halle of ye Cat King", fn=great_hall)
 
+# ---------- World 1-2: Ye Abbey in ye Wood ----------
+def abbey():
+    W, H = 288, 288
+    s = wall(20, 150, 268, 288, "buff")
+    s += fill("M12,152 L144,104 L276,152 Z", "terra", 0, None) + clip("abr", "M12,152 L144,104 L276,152 Z", scales(8, 100, 280, 156, 7, "dark", 0.8)) + stem("M12,152 L144,104 L276,152 Z", "dark", 1.8)
+    for x in (44, 80, 208, 244):
+        s += window(x, 200, 10, 22)
+        s += fill(f"M{x - 12},288 L{x - 12},170 L{x - 8},170 L{x - 8},288 Z", ("blue", "green")[(x // 40) % 2], 90, "dark", 1)
+    s += wall(110, 60, 178, 288, "sage")
+    s += crenels(106, 182, 60, "ochre")
+    s += window(144, 92, 10, 20) + window(128, 134) + window(160, 134)
+    s += fill("M136,100 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0 Z", "gold", 0, "dark", 1.1)   # the bell
+    s += roof(144, 50, 56, 48, "blue", "abs") + stem("M144,4 L144,-10 M137,-4 L151,-4".replace("-10", "0").replace("-4", "2"), "gold", 2.2, False)
+    s += door(144, 288, 34, 62)
+    s += fill("M232,150 L262,150 L262,288 L232,288 Z", "ochre", 90, "dark", 1.4) + roof(247, 150, 40, 36, "terra", "abt")
+    return s
+C["castle_abbey"] = dict(size=(288, 288), title="Ye Abbey in ye Wood", fn=abbey)
+
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

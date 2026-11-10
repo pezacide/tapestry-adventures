@@ -63,6 +63,8 @@ namespace Tapestry
             { "scenery/hill", new Sheet("Art/scenery/hill", 160f, 64f, 1, 0f, 12f, 160f, 64f) },
             { "scenery/hall", new Sheet("Art/scenery/hall", 160f, 128f, 1, 3f, 2.5f, 157.5f, 128f) },
             { "scenery/motte", new Sheet("Art/scenery/motte", 128f, 128f, 1, 0f, 15f, 128f, 128f) },
+            { "scenery/canopy", new Sheet("Art/scenery/canopy", 48f, 26f, 1, 0f, 3f, 48f, 26f) },
+            { "scenery/trunk", new Sheet("Art/scenery/trunk", 48f, 48f, 1, 15f, 0f, 33f, 48f) },
             { "scenery/border", new Sheet("Art/scenery/border", 384f, 64f, 1, 0f, 1.5f, 384f, 62.5f) },
             { "scenery/inscription", new Sheet("Art/scenery/inscription", 900f, 44f, 1, 7f, 12f, 900f, 35.5f) },
             { "scenery/title", new Sheet("Art/scenery/title", 500f, 44f, 1, 6f, 12f, 424.5f, 35.5f) },
@@ -70,10 +72,13 @@ namespace Tapestry
             { "scenery/castle_sea_tower", new Sheet("Art/scenery/castle_sea_tower", 240f, 288f, 1, 0f, 13f, 240f, 288f) },
             { "scenery/castle_stone", new Sheet("Art/scenery/castle_stone", 336f, 264f, 1, 0f, 0f, 336f, 264f) },
             { "scenery/castle_great_hall", new Sheet("Art/scenery/castle_great_hall", 336f, 288f, 1, 7.5f, 3f, 329f, 288f) },
+            { "scenery/castle_abbey", new Sheet("Art/scenery/castle_abbey", 288f, 288f, 1, 11f, 0f, 277f, 288f) },
             { "scenery/bezant", new Sheet("Art/scenery/bezant", 24f, 24f, 4, 1.5f, 1.5f, 22.5f, 22.5f) },
             { "backgrounds/linen", new Sheet("Art/backgrounds/linen", 960f, 540f, 1, 0f, 0f, 960f, 540f) },
             { "backgrounds/far", new Sheet("Art/backgrounds/far", 960f, 540f, 1, 38.5f, 220f, 951f, 506.5f) },
             { "backgrounds/near", new Sheet("Art/backgrounds/near", 960f, 540f, 1, 21.5f, 308.5f, 893.5f, 515f) },
+            { "backgrounds/forest_far", new Sheet("Art/backgrounds/forest_far", 960f, 540f, 1, 0f, 261f, 960f, 540f) },
+            { "backgrounds/forest_near", new Sheet("Art/backgrounds/forest_near", 960f, 540f, 1, 0f, 339f, 960f, 540f) },
         };
     }
 }

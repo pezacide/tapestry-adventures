@@ -73,6 +73,31 @@ def meadow_theme():
     mix_into(buf, dr, 0)
     return finish(buf, L, 0.18)
 
+def forest_theme():
+    """World 1-2: a wandering 3/4 tune in A Dorian, lute ostinato under recorder, soft drone."""
+    bpm = 100; beat = 60 / bpm; bar = 3 * beat
+    A = ("A4:1 C5:1 E5:1 D5:1.5 C5:.5 B4:1 C5:1 A4:1 G4:1 A4:3 "
+         "E5:1 G5:1 E5:1 F#5:1.5 E5:.5 D5:1 E5:1 D5:1 C5:1 B4:3")
+    B = ("C5:1 D5:1 E5:1 G5:2 E5:1 F#5:1 E5:1 D5:1 E5:3 "
+         "D5:1 C5:1 B4:1 C5:1.5 B4:.5 A4:1 G4:1 B4:1 D5:1 A4:3")
+    rA = ["A2", "D3", "C3", "A2", "C3", "D3", "E3", "E3"]
+    rB = ["C3", "G2", "D3", "A2", "D3", "A2", "G2", "A2"]
+    plan = [(A, rA, 0), (A, rA, 1), (B, rB, 1), (A, rA, 0)]
+    L = 32 * bar
+    buf = np.zeros(int((L + 3) * SR))
+    for k, (mel, roots, extra) in enumerate(plan):
+        t0 = k * 8 * bar
+        play(buf, recorder, mel, bpm, t0, 0.85)
+        if extra:   # a second recorder a sixth below, as a consort would
+            play(buf, recorder, " ".join(f"{up(n.split(':')[0], -9)}:{n.split(':')[1]}" for n in mel.split()), bpm, t0, 0.3)
+        for i, r in enumerate(roots):
+            third = 16 if r[0] in "CG" else 15
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (third, 1), (12, 1), (7, 1)], 0.5)
+            mix_into(buf, tabor(0.35, 0.3), t0 + i * bar)
+            if i % 2 == 1: mix_into(buf, tabor(0.2, 0.18, False), t0 + i * bar + 2 * beat)
+    mix_into(buf, drone(freq("A2"), L + 1, 0.45, False) + drone(freq("E3"), L + 1, 0.25, False), 0)
+    return finish(buf, L, 0.32)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -175,7 +200,7 @@ def sfx():
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

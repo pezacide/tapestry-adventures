@@ -29,7 +29,9 @@ namespace Tapestry
         string toast; float toastTime;
         readonly List<Layer> layers = new List<Layer>();
 
-        int knightIndex, bezantCount, lives = 3, score;
+        int knightIndex, bezantCount, lives = 3, score, levelIndex;
+        LevelDef L { get { return Levels.All[levelIndex]; } }
+        string farKey, nearKey;
         float stateTime, camX, winTime;
         bool deathFell;
         int winPhase;   // 0 slide down the pole, 1 walk to the castle, 2 inside
@@ -70,10 +72,15 @@ namespace Tapestry
 
         void SetupBackdrop()
         {
+            // rebuilt when a level asks for different background layers
+            if (backdrop != null && farKey == L.FarLayer && nearKey == L.NearLayer) return;
+            if (backdrop != null) Destroy(backdrop.gameObject);
+            layers.Clear();
+            farKey = L.FarLayer; nearKey = L.NearLayer;
             backdrop = new GameObject("Backdrop").transform;
             AddLayer("backgrounds/linen", 0f, 0f, -100, 3);
-            AddLayer("backgrounds/far", 0.25f, 0f, -90, 3);
-            AddLayer("backgrounds/near", 0.5f, -0.6f, -80, 3);
+            AddLayer(L.FarLayer, 0.25f, 0f, -90, 3);
+            AddLayer(L.NearLayer, 0.5f, -0.6f, -80, 3);
             AddLayer("scenery/border", 1f, ViewHalfHeight * 2f - 64f / Art.DesignPerTile, 90, 7);
         }
 
@@ -106,13 +113,14 @@ namespace Tapestry
         {
             if (world != null) Destroy(world.gameObject);
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); bayard = null; winPhase = 0; toast = null;
+            SetupBackdrop();
             world = new GameObject("World").transform;
-            level = new Level(Level1.Map, world);
+            level = new Level(L.Map, world);
 
-            foreach (var d in Level1.Props)
+            foreach (var d in L.Props)
                 Art.Make(d.Key, world, new Vector2(d.X, level.GroundAt(d.X)), -20);
             // the castle at the end, centred on its doorway; drawn behind the knight, who walks in and vanishes
-            Art.Make(Level1.Castle, world, new Vector2(Level1.CastleX, level.GroundAt(Level1.CastleX)), -5);
+            Art.Make(L.Castle, world, new Vector2(L.CastleX, level.GroundAt(L.CastleX)), -5);
 
             foreach (var s in level.Spawns)
             {
@@ -160,7 +168,7 @@ namespace Tapestry
                 case State.Playing: TickPlay(dt); break;
                 case State.Paused:
                     if (TapestryInput.StartPressed || TapestryInput.JumpPressed) SetState(State.Playing);
-                    else if (TapestryInput.DownPressed) { LoadLevel(); SetState(State.Title); }
+                    else if (TapestryInput.DownPressed) { levelIndex = 0; LoadLevel(); SetState(State.Title); }
                     break;
                 case State.Dying:
                     player.Tick(dt, level);
@@ -176,16 +184,19 @@ namespace Tapestry
                     player.Tick(dt, level);
                     TickEntities(dt);
                     if (winPhase == 2 && winTime > 1.2f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
-                    { LoadLevel(); SetState(State.Title); }
+                    {
+                        if (levelIndex + 1 < Levels.All.Length) { levelIndex++; LoadLevel(); SetState(State.Playing); }
+                        else { levelIndex = 0; LoadLevel(); SetState(State.Title); }
+                    }
                     break;
                 case State.GameOver:
                     if (stateTime > 1.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
-                    { lives = 3; bezantCount = 0; score = 0; LoadLevel(); SetState(State.Title); }
+                    { lives = 3; bezantCount = 0; score = 0; levelIndex = 0; LoadLevel(); SetState(State.Title); }
                     break;
             }
         }
 
-        const string LevelMusic = "meadow";
+        string LevelMusic { get { return L.Music; } }
         bool relicMusic;
 
         void SetState(State s)
@@ -197,7 +208,7 @@ namespace Tapestry
                 case State.Title: Audio.Music("title"); break;
                 case State.Playing:
                     if (was == State.Paused) Audio.ResumeMusic();
-                    else { relicMusic = false; Audio.Music(LevelMusic); }
+                    else { relicMusic = false; Audio.Music(LevelMusic); Toast(L.Title + "  ·  " + L.Name); }
                     break;
                 case State.Paused: Audio.PauseMusic(); Audio.Play("pause"); break;
                 case State.Dying: Audio.Music("death", false); break;
@@ -230,7 +241,7 @@ namespace Tapestry
                 pb.Vel = new Vector2(3.2f, 0f);
                 pb.Pos.x += 3.2f * dt;
                 pb.Pos.y = level.GroundAt(pb.Pos.x);
-                if (pb.Pos.x >= Level1.CastleX || winTime > 6f) { winPhase = 2; winTime = 0f; pb.Vel = Vector2.zero; player.Hide(); }
+                if (pb.Pos.x >= L.CastleX || winTime > 6f) { winPhase = 2; winTime = 0f; pb.Vel = Vector2.zero; player.Hide(); }
             }
         }
 
@@ -254,6 +265,7 @@ namespace Tapestry
             }
             if (go)
             {
+                if (levelIndex != 0) { levelIndex = 0; LoadLevel(); }
                 player.SetKnight(Knights.All[knightIndex]);
                 Audio.Play("confirm");
                 SetState(State.Playing);
@@ -495,7 +507,7 @@ namespace Tapestry
                     float y = H * 0.14f;
                     var t = Art.Texture("scenery/title");
                     if (t != null) { float tw = Mathf.Min(W * 0.9f, U * 1.3f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th; }
-                    GUI.Label(new Rect(0, y, W, U * 0.07f), "Ye Firste Realme · " + Level1.Name, center);
+                    GUI.Label(new Rect(0, y, W, U * 0.07f), Levels.All[0].Title + " · " + Levels.All[0].Name, center);
                     for (int i = 0; i < Knights.All.Length; i++)
                     {
                         var r = PortraitRect(i);
@@ -528,8 +540,10 @@ namespace Tapestry
                     {
                         Panel(new Rect(W * 0.15f, H * 0.24f, W * 0.7f, H * 0.5f));
                         GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HERE YE KNYGHTE IS VICTORIOUS", big);
-                        GUI.Label(new Rect(W * 0.2f, H * 0.38f, W * 0.6f, H * 0.12f), "Huzzah! Ye beastes are put to flyghte.\nYet ye Princesse Aelfgyva lyeth in another castel...", center);
-                        DrawFrame("princess/aelfgyva", 1, new Rect(W * 0.5f - H * 0.06f, H * 0.5f, H * 0.12f, H * 0.23f));
+                        GUI.Label(new Rect(W * 0.15f, H * 0.37f, W * 0.7f, H * 0.17f), levelIndex + 1 < Levels.All.Length
+                            ? "Huzzah! Ye beastes are put to flyghte.\nYet ye Princesse Aelfgyva lyeth in another castel...\nPresse JUMPE to ryde on."
+                            : "Huzzah! Thou hast passed every realme yet stitched.\nMore of ye tapestrie is yet to be sewn...", center);
+                        DrawFrame("princess/aelfgyva", 1, new Rect(W * 0.5f - H * 0.05f, H * 0.54f, H * 0.1f, H * 0.19f));
                     }
                     if (state == State.Dying)
                     {

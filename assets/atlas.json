@@ -497,6 +497,20 @@
       ],
       "file": "scenery/motte.png"
     },
+    "canopy": {
+      "size": [
+        48,
+        26
+      ],
+      "file": "scenery/canopy.png"
+    },
+    "trunk": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/trunk.png"
+    },
     "border": {
       "size": [
         384,
@@ -546,6 +560,13 @@
       ],
       "file": "scenery/castle_great_hall.png"
     },
+    "castle_abbey": {
+      "size": [
+        288,
+        288
+      ],
+      "file": "scenery/castle_abbey.png"
+    },
     "bezant": {
       "size": [
         24,
@@ -579,6 +600,20 @@
       ],
       "file": "backgrounds/near.png",
       "tileable_x": true
+    },
+    "forest_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/forest_far.png"
+    },
+    "forest_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/forest_near.png"
     }
   }
 }
