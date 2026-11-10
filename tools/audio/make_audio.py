@@ -1,0 +1,188 @@
+"""Compose the music and sound effects -> assets/audio/*.ogg and the Unity project's Resources/Audio.
+Run:  python3 tools/audio/make_audio.py   (numpy + ffmpeg)"""
+import os, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
+from synth import *
+
+ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+OUT = os.path.join(ROOT, "assets", "audio")
+UNITY = os.path.join(ROOT, "unity", "Assets", "Resources", "Audio")
+
+NAMES = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
+def midi(n):
+    f = freq(n); return int(round(69 + 12 * np.log2(f / 440)))
+def name(m): return f"{NAMES[m % 12]}{m // 12 - 1}"
+def up(n, semis): return name(midi(n) + semis)
+
+def arp_bar(buf, root, start, eighth, pattern, vel=0.8):
+    """pattern: list of (semitones above root, length in eighths)."""
+    at = start
+    for semis, ln in pattern:
+        mix_into(buf, lute(freq(up(root, semis)), ln * eighth + 0.25, vel), at)
+        at += ln * eighth
+
+def fade(x, secs=0.4):
+    n = min(len(x), int(secs * SR)); x = x.copy(); x[-n:] *= np.linspace(1, 0, n); return x
+
+def finish(x, loop_len=None, rev=0.22):
+    y = reverb(x, rev)
+    if loop_len: y = loopify(y, loop_len)
+    return normalise(y)
+
+# ================================================================== MUSIC
+def title_theme():
+    bpm = 84; beat = 60 / bpm; bars = 16; L = bars * 3 * beat
+    buf = np.zeros(int((L + 3) * SR))
+    mel = ("D5:1 E5:.5 F5:.5 G5:1 A5:2 G5:1 F5:1 E5:1 D5:1 E5:3 "
+           "F5:1 G5:.5 A5:.5 C6:1 B5:1 A5:1 G5:1 A5:1.5 G5:.5 F5:1 D5:3 "
+           "A5:1 A5:.5 B5:.5 C6:1 D6:2 C6:1 B5:1 A5:1 G5:1 A5:3 "
+           "F5:1 E5:.5 F5:.5 G5:1 A5:1 G5:1 E5:1 F5:1 E5:1 C5:1 D5:3")
+    play(buf, recorder, mel, bpm, 0, 0.9)
+    roots = ["D3", "D3", "C3", "A2", "F3", "G3", "F3", "D3", "A2", "D3", "G3", "A2", "F3", "C3", "A2", "D3"]
+    for i, r in enumerate(roots):
+        arp_bar(buf, r, i * 3 * beat, beat / 2, [(0, 1), (7, 1), (12, 1), (15 if i % 4 != 3 else 16, 1), (12, 1), (7, 1)], 0.55)
+        mix_into(buf, tabor(0.4, 0.35), i * 3 * beat)
+    mix_into(buf, drone(freq("D3"), L + 1, 0.55, False) + drone(freq("A3"), L + 1, 0.35, False), 0)
+    return finish(buf, L, 0.3)
+
+def meadow_theme():
+    eighth = 0.2; bar = 6 * eighth
+    A = ("D5:2 B4:1 G4:2 A4:1 B4:2 C5:1 D5:3 E5:2 D5:1 C5:2 B4:1 A4:3 D4:3 "
+         "G4:2 A4:1 B4:2 C5:1 D5:2 E5:1 F5:3 E5:2 C5:1 D5:2 B4:1 G4:6")
+    B = ("G5:2 F5:1 E5:2 D5:1 E5:2 F5:1 G5:3 F5:2 E5:1 D5:2 C5:1 D5:3 A4:3 "
+         "B4:2 C5:1 D5:2 E5:1 F5:2 E5:1 D5:2 C5:1 B4:2 A4:1 B4:2 D5:1 G4:6")
+    rootsA = ["G2", "G2", "C3", "D3", "G2", "D3", "C3", "G2"]
+    rootsB = ["C3", "G2", "F2", "D3", "G2", "F2", "D3", "G2"]
+    sections = [(A, rootsA, False), (A, rootsA, True), (B, rootsB, False), (B, rootsB, True)]
+    L = 32 * bar
+    buf = np.zeros(int((L + 3) * SR))
+    bpm8 = 60 / eighth
+    for s, (mel, roots, second) in enumerate(sections):
+        t0 = s * 8 * bar
+        play(buf, recorder, mel, bpm8, t0, 0.95)
+        if second:   # second time round a shawm doubles the tune an octave down
+            play(buf, shawm, " ".join(f"{up(n.split(':')[0], -12)}:{n.split(':')[1]}" if not n.startswith("r") else n for n in mel.split()), bpm8, t0, 0.35)
+        for i, r in enumerate(roots):
+            bt = t0 + i * bar
+            arp_bar(buf, r, bt, eighth, [(12, 2), (19, 1), (24, 2), (19, 1)], 0.5)
+            for at, low in ((0, True), (2, False), (3, True), (5, False)):
+                mix_into(buf, tabor(0.3, 0.55 if low else 0.35, low), bt + at * eighth)
+                if second and not low: mix_into(buf, jingle(0.2, 0.8), bt + at * eighth)
+    dr = drone(freq("G2"), L + 1, 0.5) + drone(freq("D3"), L + 1, 0.3)
+    mix_into(buf, dr, 0)
+    return finish(buf, L, 0.18)
+
+def relic_theme():
+    eighth = 0.14; bar = 6 * eighth
+    mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
+           "D5:1 B4:1 G4:1 B4:1 D5:1 F5:1 G5:3 D5:3 ") * 2
+    L = 8 * bar
+    buf = np.zeros(int((L + 2) * SR))
+    play(buf, shawm, mel, 60 / eighth, 0, 0.9)
+    play(buf, recorder, mel.replace("4:", "5x").replace("5:", "6:").replace("5x", "5:"), 60 / eighth, 0, 0.35)
+    for i in range(8):
+        for e in range(6):
+            mix_into(buf, tabor(0.2, 0.5 if e % 3 == 0 else 0.25, e % 3 == 0), i * bar + e * eighth)
+            mix_into(buf, jingle(0.12, 0.6), i * bar + e * eighth)
+    mix_into(buf, drone(freq("G2"), L + 1, 0.4), 0)
+    return finish(buf, L, 0.12)
+
+def victory():
+    buf = np.zeros(int(6 * SR)); bpm = 132
+    end = play(buf, shawm, "G4:.5 G4:.5 G4:.5 C5:1.5 r:.25 B4:.25 C5:.5 D5:.5 G5:3", bpm, 0, 1.0)
+    play(buf, recorder, "r:2.25 E5:.5 F5:.5 G5:.5 B5:3", bpm, 0, 0.5)
+    for i in range(16): mix_into(buf, tabor(0.15, 0.25 + i * 0.02, i % 2 == 0), i * 0.06)
+    for n in ("G3", "D4", "G4", "B4"): mix_into(buf, lute(freq(n), 2.5, 0.6), end - 3 * 60 / bpm)
+    mix_into(buf, tabor(0.6, 0.8), end - 3 * 60 / bpm)
+    return fade(finish(buf, None, 0.3)[: int(5.5 * SR)])
+
+def death():
+    buf = np.zeros(int(4 * SR))
+    play(buf, recorder, "A4:.5 G4:.5 F4:.5 E4:1 D4:2.5", 110, 0, 0.9)
+    mix_into(buf, lute(freq("D3"), 2.5, 0.6), 60 / 110 * 2.5)
+    return fade(finish(buf, None, 0.3)[: int(3.6 * SR)])
+
+def game_over():
+    buf = np.zeros(int(9 * SR)); bpm = 72
+    play(buf, recorder, "D5:1 C5:1 A4:2 Bb4:1 A4:1 G4:2 F4:1 E4:1 D4:4", bpm, 0, 0.85)
+    for i, r in enumerate(["D3", "F3", "G3", "C3", "A2", "D3"]):
+        mix_into(buf, lute(freq(r), 1.8, 0.5) + lute(freq(up(r, 7)), 1.8, 0.35), i * 2 * 60 / bpm)
+    return fade(finish(buf, None, 0.35)[: int(8.5 * SR)])
+
+# ================================================================== SOUND EFFECTS
+def sweep(f0, f1, dur, shape="sine", vel=1.0):
+    tt = t(dur); n = len(tt)
+    f = f0 * (f1 / f0) ** (tt / dur)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    y = np.sin(ph) if shape == "sine" else np.sign(np.sin(ph)) * 0.6 + 0.4 * np.sin(2 * ph)
+    return y * env(n, 0.005, dur * 0.4) * vel
+
+def add(*xs):
+    """Sum signals of different lengths (shorter ones are padded with silence)."""
+    n = max(len(x) for x in xs); out = np.zeros(n)
+    for x in xs: out[:len(x)] += x
+    return out
+
+def fx(x, peak=0.8, rev=0.08):
+    return normalise(reverb(x, rev, 0.4), peak)
+
+def sfx():
+    S = {}
+    S["jump"] = fx(sweep(320, 760, 0.16) * 0.6 + noise(0.16, 2000, 6000, 30, 0.15), 0.6)
+    S["stomp"] = fx(add(tabor(0.2, 1.0), sweep(520, 150, 0.12, "sine", 0.5)), 0.75)
+    b = np.zeros(int(0.6 * SR)); mix_into(b, bell(freq("B5"), 0.5, 1.0), 0); mix_into(b, bell(freq("E6"), 0.5, 1.0), 0.07)
+    S["bezant"] = fx(b, 0.55)
+    br = noise(0.4, 300, 4000, 9, 1.0)
+    for k in range(6): mix_into(br, noise(0.05, 2000, 8000, 60, 0.6), 0.03 + k * 0.045)
+    S["brick"] = fx(br, 0.7)
+    S["bump"] = fx(add(tabor(0.16, 1.0), lute(freq("C3"), 0.1, 0.5)), 0.6)
+    g = np.zeros(int(0.8 * SR))
+    for k, n in enumerate(("G4", "B4", "D5", "G5", "B5", "D6")): mix_into(g, lute(freq(n), 0.5, 0.7, 0.8), k * 0.05)
+    S["item_appear"] = fx(g, 0.55, 0.2)
+    p = np.zeros(int(1.0 * SR))
+    for k, n in enumerate(("C5", "E5", "G5", "C6")): mix_into(p, recorder(freq(n), 0.16, 0.9), k * 0.09)
+    mix_into(p, bell(freq("C6"), 0.6, 0.6), 0.36)
+    S["powerup"] = fx(p, 0.6, 0.2)
+    o = np.zeros(int(1.2 * SR))
+    for k, n in enumerate(("E5", "G5", "E6", "C6", "D6", "G6")): mix_into(o, recorder(freq(n), 0.14, 0.9), k * 0.11)
+    S["oneup"] = fx(o, 0.6, 0.2)
+    S["crossbow"] = fx(add(lute(freq("A2"), 0.18, 1.0, 0.9), noise(0.3, 800, 5000, 14, 0.35)), 0.7)
+    tt = t(0.4)
+    S["fireball"] = fx(bandpass(rng.standard_normal(len(tt)), 200, 2500) * np.sin(np.pi * tt / 0.4) * 0.9, 0.6)
+    S["hurt"] = fx(np.concatenate([shawm(freq("E4"), 0.12, 1.0), shawm(freq("C4"), 0.22, 1.0)]), 0.65)
+    # Bayard: clip-clop and a whinny
+    h = np.zeros(int(1.0 * SR))
+    for at in (0, 0.12, 0.3, 0.42):
+        mix_into(h, add(noise(0.05, 900, 3000, 70, 0.9), tabor(0.04, 0.4, False)), at)
+    tt = t(0.55); f = 520 + 260 * np.sin(np.pi * tt / 0.55) + 40 * np.sin(2 * np.pi * 22 * tt)
+    neigh = bandpass(np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.5 * np.sin(4 * np.pi * np.cumsum(f) / SR), 300, 3000) * env(len(tt), 0.03, 0.2) * 0.5
+    mix_into(h, neigh, 0.45)
+    S["mount"] = fx(h, 0.65)
+    th = np.zeros(int(0.9 * SR)); mix_into(th, neigh * 1.2, 0); mix_into(th, noise(0.3, 400, 3000, 10, 0.4), 0.1)
+    S["thrown"] = fx(th, 0.7)
+    lo = np.zeros(int(1.4 * SR))
+    for k, n in enumerate(("A4", "F4", "D4")): mix_into(lo, recorder(freq(n), 0.38, 0.9), k * 0.36)
+    S["bayard_lost"] = fx(lo, 0.55, 0.25)
+    S["pause"] = fx(bell(freq("A5"), 0.5, 1.0), 0.45)
+    S["kick"] = fx(add(tabor(0.12, 1.0, False), tabor(0.1, 0.6)), 0.7)
+    S["soup"] = fx(noise(0.3, 200, 1500, 12, 1.0) * (1 + 0.6 * np.sin(2 * np.pi * 30 * t(0.3))), 0.55)
+    S["pole"] = fx(sweep(1200, 300, 0.9) * 0.5 + noise(0.9, 3000, 8000, 3, 0.05), 0.5)
+    S["select"] = fx(lute(freq("D4"), 0.3, 1.0, 0.7), 0.5)
+    c = np.zeros(int(0.6 * SR)); mix_into(c, lute(freq("D4"), 0.4, 1.0), 0); mix_into(c, lute(freq("A4"), 0.4, 1.0), 0.08)
+    S["confirm"] = fx(c, 0.55)
+    S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
+    return S
+
+if __name__ == "__main__":
+    music = {"title": title_theme, "meadow": meadow_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    for n, fn in music.items():
+        save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
+        print("music", n)
+    for n, x in sfx().items():
+        save_ogg(x, os.path.join(OUT, "sfx", n + ".ogg"), 6)
+    print("sfx done")
+    if os.path.isdir(os.path.dirname(UNITY)):
+        if os.path.isdir(UNITY): shutil.rmtree(UNITY)
+        shutil.copytree(OUT, UNITY)
+        print("copied into", UNITY)

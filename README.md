@@ -34,6 +34,7 @@ python3 tools/emb/gallery.py    # writes assets/gallery.html
 python3 tools/unity/export_art.py    # copies the art into the Unity project + ArtCatalog.cs
 python3 tools/unity/make_level1.py   # regenerates World 1-1's map
 python3 tools/unity/preview_level.py # renders assets/level1_preview.png
+python3 tools/audio/make_audio.py    # composes the music + sound effects (numpy, ffmpeg)
 ```
 
 - To recolour a knight, edit the `KNIGHTS` table in `knights.py`.

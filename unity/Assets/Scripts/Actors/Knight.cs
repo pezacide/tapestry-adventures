@@ -72,6 +72,7 @@ namespace Tapestry
             {
                 Body.Vel.y = Def.Jump + Mathf.Abs(Body.Vel.x) * 0.12f + (Mounted ? 1.4f : 0f);
                 jumpBuffer = coyote = 0f;
+                Audio.Play("jump", 0.55f);
             }
 
             // dismount
@@ -97,7 +98,10 @@ namespace Tapestry
 
             // the crossbowe: RUN shoots (as Mario throws fireballs with the run button)
             if (HasCrossbow && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
+            {
                 GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, Mounted ? 1.45f : 0.95f), FacingRight);
+                Audio.Play("crossbow", 0.8f);
+            }
 
             if (invuln > 0f) invuln -= dt;
             view.Renderer.enabled = invuln <= 0f || Mathf.Repeat(invuln, 0.16f) > 0.08f;
@@ -146,6 +150,7 @@ namespace Tapestry
             }
             Hearts--;
             invuln = 1.6f;
+            Audio.Play("hurt");
             if (HasCrossbow) { HasCrossbow = false; PlaceCrossbow(); }   // like losing the fire flower
             if (Hearts <= 0) Die();
         }
@@ -169,6 +174,7 @@ namespace Tapestry
         {
             Mounted = true;
             Body.W = RideW; Body.H = RideH;
+            Audio.Play("mount", 0.9f);
             view.SetSheet(Def.MountedSheet);
         }
 
@@ -179,6 +185,7 @@ namespace Tapestry
             view.SetSheet(Def.Sheet);
             GameManager.I.ReleaseBayard(Body.Pos, FacingRight, thrown);
             Body.Vel.y = thrown ? 10f : 7f;
+            if (thrown) Audio.Play("thrown");
             Body.Vel.x = thrown ? (FacingRight ? -3f : 3f) : 0f;
         }
 

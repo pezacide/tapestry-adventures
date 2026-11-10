@@ -10,12 +10,12 @@ namespace Tapestry
     public static class TapestryInput
     {
         public static float Horizontal;
-        public static bool JumpHeld, JumpPressed, RunHeld, RunPressed, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed;
+        public static bool JumpHeld, JumpPressed, RunHeld, RunPressed, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed, MutePressed;
         public static bool LeftPressed, RightPressed;
         public static bool TouchSeen;
         public static Vector2? TapPosition;    // GUI coordinates (top-left origin) of a new touch/click this frame
 
-        static bool prevJump, prevRun, prevDown, prevStart, prevNext, prevPrev, prevLeft, prevRight;
+        static bool prevMute, prevJump, prevRun, prevDown, prevStart, prevNext, prevPrev, prevLeft, prevRight;
 
         // On-screen touch buttons, as fractions of the screen (x, y from top, w, h).
         public static readonly Rect LeftButton = new Rect(0.02f, 0.74f, 0.11f, 0.22f);
@@ -30,7 +30,7 @@ namespace Tapestry
         public static void Poll()
         {
             float h = 0f;
-            bool jump = false, run = false, down = false, start = false, next = false, prev = false;
+            bool jump = false, run = false, down = false, start = false, next = false, prev = false, mute = false;
             TapPosition = null;
 
 #if ENABLE_INPUT_SYSTEM
@@ -45,6 +45,7 @@ namespace Tapestry
                 start |= kb.enterKey.isPressed || kb.escapeKey.isPressed || kb.pKey.isPressed;
                 next |= kb.eKey.isPressed || kb.tabKey.isPressed;
                 prev |= kb.qKey.isPressed;
+                mute |= kb.mKey.isPressed;
             }
             var pad = Gamepad.current;
             if (pad != null)
@@ -58,6 +59,7 @@ namespace Tapestry
                 start |= pad.startButton.isPressed;
                 next |= pad.rightShoulder.isPressed;
                 prev |= pad.leftShoulder.isPressed;
+                mute |= pad.selectButton.isPressed;
             }
             var ts = Touchscreen.current;
             int touchCount = 0;
@@ -96,6 +98,7 @@ namespace Tapestry
             start |= Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.Escape) || Input.GetKey(KeyCode.P) || Input.GetKey(KeyCode.JoystickButton7);
             next |= Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Tab) || Input.GetKey(KeyCode.JoystickButton5);
             prev |= Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.JoystickButton4);
+            mute |= Input.GetKey(KeyCode.M) || Input.GetKey(KeyCode.JoystickButton6);
             for (int i = 0; i < Input.touchCount; i++)
             {
                 var t = Input.GetTouch(i);
@@ -117,6 +120,7 @@ namespace Tapestry
             StartPressed = start && !prevStart; prevStart = start;
             NextKnightPressed = next && !prevNext; prevNext = next;
             PrevKnightPressed = prev && !prevPrev; prevPrev = prev;
+            MutePressed = mute && !prevMute; prevMute = mute;
             bool left = Horizontal < -0.5f, right = Horizontal > 0.5f;
             LeftPressed = left && !prevLeft; prevLeft = left;
             RightPressed = right && !prevRight; prevRight = right;

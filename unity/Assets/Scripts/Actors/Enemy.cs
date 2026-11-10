@@ -113,6 +113,7 @@ namespace Tapestry
                         if (timer > 3.1f)
                         {
                             timer = 0f;
+                            Audio.Play("roar", 0.7f); Audio.Play("fireball", 0.6f);
                             GameManager.I.SpawnShot("fireball", Body.Pos + new Vector2(Mathf.Sign(dx) * Body.W * 0.7f, Body.H * 0.65f), new Vector2(Mathf.Sign(dx) * 6.5f, 0f));
                         }
                     }
@@ -164,6 +165,7 @@ namespace Tapestry
                         if (timer > 2.8f)
                         {
                             timer = 0f;
+                            Audio.Play("soup", 0.8f);
                             GameManager.I.SpawnShot("soup_glob", Body.Pos + new Vector2(0f, Body.H), new Vector2(Mathf.Clamp(dx * 0.55f, -5f, 5f), 8f));
                         }
                     }
@@ -187,6 +189,7 @@ namespace Tapestry
                 {
                     float d = k.Body.Pos.x < Body.Pos.x ? 1f : -1f;
                     shellVx = d * 10f; kickGrace = 0.3f;
+                    Audio.Play("kick");
                     if (fromAbove) k.Bounce();
                 }
                 return;
@@ -198,6 +201,7 @@ namespace Tapestry
             if (Kind == "snail_hound")
             {
                 shell = true; Body.Vel.x = 0f; Body.H *= 0.8f; view.SetFrame(2);
+                Audio.Play("stomp");
                 GameManager.I.AddScore(100);
                 return;
             }
@@ -207,6 +211,7 @@ namespace Tapestry
         public void Squash()
         {
             Alive = false; squashed = true; deadTimer = 0f;
+            Audio.Play("stomp");
             view.Root.transform.localScale = new Vector3(1f, 0.45f, 1f);
             GameManager.I.AddScore(100);
         }
@@ -216,6 +221,7 @@ namespace Tapestry
         {
             if (!Alive) return;
             Alive = false; flipped = true;
+            Audio.Play("kick", 0.8f);
             view.Renderer.flipY = true;
             Body.Vel = new Vector2(Body.Vel.x * 0.3f, 8f);
             GameManager.I.AddScore(200);

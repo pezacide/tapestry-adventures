@@ -43,9 +43,10 @@ namespace Tapestry
             I = this;
             if (Application.isMobilePlatform) Application.targetFrameRate = 60;
             SetupCamera();
+            Audio.Init(gameObject);
             SetupBackdrop();
             LoadLevel();
-            state = State.Title;
+            SetState(State.Title);
         }
 
         void SetupCamera()
@@ -57,6 +58,7 @@ namespace Tapestry
                 go.tag = "MainCamera";
                 cam = go.AddComponent<Camera>();
             }
+            if (Object.FindAnyObjectByType<AudioListener>() == null) cam.gameObject.AddComponent<AudioListener>();
             cam.orthographic = true;
             cam.orthographicSize = ViewHalfHeight;
             cam.clearFlags = CameraClearFlags.SolidColor;
@@ -149,6 +151,7 @@ namespace Tapestry
         void Update()
         {
             TapestryInput.Poll();
+            if (TapestryInput.MutePressed) Audio.ToggleMute();
             float dt = Mathf.Min(Time.deltaTime, 1f / 30f);
             stateTime += dt;
             switch (state)
@@ -182,7 +185,33 @@ namespace Tapestry
             }
         }
 
-        void SetState(State s) { state = s; stateTime = 0f; }
+        const string LevelMusic = "meadow";
+        bool relicMusic;
+
+        void SetState(State s)
+        {
+            var was = state;
+            state = s; stateTime = 0f;
+            switch (s)
+            {
+                case State.Title: Audio.Music("title"); break;
+                case State.Playing:
+                    if (was == State.Paused) Audio.ResumeMusic();
+                    else { relicMusic = false; Audio.Music(LevelMusic); }
+                    break;
+                case State.Paused: Audio.PauseMusic(); Audio.Play("pause"); break;
+                case State.Dying: Audio.Music("death", false); break;
+                case State.Won: Audio.Play("pole"); Audio.Music("victory", false); break;
+                case State.GameOver: Audio.Music("game_over", false); break;
+            }
+        }
+
+        /// <summary>The holy relique has its own tune while it lasts.</summary>
+        void UpdateRelicMusic()
+        {
+            if (player.Blessed && !relicMusic) { relicMusic = true; Audio.Music("relic"); }
+            else if (!player.Blessed && relicMusic) { relicMusic = false; Audio.Music(LevelMusic); }
+        }
 
         /// <summary>After touching the pole: slide down it, walk into the castle, then show the verse.</summary>
         void TickWin(float dt)
@@ -210,8 +239,8 @@ namespace Tapestry
         void TickTitle()
         {
             int n = Knights.All.Length;
-            if (TapestryInput.LeftPressed) knightIndex = (knightIndex + n - 1) % n;
-            if (TapestryInput.RightPressed) knightIndex = (knightIndex + 1) % n;
+            if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
+            if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
             bool go = stateTime > 0.3f && (TapestryInput.JumpPressed || TapestryInput.StartPressed);
             if (TapestryInput.TapPosition.HasValue)
             {
@@ -219,12 +248,14 @@ namespace Tapestry
                     if (PortraitRect(i).Contains(TapestryInput.TapPosition.Value))
                     {
                         if (i == knightIndex) go = true;
+                        else Audio.Play("select");
                         knightIndex = i;
                     }
             }
             if (go)
             {
                 player.SetKnight(Knights.All[knightIndex]);
+                Audio.Play("confirm");
                 SetState(State.Playing);
             }
         }
@@ -239,6 +270,7 @@ namespace Tapestry
             player.Tick(dt, level);
             TickEntities(dt);
             if (player.Dead) return;
+            UpdateRelicMusic();
 
             var pb = player.Body;
             foreach (var e in enemies)
@@ -309,7 +341,7 @@ namespace Tapestry
                 bayard.Tick(dt, level);
                 if (bayard.Removed)
                 {
-                    if (bayard.Lost) Toast("Alas! Bayard is loste. Seeke him agayne in ye bryckes.");
+                    if (bayard.Lost) { Toast("Alas! Bayard is loste. Seeke him agayne in ye bryckes."); Audio.Play("bayard_lost"); }
                     bayard = null;
                 }
             }
@@ -349,6 +381,13 @@ namespace Tapestry
         public void KnightHitBlock(int x, int y)
         {
             var r = level.HitFromBelow(x, y);
+            switch (r)
+            {
+                case Level.BumpResult.Broke: Audio.Play("brick"); break;
+                case Level.BumpResult.Thud: Audio.Play("bump", 0.8f); break;
+                case Level.BumpResult.Bezant: case Level.BumpResult.None: break;
+                default: Audio.Play("item_appear"); break;
+            }
             var top = new Vector2(x + 0.5f, y + 1f);
             switch (r)
             {
@@ -394,10 +433,10 @@ namespace Tapestry
             score += 1000;
             switch (it.Kind)
             {
-                case "chalice": lives++; Toast("A golden chalice! One more lyfe is thyne."); break;
-                case "capon": player.Heal(); Toast("A roaste capon! Thy herte is mended."); break;
-                case "crossbow": player.GiveCrossbow(); Toast("A crossbowe! Presse RUNNE to loose a bolte."); break;
-                case "relic": player.RelicTime = 9f; Toast("A holy relique! No beaste may harme thee for a whyle."); break;
+                case "chalice": Audio.Play("oneup"); lives++; Toast("A golden chalice! One more lyfe is thyne."); break;
+                case "capon": Audio.Play("powerup"); player.Heal(); Toast("A roaste capon! Thy herte is mended."); break;
+                case "crossbow": Audio.Play("powerup"); player.GiveCrossbow(); Toast("A crossbowe! Presse RUNNE to loose a bolte."); break;
+                case "relic": Audio.Play("powerup"); player.RelicTime = 9f; Toast("A holy relique! No beaste may harme thee for a whyle."); break;
             }
         }
         public void AddScore(int n) { score += n; }
@@ -405,6 +444,7 @@ namespace Tapestry
 
         void AddBezant()
         {
+            Audio.Play("bezant", 0.7f);
             bezantCount++; score += 10;
             if (bezantCount >= 100) { bezantCount -= 100; lives++; }
         }
@@ -482,7 +522,7 @@ namespace Tapestry
                     {
                         Panel(new Rect(W * 0.25f, H * 0.3f, W * 0.5f, H * 0.36f));
                         GUI.Label(new Rect(0, H * 0.33f, W, H * 0.12f), "THOU ART AT REST", big);
-                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.16f), "JUMPE or Starte to continewe\nDOWNE to returne unto ye beginnynge", center);
+                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.16f), "JUMPE or Starte to continewe\nDOWNE to returne unto ye beginnynge\nM (or Selecte) to silence ye musick", center);
                     }
                     if (state == State.Won && winPhase == 2)
                     {
