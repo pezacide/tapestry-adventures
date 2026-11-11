@@ -21,7 +21,7 @@ namespace Tapestry
         // a fixed joystick bottom-left; round JUMPE and RUNNE/SHOOTE buttons bottom-right; pause top-right
         static float Unit { get { return Mathf.Min(Screen.height, Screen.width * 9f / 16f); } }
         static Vector2 At(float fx, float fy) { var a = Safe; return new Vector2(a.x + fx * a.width, a.y + fy * a.height); }
-        public static Vector2 JoyCentre { get { return At(0.095f, 0.79f); } }
+        public static Vector2 JoyCentre { get { return At(0.092f, 0.825f); } }   // tucked into the bottom-left corner, just inside the screen edge
         public static float JoyRadius { get { return Unit * 0.15f; } }
         public static Vector2 JumpCentre { get { return At(0.915f, 0.70f); } }
         public static float JumpRadius { get { return Unit * 0.135f; } }

@@ -123,37 +123,69 @@ namespace Tapestry
 
         // ---- the "what is this?" screen: shown the first time the game is opened, and from a link on the title screen
         const string SeenAboutKey = "seen:about";
+        int aboutPage;
+        const int AboutPages = 4;
         void TickAbout()
         {
-            if (stateTime < 0.4f) return;
-            if (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue)
+            if (stateTime < 0.35f) return;
+            if (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.RightPressed || TapestryInput.TapPosition.HasValue)
             {
-                PlayerPrefs.SetInt(SeenAboutKey, 1); PlayerPrefs.Save();
-                Audio.Play("select"); SetState(State.Title);
+                Audio.Play("select");
+                if (++aboutPage >= AboutPages)
+                {
+                    PlayerPrefs.SetInt(SeenAboutKey, 1); PlayerPrefs.Save();
+                    SetState(State.Title);
+                }
+                else stateTime = 0f;
             }
+            else if (TapestryInput.LeftPressed && aboutPage > 0) { aboutPage--; Audio.Play("select"); stateTime = 0f; }
         }
+
+        static string[] AboutText(bool touch)
+        {
+            var tapestries = new System.Text.StringBuilder();
+            for (int w = 1; w < WorldNames.Length; w++) tapestries.Append(w + "   " + WorldNames[w] + "\n");
+            return new[]
+            {
+                "Ye Tapestrie Adventures is a two-dimensional, side-scrolling platform game: runne, leape and stompe from left to ryghte, over pittes and past perils, to ye pole at ye ende of every realme.\n\n" +
+                "Every scene is stitched or woven like a tapestry of ye Middle Ages. Ye first three are wool embroidery upon linen, in ye manner of ye Bayeux Tapestrie; from ye fourth they are woven, thick with leaves and flowers, whyle thy knyghtes remayne stitched.\n\n" +
+                "Thy foes are strange beastes lifted from ye bestiaries and ye margins of olde manuscripts.",
+
+                (touch
+                    ? "Moove with ye joystick: push it to ye rim to runne, and pull it downe to dismounte. Ye large button leapeth (holde it to leape higher); ye small one runneth, and shooteth a crossbowe if thou bearest one."
+                    : "LEFTE and RYGHTE moove thee; holde RUNNE to runne, and it shooteth a crossbowe if thou bearest one. JUMPE leapeth (holde it to leape higher); DOWNE dismounteth.") + "\n\n" +
+                "Stompe beastes from above; touche them from ye side and thou art hurte. Bumpe bricks from beneath to breake them: some hide a bezant, a capon (mendeth a herte), a golden chalice (a lyfe), a crossbowe, a holy relique (nothing may harme thee for a whyle), or Bayard ye magic horse, whom thou mayst ryde.\n\n" +
+                "Touche a halfway banner and thou shalt ryse agayne there. Mind ye Tyme, for it runneth out.",
+
+                "Seven tapestries, four realmes in each, and a castle with a mighty boss at ye ende of every one:\n\n" + tapestries.ToString(),
+
+                "Princesse Aelfgyva hath been carried off by ye Cat King, who fleeth ever deeper into ye tapestries.\n\n" +
+                "Ryde after him with four brave knyghtes (Sir Rubeus, Dame Azura, Sir Verdain and Lady Aurelia), and Bayard ye magic horse at thy side. In every castle a good monke telleth thee that ye Princesse is in another; thou must overcome ye guardian of each, and at last ye Cat King himselfe upon his throne.\n\n" +
+                "Before every realme thou shalt be tolde of its beastes and perils. Heede them well."
+            };
+        }
+
+        static readonly string[] AboutHeads = { "What is this?", "How to playe", "Ye Seven Tapestries", "Ye Storye" };
 
         void DrawAbout(float W, float H)
         {
             Panel(new Rect(0, 0, W, H));
             var t = Art.Texture("scenery/title");
-            float y = H * 0.04f;
-            if (t != null) { float tw = Mathf.Min(W * 0.8f, U * 1.2f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th + H * 0.01f; }
-            GUI.Label(new Rect(W * 0.08f, y, W * 0.84f, U * 0.3f),
-                "A two-dimensional, side-scrolling adventure, stitched and woven in the manner of the medieval tapestries.\n" +
-                "Ride four knights through seven famous tapestries, from ye Bayeux Tapestrie to ye Apocalypse of Angers: leape upon strange beastes of ye bestiary, " +
-                "ryde Bayard ye magic horse, and overcome a mighty foe in every castle, to rescue Princesse Aelfgyva from ye Cat King.", center);
-            // the four knights, in a row
-            float pw = U * 0.12f, gap = pw * 0.5f, total = 4 * pw + 3 * gap, ky = H * 0.62f;
-            for (int i = 0; i < Knights.All.Length; i++)
-                DrawFrame(Knights.All[i].Sheet, (int)(Time.time * 3f + i) % 3, new Rect((W - total) * 0.5f + i * (pw + gap), ky, pw, pw * 1.5f));
-            GUI.Label(new Rect(W * 0.08f, H * 0.62f + pw * 1.5f + H * 0.01f, W * 0.84f, U * 0.1f),
-                TapestryInput.ShowTouchControls
-                    ? "Moove with ye joystick; ye lefte button leapeth, ye ryghte button runneth (and shooteth a crossbowe, when thou hast one)."
-                    : "LEFTE and RYGHTE moove thee, JUMPE leapeth, RUNNE runneth (and shooteth a crossbowe, when thou hast one).", center);
+            float y = H * 0.03f;
+            if (t != null) { float tw = Mathf.Min(W * 0.5f, U * 0.8f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th; }
+            GUI.Label(new Rect(0, y, W, U * 0.08f), AboutHeads[aboutPage], big);
+            y += U * 0.085f;
+            GUI.Label(new Rect(W * 0.1f, y, W * 0.8f, H * 0.9f - y - U * 0.12f), AboutText(TapestryInput.ShowTouchControls)[aboutPage], center);
+            if (aboutPage == 0)   // the four knights, in a row
+            {
+                float pw = U * 0.1f, gap = pw * 0.5f, total = 4 * pw + 3 * gap;
+                for (int i = 0; i < Knights.All.Length; i++)
+                    DrawFrame(Knights.All[i].Sheet, (int)(Time.time * 3f + i) % 3, new Rect((W - total) * 0.5f + i * (pw + gap), H * 0.8f, pw, pw * 1.5f));
+            }
             float a = 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.time * 2.5f));
             var cc = GUI.color; GUI.color = new Color(1f, 1f, 1f, a);
-            GUI.Label(new Rect(0, H * 0.92f, W, U * 0.06f), TapestryInput.ShowTouchControls ? "Touche to begynne" : "JUMPE to begynne", center);
+            string go = aboutPage == AboutPages - 1 ? (TapestryInput.ShowTouchControls ? "Touche to begynne" : "JUMPE to begynne") : (TapestryInput.ShowTouchControls ? "Touche to continue" : "JUMPE to continue");
+            GUI.Label(new Rect(0, H * 0.93f, W, U * 0.05f), go + "     (" + (aboutPage + 1) + " of " + AboutPages + ")", center);
             GUI.color = cc;
         }
 
@@ -503,7 +535,7 @@ namespace Tapestry
             {
                 case State.Title: Audio.Music("title"); break;
                 case State.Briefing: Audio.Music(L.Music); break;
-                case State.About: Audio.Music("title"); break;
+                case State.About: Audio.Music("title"); if (was != State.About) aboutPage = 0; break;
                 case State.Ending: Audio.Music("ending", false); break;
                 case State.Playing:
                     if (was == State.Paused) Audio.ResumeMusic();
@@ -1723,22 +1755,24 @@ namespace Tapestry
         void TouchButtons()
         {
             // the fixed joystick: base, then the knob where the thumb has pushed it
-            DrawDisc("scenery/ui_joy_base", TapestryInput.JoyCentre, TapestryInput.JoyRadius, 82f / 90f, 1f);
-            DrawDisc("scenery/ui_joy_knob", TapestryInput.JoyCentre + TapestryInput.JoyKnob, TapestryInput.JoyRadius * 0.42f, 36f / 40f, 1f);
+            // all the controls are see-through (about a third opaque), a little firmer while touched, so they do not hide the game
+            bool joyHeld = TapestryInput.JoyKnob.sqrMagnitude > 1f;
+            DrawDisc("scenery/ui_joy_base", TapestryInput.JoyCentre, TapestryInput.JoyRadius, 82f / 90f, 1f, joyHeld ? 0.55f : 0.38f);
+            DrawDisc("scenery/ui_joy_knob", TapestryInput.JoyCentre + TapestryInput.JoyKnob, TapestryInput.JoyRadius * 0.42f, 36f / 40f, 1f, joyHeld ? 0.72f : 0.5f);
             // JUMPE shows the knight being played; RUNNE/SHOOTE shows the crossbowe
-            DrawDisc("scenery/ui_jump_" + player.Def.Key, TapestryInput.JumpCentre, TapestryInput.JumpRadius, 64f / 70f, TapestryInput.TouchJump ? 0.7f : 1f);
-            DrawDisc("scenery/ui_run", TapestryInput.RunCentre, TapestryInput.RunRadius, 50f / 56f, TapestryInput.TouchRun ? 0.7f : 1f);
-            DrawDisc("scenery/ui_pause", TapestryInput.PauseCentre, TapestryInput.PauseRadius, 23f / 26f, 1f);
+            DrawDisc("scenery/ui_jump_" + player.Def.Key, TapestryInput.JumpCentre, TapestryInput.JumpRadius, 64f / 70f, 1f, TapestryInput.TouchJump ? 0.65f : 0.42f);
+            DrawDisc("scenery/ui_run", TapestryInput.RunCentre, TapestryInput.RunRadius, 50f / 56f, 1f, TapestryInput.TouchRun ? 0.65f : 0.42f);
+            DrawDisc("scenery/ui_pause", TapestryInput.PauseCentre, TapestryInput.PauseRadius, 23f / 26f, 1f, 0.34f);
         }
 
         /// <summary>Draw a round control: the disc fills discFrac of its square texture; brightness < 1 shows it pressed.</summary>
-        void DrawDisc(string key, Vector2 centre, float radius, float discFrac, float brightness)
+        void DrawDisc(string key, Vector2 centre, float radius, float discFrac, float brightness, float alpha = 0.95f)
         {
             var tex = Art.Texture(key);
             if (tex == null) return;
             float size = 2f * radius / discFrac;
             var c = GUI.color;
-            GUI.color = new Color(brightness, brightness, brightness, 0.95f);
+            GUI.color = new Color(brightness, brightness, brightness, alpha);
             GUI.DrawTexture(new Rect(centre.x - size * 0.5f, centre.y - size * 0.5f, size, size), tex);
             GUI.color = c;
         }
