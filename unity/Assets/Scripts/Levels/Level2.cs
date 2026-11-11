@@ -19,7 +19,7 @@ namespace Tapestry
                 "              ooooo                                            oooo                                                                                  1",
                 "                                   ^^^^^                                                        ^^^^                          ooooo                                            B",
                 "              ^^^^^     s            |             O           ^^^^                         O     |    h                                        ^^^         O                 BB",
-                "                |    ^^^^^^^         |      BMB?B ^^^^           |           ?W?          ^^^^^   | ^^^^^^^         BHB       ^^^^^ BRB          |  ^^^^   ^^^^              BBB",
+                "                |    ^^^^^^^         |      BMB?B ^^^^           |           ?W?       R  ^^^^^   | ^^^^^^^         BHB       ^^^^^ B?B          |  ^^^^   ^^^^              BBB",
                 "        ^^^^    |       |      ^^^   |              |      ^^^^  | ^^^                      |     |    |                        |           ^^^  |    |      |              BBBB",
                 "          |     |       |       |    |              |        |   |  |                       |     |    |                        |            |   |    |      |             BBBBB",
                 "   P      |     | h     |       |    |              |   d    |   |  |  S  h       d   s     |     |    |   C S  c         d     |        l   |   |    |      |  h    s    BBBBBB      G",

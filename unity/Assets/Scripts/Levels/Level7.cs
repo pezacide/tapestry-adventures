@@ -19,9 +19,9 @@ namespace Tapestry
             {
                 "",
                 "",
-                "",
-                "                          g                                                               g                               oooo             oo",
-                "                                          oo                 g                ooo                               BRB                                        B1B            g      B",
+                "                          g",
+                "                                                                                          g                               oooo             oo",
+                "                        BRB               oo                 g                ooo                                                                          B1B            g      B",
                 "               ooo                             ?W?                                                                                                                              BB",
                 "       ?M?                                                                                           BHB                                   VV                                  BBB",
                 "                                          VV                                                                                               VV                                 BBBB",

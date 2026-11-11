@@ -86,12 +86,12 @@ m.put(15, 2, "s"); m.put(26, 2, "h"); m.put(35, 2, "S")
 m.tower(22, 2)
 m.row(37, 5, "===="); m.row(37, 7, "oooo")
 m.row(43, 5, "BWB"); m.put(48, 2, "l")
-m.tower(54, 3); m.put(58, 2, "d"); m.tower(62, 3)
+m.tower(54, 3); m.put(58, 2, "d"); m.tower(62, 3); m.put(66, 5, "R")
 m.row(71, 4, "==="); m.row(74, 6, "==="); m.row(71, 6, "ooo")
 m.stairs(80, 5)
 m.put(88, 2, "c"); m.put(96, 7, "w")
 m.put(97, 2, "C"); m.row(100, 5, "B?B?BHB"); m.row(101, 8, "o o o")
-m.put(112, 2, "u"); m.row(117, 5, "BRB"); m.put(117, 2, "S")
+m.put(112, 2, "u"); m.put(117, 2, "S")
 m.tower(124, 3); m.put(124, 5, "O")
 m.row(130, 4, "BBBB"); m.put(132, 5, "k")
 m.row(140, 5, "==="); m.row(140, 7, "ooo")
@@ -115,11 +115,11 @@ m.row(44, 5, "BMB?B")
 m.treetop(50, 4, 5); m.put(51, 6, "O")
 m.put(56, 2, "d")
 m.treetop(59, 4, 4); m.treetop(63, 4, 6); m.treetop(67, 3, 4); m.row(63, 8, "oooo"); m.put(65, 9, "w")   # over the stream
-m.put(74, 2, "h"); m.put(71, 2, "S"); m.row(77, 5, "?W?"); m.put(82, 2, "d"); m.put(86, 2, "s")
+m.put(74, 2, "h"); m.put(71, 2, "S"); m.row(77, 5, "?W?"); m.put(82, 2, "d"); m.put(86, 2, "s"); m.put(87, 5, "R")
 m.treetop(90, 5, 5); m.put(92, 6, "O"); m.treetop(96, 4, 7); m.row(96, 9, "oooo")
 m.treetop(100, 7, 5); m.put(103, 6, "h")                      # bridge over the second gap
 m.put(107, 2, "C"); m.put(112, 2, "c"); m.put(109, 2, "S"); m.row(116, 5, "BHB"); m.put(122, 2, "d")
-m.treetop(126, 5, 5); m.row(126, 7, "ooooo"); m.row(132, 5, "BRB"); m.put(137, 2, "l")
+m.treetop(126, 5, 5); m.row(126, 7, "ooooo"); m.row(132, 5, "B?B"); m.put(137, 2, "l")
 m.treetop(140, 3, 4); m.treetop(144, 3, 6); m.put(143, 9, "w")   # over the third gap
 m.treetop(148, 4, 5); m.row(149, 8, "1")
 m.treetop(155, 4, 5); m.put(156, 6, "O"); m.put(160, 2, "h"); m.put(165, 2, "s")
@@ -149,7 +149,7 @@ m.pillar(24, 6, 2)                                            # low arch: 4 rows
 m.put(32, 2, "L")                                             # low gliding lift over the first pit (31-40): reaches x 29-38
 m.row(33, 6, "ooo")
 m.put(46, 2, "h"); m.row(50, 5, "?W?"); m.put(55, 2, "k")
-m.stairs(58, 3); m.pillar(63, 6, 3); m.put(66, 2, "S")
+m.stairs(58, 3); m.pillar(63, 6, 3); m.put(66, 2, "S"); m.put(68, 5, "R")
 m.put(72, 2, "E"); m.row(73, 6, "oo")                         # rising lift in the second pit (71-81)
 m.put(77, 3, "L")
 m.put(86, 2, "d"); m.row(88, 5, "BHB"); m.put(93, 2, "l")
@@ -159,7 +159,7 @@ m.put(110, 2, "C")
 m.put(112, 2, "c"); m.pillar(116, 6, 2); m.row(120, 5, "B1B"); m.put(121, 6, "O"); m.put(130, 2, "s")
 m.row(134, 4, "BBBB"); m.put(136, 5, "k")
 m.put(141, 2, "E")                                            # last pit (141-145)
-m.put(150, 2, "h"); m.put(155, 2, "S"); m.row(158, 5, "?BRB?")
+m.put(150, 2, "h"); m.put(155, 2, "S"); m.row(158, 5, "?B?B?")
 m.put(170, 2, "d"); m.row(174, 5, "?B?")
 write("Level3", "Worlde 1-3", "Ye Undercroft", "HERE YE KNYGHTES GOE DOWNE INTO YE UNDERCROFT", m,
       [], "scenery/crypt_exit", 188, "crypt", "backgrounds/crypt_far", "backgrounds/crypt_near", entrance=True)
@@ -211,7 +211,7 @@ m.row(9, 5, "B?BMB"); m.put(14, 7, "g")
 m.put(18, 2, "x")
 m.put(24, 2, "Q")                                             # the first log pile
 m.row(30, 5, "BB?BB"); m.row(31, 8, "ooo")
-m.row(40, 4, "==="); m.put(47, 2, "x"); m.put(52, 7, "g")
+m.row(40, 4, "==="); m.put(47, 2, "x"); m.row(50, 5, "BRB"); m.put(52, 7, "g")
 m.put(58, 2, "Q")
 m.stairs(64, 3); m.row(70, 5, "?W?"); m.put(75, 2, "s")
 m.row(81, 4, "==="); m.row(84, 6, "==="); m.row(81, 6, "ooo"); m.put(83, 9, "g")   # over the tidal pool
@@ -219,7 +219,7 @@ m.put(92, 2, "C")
 m.put(96, 2, "x"); m.row(100, 5, "BHB"); m.put(106, 2, "Q")
 m.put(112, 2, "S"); m.row(116, 5, "B1B"); m.put(118, 8, "g"); m.put(124, 2, "x")
 m.row(133, 5, "==="); m.row(133, 7, "ooo")
-m.put(142, 2, "Q"); m.row(146, 5, "BRB"); m.put(150, 2, "d"); m.put(154, 7, "g"); m.put(158, 2, "x")
+m.put(142, 2, "Q"); m.put(150, 2, "d"); m.put(154, 7, "g"); m.put(158, 2, "x")
 m.stairs(164, 6)
 m.put(178, 2, "G")
 write("Level5", "Worlde 2-1", "Ye Shipwrights' Yarde", "HERE YE SHIPWRIGHTES FELLE YE TREES AND BUILDE YE SHIPPES", m,
@@ -232,7 +232,7 @@ m = Map(180)
 m.ground(0, 52); m.ground(60, 109); m.ground(116, 179)        # two abysses to swim over
 m.put(3, 2, "P")
 m.row(8, 5, "BWB"); m.row(14, 7, "ooo")                       # the crossbowe, early: nothing here can be stomped
-m.put(18, 6, "f"); m.put(26, 4, "f")
+m.put(18, 6, "f"); m.put(26, 4, "f"); m.put(22, 7, "R")
 for y in range(2, 6): m.put(30, y, "V"); m.put(31, y, "V")    # a rock pillar from the sea-bed
 for y in range(7, 10): m.put(36, y, "V"); m.put(37, y, "V")   # and one hanging from above: swim between
 m.row(38, 5, "oooo"); m.put(42, 8, "m")
@@ -247,7 +247,7 @@ m.row(110, 7, "oooooo"); m.put(112, 5, "z"); m.put(114, 8, "m")   # over the sec
 for y in range(2, 5): m.put(122, y, "V"); m.put(123, y, "V")
 for y in range(7, 10): m.put(128, y, "V"); m.put(129, y, "V")
 m.put(132, 6, "f"); m.put(136, 3, "f"); m.put(140, 7, "m"); m.put(146, 4, "z")
-m.row(150, 5, "?R?")
+m.row(150, 5, "?B?")
 write("Level6", "Worlde 2-2", "Beneath ye Waves", "HERE YE KNYGHTES SWYMME BENEATH YE WAVES", m,
       [("seaweed", 6), ("seaweed", 22), ("seaweed", 44), ("seaweed", 66), ("seaweed", 90), ("seaweed", 120), ("seaweed", 144), ("seaweed", 158)],
       "scenery/wreck", 168, "deep", "backgrounds/deep_far", "backgrounds/deep_near",
@@ -261,7 +261,7 @@ def stack(x, top):   # a sea-rock stack rising from the waves
     for y in range(0, top + 1): m.put(x, y, "V"); m.put(x + 1, y, "V")
 m.put(3, 2, "P"); m.row(7, 5, "?M?")
 m.put(14, 2, "Y"); m.row(15, 6, "ooo")
-m.put(23, 3, "Y"); m.put(26, 8, "g")
+m.put(23, 3, "Y"); m.row(24, 7, "BRB"); m.put(26, 9, "g")
 m.put(32, 2, "U")
 stack(42, 4); m.row(42, 7, "oo")
 m.put(46, 2, "Y"); m.row(47, 6, "?W?")
@@ -269,7 +269,7 @@ m.put(58, 2, "x"); m.put(61, 7, "g")
 m.put(67, 2, "U"); m.put(77, 3, "Y"); m.row(78, 7, "ooo")
 stack(85, 3); m.put(88, 2, "Y"); m.put(90, 8, "g")
 m.put(98, 2, "C"); m.row(101, 5, "BHB"); m.put(105, 2, "x")
-m.put(111, 2, "Y"); m.row(112, 7, "BRB"); m.put(121, 3, "U"); m.row(122, 8, "oooo")
+m.put(111, 2, "Y"); m.put(121, 3, "U"); m.row(122, 8, "oooo")
 m.put(131, 2, "Y"); stack(139, 5); m.row(139, 8, "oo")
 m.put(143, 2, "U"); m.put(153, 3, "Y"); m.row(155, 7, "B1B")
 m.put(166, 2, "x"); m.put(170, 7, "g")
@@ -304,7 +304,7 @@ m.ground(0, 14); m.ground(22, 30); m.ground(48, 56); m.ground(80, 92); m.ground(
 m.put(3, 2, "P"); m.row(8, 5, "?M?")
 m.put(13, 6, ">")                                            # a wind at your back over the first gap
 m.row(16, 4, "==="); m.row(16, 6, "ooo")
-m.put(26, 2, "h"); m.row(24, 5, "B?B")
+m.put(26, 2, "h"); m.row(24, 5, "BRB")
 m.put(34, 3, "L"); m.put(41, 5, "L")                        # star boards across the long gap
 m.put(38, 8, "b"); m.row(37, 8, "ooo")
 m.put(79, 7, "<")                                            # a head-wind across this gap: time your leaps
@@ -329,7 +329,7 @@ m = Map(180)
 m.ground(0, 40); m.ground(48, 98); m.ground(106, 179)
 m.put(3, 2, "P")
 m.row(8, 5, "BWB"); m.row(13, 7, "ooo")                       # the crossbowe first
-m.put(18, 5, "f"); m.put(24, 4, "e")
+m.put(18, 5, "f"); m.put(24, 4, "e"); m.put(20, 7, "R")
 for y in range(2, 6): m.put(28, y, "V"); m.put(29, y, "V")
 for y in range(7, 10): m.put(34, y, "V"); m.put(35, y, "V")
 m.row(36, 5, "oooo"); m.put(42, 7, "m"); m.row(43, 4, "?M?")  # over the first abyss
@@ -342,7 +342,7 @@ m.put(98, 4, "e"); m.row(100, 7, "oooooo")                    # over the second 
 for y in range(2, 5): m.put(112, y, "V"); m.put(113, y, "V")
 for y in range(7, 10): m.put(118, y, "V"); m.put(119, y, "V")
 m.put(122, 6, "f"); m.put(126, 3, "e"); m.put(132, 7, "m"); m.put(138, 4, "z"); m.put(142, 6, "f")
-m.row(146, 5, "?R?"); m.put(152, 3, "e")
+m.row(146, 5, "?B?"); m.put(152, 3, "e")
 write("Level10", "Worlde 3-2", "Ye Waters Above", "HERE YE KNYGHTES SWYMME IN YE WATERS ABOVE YE FIRMAMENT", m,
       [], "scenery/castle_fountain", 168, "waters", "backgrounds/waters_far", "backgrounds/deep_near",
       skin=("scenery/cloud_top", "scenery/cloud_fill", "scenery/roundel_block"), vault="scenery/cloud_block", underwater=True, end_at_door=True)
