@@ -9,7 +9,7 @@ namespace Tapestry
     {
         public static GameManager I { get; private set; }
 
-        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing, Ending }
+        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing, Ending, Paywall }
         State state = State.Title;
 
         const float ViewHalfHeight = 5.625f;           // 540 design px tall = 11.25 tiles
@@ -91,8 +91,78 @@ namespace Tapestry
             }
         }
 
+        // ---- the one purchase: Worlds 2 to 7 are locked until "Ye Whole Tapestrie" is bought
+        int paywallTarget;   // the level to ride on to once it is bought
+        bool Locked(int level) { return Store.WorldLocked(WorldOf(Levels.All[level])); }
+        int FirstLockedLevel() { for (int i = 0; i < Levels.All.Length; i++) if (Locked(i)) return i; return -1; }
+        void OpenPaywall(int target) { paywallTarget = target; Store.Message = ""; SetState(State.Paywall); }
+
+        void LeavePaywall(bool bought)
+        {
+            if (bought)
+            {
+                levelIndex = paywallTarget; checkpointClaimed = false; briefedTitle = null;
+                LoadLevel();
+                player.SetKnight(Knights.All[knightIndex]);
+                Audio.Play("confirm");
+                SetState(FirstState());
+            }
+            else { carry = false; levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
+        }
+
+        Rect PaywallRect(int i)   // 0 buy, 1 not now, 2 restore
+        {
+            float W = Screen.width, H = Screen.height;
+            if (i == 2) return new Rect(W * 0.5f - U * 0.3f, H * 0.82f, U * 0.6f, U * 0.06f);
+            float w = U * 0.52f, h = U * 0.09f, y = H * 0.66f;
+            return i == 0 ? new Rect(W * 0.5f - w - U * 0.02f, y, w, h) : new Rect(W * 0.5f + U * 0.02f, y, w, h);
+        }
+
+        Rect UnlockLinkRect() { return new Rect(Screen.width * 0.5f - U * 0.4f, Screen.height * 0.9f, U * 0.8f, U * 0.07f); }
+
+        void TickPaywall()
+        {
+            if (Store.Owned) { LeavePaywall(true); return; }
+            if (stateTime < 0.35f || Store.Busy) return;
+            bool buy = TapestryInput.JumpPressed || TapestryInput.StartPressed, no = TapestryInput.DownPressed || TapestryInput.RunPressed;
+            if (TapestryInput.TapPosition.HasValue)
+            {
+                var tap = TapestryInput.TapPosition.Value;
+                if (PaywallRect(0).Contains(tap)) buy = true;
+                else if (PaywallRect(1).Contains(tap)) no = true;
+                else if (PaywallRect(2).Contains(tap)) { Store.Restore(); Audio.Play("select"); }
+            }
+            if (buy) { Audio.Play("select"); Store.Buy(); }
+            else if (no) { Audio.Play("select"); LeavePaywall(false); }
+        }
+
+        void DrawPaywall(float W, float H)
+        {
+            Panel(new Rect(0, 0, W, H));
+            var t = Art.Texture("scenery/title");
+            if (t != null) { float tw = Mathf.Min(W * 0.7f, U * 1.0f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, H * 0.04f, tw, th), t); }
+            GUI.Label(new Rect(0, H * 0.25f, W, U * 0.09f), "Ye Whole Tapestrie", big);
+            GUI.Label(new Rect(W * 0.12f, H * 0.35f, W * 0.76f, U * 0.3f),
+                "Thou hast ridden through ye Bayeux Tapestrie, and it was free.\n" +
+                "Six more tapestries await: twenty-five realmes, seven mighty bosses, and ye Cat King himselfe.\n" +
+                "One purchase, thyne for ever. No ads, and no further payments.", center);
+            var c = GUI.color;
+            for (int i = 0; i < 2; i++)
+            {
+                var r = PaywallRect(i);
+                GUI.color = i == 0 ? new Color(0.66f, 0.26f, 0.18f, Store.Busy ? 0.25f : 0.55f) : new Color(0.2f, 0.145f, 0.114f, 0.18f);
+                GUI.DrawTexture(r, Texture2D.whiteTexture);
+                GUI.color = c;
+                GUI.Label(r, i == 0 ? (Store.Busy ? "One moment..." : "Unlocke" + (string.IsNullOrEmpty(Store.Price) ? "" : "  " + Store.Price)) : "Not now", center);
+            }
+            GUI.Label(PaywallRect(2), "Restore a former purchase", center);
+            if (!string.IsNullOrEmpty(Store.Message)) GUI.Label(new Rect(W * 0.1f, H * 0.78f, W * 0.8f, U * 0.05f), Store.Message, center);
+            if (!TapestryInput.ShowTouchControls) GUI.Label(new Rect(0, H * 0.92f, W, U * 0.05f), "JUMPE to unlocke  -  DOWNE to returne", center);
+        }
+
         void StartAt(int index)
         {
+            if (Locked(index)) { carry = false; OpenPaywall(index); return; }
             levelIndex = index; checkpointClaimed = false;
             LoadLevel();
             player.SetKnight(Knights.All[knightIndex]);
@@ -128,6 +198,7 @@ namespace Tapestry
         {
             if (I != null && I != this) { Destroy(gameObject); return; }
             I = this;
+            Store.Init();
             if (Application.isMobilePlatform) { Application.targetFrameRate = 60; Screen.sleepTimeout = SleepTimeout.NeverSleep; }
             SetupCamera();
             Audio.Init(gameObject);
@@ -356,6 +427,7 @@ namespace Tapestry
                     if (stateTime > 0.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
                     { Audio.Play("select"); SetState(State.Playing); }
                     break;
+                case State.Paywall: TickPaywall(); break;
                 case State.Ending:   // the story told, scrolling up; then back to the title
                     if (stateTime > 5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue) || stateTime > EndingLength)
                     { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
@@ -376,6 +448,7 @@ namespace Tapestry
         void NextLevel()
         {
             carry = true; carryHearts = player.Hearts; carryCrossbow = player.HasCrossbow; carryMount = player.Mounted ? player.MountKind : null;
+            if (levelIndex + 1 < Levels.All.Length && Locked(levelIndex + 1)) { OpenPaywall(levelIndex + 1); return; }   // the end of the free tapestry
             levelIndex++;
             checkpointClaimed = false;
             LoadLevel();
@@ -549,6 +622,8 @@ namespace Tapestry
             if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
             if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
             bool go = stateTime > 0.3f && (TapestryInput.JumpPressed || TapestryInput.StartPressed);
+            if (TapestryInput.TapPosition.HasValue && !Store.Owned && UnlockLinkRect().Contains(TapestryInput.TapPosition.Value))
+            { Audio.Play("select"); OpenPaywall(FirstLockedLevel()); return; }
             if (TapestryInput.TapPosition.HasValue)
             {
                 for (int i = 0; i < n; i++)
@@ -1267,6 +1342,7 @@ namespace Tapestry
             {
                 case State.Briefing: DrawBriefing(W, H); break;
                 case State.Ending: DrawEnding(W, H); break;
+                case State.Paywall: DrawPaywall(W, H); break;
                 case State.Title:
                     Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
                     if (titleStep == 1) { DrawRealmSelect(W, H); break; }
@@ -1288,6 +1364,7 @@ namespace Tapestry
                     GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.07f), def.Trait, center); y += U * 0.07f;
                     GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.1f),
                         TapestryInput.ShowTouchControls ? "Touche a knyghte to chuse, and touche agayne to ryde forth" : "LEFTE or RYGHTE to chuse thy knyghte  -  JUMPE or Entre to ryde forth", center);
+                    if (!Store.Owned) GUI.Label(UnlockLinkRect(), "Unlocke Worldes 2 to 7  (touche here)", center);
                     break;
 
                 case State.Playing:
@@ -1421,9 +1498,11 @@ namespace Tapestry
                 GUI.color = i == realmChoice ? new Color(0.66f, 0.26f, 0.18f, 0.4f) : new Color(0.2f, 0.145f, 0.114f, 0.12f);
                 GUI.DrawTexture(r, Texture2D.whiteTexture);
                 GUI.color = c;
+                if (Locked(realmStarts[i])) GUI.color = new Color(1f, 1f, 1f, 0.45f);   // not yet bought
                 string num = def.Title.Substring(def.Title.IndexOf(' ') + 1);   // "Worlde 3-2" -> "3-2"
                 GUI.Label(new Rect(r.x, r.y + r.height * 0.06f, r.width, r.height * 0.4f), num, big);
                 GUI.Label(new Rect(r.x + r.width * 0.05f, r.y + r.height * 0.48f, r.width * 0.9f, r.height * 0.5f), def.Name, center);
+                GUI.color = Color.white;
             }
             bool more = RealmWorld(realmStarts.Count - 1) > world, less = RealmWorld(0) < world;
             if (less) GUI.Label(PageArrowRect(-1), "<", big);

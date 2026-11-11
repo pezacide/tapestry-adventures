@@ -126,6 +126,10 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **The Cat King** stands upon his throne flinging soup, and summons Soup Cats. On his throne he cannot be harmed. Every few flings he leaps down and **prowls after you: stomp him then!** Four blows.
   - Then the gate behind the throne crumbles and **Princess Aelfgyva** is free. Walk to her, and the story of the whole adventure scrolls past: **Ye Ende**.
 
+**Reward blocks are shuffled every play:** the prizes (bezants, Bayard, the unicorn, the capon, the crossbowe, the chalice) change places among the bricks. The holy relique stays where it is, and the chalice is never put near the end of a level or beside the relique.
+
+**The free tapestry and the unlock:** World 1 is free. At the end of 1-4, or when a later realm is chosen, a screen offers **Ye Whole Tapestrie**, one purchase (£3.99) that unlocks Worlds 2 to 7 for good. There is also an "Unlocke" link on the title screen. In the Unity editor the purchase is simulated; use **Tapestry > Store > Forget the Purchase** to see the locks again. For the Google Play steps see `docs/PLAY_STORE.md`.
+
 **Briefing:** before each realme, a parchment names its beasts and hazards, and the things that help or must be done (the unicorn's horn, mounts in the bricks, the halfway banner, and so on), each with a picture and a word of counsel. In a castle it also says how to vanquish the boss. Press JUMPE or touch to ride on. It isn't shown again after a death.
 
 **Gauntlets:** after every holy relique a run of beasts waits along the way. Keep running while the relique lasts (nine seconds), and the fifth beast smitten in a row gives a lyfe.

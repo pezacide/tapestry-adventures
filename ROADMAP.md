@@ -10,7 +10,7 @@ All of these works are centuries old and in the public domain. We redraw them in
 
 | World | Tapestry | Look | Signature new mechanic | Boss | Status |
 |---|---|---|---|---|---|
-| 1 | Bayeux Tapestry | wool embroidery on bare linen | Bayard, shells, lifts | The Cockatrice | **done** |
+| 1 | Bayeux Tapestry | wool embroidery on bare linen | Bayard, shells, lifts | The Cockatrice | **done** (free) |
 | 2 | Bayeux Tapestry, the Channel crossing | embroidery; sea and ships | swimming, rocking longships, wind | Aspidochelone, the Island-Whale | **done** (2-1 to 2-4) |
 | 3 | Tapestry of Creation (Girona) | Romanesque needlework; roundels and compartments | wind-heads that blow you, sky platforms | Ye Foure Windes | **done** (3-1 to 3-4) |
 | 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | **done** (4-1 to 4-4) |
@@ -96,12 +96,11 @@ The seven trumpets, the locusts with human faces, the four horsemen, and the sev
 - **Levels:** four layouts in `tools/unity/make_levels.py`, each checked with a preview render, then play-tested on your phone.
 
 ## Release plan
-1. **Now:** World 1 test builds on your Android phone; iPhone builds once a Mac is sorted.
-2. **First release:** Worlds 1 and 2 (8 levels).
-   - World 1 free, with the later worlds unlocked by one purchase ("Ye Whole Tapestrie"), using Unity In-App Purchasing, which handles both Google Play and Apple.
-   - The other options were ads, or pricing the whole game up front. To be decided before we submit.
-3. **Updates:** one new tapestry (world) at a time, each one a reason for players to come back.
-4. **Consoles** (Switch, PlayStation, Xbox): once the game is complete or nearly so, applying through each platform's developer programme.
+1. **Now:** all seven worlds (29 realms) are built; test builds on your Android phone; iPhone builds once a Mac is sorted.
+2. **Monetization (decided):** **World 1 is free; one in-app purchase, "Ye Whole Tapestrie" at £3.99 / $3.99, unlocks Worlds 2 to 7 for good. No ads.** Built into the game (paywall, locks, restore); the Play Console steps are in `docs/PLAY_STORE.md`.
+3. **Google Play:** internal testing, then a closed test (new personal accounts need 12 testers for 14 days), then production.
+4. **Updates:** bug fixes and balance changes from play-testing; any further tapestries as new content.
+5. **Consoles** (Switch, PlayStation, Xbox): once the game is settled, applying through each platform's developer programme.
 
 ## Store checklist (both stores)
 - **Store listing:** an app icon (done), screenshots in each store's required sizes, a short and long description, and a 1024×500 feature graphic (Google).

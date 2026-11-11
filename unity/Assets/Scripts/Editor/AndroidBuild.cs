@@ -17,6 +17,7 @@ namespace Tapestry.EditorTools
         const string ScenePath = "Assets/Scenes/Main.unity";
         const string IconPath = "Assets/Icons/icon.png";
         const string ApkPath = "Builds/Android/YeTapestrieAdventures.apk";
+        const string AabPath = "Builds/Android/YeTapestrieAdventures.aab";
 
         [MenuItem("Tapestry/Android/Apply Android Settings")]
         public static void ApplySettings()
@@ -43,6 +44,43 @@ namespace Tapestry.EditorTools
 
         [MenuItem("Tapestry/Android/Build Test APK")]
         public static void BuildApk() { Build(false); }
+
+        /// <summary>The Play Store takes an Android App Bundle (.aab), not an .apk. Before the first upload, make a signing key:
+        /// Project Settings > Player > Android > Publishing Settings > Keystore Manager (and keep it safe, with its passwords).
+        /// If Play App Signing is on (the default for new apps), Google holds the final key and this one is the upload key.</summary>
+        [MenuItem("Tapestry/Android/Build Play Store Bundle (.aab)")]
+        public static void BuildAab()
+        {
+            if (!EnsureSingleInputSystem()) return;
+            ApplySettings();
+            if (!PlayerSettings.Android.useCustomKeystore || string.IsNullOrEmpty(PlayerSettings.Android.keystoreName))
+            {
+                EditorUtility.DisplayDialog("Ye Tapestrie Adventures",
+                    "No signing key is set.\n\nOpen Project Settings > Player > Android > Publishing Settings, tick \"Custom Keystore\", " +
+                    "and use the Keystore Manager to create one. Keep the keystore file and its passwords safe: losing them means you cannot update the game.", "Very well");
+                return;
+            }
+            if (!File.Exists(ScenePath)) TapestrySetup.CreateMainScene();
+            if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
+                EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+            EditorUserBuildSettings.buildAppBundle = true;
+            Directory.CreateDirectory(Path.GetDirectoryName(AabPath));
+            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { ScenePath }, locationPathName = AabPath, target = BuildTarget.Android, options = BuildOptions.None });
+            EditorUserBuildSettings.buildAppBundle = false;
+            if (report.summary.result == BuildResult.Succeeded)
+            {
+                Debug.Log("Tapestry: built " + AabPath + " (" + (report.summary.totalSize / (1024 * 1024)) + " MB). Upload it in the Play Console. Bump VersionCode for every upload.");
+                EditorUtility.RevealInFinder(AabPath);
+            }
+            else Debug.LogError("Tapestry: bundle build failed - see the Console above for the reason.");
+        }
+
+        [MenuItem("Tapestry/Store/Forget the Purchase (to test the paywall)")]
+        public static void ForgetPurchase()
+        {
+            PlayerPrefs.DeleteKey(Tapestry.Store.OwnedKey); PlayerPrefs.Save();
+            Debug.Log("Tapestry: the unlock is forgotten; stop and press Play again to see Worlds 2-7 locked.");
+        }
 
         [MenuItem("Tapestry/Android/Build and Run on Connected Phone")]
         public static void BuildAndRun() { Build(true); }

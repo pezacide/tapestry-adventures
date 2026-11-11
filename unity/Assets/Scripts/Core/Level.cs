@@ -75,9 +75,48 @@ namespace Tapestry
                     }
                 }
             }
+            ShuffleRewards();
             BuildViews();
             ShadePanes();
         }
+
+        /// <summary>Every play, the prizes in the reward bricks are shuffled among the bricks (so no two plays are alike):
+        /// bezants, Bayard, the unicorn, the capon, the crossbowe and the chalice change places. The holy relique stays in its
+        /// own brick (the beasts that wait after it are set for it), and the chalice is kept out of the last third of the level
+        /// and well away from the relique, as it was laid out.</summary>
+        void ShuffleRewards()
+        {
+            var spots = new List<Vector2Int>(); var prizes = new List<char>(); var relics = new List<int>();
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                {
+                    char c = tiles[x, y];
+                    if (c == 'R') relics.Add(x);
+                    else if (c == '?' || c == 'H' || c == '1' || c == 'M' || c == 'W' || c == '8') { spots.Add(new Vector2Int(x, y)); prizes.Add(c); }
+                }
+            if (spots.Count < 2) return;
+            var rng = new System.Random();
+            for (int attempt = 0; attempt < 40; attempt++)
+            {
+                for (int i = prizes.Count - 1; i > 0; i--)   // Fisher-Yates
+                {
+                    int j = rng.Next(i + 1);
+                    char t = prizes[i]; prizes[i] = prizes[j]; prizes[j] = t;
+                }
+                bool ok = true;
+                for (int i = 0; i < spots.Count && ok; i++)
+                {
+                    if (prizes[i] != '1') continue;
+                    int x = spots[i].x;
+                    if (x > Width * 0.68f) ok = false;                              // not near the end
+                    foreach (int rx in relics) if (Mathf.Abs(x - rx) < 20) ok = false;   // nor beside the relique
+                }
+                if (ok) break;
+                if (attempt == 39) return;   // no fair shuffle found: keep the laid-out order
+            }
+            for (int i = 0; i < spots.Count; i++) tiles[spots[i].x, spots[i].y] = prizes[i];
+        }
+
 
         static int Key(int x, int y) { return x * 1024 + y; }
 
