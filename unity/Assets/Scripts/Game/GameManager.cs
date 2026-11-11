@@ -69,7 +69,7 @@ namespace Tapestry
         static bool Passed(string title) { return PlayerPrefs.GetInt(PassedKey(title), 0) == 1; }
 
         /// <summary>The first level of each realme (e.g. 1-3 starts at Ye Crypte Gate) that may be chosen:
-        /// 1-1 always, and any realme already passed.</summary>
+        /// 1-1 always, and any realme already passed (in the Unity editor, all of them).</summary>
         void FindRealms()
         {
             realmStarts.Clear();
@@ -79,7 +79,11 @@ namespace Tapestry
                 var t = Levels.All[i].Title;
                 if (t == seen) continue;
                 seen = t;
-                if (i == 0 || Passed(t)) realmStarts.Add(i);
+                bool open = i == 0 || Passed(t);
+#if UNITY_EDITOR
+                open = true;   // play-testing in the Unity editor: every realme may be chosen (phone builds still unlock as they are passed)
+#endif
+                if (open) realmStarts.Add(i);
             }
         }
 
