@@ -15,6 +15,22 @@ namespace Tapestry
         public abstract void Tick(float dt, Level lv, Knight player);
         public abstract void OnKnight(Knight k, bool fromAbove);
         public abstract void Hit(float amount);
+
+        /// <summary>The knight may be touching the boss: work out whether it was a stomp, and react.</summary>
+        public virtual void Contact(Knight k)
+        {
+            if (!Touchable || !k.Body.Overlaps(Body)) return;
+            bool onTop = k.Body.Vel.y < 0f && k.Body.PrevBottom >= Body.Pos.y + Body.H * 0.6f;
+            OnKnight(k, onTop);
+        }
+
+        /// <summary>A crossbowe bolt may strike the boss (three bolts to a stomp). Returns true if it did.</summary>
+        public virtual bool BoltHits(Body bolt)
+        {
+            if (!Touchable || !bolt.Overlaps(Body)) return false;
+            Hit(0.34f);
+            return true;
+        }
     }
 
     /// <summary>The Cockatrice, lord of World 1. Paces its drawbridge, hops, and glares a petrifying gaze.

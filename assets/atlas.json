@@ -750,6 +750,13 @@
       ],
       "file": "scenery/eden_fill.png"
     },
+    "wheel_year": {
+      "size": [
+        288,
+        288
+      ],
+      "file": "scenery/wheel_year.png"
+    },
     "longship": {
       "size": [
         288,

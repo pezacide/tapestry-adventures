@@ -38,12 +38,14 @@ namespace Tapestry
         readonly List<Flail> flails = new List<Flail>();
         readonly List<Log> logs = new List<Log>();
         readonly List<WindHead> winds = new List<WindHead>();
+        readonly List<Transform> wheels = new List<Transform>(); const float WheelSpeed = 0.6f; float wheelAngle;
         readonly List<Vector2> herds = new List<Vector2>(); float herdT;
         readonly List<Vector2> logPiles = new List<Vector2>(); readonly List<float> logTimers = new List<float>();
         BossBase boss;
         bool toldOfBoss;
         bool bossMusic, deathFire;
         int relicCombo;   // beasts smitten in a row by the holy relique
+        int stompCombo;   // beasts stomped without the knight's feet touching the ground
         // the crossing: gusts of wind, and fish leaping from the sea
         float windT, wind, leapT; bool windToldOf;
         public bool Underwater { get { return L.Underwater; } }
@@ -174,7 +176,7 @@ namespace Tapestry
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
-            flails.Clear(); winds.Clear(); herds.Clear(); herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -207,6 +209,15 @@ namespace Tapestry
                     case 'F': flails.Add(new Flail(p, world, flails.Count % 2 == 0, flails.Count * 1.7f)); break;
                     case 'K': boss = new Boss(p, world); break;
                     case 'J': boss = new Whale(p, world); break;
+                    case '4': boss = new FourWinds(p, world); break;
+                    case 'Z':   // a turning wheel: its rim drawn behind, four star boards riding round it
+                        var rim = new GameObject("wheel").transform; rim.SetParent(world, false);
+                        rim.localPosition = new Vector3(p.x, p.y + 0.5f, 0f);
+                        Art.Make("scenery/wheel_year", rim, new Vector2(0f, -3f), -4);
+                        wheels.Add(rim);
+                        for (int k = 0; k < 4; k++)
+                            lifts.Add(Lift.OnWheel(new Vector2(p.x, p.y + 0.5f), 2.7f, k * Mathf.PI * 0.5f, WheelSpeed, world, L.LiftSkin));
+                        break;
                     case 'A': hasAxe = true; axePos = p; axeView = Art.Make("scenery/bridge_axe", world, p, 5); break;
                     case 'N': hasMonk = true; monkPos = p; monkView = Art.Make("allies/monk", world, p, 9); monkView.flipX = true; break;
                     case 'C':
@@ -499,6 +510,8 @@ namespace Tapestry
 
             level.Tick(dt);
             foreach (var l in lifts) l.Tick(dt);
+            wheelAngle += WheelSpeed * dt;
+            foreach (var w in wheels) w.localEulerAngles = new Vector3(0f, 0f, wheelAngle * Mathf.Rad2Deg);
             foreach (var f in flails) f.Tick(dt);
             if (collapsing) TickCollapse(dt);
             player.Tick(dt, level);
@@ -510,6 +523,7 @@ namespace Tapestry
             UpdateRelicMusic();
 
             var pb = player.Body;
+            if (pb.Grounded) stompCombo = 0;
             foreach (var e in enemies)
             {
                 if (!e.Active || !e.Alive || e.Carried || !pb.Overlaps(e.Body)) continue;
@@ -522,7 +536,8 @@ namespace Tapestry
                     continue;
                 }
                 bool fromAbove = !Underwater && pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);   // under water nothing can be stomped
-                e.OnKnight(player, fromAbove);
+                var stompAt = e.Body.Pos + new Vector2(0f, e.Body.H);
+                if (e.OnKnight(player, fromAbove)) ChainKill(++stompCombo, stompAt);   // stomp after stomp without landing: the glory doubles
                 if (player.Dead) return;
             }
             foreach (var s in enemies)
@@ -548,11 +563,7 @@ namespace Tapestry
                 if (onTop) { player.Bounce(); lg.Knock(); Audio.Play("kick"); AddScore(100, lg.Body.Pos + new Vector2(0f, 1f)); }   // stomped: it tumbles away
                 else player.Hurt();
             }
-            if (boss != null && boss.Touchable && pb.Overlaps(boss.Body))
-            {
-                bool onCrown = pb.Vel.y < 0f && pb.PrevBottom >= boss.Body.Pos.y + boss.Body.H * 0.6f;
-                boss.OnKnight(player, onCrown);
-            }
+            if (boss != null) boss.Contact(player);
             foreach (var s in shots)
             {
                 if (s.Removed) continue;
@@ -565,7 +576,7 @@ namespace Tapestry
                     }
                     continue;
                 }
-                if (boss != null && boss.Touchable && s.Body.Overlaps(boss.Body)) { boss.Hit(0.34f); s.Destroy(); continue; }
+                if (boss != null && boss.BoltHits(s.Body)) { s.Destroy(); continue; }
                 foreach (var lg in logs)   // a bolt splits a log
                     if (!lg.Removed && s.Body.Overlaps(lg.Body)) { lg.Destroy(); s.Destroy(); AddScore(200, lg.Body.Pos + new Vector2(0f, 1f)); break; }
                 if (s.Removed) continue;

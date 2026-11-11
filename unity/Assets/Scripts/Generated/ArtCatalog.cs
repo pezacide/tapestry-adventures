@@ -94,6 +94,7 @@ namespace Tapestry
             { "scenery/wind_head", new Sheet("Art/scenery/wind_head", 96f, 96f, 1, 2.5f, 2.5f, 96f, 93.5f) },
             { "scenery/eden_top", new Sheet("Art/scenery/eden_top", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/eden_fill", new Sheet("Art/scenery/eden_fill", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
+            { "scenery/wheel_year", new Sheet("Art/scenery/wheel_year", 288f, 288f, 1, 2f, 2f, 286f, 286f) },
             { "scenery/longship", new Sheet("Art/scenery/longship", 288f, 110f, 1, 0f, 3.5f, 288f, 109.5f) },
             { "scenery/gust", new Sheet("Art/scenery/gust", 192f, 48f, 1, 2f, 1.5f, 184f, 45f) },
             { "scenery/searock", new Sheet("Art/scenery/searock", 48f, 48f, 1, 0f, 0f, 48f, 48f) },

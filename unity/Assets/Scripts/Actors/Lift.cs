@@ -36,9 +36,32 @@ namespace Tapestry
             Place();
         }
 
+        // a board riding round the rim of a turning wheel (it stays level, like a fair's big wheel)
+        bool onWheel; Vector2 centre; float radius;
+
+        public static Lift OnWheel(Vector2 centre, float radius, float phase, float speed, Transform parent, string skin)
+        {
+            var l = new Lift(centre, Kind.BoardSideways, parent, phase, skin);
+            l.onWheel = true; l.centre = centre; l.radius = radius;
+            l.SetSpeed(speed);
+            l.Tick(0f);
+            return l;
+        }
+
+        float wheelSpeed;
+        void SetSpeed(float s) { wheelSpeed = s; }
+
         public void Tick(float dt)
         {
             var before = Pos;
+            if (onWheel)
+            {
+                t += dt * wheelSpeed;
+                Pos = centre + new Vector2(Mathf.Cos(t), Mathf.Sin(t)) * radius - new Vector2(Width * 0.5f, 0f);
+                Delta = Pos - before;
+                Place();
+                return;
+            }
             t += dt * speed;
             Pos = home + new Vector2(Mathf.Sin(t) * ampX, Mathf.Sin(t * (ampX > 0f ? 2f : 1f)) * ampY);
             Delta = Pos - before;

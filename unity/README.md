@@ -66,6 +66,12 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
 - **Worlde 3-3, Ye Naming of ye Beastes:** the garden where Adam names the animals, with green turf over Romanesque zigzag bands and trees of life behind.
   - **Stampedes:** in three stretches of meadow, herds of three spotted **stags** come thundering in from the right every few seconds. Leap them, stomp them, or hop up onto the planks until they pass.
   - It has a bright, galloping 2/4 estampie and ends at **Ye Bower of Eden**.
+- **Worlde 3-4, Ye Wheel of ye Yeare:** the World 3 castle.
+  - **Turning wheels:** great Wheels of the Year, each with twelve month-roundels on its rim, carry four star boards round and round over the fire pits. The boards stay level, like a fair's big wheel.
+  - **The boss, Ye Foure Windes:** four great wind-heads, two on each side of a hall with a fire pit in its middle.
+    - **Blowing:** in turn, each one blows a strong wind that shoves you across the hall toward the fire.
+    - **Drawing breath:** then it flashes gold, and while it does, touch it or shoot it to defeat it.
+    - **Reaching them:** ledges lead up to the high heads. Beat all four and Brother Odo waits beyond.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 
@@ -88,7 +94,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - He crushes any beast he lands on.
   - A hit throws you off (instead of costing health); he rears and bolts. If he gallops into a pit he is lost, and you must find him again in another brick (three of the level's bricks hold him).
 - **Beasts:** Snail-Hound (red shell: stomp it, then kick the shell), Mossy Snail-Hound (green shell: stomp it, hold RUN to pick the shell up, carry it, and let go of RUN to hurl it; a held shell also fells the first beast it touches), Killer Hare, Fiery Lion (shoots fireballs), Bayeux Hound, Camel-Dragon, Wyvern, Spotted Unicorn (charges), Man-Faced Owl (swoops) and Soup Cat (throws soup).
-- **Chains (as in Mario):** a sliding shell, or the holy relique, doubles its glory for every beast it fells in a row: 100, 200, 400, 800. The 5th beast in a row, and every one after it, earns a free life. The chain starts again when the shell stops or is picked up, or when the relique wears off.
+- **Chains (as in Mario):** stomping beast after beast without touching the ground, a sliding shell, or the holy relique doubles its glory for every beast it fells in a row: 100, 200, 400, 800. The 5th beast in a row, and every one after it, earns a free life. The chain starts again when the shell stops or is picked up, or when the relique wears off.
 - **Tyme:** each level counts down in **Roman numerals** from CCC (300), about 2½ a second, as in Mario.
   - At 100 a warning appears, the counter turns red and the music quickens.
   - At 0 the knight is lost.

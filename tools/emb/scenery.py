@@ -507,6 +507,23 @@ def eden_near():
         items.append((x, g(tree_of_life((("green", "sage", "terra"), ("sage", "green", "gold"))[i % 2]), "translate(0 330) scale(1.2)")))
     return _wrap(items)
 
+def wheel_year():
+    """The Wheel of the Year from the Girona tapestry's border: a great rim of twelve roundels (the months),
+    spokes to a hub. Drawn behind the turning platforms; the game spins it."""
+    import math as _m
+    c, R = 144, 128
+    s = stem(f"M{c - R},{c} a{R},{R} 0 1,0 {2 * R},0 a{R},{R} 0 1,0 {-2 * R},0", "ochre", 12, False)
+    s += stem(f"M{c - R},{c} a{R},{R} 0 1,0 {2 * R},0 a{R},{R} 0 1,0 {-2 * R},0", "dark", 1, False)
+    for k in range(12):
+        a = k * _m.pi / 6
+        s += stem(f"M{c},{c} L{c + _m.cos(a) * R:.1f},{c + _m.sin(a) * R:.1f}", "brown", 4, False)
+        x, y = c + _m.cos(a) * R, c + _m.sin(a) * R
+        s += fill(f"M{x - 13:.1f},{y:.1f} a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0 Z", ("blue", "green", "terra")[k % 3], 0, "dark", 1.2)
+        s += dot(x, y, 4, ("gold", "cream")[k % 2])
+    s += fill(f"M{c - 22},{c} a22,22 0 1,0 44,0 a22,22 0 1,0 -44,0 Z", "gold", 0, "dark", 1.6) + dot(c, c, 7, "terra", "dark")
+    return f'<g opacity="0.85">{s}</g>'
+S["wheel_year"] = (288, 288, wheel_year, False)
+
 def waters_far():
     """The waters above the firmament: blue water stitched in wavy bands, the wheel of creation faint behind."""
     s = ""

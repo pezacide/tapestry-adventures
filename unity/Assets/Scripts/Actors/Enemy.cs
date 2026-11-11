@@ -292,10 +292,11 @@ namespace Tapestry
             }
         }
 
-        /// <summary>The knight touched this beast. fromAbove = it was a stomp.</summary>
-        public void OnKnight(Knight k, bool fromAbove)
+        /// <summary>The knight touched this beast. fromAbove = it was a stomp. Returns true if the stomp felled it
+        /// (or shelled it), so the game can score the stomp chain.</summary>
+        public bool OnKnight(Knight k, bool fromAbove)
         {
-            if (!Alive || k.Dead) return;
+            if (!Alive || k.Dead) return false;
             if (IsSnail && shell)
             {
                 if (ShellMoving)
@@ -316,20 +317,20 @@ namespace Tapestry
                     Audio.Play("kick");
                     if (fromAbove) k.Bounce();
                 }
-                return;
+                return false;
             }
-            if (!fromAbove) { k.Hurt(); return; }
-            if (k.Mounted) { k.Bounce(); Squash(); return; }   // Bayard's hooves crush every beast, burning or not
-            if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return; }   // burning mane
+            if (!fromAbove) { k.Hurt(); return false; }
+            if (k.Mounted) { k.Bounce(); Squash(false); return true; }   // Bayard's hooves crush every beast, burning or not
+            if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return false; }   // burning mane
             k.Bounce();
             if (IsSnail)
             {
                 shell = true; Body.Vel.x = 0f; Body.H *= 0.8f; view.SetFrame(2);
                 Audio.Play("stomp");
-                GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
-                return;
+                return true;
             }
-            Squash();
+            Squash(false);
+            return true;
         }
 
         /// <summary>Held in front of the knight; letting go of RUN hurls it.</summary>
@@ -354,12 +355,12 @@ namespace Tapestry
             if (vx != 0f) Body.Vel.y = 2f;
         }
 
-        public void Squash()
+        public void Squash(bool award = true)
         {
             Alive = false; squashed = true; deadTimer = 0f;
             Audio.Play("stomp");
             view.Root.transform.localScale = new Vector3(1f, 0.45f, 1f);
-            GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
+            if (award) GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
         }
 
         /// <summary>Knocked out by a shell or a bumped block: flips over and falls off the screen.</summary>

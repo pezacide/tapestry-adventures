@@ -5,7 +5,8 @@ Legend:  # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding B
          Y longship rocking at anchor   U longship sailing to and fro (deck one row above the letter)
          < wind-head blowing left   > wind-head blowing right (12 tiles of wind)   b bird of the air
          v stampede marker (herds of stags run in from the right while the knight is in the 24 tiles before it)
-         * fire pit   _ drawbridge   F flail block   A axe (drops the bridge)   K Cockatrice   J Island-Whale   N rescued monk
+         * fire pit   _ drawbridge   F flail block   A axe (drops the bridge)   K Cockatrice   J Island-Whale   4 Ye Foure Windes   N rescued monk
+         Z turning wheel (four boards ride round it, radius 2.7)
          V vault stone (unbreakable)   L lift gliding sideways   E lift rising and falling (both 3 wide, from that tile)
          ^ treetop (one-way)   | tree trunk (scenery)   T/t tower top/body (2 wide)   ~ sea   o bezant
          P start   G goal pole   C halfway banner (respawn point)
@@ -367,3 +368,26 @@ m.put(182, 2, "G")
 write("Level11", "Worlde 3-3", "Ye Naming of ye Beastes", "HERE ADAM NAMETH YE BEASTES, AND YE BEASTES DOE RUNNE", m,
       [], "scenery/castle_eden_bower", 192, "eden", "backgrounds/creation_far", "backgrounds/eden_near",
       skin=("scenery/eden_top", "scenery/eden_fill", "scenery/roundel_block"))
+
+# ======================================================= 3-4  Ye Wheel of ye Yeare (castle; boss: Ye Foure Windes)
+m = Map(150)
+m.vault(0, 149); m.floor(0, 149)
+m.put(3, 2, "P"); m.row(8, 5, "?M?")
+m.fire(13, 25); m.put(19, 4, "Z")                             # cross the fire on the turning wheel
+m.put(28, 2, "d"); m.put(31, 2, "F")
+m.row(34, 5, "?W?")                                           # the crossbowe: handy against the Winds
+m.fire(40, 51); m.put(45, 4, "Z")
+m.row(54, 5, "BRB"); m.put(57, 2, "l")
+m.put(61, 2, "C")
+m.put(64, 6, "w")
+m.fire(67, 78); m.put(72, 4, "Z"); m.put(82, 6, "F")
+m.put(86, 2, "c"); m.row(88, 5, "B1B")
+m.fire(93, 101); m.put(97, 4, "Z")
+# the hall of the Winds: a fire pit in the middle, ledges up to the high heads
+m.fire(118, 122)
+for x in (109, 110, 111, 129, 130, 131): m.put(x, 5, "V")
+m.put(120, 4, "4")
+m.put(140, 2, "N")
+write("Level12", "Worlde 3-4", "Ye Wheel of ye Yeare", "HERE YE KNYGHTES BRAVE YE WHEEL OF YE YEARE AND YE FOURE WINDES", m,
+      [], "", 0, "castle", "backgrounds/castle_far", "backgrounds/castle_near",
+      lift="scenery/star_board")
