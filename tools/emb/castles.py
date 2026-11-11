@@ -2,7 +2,7 @@
 from embroider import fill, stem, dot, g, WOOL
 from creatures import clip, scales
 import scenery
-from scenery import seaweed
+from scenery import seaweed, palmette
 
 C = {}
 
@@ -267,6 +267,23 @@ def fountain():
     s += fill("M120,44 a14,14 0 1,0 0.1,0 Z", "sky", 0, "dark", 1.2) + stem("M120,58 L120,30", "white", 3, False)
     return s
 C["castle_fountain"] = dict(size=(240, 240), title="Ye Fountaine of Lyfe", fn=fountain)
+
+# ---------- World 3-3: Ye Bower of Eden ----------
+def eden_bower():
+    W, H = 240, 252
+    s = ""
+    for x in (40, 200):   # twin trees of life as the gate-posts
+        s += fill(f"M{x - 8},252 L{x - 8},100 L{x + 8},100 L{x + 8},252 Z", "brown", 90, "dark", 1.4)
+        s += palmette(x, 100, 0, ("green", "sage", "terra"), 1.4)
+    arch = "M40,110 Q120,0 200,110"
+    s += stem(arch, "green", 8, False) + stem(arch, "olive", 3, False)   # the vine arch
+    for t in (0.15, 0.3, 0.45, 0.6, 0.75, 0.9):
+        x = 40 + 160 * t; y = 110 - 220 * t * (1 - t)   # on the curve of the arch
+        s += dot(x, y, 4, ("terra", "gold")[int(t * 10) % 2], "dark")   # fruit on the vine
+    s += fill("M84,252 L84,160 Q120,124 156,160 L156,252 Z", "green", 90, "dark", 1.6)   # the leafy bower
+    s += door(120, 252, 40, 70)
+    return s
+C["castle_eden_bower"] = dict(size=(240, 252), title="Ye Bower of Eden", fn=eden_bower)
 
 for k, v in C.items():
     scenery.S[k] = (v["size"][0], v["size"][1], v["fn"], False)

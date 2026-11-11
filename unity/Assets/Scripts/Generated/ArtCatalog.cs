@@ -44,6 +44,7 @@ namespace Tapestry
             { "enemies/sea_monk", new Sheet("Art/enemies/sea_monk", 48f, 74f, 2, 0f, 2f, 48f, 73f) },
             { "enemies/bird", new Sheet("Art/enemies/bird", 56f, 44f, 2, 0f, 0f, 54.5f, 43.5f) },
             { "enemies/hippocamp", new Sheet("Art/enemies/hippocamp", 76f, 56f, 2, 2.5f, 0f, 73.5f, 53.5f) },
+            { "enemies/stag", new Sheet("Art/enemies/stag", 72f, 50f, 2, 2.5f, 0f, 72f, 50f) },
             { "bosses/cockatrice", new Sheet("Art/bosses/cockatrice", 160f, 150f, 2, 10.5f, 0f, 159.5f, 141f) },
             { "bosses/great_dragon", new Sheet("Art/bosses/great_dragon", 300f, 160f, 3, 5f, 1f, 300f, 151f) },
             { "bosses/cat_king", new Sheet("Art/bosses/cat_king", 164f, 170f, 2, 18.5f, 0f, 164f, 170f) },
@@ -91,6 +92,8 @@ namespace Tapestry
             { "scenery/cloud_band", new Sheet("Art/scenery/cloud_band", 48f, 24f, 1, 0f, 3.5f, 48f, 23f) },
             { "scenery/star_board", new Sheet("Art/scenery/star_board", 144f, 22f, 1, 0.5f, 4.5f, 143.5f, 21f) },
             { "scenery/wind_head", new Sheet("Art/scenery/wind_head", 96f, 96f, 1, 2.5f, 2.5f, 96f, 93.5f) },
+            { "scenery/eden_top", new Sheet("Art/scenery/eden_top", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
+            { "scenery/eden_fill", new Sheet("Art/scenery/eden_fill", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/longship", new Sheet("Art/scenery/longship", 288f, 110f, 1, 0f, 3.5f, 288f, 109.5f) },
             { "scenery/gust", new Sheet("Art/scenery/gust", 192f, 48f, 1, 2f, 1.5f, 184f, 45f) },
             { "scenery/searock", new Sheet("Art/scenery/searock", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
@@ -117,6 +120,7 @@ namespace Tapestry
             { "scenery/castle_beacon", new Sheet("Art/scenery/castle_beacon", 216f, 300f, 1, 3f, 5.5f, 213f, 300f) },
             { "scenery/castle_paradise_gate", new Sheet("Art/scenery/castle_paradise_gate", 240f, 264f, 1, 8.5f, 0f, 231.5f, 264f) },
             { "scenery/castle_fountain", new Sheet("Art/scenery/castle_fountain", 240f, 240f, 1, 18.5f, 28.5f, 221.5f, 240f) },
+            { "scenery/castle_eden_bower", new Sheet("Art/scenery/castle_eden_bower", 240f, 252f, 1, 27.5f, 50.5f, 212.5f, 252f) },
             { "scenery/ui_joy_base", new Sheet("Art/scenery/ui_joy_base", 180f, 180f, 1, 6f, 6f, 174f, 174f) },
             { "scenery/ui_joy_knob", new Sheet("Art/scenery/ui_joy_knob", 80f, 80f, 1, 2.5f, 2f, 78f, 78f) },
             { "scenery/ui_run", new Sheet("Art/scenery/ui_run", 112f, 112f, 1, 4.5f, 4.5f, 108f, 108f) },
@@ -145,6 +149,7 @@ namespace Tapestry
             { "backgrounds/creation_far", new Sheet("Art/backgrounds/creation_far", 960f, 540f, 1, 0f, 74.5f, 960f, 540f) },
             { "backgrounds/creation_near", new Sheet("Art/backgrounds/creation_near", 960f, 540f, 1, 17.5f, 57.5f, 952.5f, 143f) },
             { "backgrounds/waters_far", new Sheet("Art/backgrounds/waters_far", 960f, 540f, 1, 0f, 0f, 960f, 540f) },
+            { "backgrounds/eden_near", new Sheet("Art/backgrounds/eden_near", 960f, 540f, 1, 34.5f, 366f, 881f, 523.5f) },
         };
     }
 }

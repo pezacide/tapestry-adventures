@@ -63,6 +63,9 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **The way through:** white cloud walls and a cloud-reef tunnel to swim around.
   - **Creatures:** the new **hippocamp** (the bestiary's sea-horse) paddles near its home. If you come close and level with it, it rears and flashes as a warning, then makes one straight dash of about 4 tiles and rests (swim up or down out of its line to dodge); fish, sea-serpents and sea-monks swim among the clouds. The crossbowe is right at the start.
   - It has a slow 6/8 tune in G Dorian and ends at **Ye Fountaine of Lyfe**.
+- **Worlde 3-3, Ye Naming of ye Beastes:** the garden where Adam names the animals, with green turf over Romanesque zigzag bands and trees of life behind.
+  - **Stampedes:** in three stretches of meadow, herds of three spotted **stags** come thundering in from the right every few seconds. Leap them, stomp them, or hop up onto the planks until they pass.
+  - It has a bright, galloping 2/4 estampie and ends at **Ye Bower of Eden**.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 
@@ -78,7 +81,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - a **Golden Chalice**: one more life (the 1-Up). It slides along, so chase it.
   - a **Roast Capon**: mends one heart (the mushroom). It also slides along.
   - a **Crossbowe**: RUN shoots bolts, at most two in the air at once (the fire flower). Bolts fell any beast, even the burning lion. A hit knocks the crossbowe away instead of costing health.
-  - a **Holy Relique**: about nine seconds in which no beast can harm you and any beast you touch is smitten (the star). It bounces about. While it lasts, the knight flickers gold and white inside a spinning aura of golden rays; the flicker slows in the last two seconds.
+  - a **Holy Relique** (always found before the level's halfway banner): about nine seconds in which no beast can harm you and any beast you touch is smitten (the star). It bounces about. While it lasts, the knight flickers gold and white inside a spinning aura of golden rays; the flicker slows in the last two seconds.
 - **Bayard:**
   - Riding him makes you faster and lets you jump higher.
   - Hold JUMP while falling for a flutter-leap.

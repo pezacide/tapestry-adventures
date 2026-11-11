@@ -38,6 +38,7 @@ namespace Tapestry
                 case "killer_hare": speed = 0f; break;
                 case "fiery_lion": speed = 1.4f; timer = 1f; break;
                 case "bayeux_hound": speed = 4.2f; break;
+                case "stag": speed = 5.2f; break;
                 case "camel_dragon": speed = 0.9f; break;
                 case "unicorn": speed = 1.2f; break;
                 case "wyvern": gravity = false; break;
@@ -94,6 +95,14 @@ namespace Tapestry
                         Body.Vel.x = shellVx;
                     }
                     else { Walk(lv, true); WalkFrames(); }
+                    break;
+
+                case "stag":   // runs with its herd, leaping gaps; gone once it has thundered past
+                    dir = -1f;
+                    Body.Vel.x = dir * speed; view.Face(false);
+                    if (Body.Grounded && !Body.FloorAhead(lv, dir)) Body.Vel.y = 10f;
+                    WalkFrames(0, 1, 9f);
+                    if (Body.Pos.x < p.Body.Pos.x - 18f) Remove();
                     break;
 
                 case "bayeux_hound":

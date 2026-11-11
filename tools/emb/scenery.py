@@ -472,6 +472,41 @@ def creation_near():
         items.append((x, st))
     return _wrap(items)
 
+def eden_top():
+    """The garden where Adam named the beasts: green turf over a Romanesque zigzag band."""
+    s = fill("M0,10 L48,10 L48,48 L0,48 Z", "ochre", 0, None)
+    s += stem("M0,22 L8,14 L16,22 L24,14 L32,22 L40,14 L48,22", "terra", 2.4, False)
+    s += stem("M0,34 L8,26 L16,34 L24,26 L32,34 L40,26 L48,34", "green", 2.4, False)
+    s += stem("M0,44 L48,44", "brown", 1.4, False)
+    s += fill("M0,4 q6,-3 12,0 q6,3 12,0 q6,-3 12,0 q6,3 12,0 L48,12 L0,12 Z", "green", 0, "dark", 1.3)
+    for x, c in ((8, "terra"), (30, "gold"), (42, "cream")):
+        s += stem(f"M{x},4 L{x},-2", "green", 1.2, False) + dot(x, -3, 1.6, c)
+    return s
+S["eden_top"] = (T, T, eden_top, False)
+
+def eden_fill():
+    s = fill("M0,0 L48,0 L48,48 L0,48 Z", "ochre", 0, None)
+    for i, y in enumerate((10, 22, 34, 46)):
+        s += stem(f"M0,{y} L8,{y - 8} L16,{y} L24,{y - 8} L32,{y} L40,{y - 8} L48,{y}", ("terra", "green")[i % 2], 2.4, False)
+    return s
+S["eden_fill"] = (T, T, eden_fill, False)
+
+def tree_of_life(cols=("green", "sage", "terra")):
+    """A Romanesque tree: a straight trunk with symmetrical scrolls ending in palmettes."""
+    s = fill("M44,160 L44,60 L52,60 L52,160 Z", "brown", 90, "dark", 1.2)
+    for side in (-1, 1):
+        for i, y in enumerate((70, 100, 128)):
+            d = f"M48,{y} Q{48 + side * 30},{y - 4} {48 + side * 34},{y - 22} Q{48 + side * 32},{y - 34} {48 + side * 22},{y - 30}"
+            s += stem(d, "olive", 3, False) + palmette(48 + side * 22, y - 30, side * -30, cols, 0.7)
+    s += palmette(48, 58, 0, cols, 1.0)
+    return s
+
+def eden_near():
+    items = []
+    for i, x in enumerate(range(20, BW, 190)):
+        items.append((x, g(tree_of_life((("green", "sage", "terra"), ("sage", "green", "gold"))[i % 2]), "translate(0 330) scale(1.2)")))
+    return _wrap(items)
+
 def waters_far():
     """The waters above the firmament: blue water stitched in wavy bands, the wheel of creation faint behind."""
     s = ""
@@ -780,3 +815,5 @@ S["bg_creation_far"] = (BW, BH, creation_far, False)
 S["bg_creation_near"] = (BW, BH, creation_near, False)
 
 S["bg_waters_far"] = (BW, BH, waters_far, False)
+
+S["bg_eden_near"] = (BW, BH, eden_near, False)

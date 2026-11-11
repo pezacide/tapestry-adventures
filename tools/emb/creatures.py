@@ -459,3 +459,21 @@ def hippocamp(f):
     return s
 C["hippocamp"] = dict(title="Hippocamp", size=(76, 56), frames=2, build=hippocamp,
                       behaviour="the sea-horse of the bestiaries: paddles at rest, then gallops through the water at the knight; cannot be stomped under water")
+
+
+def stag(f):
+    """A Romanesque stag, running in the stampede: spotted ochre hide, great branching antlers."""
+    ext = f == 0
+    s = ""
+    s += limb(18, 30, 18, 3.2, "terra", 40 if ext else -15, "hoof") + limb(48, 28, 18, 3.2, "terra", -45 if ext else 25, "hoof")
+    body = "M12,24 Q30,16 52,20 L56,32 Q40,36 30,34 Q18,38 12,32 Q8,28 12,24 Z"
+    s += fill(body, "ochre", 160) + dots(12, 20, 56, 36, 6, 1.4, "cream") if False else fill(body, "ochre", 160)
+    s += clip("stg", body, dots(10, 20, 58, 38, 7, 1.5, "cream")) + stem(body, "dark", 1.4)
+    s += stem("M12,24 Q6,20 8,16", "ochre", 2.4, False)   # little tail
+    s += limb(22, 30, 18, 3.2, "ochre", 55 if ext else -30, "hoof") + limb(52, 29, 18, 3.2, "ochre", -60 if ext else 35, "hoof")
+    s += fill("M50,22 Q54,12 60,10 L68,14 Q70,18 66,19 L60,20 Q56,24 54,30 Z", "ochre", 100, "dark", 1.2)
+    s += dot(62, 13.5, 0.9, "dark")
+    s += stem("M58,10 Q54,2 48,0 M56,6 L52,8 M60,9 Q62,1 68,0 M62,4 L66,6", "brown", 1.8, False)   # antlers
+    return s
+C["stag"] = dict(title="Stag of ye Stampede", size=(72, 50), frames=2, build=stag,
+                 behaviour="runs with its herd across the garden in a stampede, leaping gaps; stompable")

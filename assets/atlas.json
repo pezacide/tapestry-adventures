@@ -352,6 +352,16 @@
       ],
       "frame_count": 2,
       "file": "enemies/hippocamp.png"
+    },
+    "stag": {
+      "title": "Stag of ye Stampede",
+      "behaviour": "runs with its herd across the garden in a stampede, leaping gaps; stompable",
+      "frame": [
+        72,
+        50
+      ],
+      "frame_count": 2,
+      "file": "enemies/stag.png"
     }
   },
   "bosses": {
@@ -726,6 +736,20 @@
       ],
       "file": "scenery/wind_head.png"
     },
+    "eden_top": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/eden_top.png"
+    },
+    "eden_fill": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/eden_fill.png"
+    },
     "longship": {
       "size": [
         288,
@@ -907,6 +931,13 @@
         240
       ],
       "file": "scenery/castle_fountain.png"
+    },
+    "castle_eden_bower": {
+      "size": [
+        240,
+        252
+      ],
+      "file": "scenery/castle_eden_bower.png"
     },
     "ui_joy_base": {
       "size": [
@@ -1113,6 +1144,13 @@
         540
       ],
       "file": "backgrounds/waters_far.png"
+    },
+    "eden_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/eden_near.png"
     }
   }
 }

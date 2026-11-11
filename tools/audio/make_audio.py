@@ -265,6 +265,30 @@ def waters_theme():
     mix_into(buf, drone(freq("G2"), L + 1, 0.35, False) + drone(freq("D3"), L + 1, 0.2, False), 0)
     return finish(buf, L, 0.6)
 
+def eden_theme():
+    """World 3-3, ye Naming of ye Beastes: a bright, galloping 2/4 estampie in F Lydian - recorder and shawm,
+    lute, a running drum, bells."""
+    eighth = 0.15; bar = 4 * eighth
+    A = ("F5:1 G5:1 A5:1 C6:1 B5:1 A5:1 G5:2 A5:1 G5:1 F5:1 E5:1 F5:2 C5:2 "
+         "D5:1 E5:1 F5:1 A5:1 G5:1 F5:1 E5:2 F5:1 A5:1 G5:1 E5:1 F5:4 ")
+    B = ("C6:1 B5:1 A5:1 B5:1 C6:2 A5:2 B5:1 A5:1 G5:1 A5:1 B5:2 G5:2 "
+         "A5:1 G5:1 F5:1 G5:1 A5:2 F5:2 G5:1 E5:1 C5:1 E5:1 F5:4 ")
+    roots = ["F2", "C3", "F2", "C3", "D3", "C3", "G2", "F2"]
+    L = 32 * bar
+    buf = np.zeros(int((L + 3) * SR))
+    for k, (mel, inst) in enumerate(((A, recorder), (A, shawm), (B, recorder), (B, shawm))):
+        t0 = k * 8 * bar
+        play(buf, inst, mel, 60 / eighth, t0, 0.8 if inst is recorder else 0.6)
+        if inst is shawm: play(buf, recorder, mel, 60 / eighth, t0, 0.35)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, eighth, [(0, 1), (12, 1), (7, 1), (16, 1)], 0.45)
+            for e in range(4):
+                mix_into(buf, tabor(0.18, 0.5 if e % 2 == 0 else 0.3, e % 2 == 0), t0 + i * bar + e * eighth)
+            if k % 2: mix_into(buf, jingle(0.15, 0.6), t0 + i * bar + 2 * eighth)
+            if i % 2 == 0: mix_into(buf, bell(freq(up(r, 36)), 1.0, 0.12), t0 + i * bar)
+    mix_into(buf, drone(freq("F2"), L + 1, 0.4) + drone(freq("C3"), L + 1, 0.25), 0)
+    return finish(buf, L, 0.2)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -367,7 +391,7 @@ def sfx():
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "eden": eden_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

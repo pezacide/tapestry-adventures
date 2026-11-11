@@ -4,6 +4,7 @@ Legend:  # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding B
          Q log pile (rolls logs at the knight)   g gull   x crab   f fish   z sea-serpent   m sea-monk   e hippocamp
          Y longship rocking at anchor   U longship sailing to and fro (deck one row above the letter)
          < wind-head blowing left   > wind-head blowing right (12 tiles of wind)   b bird of the air
+         v stampede marker (herds of stags run in from the right while the knight is in the 24 tiles before it)
          * fire pit   _ drawbridge   F flail block   A axe (drops the bridge)   K Cockatrice   J Island-Whale   N rescued monk
          V vault stone (unbreakable)   L lift gliding sideways   E lift rising and falling (both 3 wide, from that tile)
          ^ treetop (one-way)   | tree trunk (scenery)   T/t tower top/body (2 wide)   ~ sea   o bezant
@@ -346,3 +347,23 @@ m.row(146, 5, "?B?"); m.put(152, 3, "e")
 write("Level10", "Worlde 3-2", "Ye Waters Above", "HERE YE KNYGHTES SWYMME IN YE WATERS ABOVE YE FIRMAMENT", m,
       [], "scenery/castle_fountain", 168, "waters", "backgrounds/waters_far", "backgrounds/deep_near",
       skin=("scenery/cloud_top", "scenery/cloud_fill", "scenery/roundel_block"), vault="scenery/cloud_block", underwater=True, end_at_door=True)
+
+# ======================================================= 3-3  Ye Naming of ye Beastes (stampedes)
+m = Map(200)
+m.ground(0, 44); m.ground(49, 99); m.ground(104, 148); m.ground(152, 199)
+m.put(3, 2, "P"); m.row(9, 5, "?M?")
+m.row(16, 5, "BRB"); m.put(22, 2, "h")
+m.put(40, 2, "v")                                             # the first stampede: on open ground
+m.row(30, 5, "===="); m.row(36, 7, "====")                    # planks to leap up out of the herd's way
+m.row(45, 4, "===")
+m.put(56, 2, "d"); m.row(60, 5, "?W?"); m.tower(66, 3)
+m.put(78, 2, "v"); m.row(70, 5, "===="); m.row(74, 7, "===")   # the second: hop up the planks as it passes
+m.put(84, 2, "C"); m.row(88, 5, "BHB"); m.put(94, 2, "u")
+m.row(100, 4, "==="); m.put(110, 2, "c"); m.row(114, 5, "B?B?B")
+m.put(132, 2, "v"); m.row(122, 5, "===="); m.row(127, 7, "===="); m.put(126, 8, "b")   # the third, mounted on Bayard if you can
+m.row(149, 4, "==="); m.put(156, 2, "S"); m.row(158, 5, "B1B"); m.put(162, 2, "h")
+m.stairs(166, 6)
+m.put(182, 2, "G")
+write("Level11", "Worlde 3-3", "Ye Naming of ye Beastes", "HERE ADAM NAMETH YE BEASTES, AND YE BEASTES DOE RUNNE", m,
+      [], "scenery/castle_eden_bower", 192, "eden", "backgrounds/creation_far", "backgrounds/eden_near",
+      skin=("scenery/eden_top", "scenery/eden_fill", "scenery/roundel_block"))

@@ -38,6 +38,7 @@ namespace Tapestry
         readonly List<Flail> flails = new List<Flail>();
         readonly List<Log> logs = new List<Log>();
         readonly List<WindHead> winds = new List<WindHead>();
+        readonly List<Vector2> herds = new List<Vector2>(); float herdT;
         readonly List<Vector2> logPiles = new List<Vector2>(); readonly List<float> logTimers = new List<float>();
         BossBase boss;
         bool toldOfBoss;
@@ -173,7 +174,7 @@ namespace Tapestry
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
-            flails.Clear(); winds.Clear(); logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); winds.Clear(); herds.Clear(); herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -196,6 +197,7 @@ namespace Tapestry
                     case 'g': kind = "gull"; break;
                     case 'x': kind = "crab"; break;
                     case 'b': kind = "bird"; break;
+                    case 'v': herds.Add(p); break;
                     case '<': case '>': winds.Add(new WindHead(p, s.Key == '>', world)); break;
                     case 'f': kind = "fish"; break;
                     case 'z': kind = "sea_serpent"; break;
@@ -375,6 +377,28 @@ namespace Tapestry
             }
         }
 
+        /// <summary>A stampede: while the knight is in the stretch of meadow before a herd marker, a herd of three stags
+        /// comes thundering in from the right every few seconds.</summary>
+        void TickStampede(float dt)
+        {
+            if (herds.Count == 0 || player.Dead) return;
+            bool inStretch = false;
+            foreach (var h in herds)
+                if (player.Body.Pos.x > h.x - 24f && player.Body.Pos.x < h.x + 2f) inStretch = true;
+            if (!inStretch) return;
+            herdT -= dt;
+            if (herdT > 0f) return;
+            herdT = 5.5f;
+            for (int i = 0; i < 3; i++)
+            {
+                float x = camX + HalfWidth + 1.5f + i * 1.6f;
+                var st = new Enemy("stag", new Vector2(x, level.GroundAt(x)), world) { Active = true };
+                enemies.Add(st);
+            }
+            Audio.Play("mount", 0.6f);
+            Toast("A stampede! Leap them or stomp them!");
+        }
+
         void UpdateRelicMusic()
         {
             if (!player.Blessed) relicCombo = 0;
@@ -480,6 +504,7 @@ namespace Tapestry
             player.Tick(dt, level);
             TickWindAndSea(dt);
             foreach (var w in winds) w.Tick(dt, level, player);
+            TickStampede(dt);
             TickEntities(dt);
             if (player.Dead) return;
             UpdateRelicMusic();
