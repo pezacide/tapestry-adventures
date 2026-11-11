@@ -22,6 +22,8 @@ namespace Tapestry
         Phase phase = Phase.Rest;
         int current = -1;
         float t, hurtGrace;
+        readonly SpriteRenderer pointer;   // a manicule pointing at the Wind that is drawing breath
+        bool told;
 
         public FourWinds(Vector2 centre, Transform parent)
         {
@@ -45,6 +47,8 @@ namespace Tapestry
                 }
                 heads.Add(h);
             }
+            pointer = Art.Make("scenery/manicule", parent, Vector2.zero, 12);
+            pointer.enabled = false;
         }
 
         Head Cur { get { return current >= 0 ? heads[current] : null; } }
@@ -71,13 +75,28 @@ namespace Tapestry
                     break;
                 case Phase.Blow:
                     if (!player.Dead) player.Body.Nudge(lv, (Cur.Left ? 1f : -1f) * 5f * dt);
-                    if (t > 2.4f * quick) { phase = Phase.Breathe; t = 0f; Audio.Play("pause", 0.6f); }
+                    if (t > 2.4f * quick)
+                    {
+                        phase = Phase.Breathe; t = 0f; Audio.Play("pause", 0.6f);
+                        GameManager.I.Toast(told ? "Smite ye Wynde now!" : "Ye Wynde draweth breath! Smite it now - touch it, or loose a bolt!");
+                        told = true;
+                    }
                     break;
                 case Phase.Breathe:
                     // drawing breath: a gentle pull toward it - and it can be struck
-                    if (!player.Dead) player.Body.Nudge(lv, (Cur.Left ? -1f : 1f) * 1.2f * dt);
-                    if (t > 1.8f) { phase = Phase.Rest; t = 0f; }
+                    if (!player.Dead) player.Body.Nudge(lv, (Cur.Left ? -1f : 1f) * 2.2f * dt);
+                    if (t > 3f) { phase = Phase.Rest; t = 0f; }
                     break;
+            }
+            // the manicule points at the Wind that can be struck
+            var ch = Cur;
+            pointer.enabled = phase == Phase.Breathe && ch != null && !ch.Beaten;
+            if (pointer.enabled)
+            {
+                float side = ch.Left ? 1f : -1f;   // stand on the hall side of the head, pointing back at it
+                float bob = Mathf.Sin(t * 8f) * 0.25f;
+                pointer.flipX = ch.Left;           // the drawing points right; flip it to point left
+                pointer.transform.localPosition = new Vector3(ch.At.x + side * (2.4f + bob), ch.At.y - 0.55f, 0f);
             }
             for (int i = 0; i < heads.Count; i++)
             {
@@ -136,6 +155,7 @@ namespace Tapestry
             Audio.Play("stomp"); Audio.Play("roar", 0.8f);
             GameManager.I.AddScore(1000, h.At + new Vector2(0f, 1.2f));
             phase = Phase.Rest; t = 0f;
+            pointer.enabled = false;
             if (Health <= 0.01f)
             {
                 Health = 0f; Dead = true; t = 0f;

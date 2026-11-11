@@ -64,13 +64,13 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **Creatures:** the new **hippocamp** (the bestiary's sea-horse) paddles near its home. If you come close and level with it, it rears and flashes as a warning, then makes one straight dash of about 4 tiles and rests (swim up or down out of its line to dodge); fish, sea-serpents and sea-monks swim among the clouds. The crossbowe is right at the start.
   - It has a slow 6/8 tune in G Dorian and ends at **Ye Fountaine of Lyfe**.
 - **Worlde 3-3, Ye Naming of ye Beastes:** the garden where Adam names the animals, with green turf over Romanesque zigzag bands and trees of life behind.
-  - **Stampedes:** in three stretches of meadow, herds of three spotted **stags** come thundering in from the right every few seconds. Leap them, stomp them, or hop up onto the planks until they pass.
+  - **Stampedes:** in three stretches of meadow, herds of three spotted **stags** come thundering in from the right (three herds per stampede, one at a time). They turn back at walls and leave the field after a while. Leap them, stomp them, or hop up onto the planks until they pass.
   - It has a bright, galloping 2/4 estampie and ends at **Ye Bower of Eden**.
 - **Worlde 3-4, Ye Wheel of ye Yeare:** the World 3 castle.
   - **Turning wheels:** great Wheels of the Year, each with twelve month-roundels on its rim, carry four star boards round and round over the fire pits. The boards stay level, like a fair's big wheel.
   - **The boss, Ye Foure Windes:** four great wind-heads, two on each side of a hall with a fire pit in its middle.
     - **Blowing:** in turn, each one blows a strong wind that shoves you across the hall toward the fire.
-    - **Drawing breath:** then it flashes gold, and while it does, touch it or shoot it to defeat it.
+    - **Drawing breath:** then it flashes gold for about three seconds and a manicule points at it. While it does, touch it or shoot it to defeat it.
     - **Reaching them:** ledges lead up to the high heads. Beat all four and Brother Odo waits beyond.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.

@@ -18,7 +18,7 @@ namespace Tapestry
 
         readonly SpriteView view;
         readonly Vector2 home;
-        float dir = -1f, timer, anim, kickGrace, deadTimer, shellVx;
+        float dir = -1f, timer, anim, kickGrace, deadTimer, shellVx, lifeT;
         bool shell, squashed, flipped, charging, swooping, gravity = true;
         float speed;
 
@@ -97,12 +97,13 @@ namespace Tapestry
                     else { Walk(lv, true); WalkFrames(); }
                     break;
 
-                case "stag":   // runs with its herd, leaping gaps; gone once it has thundered past
-                    dir = -1f;
-                    Body.Vel.x = dir * speed; view.Face(false);
+                case "stag":   // runs with its herd, leaping gaps, turning back at walls; leaves the field after a while
+                    if (Body.HitWall) dir = -dir;
+                    Body.Vel.x = dir * speed; view.Face(dir > 0f);
                     if (Body.Grounded && !Body.FloorAhead(lv, dir)) Body.Vel.y = 10f;
                     WalkFrames(0, 1, 9f);
-                    if (Body.Pos.x < p.Body.Pos.x - 18f) Remove();
+                    lifeT += dt;
+                    if (lifeT > 10f || Mathf.Abs(Body.Pos.x - p.Body.Pos.x) > 18f) Remove();
                     break;
 
                 case "bayeux_hound":

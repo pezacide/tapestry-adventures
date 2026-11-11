@@ -39,7 +39,8 @@ namespace Tapestry
         readonly List<Log> logs = new List<Log>();
         readonly List<WindHead> winds = new List<WindHead>();
         readonly List<Transform> wheels = new List<Transform>(); const float WheelSpeed = 0.6f; float wheelAngle;
-        readonly List<Vector2> herds = new List<Vector2>(); float herdT;
+        readonly List<Vector2> herds = new List<Vector2>(); readonly List<int> herdsSent = new List<int>(); float herdT;
+        const int HerdsPerStampede = 3;
         readonly List<Vector2> logPiles = new List<Vector2>(); readonly List<float> logTimers = new List<float>();
         BossBase boss;
         bool toldOfBoss;
@@ -176,7 +177,7 @@ namespace Tapestry
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
-            flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -199,7 +200,7 @@ namespace Tapestry
                     case 'g': kind = "gull"; break;
                     case 'x': kind = "crab"; break;
                     case 'b': kind = "bird"; break;
-                    case 'v': herds.Add(p); break;
+                    case 'v': herds.Add(p); herdsSent.Add(0); break;
                     case '<': case '>': winds.Add(new WindHead(p, s.Key == '>', world)); break;
                     case 'f': kind = "fish"; break;
                     case 'z': kind = "sea_serpent"; break;
@@ -393,13 +394,15 @@ namespace Tapestry
         void TickStampede(float dt)
         {
             if (herds.Count == 0 || player.Dead) return;
-            bool inStretch = false;
-            foreach (var h in herds)
-                if (player.Body.Pos.x > h.x - 24f && player.Body.Pos.x < h.x + 2f) inStretch = true;
-            if (!inStretch) return;
+            int stretch = -1;
+            for (int i = 0; i < herds.Count; i++)
+                if (player.Body.Pos.x > herds[i].x - 24f && player.Body.Pos.x < herds[i].x + 2f) stretch = i;
+            if (stretch < 0 || herdsSent[stretch] >= HerdsPerStampede) return;   // each stampede sends three herds, no more
+            foreach (var e in enemies) if (e.Kind == "stag" && e.Alive) return;   // the last herd must be gone first
             herdT -= dt;
             if (herdT > 0f) return;
             herdT = 5.5f;
+            herdsSent[stretch]++;
             for (int i = 0; i < 3; i++)
             {
                 float x = camX + HalfWidth + 1.5f + i * 1.6f;
