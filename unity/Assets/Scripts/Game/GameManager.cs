@@ -446,7 +446,11 @@ namespace Tapestry
                 if (raftTimers[i] <= 0f)
                 {
                     raftTimers[i] = 3.6f;
-                    lifts.Add(Lift.Raft(new Vector2(raftLaunches[i].x - 0.5f, raftLaunches[i].y + 1f), 12f, world));
+                    // each raft sails from its launch to the far bank, sinking as its prow touches the shore
+                    int bank = Mathf.FloorToInt(raftLaunches[i].x) + 1, ry = Mathf.FloorToInt(raftLaunches[i].y);
+                    while (bank < level.Width && level.Water(bank, ry)) bank++;
+                    float run = Mathf.Max(1f, bank - 3f - (raftLaunches[i].x - 0.5f));
+                    lifts.Add(Lift.Raft(new Vector2(raftLaunches[i].x - 0.5f, raftLaunches[i].y + 1f), run, world));
                 }
             }
             if (riding != null && riding.Gone) riding = null;

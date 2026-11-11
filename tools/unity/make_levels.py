@@ -102,7 +102,7 @@ m.row(130, 4, "BBBB"); m.put(132, 5, "k")
 m.row(140, 5, "==="); m.row(140, 7, "ooo")
 m.put(150, 2, "s"); m.put(154, 2, "h"); m.put(147, 7, "w"); m.row(148, 5, "BHB?")
 m.stairs(160, 6)
-m.put(176, 2, "G")
+m.put(169, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level1", "Worlde 1-1", "Ye Meadowe of Beastes", "HERE YE KNYGHTES RYDE INTO YE MEADOWE OF BEASTES", m,
       [("tree", 6), ("shrub", 12), ("hill", 25), ("tree", 34), ("shrub", 45), ("tree", 66), ("hill", 86), ("tree", 95),
        ("shrub", 110), ("hill", 128), ("shrub", 138), ("tree", 150), ("tree", 172)],
@@ -129,7 +129,7 @@ m.treetop(140, 3, 4); m.treetop(144, 3, 6); m.put(143, 9, "w")   # over the thir
 m.treetop(148, 4, 5); m.row(149, 8, "1")
 m.treetop(155, 4, 5); m.put(156, 6, "O"); m.put(160, 2, "h"); m.put(165, 2, "s")
 m.stairs(170, 6)
-m.put(182, 2, "G")
+m.put(179, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level2", "Worlde 1-2", "Ye Foreste of Wyverns", "HERE YE KNYGHTES PASSE THORUGH YE DERKE FORESTE", m,
       [("shrub", 5), ("shrub", 30), ("shrub", 72), ("shrub", 110), ("shrub", 152), ("shrub", 178)],
       "scenery/castle_abbey", 191, "forest", "backgrounds/forest_far", "backgrounds/forest_near")
@@ -175,7 +175,7 @@ m.ground(0, 71)
 m.put(5, 2, "P")
 m.put(14, 2, "h"); m.row(17, 5, "BMB"); m.put(22, 2, "S")
 m.stairs(27, 6)
-m.put(44, 2, "G")
+m.put(36, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level3c", "Worlde 1-3", "Ye Lyght of Daye", "HERE YE KNYGHTES CLYMBE BACK INTO YE LYGHT", m,
       [("crypt_entrance", 2), ("tree", 38), ("shrub", 50)],
       "scenery/castle_round_tower", 60, "meadow")
@@ -226,7 +226,7 @@ m.put(112, 2, "S"); m.row(116, 5, "B1B"); m.put(118, 8, "g"); m.put(124, 2, "x")
 m.row(133, 5, "==="); m.row(133, 7, "ooo")
 m.put(142, 2, "Q"); m.put(150, 2, "d"); m.put(154, 7, "g"); m.put(158, 2, "x")
 m.stairs(164, 6)
-m.put(178, 2, "G")
+m.put(173, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level5", "Worlde 2-1", "Ye Shipwrights' Yarde", "HERE YE SHIPWRIGHTES FELLE YE TREES AND BUILDE YE SHIPPES", m,
       [("shrub", 6), ("ship", 36), ("ship", 110), ("shrub", 170)],
       "scenery/castle_harbour_gate", 189, "shore", "backgrounds/shore_far", "backgrounds/shore_near",
@@ -279,7 +279,7 @@ m.put(131, 2, "Y"); stack(139, 5); m.row(139, 8, "oo")
 m.put(143, 2, "U"); m.put(153, 3, "Y"); m.row(155, 7, "B1B")
 m.put(166, 2, "x"); m.put(170, 7, "g")
 m.stairs(172, 6)
-m.put(186, 2, "G")
+m.put(181, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level7", "Worlde 2-3", "Ye Crossing", "HERE YE FLEETE CROSSETH YE SEA", m,
       [("shrub", 4), ("shrub", 60), ("shrub", 102), ("shrub", 166)],
       "scenery/castle_beacon", 195, "crossing", "backgrounds/shore_far", "backgrounds/sea_near",
@@ -324,7 +324,7 @@ m.put(129, 3, "L"); m.row(136, 5, "===="); m.put(140, 7, "<"); m.put(143, 3, "L"
 m.put(138, 9, "b"); m.put(146, 8, "b")
 m.put(155, 2, "h"); m.row(158, 5, "B1B"); m.put(162, 2, "d")
 m.stairs(166, 6)
-m.put(182, 2, "G")
+m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level9", "Worlde 3-1", "Ye Firmament", "HERE YE KNYGHTES CLYMBE YE FIRMAMENT OF HEVENE", m,
       [], "scenery/castle_paradise_gate", 192, "firmament", "backgrounds/creation_far", "backgrounds/creation_near",
       skin=("scenery/cloud_top", "scenery/cloud_fill", "scenery/roundel_block"), plank="scenery/cloud_band", lift="scenery/star_board")
@@ -367,7 +367,7 @@ m.row(100, 4, "==="); m.put(110, 2, "c"); m.row(114, 5, "B?B?B")
 m.put(132, 2, "v"); m.row(122, 5, "===="); m.row(127, 7, "===="); m.put(126, 8, "b")   # the third, mounted on Bayard if you can
 m.row(149, 4, "==="); m.put(156, 2, "S"); m.row(158, 5, "B1B"); m.put(162, 2, "h")
 m.stairs(166, 6)
-m.put(182, 2, "G")
+m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level11", "Worlde 3-3", "Ye Naming of ye Beastes", "HERE ADAM NAMETH YE BEASTES, AND YE BEASTES DOE RUNNE", m,
       [], "scenery/castle_eden_bower", 192, "eden", "backgrounds/creation_far", "backgrounds/eden_near",
       skin=("scenery/eden_top", "scenery/eden_fill", "scenery/roundel_block"))
@@ -409,28 +409,30 @@ m.row(93, 4, "===="); m.put(104, 2, "u"); m.row(108, 5, "B?B?B"); m.put(116, 2, 
 m.row(124, 4, "==="); m.row(128, 6, "==="); m.put(134, 2, "d")
 m.row(141, 4, "====="); m.put(152, 2, "j"); m.row(156, 5, "B1B"); m.put(160, 2, "h")
 m.stairs(166, 6)
-m.put(182, 2, "G")
+m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level13", "Worlde 4-1", "Ye Boare Hunte", "HERE YE HUNTE RYDETH AND YE HOUNDES ARE LOOSED", m,
       [], "scenery/castle_pavilion", 192, "hunt", "backgrounds/verdure_far", "backgrounds/verdure_near",
       skin=W4, plank="scenery/branch", hounds=True)
 
 # ---- 4-2  Ye Otter and ye Swanne: the river, crossed on drifting rafts
 m = Map(200)
-m.ground(0, 18); m.water(19, 42); m.ground(43, 66); m.water(67, 94); m.ground(95, 118); m.water(119, 150); m.ground(151, 199)
+m.ground(0, 18); m.water(19, 29); m.ground(30, 32); m.water(33, 42); m.ground(43, 66)
+m.water(67, 80); m.ground(81, 83); m.water(84, 94); m.ground(95, 118)
+m.water(119, 133); m.ground(134, 136); m.water(137, 150); m.ground(151, 199)   # little islands to rest on
 m.put(3, 2, "P"); m.row(8, 5, "?M?"); m.put(13, 2, "j")
-m.put(19, 1, "r"); m.put(31, 1, "r")                          # rafts drift right across the first stretch
+m.put(19, 1, "r"); m.put(33, 1, "r")                          # rafts sail from bank to bank
 m.put(24, 2, "i"); m.put(36, 2, "i"); m.put(28, 2, "n")
 m.row(25, 6, "ooo"); m.row(47, 5, "BRB"); m.put(55, 2, "h"); m.put(60, 2, "S")
-m.put(67, 1, "r"); m.put(80, 1, "r")
+m.put(67, 1, "r"); m.put(84, 1, "r")
 m.put(72, 2, "i"); m.put(85, 2, "i"); m.put(78, 2, "n"); m.put(90, 2, "n")
 m.row(73, 6, "oooo")
 m.put(98, 2, "C"); m.row(102, 5, "?W?"); m.put(110, 2, "j"); m.row(113, 5, "BHB")
-m.put(119, 1, "r"); m.put(131, 1, "r"); m.put(141, 1, "r")
-m.put(124, 2, "i"); m.put(136, 2, "i"); m.put(146, 2, "i"); m.put(130, 2, "n")
+m.put(119, 1, "r"); m.put(137, 1, "r")
+m.put(124, 2, "i"); m.put(141, 2, "i"); m.put(146, 2, "i"); m.put(130, 2, "n")
 m.row(122, 6, "oooooo")
 m.put(156, 2, "h"); m.row(160, 5, "B1B")
 m.stairs(166, 6)
-m.put(182, 2, "G")
+m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level14", "Worlde 4-2", "Ye Otter and ye Swanne", "HERE YE HUNTE GOETH DOWNE TO YE RIVER", m,
       [], "scenery/castle_mill", 192, "river", "backgrounds/river_far", None,
       skin=W4, plank="scenery/branch")
@@ -440,14 +442,14 @@ m = Map(200)
 m.ground(0, 30); m.ground(38, 70); m.ground(78, 120); m.ground(128, 199)
 m.put(3, 2, "P"); m.row(9, 5, "?M?")
 m.row(16, 5, "===="); m.row(22, 8, "===="); m.put(20, 9, "a")   # up the first hunting stand
-m.row(31, 6, "===="); m.put(44, 2, "j"); m.row(48, 5, "BRB"); m.put(54, 9, "a")
+m.row(31, 4, "===="); m.put(44, 2, "j"); m.row(48, 5, "BRB"); m.put(54, 9, "a")
 m.row(58, 5, "===="); m.row(64, 8, "==="); m.put(66, 9, "a")
-m.row(71, 6, "===="); m.put(82, 2, "C"); m.put(86, 2, "h"); m.row(90, 5, "?W?")
+m.row(71, 4, "===="); m.put(82, 2, "C"); m.put(86, 2, "h"); m.row(90, 5, "?W?")
 m.put(96, 9, "a"); m.row(100, 5, "===="); m.row(106, 8, "====")
-m.row(121, 6, "===="); m.put(134, 2, "j"); m.row(138, 5, "BHB"); m.put(140, 9, "a")
+m.row(121, 4, "===="); m.put(134, 2, "j"); m.row(138, 5, "BHB"); m.put(140, 9, "a")
 m.put(148, 2, "d"); m.row(152, 5, "B1B"); m.put(158, 9, "a")
 m.stairs(166, 6)
-m.put(182, 2, "G")
+m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
 write("Level15", "Worlde 4-3", "Ye Falconers' Heath", "HERE YE FALCONERS LOOSE YE HAWKES UPON YE HEATH", m,
       [("hunting_stand", 18), ("hunting_stand", 24), ("hunting_stand", 60), ("hunting_stand", 102), ("hunting_stand", 108)],
       "scenery/castle_mews", 192, "heath", "backgrounds/heath_far", None,
@@ -457,7 +459,7 @@ write("Level15", "Worlde 4-3", "Ye Falconers' Heath", "HERE YE FALCONERS LOOSE Y
 m = Map(150)
 m.vault(0, 149); m.floor(0, 149)
 m.put(3, 2, "P"); m.row(8, 5, "?M?")
-m.fire(13, 18); m.put(22, 2, "j"); m.put(26, 5, "F")         # hearth fires and a swinging flail
+m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "j"); m.put(26, 5, "F")         # hearth fires and a swinging flail
 m.row(30, 5, "?W?")
 m.fire(36, 42); m.row(37, 4, "==="); m.put(46, 2, "d"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
