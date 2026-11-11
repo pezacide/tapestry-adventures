@@ -9,7 +9,7 @@ namespace Tapestry
     {
         public static GameManager I { get; private set; }
 
-        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing, Ending, Paywall }
+        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing, Ending, Paywall, About }
         State state = State.Title;
 
         const float ViewHalfHeight = 5.625f;           // 540 design px tall = 11.25 tiles
@@ -118,7 +118,44 @@ namespace Tapestry
             return i == 0 ? new Rect(W * 0.5f - w - U * 0.02f, y, w, h) : new Rect(W * 0.5f + U * 0.02f, y, w, h);
         }
 
-        Rect UnlockLinkRect() { return new Rect(Screen.width * 0.5f - U * 0.4f, Screen.height * 0.9f, U * 0.8f, U * 0.07f); }
+        Rect UnlockLinkRect() { return new Rect(Screen.width * 0.5f - U * 0.35f, Screen.height * 0.9f, U * 0.7f, U * 0.07f); }
+        Rect AboutLinkRect() { return new Rect(Screen.width * 0.98f - U * 0.42f, Screen.height * 0.9f, U * 0.42f, U * 0.07f); }
+
+        // ---- the "what is this?" screen: shown the first time the game is opened, and from a link on the title screen
+        const string SeenAboutKey = "seen:about";
+        void TickAbout()
+        {
+            if (stateTime < 0.4f) return;
+            if (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue)
+            {
+                PlayerPrefs.SetInt(SeenAboutKey, 1); PlayerPrefs.Save();
+                Audio.Play("select"); SetState(State.Title);
+            }
+        }
+
+        void DrawAbout(float W, float H)
+        {
+            Panel(new Rect(0, 0, W, H));
+            var t = Art.Texture("scenery/title");
+            float y = H * 0.04f;
+            if (t != null) { float tw = Mathf.Min(W * 0.8f, U * 1.2f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th + H * 0.01f; }
+            GUI.Label(new Rect(W * 0.08f, y, W * 0.84f, U * 0.3f),
+                "A two-dimensional, side-scrolling adventure, stitched and woven in the manner of the medieval tapestries.\n" +
+                "Ride four knights through seven famous tapestries, from ye Bayeux Tapestrie to ye Apocalypse of Angers: leape upon strange beastes of ye bestiary, " +
+                "ryde Bayard ye magic horse, and overcome a mighty foe in every castle, to rescue Princesse Aelfgyva from ye Cat King.", center);
+            // the four knights, in a row
+            float pw = U * 0.12f, gap = pw * 0.5f, total = 4 * pw + 3 * gap, ky = H * 0.62f;
+            for (int i = 0; i < Knights.All.Length; i++)
+                DrawFrame(Knights.All[i].Sheet, (int)(Time.time * 3f + i) % 3, new Rect((W - total) * 0.5f + i * (pw + gap), ky, pw, pw * 1.5f));
+            GUI.Label(new Rect(W * 0.08f, H * 0.62f + pw * 1.5f + H * 0.01f, W * 0.84f, U * 0.1f),
+                TapestryInput.ShowTouchControls
+                    ? "Moove with ye joystick; ye lefte button leapeth, ye ryghte button runneth (and shooteth a crossbowe, when thou hast one)."
+                    : "LEFTE and RYGHTE moove thee, JUMPE leapeth, RUNNE runneth (and shooteth a crossbowe, when thou hast one).", center);
+            float a = 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.time * 2.5f));
+            var cc = GUI.color; GUI.color = new Color(1f, 1f, 1f, a);
+            GUI.Label(new Rect(0, H * 0.92f, W, U * 0.06f), TapestryInput.ShowTouchControls ? "Touche to begynne" : "JUMPE to begynne", center);
+            GUI.color = cc;
+        }
 
         void TickPaywall()
         {
@@ -199,12 +236,13 @@ namespace Tapestry
             if (I != null && I != this) { Destroy(gameObject); return; }
             I = this;
             Store.Init();
+            bool firstTime = PlayerPrefs.GetInt("seen:about", 0) == 0;
             if (Application.isMobilePlatform) { Application.targetFrameRate = 60; Screen.sleepTimeout = SleepTimeout.NeverSleep; }
             SetupCamera();
             Audio.Init(gameObject);
             SetupBackdrop();
             LoadLevel();
-            SetState(State.Title);
+            SetState(firstTime ? State.About : State.Title);
         }
 
         void SetupCamera()
@@ -428,6 +466,7 @@ namespace Tapestry
                     { Audio.Play("select"); SetState(State.Playing); }
                     break;
                 case State.Paywall: TickPaywall(); break;
+                case State.About: TickAbout(); break;
                 case State.Ending:   // the story told, scrolling up; then back to the title
                     if (stateTime > 5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue) || stateTime > EndingLength)
                     { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
@@ -464,6 +503,7 @@ namespace Tapestry
             {
                 case State.Title: Audio.Music("title"); break;
                 case State.Briefing: Audio.Music(L.Music); break;
+                case State.About: Audio.Music("title"); break;
                 case State.Ending: Audio.Music("ending", false); break;
                 case State.Playing:
                     if (was == State.Paused) Audio.ResumeMusic();
@@ -622,6 +662,8 @@ namespace Tapestry
             if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
             if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
             bool go = stateTime > 0.3f && (TapestryInput.JumpPressed || TapestryInput.StartPressed);
+            if (TapestryInput.TapPosition.HasValue && AboutLinkRect().Contains(TapestryInput.TapPosition.Value))
+            { Audio.Play("select"); SetState(State.About); return; }
             if (TapestryInput.TapPosition.HasValue && !Store.Owned && UnlockLinkRect().Contains(TapestryInput.TapPosition.Value))
             { Audio.Play("select"); OpenPaywall(FirstLockedLevel()); return; }
             if (TapestryInput.TapPosition.HasValue)
@@ -1343,6 +1385,7 @@ namespace Tapestry
                 case State.Briefing: DrawBriefing(W, H); break;
                 case State.Ending: DrawEnding(W, H); break;
                 case State.Paywall: DrawPaywall(W, H); break;
+                case State.About: DrawAbout(W, H); break;
                 case State.Title:
                     Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
                     if (titleStep == 1) { DrawRealmSelect(W, H); break; }
@@ -1365,6 +1408,7 @@ namespace Tapestry
                     GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.1f),
                         TapestryInput.ShowTouchControls ? "Touche a knyghte to chuse, and touche agayne to ryde forth" : "LEFTE or RYGHTE to chuse thy knyghte  -  JUMPE or Entre to ryde forth", center);
                     if (!Store.Owned) GUI.Label(UnlockLinkRect(), "Unlocke Worldes 2 to 7  (touche here)", center);
+                    GUI.Label(AboutLinkRect(), "What is this?", center);
                     break;
 
                 case State.Playing:
