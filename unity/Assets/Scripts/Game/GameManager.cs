@@ -9,7 +9,7 @@ namespace Tapestry
     {
         public static GameManager I { get; private set; }
 
-        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing, Ending, Paywall, About }
+        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing, Ending, Paywall, About, Tapestries }
         State state = State.Title;
 
         const float ViewHalfHeight = 5.625f;           // 540 design px tall = 11.25 tiles
@@ -119,9 +119,85 @@ namespace Tapestry
         }
 
         Rect UnlockLinkRect() { return new Rect(Screen.width * 0.5f - U * 0.35f, Screen.height * 0.9f, U * 0.7f, U * 0.07f); }
+        Rect TapestriesLinkRect() { return new Rect(Screen.width * 0.02f, Screen.height * 0.9f, U * 0.42f, U * 0.07f); }
         Rect AboutLinkRect() { return new Rect(Screen.width * 0.98f - U * 0.42f, Screen.height * 0.9f, U * 0.42f, U * 0.07f); }
 
         // ---- the "what is this?" screen: shown the first time the game is opened, and from a link on the title screen
+        // ---- "Ye Tapestries": the real tapestries behind the game, one page each (reached from the title screen)
+        class TapestryInfo { public string Name, Where, Picture, Text, InGame; }
+        static readonly TapestryInfo[] TapestryPages =
+        {
+            new TapestryInfo { Name = "Ye Bayeux Tapestrie", Where = "Worlde 1 and 2  -  embroidered in England in ye 1070s; now at Bayeux, Normandy", Picture = "backgrounds/far",
+                Text = "About 68 metres long and half a metre tall, it telleth how William of Normandy conquered England, ending at ye Battle of Hastings in 1066. It is not truly a tapestry at all, but wool embroidered upon linen. It was most likely ordered by Bishop Odo of Bayeux, William's half-brother, and stitched by English embroiderers, perhaps at Canterbury. Look for ye mysterious lady named Aelfgyva, shown beside a priest: nobody knoweth who she was.",
+                InGame = "Worlde 1 and ye sea crossing of Worlde 2 borrow its stitched wool-on-linen look, its horsemen, hounds and felled trees, and its longships. Princesse Aelfgyva is named for that mysterious lady." },
+            new TapestryInfo { Name = "Ye Tapestrie of Creacioun", Where = "Worlde 3  -  embroidered about 1100; now in Girona Cathedral, Catalonia", Picture = "backgrounds/creation_far",
+                Text = "A great Romanesque embroidery in wool, couched upon linen, of which about 3.7 by 4.7 metres survive. Christ sitteth at ye centre of circles; ye four winds blow in ye corners; and a border telleth ye months of ye yeare. Scholars date it to ye 11th or 12th century, and are not agreed what it was for: an altar canopy, a curtain, or a carpet.",
+                InGame = "Worlde 3 is set in its sky: ye wind-heads that blow thee about, ye sun and moon, and ye Wheel of ye Yeare in a castle of turning wheels." },
+            new TapestryInfo { Name = "Ye Devonshire Hunting Tapestries", Where = "Worlde 4  -  woven in ye Low Countries, probably at Arras, about 1425-1450; now in ye Victoria and Albert Museum, London", Picture = "backgrounds/verdure_far",
+                Text = "Four huge woven hangings: a boar and bear hunt, an otter and swan hunt, a deer hunt, and falconry. They shew lords and ladies in fashionable dress hunting through woods crowded with leaves and flowers. Ye Dukes of Devonshire kept them at Hardwick Hall until they came to ye museum in 1957. From these, ye game's art turneth from stitched to woven.",
+                InGame = "Worlde 4 hath ye hounds, boars, otters, swans and falcons of those hunts, ye dense leafy verdure, and ye Greate Boar." },
+            new TapestryInfo { Name = "Ye Unicorne Tapestries", Where = "Worlde 5  -  seven hangings, about 1495-1505, probably designed in Paris and woven in Brussels; now at ye Cloisters, New York", Picture = "backgrounds/millefleur_far",
+                Text = "Wool, silk and gilded thread. They follow hunters who seek, chase and at last take ye unicorn, who endeth chained to a pomegranate tree within a little fence. In one, ye unicorn dippeth its horn to purify a poisoned stream. Ye letters AE are woven into ye hangings, but nobody knoweth whose they were.",
+                InGame = "Worlde 5 hath ye hunters and hounds, ye poisoned stream that ye unicorn's horn maketh pure, and ye unicorn in its fence: here it is spared, and becometh thy steede." },
+            new TapestryInfo { Name = "Ye Ladye and ye Unicorne", Where = "Worlde 6  -  six hangings, about 1500, probably woven in Flanders from designs made in Paris; now in ye Musee de Cluny, Paris", Picture = "backgrounds/red_far",
+                Text = "Five hangings shew ye senses: taste, hearing, sight, smell and touch. Ye sixth beareth ye words A mon seul desir (To my sole desire), and its meaning is still a mystery. A lady standeth on a blue island of flowers before a red ground strewn with flowers and little beastes, with a lion and a unicorn at her sides. Ye arms of ye Le Viste family appear upon them, but who ordered them is still debated.",
+                InGame = "Worlde 6: Sight (ye mirrour), Hearing (ye organ), Taste and Smell, and ye Ladye's tente, where ye Lyon and ye Unicorne guard her." },
+            new TapestryInfo { Name = "Ye Apocalypse of Angers", Where = "Worlde 7  -  woven in Paris in ye 1370s and 1380s; now in ye Chateau d'Angers, France", Picture = "backgrounds/apoc_far",
+                Text = "Ordered by Louis I, Duke of Anjou, about 1373, from designs by Hennequin de Bruges, painter to King Charles V, and woven in ye workshop of Nicolas Bataille. It told ye Book of Revelation: ye seven trumpets, ye locusts, ye four horsemen and ye beast with seven heads. It was about 140 metres long, and roughly 100 metres survive. Its scenes sit against alternating red and blue grounds.",
+                InGame = "Worlde 7: ye seven trumpets, ye crowned locusts, ye four horsemen and ye Beaste of Seven Heddes, then ye Cat King's own hall." },
+            new TapestryInfo { Name = "Beastes, Bayard and ye Cat King", Where = "Whence ye rest came", Picture = "backgrounds/castle_far",
+                Text = "Ye strange beastes come from medieval bestiaries: Aspidochelone, ye whale that sailors mistook for an island; ye cockatrice; ye hippocamp; ye man-faced owl. Bayard is named for ye magic horse of ye old romance of ye Four Sons of Aymon, who could carry all four brothers at once. Ye knights, ye Cat King and his Soup Cats are inventions of this game, and alle ye pictures were drawn for it, in ye manner of ye old tapestries. Ye true tapestries themselves are centuries old; if thou art ever near one, go and see it.",
+                InGame = "" },
+        };
+        int tapestryPage;
+
+        Rect TapPrevZone() { return new Rect(0, Screen.height * 0.2f, Screen.width * 0.16f, Screen.height * 0.7f); }
+        Rect TapBackRect() { return new Rect(Screen.width * 0.5f - U * 0.3f, Screen.height * 0.92f, U * 0.6f, U * 0.07f); }
+
+        void TickTapestries()
+        {
+            if (stateTime < 0.3f) return;
+            bool next = TapestryInput.JumpPressed || TapestryInput.RightPressed || TapestryInput.StartPressed;
+            bool prev = TapestryInput.LeftPressed, back = TapestryInput.RunPressed || TapestryInput.DownPressed;
+            if (TapestryInput.TapPosition.HasValue)
+            {
+                var tap = TapestryInput.TapPosition.Value;
+                if (TapBackRect().Contains(tap)) back = true;
+                else if (TapPrevZone().Contains(tap)) prev = true;
+                else next = true;
+            }
+            if (back) { Audio.Play("select"); SetState(State.Title); }
+            else if (prev && tapestryPage > 0) { tapestryPage--; Audio.Play("select"); stateTime = 0f; }
+            else if (next)
+            {
+                Audio.Play("select");
+                if (++tapestryPage >= TapestryPages.Length) SetState(State.Title); else stateTime = 0f;
+            }
+        }
+
+        void DrawTapestries(float W, float H)
+        {
+            Panel(new Rect(0, 0, W, H));
+            var p = TapestryPages[tapestryPage];
+            // a strip of the tapestry's own art, framed
+            float bh = H * 0.27f, bw = Mathf.Min(W * 0.8f, bh * 4.4f); bh = bw / 4.4f;
+            var br = new Rect((W - bw) * 0.5f, H * 0.03f, bw, bh);
+            var c = GUI.color; GUI.color = new Color(0.2f, 0.145f, 0.114f, 0.9f);
+            GUI.DrawTexture(new Rect(br.x - 5f, br.y - 5f, br.width + 10f, br.height + 10f), Texture2D.whiteTexture); GUI.color = c;
+            var tex = Art.Texture(p.Picture);
+            if (tex != null) GUI.DrawTextureWithTexCoords(br, tex, new Rect(0f, 0.3f, 1f, 0.4f));
+            float y = br.yMax + H * 0.02f;
+            GUI.Label(new Rect(0, y, W, U * 0.08f), p.Name, big); y += U * 0.085f;
+            GUI.Label(new Rect(W * 0.1f, y, W * 0.8f, U * 0.08f), p.Where, center); y += U * 0.085f;
+            GUI.Label(new Rect(W * 0.1f, y, W * 0.8f, H * 0.9f - y - U * 0.1f),
+                p.Text + (string.IsNullOrEmpty(p.InGame) ? "" : "\n\nIn ye game:  " + p.InGame), tipText);
+            var cc = GUI.color; GUI.color = new Color(1f, 1f, 1f, 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.time * 2.5f)));
+            if (tapestryPage > 0) GUI.Label(new Rect(W * 0.01f, H * 0.5f, W * 0.1f, U * 0.1f), "<", big);
+            GUI.Label(new Rect(W * 0.89f, H * 0.5f, W * 0.1f, U * 0.1f), ">", big);
+            GUI.Label(TapBackRect(), "Returne  (" + (tapestryPage + 1) + " of " + TapestryPages.Length + ")", center);
+            GUI.color = cc;
+        }
+
         const string SeenAboutKey = "seen:about";
         int aboutPage;
         const int AboutPages = 4;
@@ -152,12 +228,12 @@ namespace Tapestry
                 "Thy foes are strange beastes lifted from ye bestiaries and ye margins of olde manuscripts.",
 
                 (touch
-                    ? "Moove with ye joystick: push it to ye rim to runne, and pull it downe to dismounte. Ye large button leapeth (holde it to leape higher); ye small one runneth, and shooteth a crossbowe if thou bearest one."
-                    : "LEFTE and RYGHTE moove thee; holde RUNNE to runne, and it shooteth a crossbowe if thou bearest one. JUMPE leapeth (holde it to leape higher); DOWNE dismounteth.") + "\n\n" +
+                    ? "Moove with ye joystick: push it to ye rim to runne, and pull it downe to crouche (or, when thou ridest, to dismounte). Ye large button leapeth (holde it to leape higher); ye small one runneth, and shooteth a crossbowe if thou bearest one."
+                    : "LEFTE and RYGHTE moove thee; holde RUNNE to runne, and it shooteth a crossbowe if thou bearest one. JUMPE leapeth (holde it to leape higher); DOWNE crouchethe (or dismounteth, when thou ridest). Crouche to duck spears and flung sweetes, or to creepe through a low passage.") + "\n\n" +
                 "Stompe beastes from above; touche them from ye side and thou art hurte. Bumpe bricks from beneath to breake them: some hide a bezant, a capon (mendeth a herte), a golden chalice (a lyfe), a crossbowe, a holy relique (nothing may harme thee for a whyle), or Bayard ye magic horse, whom thou mayst ryde.\n\n" +
                 "Touche a halfway banner and thou shalt ryse agayne there. Mind ye Tyme, for it runneth out.",
 
-                "Seven tapestries, four realmes in each, and a castle with a mighty boss at ye ende of every one:\n\n" + tapestries.ToString(),
+                "Seven tapestries, four realmes in each, and a castle with a mighty boss at ye ende of every one:\n\n" + tapestries.ToString() + "\nTouche \"Ye Tapestries\" on ye title screene to learne of ye true tapestries that inspired them.",
 
                 "Princesse Aelfgyva hath been carried off by ye Cat King, who fleeth ever deeper into ye tapestries.\n\n" +
                 "Ryde after him with four brave knyghtes (Sir Rubeus, Dame Azura, Sir Verdain and Lady Aurelia), and Bayard ye magic horse at thy side. In every castle a good monke telleth thee that ye Princesse is in another; thou must overcome ye guardian of each, and at last ye Cat King himselfe upon his throne.\n\n" +
@@ -499,6 +575,7 @@ namespace Tapestry
                     break;
                 case State.Paywall: TickPaywall(); break;
                 case State.About: TickAbout(); break;
+                case State.Tapestries: TickTapestries(); break;
                 case State.Ending:   // the story told, scrolling up; then back to the title
                     if (stateTime > 5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue) || stateTime > EndingLength)
                     { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
@@ -536,6 +613,7 @@ namespace Tapestry
                 case State.Title: Audio.Music("title"); break;
                 case State.Briefing: Audio.Music(L.Music); break;
                 case State.About: Audio.Music("title"); if (was != State.About) aboutPage = 0; break;
+                case State.Tapestries: if (was != State.Tapestries) tapestryPage = 0; break;
                 case State.Ending: Audio.Music("ending", false); break;
                 case State.Playing:
                     if (was == State.Paused) Audio.ResumeMusic();
@@ -694,6 +772,8 @@ namespace Tapestry
             if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
             if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
             bool go = stateTime > 0.3f && (TapestryInput.JumpPressed || TapestryInput.StartPressed);
+            if (TapestryInput.TapPosition.HasValue && TapestriesLinkRect().Contains(TapestryInput.TapPosition.Value))
+            { Audio.Play("select"); SetState(State.Tapestries); return; }
             if (TapestryInput.TapPosition.HasValue && AboutLinkRect().Contains(TapestryInput.TapPosition.Value))
             { Audio.Play("select"); SetState(State.About); return; }
             if (TapestryInput.TapPosition.HasValue && !Store.Owned && UnlockLinkRect().Contains(TapestryInput.TapPosition.Value))
@@ -1418,6 +1498,7 @@ namespace Tapestry
                 case State.Ending: DrawEnding(W, H); break;
                 case State.Paywall: DrawPaywall(W, H); break;
                 case State.About: DrawAbout(W, H); break;
+                case State.Tapestries: DrawTapestries(W, H); break;
                 case State.Title:
                     Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
                     if (titleStep == 1) { DrawRealmSelect(W, H); break; }
@@ -1441,6 +1522,7 @@ namespace Tapestry
                         TapestryInput.ShowTouchControls ? "Touche a knyghte to chuse, and touche agayne to ryde forth" : "LEFTE or RYGHTE to chuse thy knyghte  -  JUMPE or Entre to ryde forth", center);
                     if (!Store.Owned) GUI.Label(UnlockLinkRect(), "Unlocke Worldes 2 to 7  (touche here)", center);
                     GUI.Label(AboutLinkRect(), "What is this?", center);
+                    GUI.Label(TapestriesLinkRect(), "Ye Tapestries", center);
                     break;
 
                 case State.Playing:

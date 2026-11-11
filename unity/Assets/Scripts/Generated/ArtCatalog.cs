@@ -16,16 +16,16 @@ namespace Tapestry
 
         public static readonly Dictionary<string, Sheet> Sheets = new Dictionary<string, Sheet>
         {
-            { "heroes/rubeus", new Sheet("Art/heroes/rubeus", 64f, 96f, 5, 15f, 0f, 62.5f, 94f) },
+            { "heroes/rubeus", new Sheet("Art/heroes/rubeus", 64f, 96f, 6, 14f, 0f, 62.5f, 94f) },
             { "heroes/rubeus_mounted", new Sheet("Art/heroes/rubeus_mounted", 104f, 128f, 5, 0f, 0f, 100.5f, 126.5f) },
             { "heroes/rubeus_unicorn", new Sheet("Art/heroes/rubeus_unicorn", 104f, 128f, 5, 0f, 0f, 104f, 126.5f) },
-            { "heroes/azura", new Sheet("Art/heroes/azura", 64f, 96f, 5, 14.5f, 0f, 63f, 93.5f) },
+            { "heroes/azura", new Sheet("Art/heroes/azura", 64f, 96f, 6, 12.5f, 0f, 63f, 93.5f) },
             { "heroes/azura_mounted", new Sheet("Art/heroes/azura_mounted", 104f, 128f, 5, 0f, 0f, 100.5f, 126.5f) },
             { "heroes/azura_unicorn", new Sheet("Art/heroes/azura_unicorn", 104f, 128f, 5, 0f, 0f, 104f, 126.5f) },
-            { "heroes/verdain", new Sheet("Art/heroes/verdain", 64f, 96f, 5, 7.5f, 0f, 62.5f, 93.5f) },
+            { "heroes/verdain", new Sheet("Art/heroes/verdain", 64f, 96f, 6, 5f, 0f, 62.5f, 93.5f) },
             { "heroes/verdain_mounted", new Sheet("Art/heroes/verdain_mounted", 104f, 128f, 5, 0f, 0f, 100.5f, 126.5f) },
             { "heroes/verdain_unicorn", new Sheet("Art/heroes/verdain_unicorn", 104f, 128f, 5, 0f, 0f, 104f, 126.5f) },
-            { "heroes/aurelia", new Sheet("Art/heroes/aurelia", 64f, 96f, 5, 14.5f, 0f, 62.5f, 93.5f) },
+            { "heroes/aurelia", new Sheet("Art/heroes/aurelia", 64f, 96f, 6, 13.5f, 0f, 62.5f, 93.5f) },
             { "heroes/aurelia_mounted", new Sheet("Art/heroes/aurelia_mounted", 104f, 128f, 5, 0f, 0f, 100.5f, 126.5f) },
             { "heroes/aurelia_unicorn", new Sheet("Art/heroes/aurelia_unicorn", 104f, 128f, 5, 0f, 0f, 104f, 126.5f) },
             { "mounts/bayard", new Sheet("Art/mounts/bayard", 104f, 84f, 5, 0f, 0f, 100.5f, 82.5f) },

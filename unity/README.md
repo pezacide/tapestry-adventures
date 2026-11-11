@@ -126,6 +126,10 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - **The Cat King** stands upon his throne flinging soup, and summons Soup Cats. On his throne he cannot be harmed. Every few flings he leaps down and **prowls after you: stomp him then!** Four blows.
   - Then the gate behind the throne crumbles and **Princess Aelfgyva** is free. Walk to her, and the story of the whole adventure scrolls past: **Ye Ende**.
 
+**Crouching:** on foot, hold DOWN (or pull the touch joystick down) to crouch. A crouched knight is much lower (about one tile high), so he can duck beneath thrown spears, flung comfits and falling stars, and creep through a one-tile gap, but he moves slowly and cannot run. He stands up as soon as there is room above him. When riding, DOWN still dismounts.
+
+**Ye Tapestries:** the title screen has a "Ye Tapestries" link: one page for each real tapestry behind the game (the Bayeux Tapestry, the Tapestry of Creation, the Devonshire Hunting Tapestries, the Unicorn Tapestries, the Lady and the Unicorn, the Apocalypse of Angers), with a picture, where and when it was made, where it is now, and how it appears in the game. A last page tells where the beasts, Bayard and the Cat King came from.
+
 **Reward blocks are shuffled every play:** the prizes (bezants, Bayard, the unicorn, the capon, the crossbowe, the chalice) change places among the bricks. The holy relique stays where it is, and the chalice is never put near the end of a level or beside the relique.
 
 **The free tapestry and the unlock:** World 1 is free. At the end of 1-4, or when a later realm is chosen, a screen offers **Ye Whole Tapestrie**, one purchase (£3.99) that unlocks Worlds 2 to 7 for good. There is also an "Unlocke" link on the title screen. In the Unity editor the purchase is simulated; use **Tapestry > Store > Forget the Purchase** to see the locks again. For the Google Play steps see `docs/PLAY_STORE.md`.

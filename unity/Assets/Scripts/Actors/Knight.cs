@@ -5,7 +5,7 @@ namespace Tapestry
     /// <summary>The player: Mario-style running and jumping, plus riding Bayard.</summary>
     public class Knight
     {
-        const float FootW = 0.62f, FootH = 1.72f, RideW = 1.25f, RideH = 1.9f;
+        const float FootW = 0.62f, FootH = 1.72f, RideW = 1.25f, RideH = 1.9f, CrouchH = 0.95f;   // crouched, he fits a one-tile gap
         const float RiseGravity = 24f, FallGravity = 60f, MaxFall = 17f;
 
         public readonly Body Body;
@@ -67,8 +67,13 @@ namespace Tapestry
             else
             {
             float h = stone ? 0f : TapestryInput.Horizontal;
+            // crouch: on foot, on the ground, holding DOWN. He ducks low (under spears, flung comfits and the like) and creeps; he stands
+            // again as soon as there is room above him (so he stays crouched in a low passage).
+            bool wantCrouch = !Mounted && !stone && Body.Grounded && TapestryInput.DownHeld;
+            if (wantCrouch && !crouching) { crouching = true; Body.H = CrouchH; }
+            else if (crouching && !wantCrouch && RoomToStand(lv)) { crouching = false; Body.H = FootH; }
             float speedMul = OnUnicorn ? 1.45f : Mounted ? 1.2f : 1f;   // the unicorn is the swifter steed
-            float target = h * (TapestryInput.RunHeld ? Def.Run : Def.Walk) * speedMul;
+            float target = h * (TapestryInput.RunHeld && !crouching ? Def.Run : Def.Walk) * speedMul * (crouching ? 0.4f : 1f);
             float accel;
             if (Body.Grounded || coyote > 0f)
                 accel = h != 0f && Mathf.Sign(h) != Mathf.Sign(Body.Vel.x) && Mathf.Abs(Body.Vel.x) > 0.5f ? 55f : (h != 0f ? 28f : 34f);
@@ -115,7 +120,7 @@ namespace Tapestry
             // the crossbowe: RUN shoots (as Mario throws fireballs with the run button)
             if (!stone && HasCrossbow && Carrying == null && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
             {
-                GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, lying ? 0.35f : Mounted ? 1.45f : 0.95f), FacingRight);
+                GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, lying ? 0.35f : Mounted ? 1.45f : crouching ? 0.55f : 0.95f), FacingRight);
                 Audio.Play("crossbow", 0.8f);
             }
 
@@ -134,6 +139,8 @@ namespace Tapestry
         }
 
         float stroke;   // time since the last swimming stroke
+        bool crouching; // ducking low (DOWNE held, or the stick pulled down)
+        public bool Crouching { get { return crouching; } }
         bool lying;     // swimming flat, head first (the body is low and long while so)
         const float SwimW = 1.2f, SwimH = 0.75f;
 
@@ -181,7 +188,8 @@ namespace Tapestry
         void Animate(float dt)
         {
             int frame;
-            if (GameManager.I.Underwater && !Body.Grounded && !frozen) frame = stroke < 0.25f ? 1 : 3;   // a kick, then a glide
+            if (crouching && !GameManager.I.Underwater) frame = 5;
+            else if (GameManager.I.Underwater && !Body.Grounded && !frozen) frame = stroke < 0.25f ? 1 : 3;   // a kick, then a glide
             else if (!Body.Grounded && !frozen) frame = 3;
             else if (Mathf.Abs(Body.Vel.x) < 0.3f) frame = 0;
             else
@@ -229,7 +237,7 @@ namespace Tapestry
         public void Die(bool fell = false)
         {
             if (Dead) return;
-            Dead = true;
+            Dead = true; if (crouching) { crouching = false; Body.H = FootH; }
             if (Mounted) { Mounted = false; view.SetSheet(Def.Sheet); }
             view.Renderer.enabled = true;
             RelicTime = 0f; ShowGlory(false); HasCrossbow = false; PlaceCrossbow();
@@ -243,7 +251,7 @@ namespace Tapestry
 
         public void Mount(string kind = "bayard", bool silent = false)
         {
-            Mounted = true; MountKind = kind;
+            Mounted = true; MountKind = kind; crouching = false;
             Body.W = RideW; Body.H = RideH;
             if (!silent) Audio.Play("mount", 0.9f);
             view.SetSheet(Def.RideSheet(kind));
@@ -315,7 +323,7 @@ namespace Tapestry
             crossbowView.enabled = HasCrossbow && view.Renderer.enabled && !Dead;
             crossbowView.flipX = !FacingRight;
             crossbowView.transform.localPosition = lying ? new Vector3(FacingRight ? 0.75f : -0.75f, 0.2f, 0f)
-                : new Vector3(FacingRight ? 0.3f : -0.3f, Mounted ? 1.3f : 0.75f, 0f);
+                : new Vector3(FacingRight ? 0.3f : -0.3f, Mounted ? 1.3f : crouching ? 0.42f : 0.75f, 0f);
         }
 
         public void Destroy() { view.Destroy(); }

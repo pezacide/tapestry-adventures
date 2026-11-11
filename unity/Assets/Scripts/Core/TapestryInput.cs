@@ -10,7 +10,7 @@ namespace Tapestry
     public static class TapestryInput
     {
         public static float Horizontal;
-        public static bool JumpHeld, JumpPressed, RunHeld, RunPressed, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed, MutePressed;
+        public static bool JumpHeld, JumpPressed, RunHeld, RunPressed, DownHeld, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed, MutePressed;
         public static bool LeftPressed, RightPressed;
         public static bool TouchSeen;
         public static Vector2? TapPosition;    // GUI coordinates (top-left origin) of a new touch/click this frame
@@ -126,7 +126,7 @@ namespace Tapestry
             JumpPressed = jump && !prevJump; JumpHeld = jump; prevJump = jump;
             // pushing the stick all the way runs, but only the button fires the crossbowe
             RunHeld = run || stickRun; RunPressed = run && !prevRun; prevRun = run;
-            DownPressed = down && !prevDown; prevDown = down;
+            DownHeld = down; DownPressed = down && !prevDown; prevDown = down;
             StartPressed = start && !prevStart; prevStart = start;
             NextKnightPressed = next && !prevNext; prevNext = next;
             PrevKnightPressed = prev && !prevPrev; prevPrev = prev;

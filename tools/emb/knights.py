@@ -63,7 +63,7 @@ def knight(cfg, pose):
 
 def knight_body(cfg, pose):
     hz, sh = cfg["mail"], cfg["shield"]
-    fl, bl = {"idle": (0, 0), "walk1": (-24, 20), "walk2": (20, -24), "jump": (-38, 26), "ride": (-34, 0)}[pose]
+    fl, bl = {"idle": (0, 0), "walk1": (-24, 20), "walk2": (20, -24), "jump": (-38, 26), "ride": (-34, 0), "crouch": (-30, 22)}[pose]
     lift = -3 if pose == "jump" else (-1 if pose.startswith("walk") else 0)
     s = g(leg(cfg["hose"], True), rot(bl, 33, 63) + " translate(-4 0)") if pose != "ride" else ""
     s += weapon(cfg["weapon"])
@@ -84,6 +84,8 @@ def knight_body(cfg, pose):
     s += fill("M24,18.3 L45.5,18.3 L45.5,21 L24,21 Z", cfg["trim"], 0, "dark", 1)
     s += fill("M42,19 L45,19 L45,27 L42.4,27 Z", cfg["helm"], 90, "dark", 1)
     s += shield_design(cfg["device"], sh[0], sh[1])
+    if pose == "crouch":   # hunched low behind the shield: squashed down onto the feet, a little broader
+        return g(s, "translate(-3.4 38.6) scale(1.1 0.58)")
     return g(s, f"translate(0 {lift})")
 
 KNIGHTS = {
@@ -96,4 +98,4 @@ KNIGHTS = {
     "aurelia": dict(title="Lady Aurelia", mail="ochre", hose="green", helm="grey", trim="indigo", shield=("indigo", "gold"), device="bezants", weapon="mace", braid="terra", seed=9,
                     trait="Swift; fastest on foot, lighter jumps"),
 }
-POSES = ["idle", "walk1", "walk2", "jump", "ride"]   # "ride": seated, far leg hidden, for use on Bayard
+POSES = ["idle", "walk1", "walk2", "jump", "ride", "crouch"]   # "ride": seated, far leg hidden, for use on Bayard; "crouch": ducking low
