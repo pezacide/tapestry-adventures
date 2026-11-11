@@ -12,10 +12,12 @@ namespace Tapestry
         readonly Transform[] gusts = new Transform[3];
         float t;
 
-        public WindHead(Vector2 pos, bool blowsRight, Transform parent)
+        readonly bool blasts;   // a trumpet angel: it blasts in turns (and harder) rather than blowing all the while
+        public WindHead(Vector2 pos, bool blowsRight, Transform parent, string skin = null)
         {
             at = pos + new Vector2(0f, 0.5f); dir = blowsRight ? 1f : -1f;
-            var head = Art.Make("scenery/wind_head", parent, new Vector2(pos.x, pos.y - 0.5f), 3);
+            blasts = !string.IsNullOrEmpty(skin);
+            var head = Art.Make(blasts ? skin : "scenery/wind_head", parent, new Vector2(pos.x, pos.y - 0.5f), 3);
             head.flipX = !blowsRight;
             for (int i = 0; i < gusts.Length; i++)
             {
@@ -35,12 +37,16 @@ namespace Tapestry
         public void Tick(float dt, Level lv, Knight k)
         {
             t += dt;
+            bool on = !blasts || Mathf.Repeat(t, 4.5f) < 1.6f;
+            if (blasts && Mathf.Repeat(t, 4.5f) < dt && Mathf.Abs(k.Body.Pos.x - at.x) < 16f) Audio.Play("trumpet", 0.8f);
+            for (int i = 0; i < gusts.Length; i++) gusts[i].gameObject.SetActive(on);
+            if (!on) return;
             for (int i = 0; i < gusts.Length; i++)   // gusts stream out across the windy stretch
             {
                 float along = Mathf.Repeat(t * 6f + i * Reach / gusts.Length, Reach);
                 gusts[i].localPosition = new Vector3(at.x + dir * (1.2f + along), at.y - 0.6f + (i - 1) * 1.1f, 0f);
             }
-            if (!k.Dead && Inside(k.Body)) k.Body.Nudge(lv, dir * Push * dt);
+            if (!k.Dead && Inside(k.Body)) k.Body.Nudge(lv, dir * (blasts ? 5f : Push) * dt);
         }
     }
 }

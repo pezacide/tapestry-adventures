@@ -58,7 +58,7 @@ class Map:
             for y in range(0, top + 1): self.put(x, y, "*")
     def rows(self): return ["".join(self.g[y]).rstrip() for y in range(self.H - 1, -1, -1)]
 
-WALKERS, FLIERS, SWIMMERS = "sShldcujyqIx{}", "gbawp!", "fzm"
+WALKERS, FLIERS, SWIMMERS = "sShldcujyqIx{}k", "gbawp!&", "fzm"
 STANDABLE = set("#BV?X=^HMW1R87")
 def gauntlet(m, underwater=False):
     """After every holy relique (R brick), a run of six beasts spaced over the next ~32 tiles: a knight who keeps
@@ -72,7 +72,7 @@ def gauntlet(m, underwater=False):
     stop = W
     for x in range(W):   # never into a boss's hall, nor near the pole and its stairs
         for y in range(H):
-            if m.g[y][x] in "KJ45 6".replace(" ", "") or m.g[y][x] == "D": stop = min(stop, x - 14)
+            if m.g[y][x] in "KJ456$23" or m.g[y][x] == "D": stop = min(stop, x - 14)
             if m.g[y][x] == "G": stop = min(stop, x - 16)
     relics = sorted({x for x in range(W) for y in range(H) if m.g[y][x] == "R"})
     for rx in relics:
@@ -119,7 +119,7 @@ def place_chalice(m):
                 m.put(x - 1, 5, "B"); m.put(x, 5, "1"); m.put(x + 1, 5, "B")
                 break
 
-def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=None, near=None, entrance=False, skin=None, vault=None, underwater=False, end_at_door=False, wind=False, leaping_fish=False, plank=None, lift=None, hounds=False, chase=False, gate=None):
+def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=None, near=None, entrance=False, skin=None, vault=None, underwater=False, end_at_door=False, wind=False, leaping_fish=False, plank=None, lift=None, hounds=False, chase=False, gate=None, wind_skin=None, falling_stars=False, horsemen=False, finale=False):
     castle = castle or ""
     gauntlet(m, underwater)
     place_chalice(m)
@@ -141,6 +141,10 @@ def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=
     if hounds: cs.append('            HuntingHounds = true,')
     if chase: cs.append('            Chase = true,')
     if gate: cs.append(f'            Gate = "{gate}",')
+    if wind_skin: cs.append(f'            WindSkin = "{wind_skin}",')
+    if falling_stars: cs.append('            FallingStars = true,')
+    if horsemen: cs.append('            Horsemen = true,')
+    if finale: cs.append('            Finale = true,')
     cs.append("            Map = new[]"); cs.append("            {")
     cs += [f'                "{r}",' for r in m.rows()]
     cs += ["            },", "            Props = new Decor[]", "            {"]
@@ -700,3 +704,95 @@ m.put(136, 2, "N")
 write("Level24", "Worlde 6-4", "A mon seul desir", "HERE YE LYON AND YE UNICORNE GUARDE YE LADYE'S TENTE", m,
       [], "", 0, "castle", "backgrounds/pavilion_far", "backgrounds/castle_near",
       skin=W6, plank="scenery/garland")
+
+# ======================================================= World 7: the Apocalypse Tapestry (red and blue grounds) - and the finale
+W7 = ("scenery/apoc_top", "scenery/apoc_fill", "scenery/gothic_block")
+
+# ---- 7-1  Ye Seven Trumpettes: seven angels sound their trumpets (each blast drives thee back); stars fall from heaven
+m = Map(200)
+m.ground(0, 40); m.ground(46, 85); m.ground(92, 130); m.ground(137, 199)
+m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.put(16, 2, "k"); m.row(20, 5, "BHB")
+m.put(36, 7, "<")                                                 # the first trumpet: wait for its blast to pass
+m.row(41, 4, "=====")
+m.put(52, 2, "k"); m.row(56, 5, "BWB"); m.put(62, 7, "&")
+m.put(70, 7, "<"); m.put(84, 7, "<")
+m.row(86, 4, "======")
+m.row(95, 5, "BRB"); m.put(101, 2, "C"); m.put(106, 2, "k")
+m.put(116, 7, "<"); m.put(110, 8, "&"); m.row(112, 5, "?B?")
+m.put(129, 7, "<")
+m.row(131, 4, "======")
+m.put(142, 2, "k"); m.put(150, 7, "<"); m.put(148, 8, "&"); m.row(152, 5, "B?B")
+m.put(162, 7, "<")                                                # the seventh trumpet
+m.stairs(166, 6)
+m.put(178, 2, "G")
+write("Level25", "Worlde 7-1", "Ye Seven Trumpettes", "HERE YE SEVEN ANGELS SOUNDE YE SEVEN TRUMPETTES", m,
+      [], "scenery/castle_heaven_gate", 190, "trumpets", "backgrounds/apoc_far", "backgrounds/apoc_near",
+      skin=W7, plank="scenery/cloud_scroll", wind_skin="scenery/trumpet_angel", falling_stars=True)
+
+# ---- 7-2  Ye Locustes: swarms of crowned locusts with the faces of men
+m = Map(200)
+m.ground(0, 34); m.ground(40, 78); m.ground(84, 122); m.ground(128, 199)
+m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.put(18, 6, "&"); m.put(22, 8, "&"); m.put(26, 2, "k")
+m.row(35, 4, "====="); m.put(38, 8, "&")
+m.row(46, 5, "BWB"); m.put(52, 6, "&"); m.put(55, 8, "&"); m.put(58, 5, "&"); m.put(64, 2, "k"); m.row(68, 6, "=====")
+m.row(79, 4, "=====")
+m.row(88, 5, "BRB"); m.put(94, 2, "C"); m.put(100, 7, "&"); m.put(104, 5, "&"); m.put(108, 8, "&"); m.put(112, 2, "k")
+m.row(123, 4, "=====")
+m.row(132, 5, "B8B"); m.put(140, 6, "&"); m.put(144, 8, "&"); m.put(148, 5, "&"); m.put(152, 7, "&"); m.put(156, 2, "k")
+m.stairs(166, 6)
+m.put(178, 2, "G")
+write("Level26", "Worlde 7-2", "Ye Locustes", "HERE YE LOCUSTES COME FORTH OUT OF YE PITTE", m,
+      [], "scenery/castle_city_gate", 190, "locusts", "backgrounds/apoc_far", "backgrounds/apoc_near",
+      skin=W7, plank="scenery/cloud_scroll")
+
+# ---- 7-3  Ye Foure Horsemen: they gallop in from behind, one after another; ride Bayard to keep ahead
+m = Map(200)
+m.ground(0, 44); m.ground(49, 92); m.ground(97, 140); m.ground(145, 199)
+m.put(3, 2, "P"); m.row(8, 5, "BHB"); m.row(14, 5, "?M?")
+m.row(24, 5, "===="); m.row(34, 6, "====")                       # cloud ledges to wait upon while a ryder passes
+m.row(45, 4, "====")
+m.put(56, 2, "k"); m.row(60, 5, "BWB"); m.row(68, 6, "=====")
+m.row(93, 4, "====")
+m.row(100, 5, "BRB"); m.put(106, 2, "C"); m.row(110, 5, "BHB"); m.row(118, 6, "====="); m.put(126, 2, "k")
+m.row(141, 4, "====")
+m.row(150, 5, "?B?"); m.row(156, 6, "====")
+m.stairs(166, 6)
+m.put(178, 2, "G")
+write("Level27", "Worlde 7-3", "Ye Foure Horsemen", "HERE YE FOURE HORSEMEN RYDE FORTH", m,
+      [], "scenery/castle_cat_keep", 190, "horsemen", "backgrounds/apoc_far", "backgrounds/apoc_near",
+      skin=W7, plank="scenery/cloud_scroll", horsemen=True)
+
+# ---- 7-4  Ye Beaste of Seven Heddes: castle and boss
+m = Map(150)
+m.vault(0, 149); m.floor(0, 149)
+m.put(3, 2, "P"); m.row(8, 5, "?M?")
+m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "k"); m.put(26, 5, "F")
+m.row(30, 5, "?W?"); m.put(34, 6, "&")
+m.fire(38, 43); m.row(39, 4, "==="); m.put(47, 2, "k"); m.row(50, 5, "BRB")
+m.put(55, 2, "C")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "k")
+m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
+for y in range(2, 5): m.put(98, y, "V")
+for y in range(2, 9): m.put(122, y, "D")
+m.put(110, 2, "2")
+m.put(136, 2, "N")
+write("Level28", "Worlde 7-4", "Ye Beaste of Seven Heddes", "HERE YE BEASTE RISETH OUT OF YE SEA WITH SEVEN HEDDES", m,
+      [], "", 0, "castle", "backgrounds/apoc_far", "backgrounds/castle_near",
+      skin=W7, plank="scenery/cloud_scroll")
+
+# ---- 7-5  Ye Greate Halle: the Cat King upon his throne - and Princess Aelfgyva behind it (the finale)
+m = Map(140)
+m.vault(0, 139); m.floor(0, 139)
+m.put(3, 2, "P"); m.row(8, 5, "?M?"); m.put(16, 2, "k")
+m.fire(20, 25); m.row(21, 4, "==="); m.put(29, 5, "F"); m.put(33, 2, "k")
+m.row(38, 5, "BWB"); m.put(44, 2, "k")
+m.fire(48, 54); m.row(49, 4, "===="); m.put(58, 6, "F")
+m.row(62, 5, "BRB"); m.put(66, 2, "C"); m.put(72, 2, "k"); m.put(78, 2, "k")
+m.fire(82, 87); m.row(83, 4, "===="); m.row(92, 5, "B1B")
+for y in range(2, 5): m.put(102, y, "V")
+m.put(120, 2, "3")                                                # the Cat King upon his throne
+for y in range(2, 9): m.put(125, y, "D")
+m.put(132, 2, "]")                                                # Princess Aelfgyva
+write("Level29", "Worlde 7-5", "Ye Greate Halle", "HERE YE CAT KING SITTETH UPON HIS THRONE", m,
+      [], "", 0, "castle", "backgrounds/hall_far", "backgrounds/castle_near",
+      skin=W7, plank="scenery/cloud_scroll", finale=True)

@@ -40,6 +40,8 @@ namespace Tapestry
             { 'q', new Entry("enemies/greyhound", "Greyhounde", "It lyeth in wayte, then raceth at thee.") },
             { 'p', new Entry("enemies/pheasant", "Pheasaunt", "It bursteth up from ye flowers as thou drawest neare.") },
             { 'I', new Entry("enemies/genet", "Genette", "It pounceth in long lowe leapes.") },
+            { '&', new Entry("enemies/locust", "Crowned Locustes", "They swarme after thee with men's faces. Stompe them.") },
+            { ']', new Entry("princess/aelfgyva", "Ye Princesse Aelfgyva", "She is held behind ye Cat King's throne. Overthrowe him, and go to her!") },
             { '{', new Entry("enemies/lapdog", "Lappe-Dogge", "It yappeth and hoppeth at thee. Stompe it.") },
             { '}', new Entry("enemies/fox", "Foxe", "It darteth at thee when thy backe is turned. Face it, or stompe it.") },
             { '@', new Entry("enemies/monkey", "Monkeye", "It flingeth comfits in arcs. Stompe it.") },
@@ -77,6 +79,8 @@ namespace Tapestry
             { '4', new Entry("scenery/wind_head", "Ye Foure Windes", "Each hedde in turne draweth breath and gloweth golde: touche it or shoote it then.") },
             { '5', new Entry("bosses/great_boar", "Ye Greate Boar", "Leape it, that it ramme ye wall; then stompe it whyle it is dazed. Three blowes.") },
             { '$', new Entry("bosses/heraldic_lion", "Ye Lyon and ye Unicorne", "Two at once! Stompe ye Lyon whyle he croucheth, ye Unicorne whyle it reareth; three blowes each. Each blowe angereth ye other.") },
+            { '2', new Entry("bosses/hydra_head", "Ye Beaste of Seven Heddes", "Each hedde in turne spitteth fyre and lungeth lowe; then it droopeth, dazed. Stompe it then. Fell alle seven.") },
+            { '3', new Entry("bosses/cat_king_afoot", "Ye Cat King", "Upon his throne he flingeth soupe and may not be harmed. When he leapeth downe and prowleth, stompe him! Foure blowes.") },
             { '6', new Entry("bosses/spotted_unicorn", "Ye Spotted Unicorne", "It may not be harmed. Leape it, that it ramme ye GATE thrice: then it is spared, and shall beare thee.") },
         };
 
@@ -90,6 +94,8 @@ namespace Tapestry
             if (def.Entrance || def.EndAtDoor) Add(list, seen, new Entry(string.IsNullOrEmpty(def.Castle) ? "scenery/crypt_entrance" : def.Castle, "Ye Doore", "There is no pole here: walke into ye doore at ye ende to goe on."));
             if (def.HuntingHounds) Add(list, seen, new Entry("enemies/talbot", "Talbot Houndes", "Ye hunte's houndes runne in from behinde. Keepe moving, or stompe them."));
             if (def.Chase) Add(list, seen, new Entry("scenery/hunt_line", "Ye Hunte", "It sweepeth on from behinde and never falleth farre backe. Runne!"));
+            if (def.FallingStars) Add(list, seen, new Entry("projectiles/star", "Falling Starres", "They falle from heaven, oft right above thee. Watche ye skye and step asyde."));
+            if (def.Horsemen) Add(list, seen, new Entry("enemies/horseman_white", "Ye Foure Horsemen", "One after another they galloppe in from behinde. Leape them, or stompe them."));
             if (def.Wind) Add(list, seen, new Entry("scenery/gust", "Gustes of Wynde", "Ye wynde bloweth by turnes, from before and behinde."));
             if (def.LeapingFish) Add(list, seen, new Entry("enemies/fish", "Leaping Fysshe", "They burst from ye sea in arcs. Stompe them in ye ayre."));
             int w = 0;
@@ -103,6 +109,7 @@ namespace Tapestry
                     Entry e;
                     if (Bosses.TryGetValue(c, out e)) { boss = e; continue; }
                     if (c == '~' && !def.Underwater) { Add(list, seen, new Entry("scenery/sea", "Ye Sea", "Falle in, and thou art loste.")); continue; }
+                    if (c == '<' && !string.IsNullOrEmpty(def.WindSkin)) { Add(list, seen, new Entry(def.WindSkin, "Ye Trumpettes", "Angels sounde them in turne: each blaste driveth thee backe. Waite for ye silence, then go.")); continue; }
                     if (ByChar.TryGetValue(c, out e)) Add(list, seen, e);
                 }
             return list;

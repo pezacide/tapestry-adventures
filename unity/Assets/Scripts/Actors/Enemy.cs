@@ -46,6 +46,8 @@ namespace Tapestry
                 case "fox": speed = 1.4f; break;
                 case "monkey": speed = 0f; timer = 1f; break;
                 case "parakeet": gravity = false; break;
+                case "locust": gravity = false; break;
+                case "horseman_white": case "horseman_red": case "horseman_black": case "horseman_pale": speed = 9.5f; dir = 1f; break;
                 case "greyhound": speed = 0f; break;
                 case "genet": speed = 1.2f; break;
                 case "pheasant": gravity = false; break;
@@ -217,6 +219,26 @@ namespace Tapestry
                         else { Walk(lv, true); WalkFrames(0, 0, 1f); }
                     }
                     else view.SetFrame(1);
+                    break;
+
+                case "locust":   // hovers about its place, then drifts after a knight who comes near, wings whirring
+                    {
+                        var target = Mathf.Abs(dx) < 9f ? p.Body.Pos + new Vector2(0f, 1.2f) : home;
+                        if ((target - home).magnitude > 10f) target = home;
+                        var to = target - Body.Pos;
+                        Body.Vel = to.normalized * Mathf.Min(2.4f, to.magnitude * 2f) + new Vector2(Mathf.Sin(timer * 5f + home.x) * 1.2f, Mathf.Cos(timer * 4f) * 1.2f);
+                        view.Face(Body.Vel.x > 0f); WalkFrames(0, 1, 12f);
+                    }
+                    break;
+
+                case "horseman_white": case "horseman_red": case "horseman_black": case "horseman_pale":
+                    // one of the four horsemen: gallops in from behind and across the realm, leaping gaps
+                    if (Body.HitWall) Body.Vel.y = Body.Grounded ? 12f : Body.Vel.y;
+                    Body.Vel.x = dir * speed; view.Face(dir > 0f);
+                    if (Body.Grounded && !Body.FloorAhead(lv, dir)) Body.Vel.y = 12f;
+                    WalkFrames(0, 1, 9f);
+                    lifeT += dt;
+                    if (lifeT > 9f || Body.Pos.x > p.Body.Pos.x + 24f) Remove();
                     break;
 
                 case "lapdog":   // scampers to and fro, yapping, and hops at the knight when he is near
@@ -564,7 +586,7 @@ namespace Tapestry
         public Shot(string kind, Vector2 pos, Vector2 vel, Transform parent)
         {
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
-            gravity = kind == "soup_glob" || kind == "spear" || kind == "comfit";
+            gravity = kind == "soup_glob" || kind == "spear" || kind == "comfit" || kind == "star";
             Friendly = kind == "bolt";
             Kind = kind;
             life = Friendly ? 1.1f : 4f;
@@ -577,7 +599,7 @@ namespace Tapestry
         {
             if (Removed) return;
             t += dt;
-            if (gravity) Body.Vel.y -= (Kind == "spear" ? 9f : 22f) * dt;
+            if (gravity) Body.Vel.y -= (Kind == "spear" ? 9f : Kind == "star" ? 5f : 22f) * dt;
             if (Kind == "spear") view.Renderer.transform.localEulerAngles = new Vector3(0f, 0f, Mathf.Atan2(Body.Vel.y, Mathf.Abs(Body.Vel.x)) * Mathf.Rad2Deg * (Body.Vel.x >= 0f ? 1f : -1f));
             Body.Step(lv, dt);
             view.SetFrame(((int)(t * 10f)) % 2);

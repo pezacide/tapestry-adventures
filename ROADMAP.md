@@ -16,7 +16,7 @@ All of these works are centuries old and in the public domain. We redraw them in
 | 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | **done** (4-1 to 4-4) |
 | 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | **done** (5-1 to 5-4) |
 | 6 | The Lady and the Unicorn | woven; red mille-fleur grounds, blue flower islands | one level for each of the five senses | Ye Lyon and ye Unicorne (twin boss) | **done** (6-1 to 6-4) |
-| 7 | Apocalypse Tapestry | woven; alternating red and blue grounds | falling stars, trumpet blasts | The Seven-Headed Dragon, then the **Cat King** finale | next |
+| 7 | Apocalypse Tapestry | woven; alternating red and blue grounds | falling stars, trumpet blasts | The Seven-Headed Beast, then the **Cat King** finale | **done** (7-1 to 7-5) |
 
 **The art changes with each tapestry.** Worlds 1–3 keep the stitched-on-linen look. From World 4 the backgrounds become fully woven (dense hatching and a weave texture), while the knights stay stitched. The contrast is deliberate: embroidered heroes walking into woven worlds.
 
@@ -82,10 +82,10 @@ The seven trumpets, the locusts with human faces, the four horsemen, and the sev
 |---|---|---|
 | 7-1 | Ye Seven Trumpettes | **falling stars** as hazards; **trumpet blasts** push you back |
 | 7-2 | Ye Locustes | swarms of crowned locusts with human faces |
-| 7-3 | Ye Foure Horsemen | a chase: four riders sweep the screen in turn; ride Bayard to keep pace |
-| 7-4 | Ye Beaste of Seven Heddes | boss **the Seven-Headed Dragon** (the Great Dragon's final form); fell its heads one by one |
+| 7-3 | Ye Foure Horsemen | the four riders gallop in from behind in turn; leap them, or wait on cloud ledges; Bayard in the bricks |
+| 7-4 | Ye Beaste of Seven Heddes | boss **the Seven-Headed Beast**: each head spits fire, lunges low, then droops dazed; stomp it, and fell all seven |
 | 7-5 | Ye Greate Halle (finale) | the **Cat King** on his throne flings soup and summons Soup Cats; beat him and **rescue Princess Aelfgyva** |
-| Ending | | the story so far, scrolling past as one long embroidered strip |
+| Ending | | the whole story, scrolling up a parchment beneath the knight and the Princess |
 
 ---
 

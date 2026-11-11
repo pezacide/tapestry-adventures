@@ -9,7 +9,7 @@ namespace Tapestry
     {
         public static GameManager I { get; private set; }
 
-        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing }
+        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing, Ending }
         State state = State.Title;
 
         const float ViewHalfHeight = 5.625f;           // 540 design px tall = 11.25 tiles
@@ -37,6 +37,10 @@ namespace Tapestry
         // World 5: ye unicorne's horne and ye poysoned fountaine; and the hunt closing in (the chase)
         SpriteRenderer hornView, huntView; Vector2 hornPos, fountainPos; bool hasHorn, carryingHorn, hasFountain, purifiedSaved, toldFoul, toldFountain;
         float huntX, huntDelay; int hornCombo, pipeCount;
+        // World 7: falling stars, the four horsemen, and the Princesse (the finale)
+        float starT, horsemanT; int horsemanNext;
+        SpriteRenderer princessView; Vector2 princessPos; bool hasPrincess, rescuedPrincess;
+        readonly List<Enemy> pendingEnemies = new List<Enemy>();
         // castles: flails, the boss, the axe that drops the bridge, and the rescued monk
         readonly List<Flail> flails = new List<Flail>();
         readonly List<Log> logs = new List<Log>();
@@ -197,7 +201,7 @@ namespace Tapestry
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
-            hornView = huntView = null; pipeCount = 0; hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
+            hornView = huntView = null; pipeCount = 0; starT = 3f; horsemanT = 4f; horsemanNext = 0; princessView = null; hasPrincess = rescuedPrincess = false; pendingEnemies.Clear(); hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -227,7 +231,7 @@ namespace Tapestry
                     case 'a': kind = "falcon"; break;
                     case 'r': raftLaunches.Add(p); raftTimers.Add(0f); break;
                     case '5': boss = new GreatBoar(p, world); break;
-                    case '<': case '>': winds.Add(new WindHead(p, s.Key == '>', world)); break;
+                    case '<': case '>': winds.Add(new WindHead(p, s.Key == '>', world, L.WindSkin)); break;
                     case 'f': kind = "fish"; break;
                     case 'z': kind = "sea_serpent"; break;
                     case 'm': kind = "sea_monk"; break;
@@ -272,6 +276,10 @@ namespace Tapestry
                     case '@': kind = "monkey"; break;
                     case '!': kind = "parakeet"; break;
                     case '$': boss = new TwinBoss(p, world); break;
+                    case '2': boss = new Hydra(p, world); break;
+                    case '3': boss = new CatKing(p, world); break;
+                    case '&': kind = "locust"; break;
+                    case ']': hasPrincess = true; princessPos = p; princessView = Art.Make("princess/aelfgyva", world, p, 9); princessView.flipX = true; break;
                     case '9': lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), Lift.Kind.OrganPipe, world, pipeCount++ % 3)); break;
                     case '6': boss = new SpottedUnicorn(p, world); break;
                     case '0': hasFountain = true; fountainPos = p; Art.Make("scenery/fountain", world, p, -4); break;
@@ -337,6 +345,7 @@ namespace Tapestry
                     TickWin(dt);
                     player.Tick(dt, level);
                     TickEntities(dt);
+                    if (winPhase == 3 && winTime > 4f) { SetState(State.Ending); break; }
                     if (winPhase == 2 && winTime > 1.2f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
                     {
                         if (levelIndex + 1 < Levels.All.Length) NextLevel();
@@ -346,6 +355,10 @@ namespace Tapestry
                 case State.Briefing:
                     if (stateTime > 0.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
                     { Audio.Play("select"); SetState(State.Playing); }
+                    break;
+                case State.Ending:   // the story told, scrolling up; then back to the title
+                    if (stateTime > 5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue) || stateTime > EndingLength)
+                    { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     break;
                 case State.Entering:   // walked into the crypt door: fade, then on to the next part
                     if (stateTime > 1.1f) NextLevel();
@@ -357,7 +370,7 @@ namespace Tapestry
             }
         }
 
-        string LevelMusic { get { return bossMusic ? "boss" : L.Music; } }
+        string LevelMusic { get { return bossMusic ? (L.Finale ? "finale" : "boss") : L.Music; } }
         bool relicMusic;
 
         void NextLevel()
@@ -378,6 +391,7 @@ namespace Tapestry
             {
                 case State.Title: Audio.Music("title"); break;
                 case State.Briefing: Audio.Music(L.Music); break;
+                case State.Ending: Audio.Music("ending", false); break;
                 case State.Playing:
                     if (was == State.Paused) Audio.ResumeMusic();
                     else if (was == State.Briefing) Toast(L.Title + "  ·  " + L.Name);
@@ -641,6 +655,7 @@ namespace Tapestry
             TickStampede(dt);
             TickHuntAndRiver(dt);
             TickChase(dt);
+            TickStarsAndHorsemen(dt);
             TickEntities(dt);
             if (player.Dead) return;
             UpdateRelicMusic();
@@ -743,6 +758,21 @@ namespace Tapestry
                 Audio.Play("kick");
             }
 
+            // the finale: the Princesse, behind the Cat King's throne
+            if (hasPrincess && !rescuedPrincess && pb.Pos.x >= princessPos.x - 1.4f && (boss == null || boss.Dead))
+            {
+                rescuedPrincess = true; rescuedMonk = true; showManicule = false;
+                if (princessView != null) princessView.sprite = Art.Frames("princess/aelfgyva")[2];
+                player.Freeze(); player.FaceRight();
+                PlayerPrefs.SetInt(PassedKey(L.Title), 1); PlayerPrefs.Save();
+                score += 10000;
+                TymeBonus();
+                Toast("Ye Princesse Aelfgyva is free!");
+                winPhase = 3; winTime = 0f;
+                SetState(State.Won);
+                return;
+            }
+
             // the rescued monk ends a castle
             if (hasMonk && !rescuedMonk && boss != null && !boss.Dead && pb.Pos.x >= monkPos.x - 1.2f)
             {
@@ -813,7 +843,7 @@ namespace Tapestry
             {
                 if (!boss.Active && boss.Body.Pos.x < wake - 2f)
                 {
-                    boss.Active = true; bossMusic = true; Audio.Music("boss");
+                    boss.Active = true; bossMusic = true; Audio.Music(LevelMusic);
                     Toast(boss.Title + " barreth thy way!");
                 }
                 if (boss.Active) boss.Tick(dt, level, player);
@@ -863,6 +893,7 @@ namespace Tapestry
 
         void Cleanup()
         {
+            if (pendingEnemies.Count > 0) { enemies.AddRange(pendingEnemies); pendingEnemies.Clear(); }
             enemies.RemoveAll(e => e.Removed);
             shots.RemoveAll(s => s.Removed);
             bezants.RemoveAll(b => b.Removed);
@@ -950,6 +981,45 @@ namespace Tapestry
         }
 
         public void SpawnShot(string kind, Vector2 pos, Vector2 vel) { shots.Add(new Shot(kind, pos, vel, world)); }
+        public void SpawnEnemy(string kind, Vector2 pos) { pendingEnemies.Add(new Enemy(kind, pos, world) { Active = true }); }
+        public int CountEnemies(string kind) { int n = 0; foreach (var e in enemies) if (e.Kind == kind && e.Alive && !e.Removed) n++; return n + pendingEnemies.FindAll(e => e.Kind == kind).Count; }
+
+        static readonly string[] HorsemanKinds = { "horseman_white", "horseman_red", "horseman_black", "horseman_pale" };
+        static readonly string[] HorsemanNames = { "Ye Ryder on ye White Horse", "Ye Ryder on ye Red Horse", "Ye Ryder on ye Blacke Horse", "Death upon ye Pale Horse" };
+
+        /// <summary>World 7: stars fall from heaven (often right above the knight); the four horsemen gallop in from behind in turn.</summary>
+        void TickStarsAndHorsemen(float dt)
+        {
+            if (player.Dead) return;
+            if (L.FallingStars)
+            {
+                starT -= dt;
+                if (starT <= 0f)
+                {
+                    starT = 1.4f + Random.value * 1.2f;
+                    float x = Random.value < 0.5f ? player.Body.Pos.x + Random.Range(-2.5f, 2.5f) : camX + Random.Range(-HalfWidth + 1.5f, HalfWidth - 1.5f);
+                    SpawnShot("star", new Vector2(x, ViewHalfHeight * 2f + 0.5f), new Vector2(0f, -2.5f));
+                    Audio.Play("star", 0.35f);
+                }
+            }
+            if (L.Horsemen && player.Body.Pos.x < level.Width - 30f)
+            {
+                horsemanT -= dt;
+                if (horsemanT <= 0f)
+                {
+                    float x = camX - HalfWidth - 1.5f;
+                    if (x > 1f && level.GroundAt(x) > 0.5f)
+                    {
+                        horsemanT = 6.5f;
+                        int i = horsemanNext++ % 4;
+                        pendingEnemies.Add(new Enemy(HorsemanKinds[i], new Vector2(x, level.GroundAt(x)), world) { Active = true });
+                        Audio.Play("trumpet", 0.7f);
+                        Toast(HorsemanNames[i] + " cometh! Leape him!");
+                    }
+                    else horsemanT = 0.5f;
+                }
+            }
+        }
         public void SpawnBolt(Vector2 pos, bool right) { shots.Add(new Shot("bolt", pos, new Vector2(right ? 13f : -13f, 0f), world)); }
         public int BoltCount { get { int n = 0; foreach (var s in shots) if (s.Friendly && !s.Removed) n++; return n; } }
 
@@ -1196,6 +1266,7 @@ namespace Tapestry
             switch (state)
             {
                 case State.Briefing: DrawBriefing(W, H); break;
+                case State.Ending: DrawEnding(W, H); break;
                 case State.Title:
                     Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
                     if (titleStep == 1) { DrawRealmSelect(W, H); break; }
@@ -1397,6 +1468,63 @@ namespace Tapestry
             var cc = GUI.color; GUI.color = new Color(1f, 1f, 1f, a);
             GUI.Label(new Rect(0, H * 0.9f, W, U * 0.06f), TapestryInput.ShowTouchControls ? "Touche to ryde forth" : "JUMPE to ryde forth", center);
             GUI.color = cc;
+        }
+
+        // ------------------------------------------------------------------ ye ende
+        static readonly string[] EndingLines =
+        {
+            "YE ENDE", "",
+            "Thus did ye knyghtes ryde through seven tapestries,",
+            "from ye Bayeux strip to ye Apocalypse of Angers.", "",
+            "They humbled ye Cockatrice upon her bridge,",
+            "and Aspidochelone, ye Island-Whale, sank beneath ye sea.",
+            "Ye Foure Windes were stilled in ye Wheel of ye Yeare,",
+            "and ye Greate Boar was brought to bay in ye Hunting Lodge.", "",
+            "Ye Spotted Unicorne was spared, and bore them on;",
+            "ye Lyon and ye Unicorne bowed before ye Ladye's tente;",
+            "and ye Beaste of Seven Heddes lost every one of them.", "",
+            "Last of alle, ye Cat King was cast downe from his throne",
+            "(and sent to bedde without any soupe).", "",
+            "And Princesse Aelfgyva was brought home with great joye,",
+            "and there was feasting for seven dayes,",
+            "and soupe for alle.", "", "",
+            "Here endeth ye tapestrie.", "", "",
+            "Made with needle, loom and code.",
+        };
+        const float EndingLength = 46f;
+
+        void DrawEnding(float W, float H)
+        {
+            Panel(new Rect(0, 0, W, H));
+            float lineH = U * 0.075f, speed = U * 0.06f;
+            float y0 = H + U * 0.05f - stateTime * speed;
+            // the knight and the Princesse, together at the top of the parchment
+            float pw = U * 0.16f;
+            var kd = Knights.All[knightIndex];
+            DrawIcon(kd.Sheet, new Rect(W * 0.5f - pw * 1.1f, H * 0.03f, pw, pw * 1.5f));
+            DrawFrameFit("princess/aelfgyva", 2, new Rect(W * 0.5f + pw * 0.1f, H * 0.03f, pw, pw * 1.5f));
+            for (int i = 0; i < EndingLines.Length; i++)
+            {
+                float y = y0 + i * lineH;
+                if (y < H * 0.03f + pw * 1.55f || y > H) continue;
+                GUI.Label(new Rect(0, y, W, lineH), EndingLines[i], i == 0 ? big : center);
+            }
+            if (stateTime > 5f)
+            {
+                var c = GUI.color; GUI.color = new Color(1f, 1f, 1f, 0.5f + 0.4f * Mathf.Sin(Time.time * 2.5f));
+                GUI.Label(new Rect(0, H * 0.93f, W, U * 0.05f), TapestryInput.ShowTouchControls ? "Touche to returne" : "JUMPE to returne", small);
+                GUI.color = c;
+            }
+        }
+
+        void DrawFrameFit(string key, int frame, Rect r)
+        {
+            var tex = Art.Texture(key);
+            if (tex == null) return;
+            int n = Mathf.Max(1, Art.Sheet(key).Frames);
+            float fw = tex.width / (float)n, fh = tex.height, k = Mathf.Min(r.width / fw, r.height / fh);
+            var d = new Rect(r.x + (r.width - fw * k) * 0.5f, r.y + (r.height - fh * k) * 0.5f, fw * k, fh * k);
+            GUI.DrawTextureWithTexCoords(d, tex, new Rect(frame / (float)n, 0f, 1f / n, 1f));
         }
 
         /// <summary>A sprite's first frame, fitted into r without stretching.</summary>

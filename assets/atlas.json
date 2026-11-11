@@ -564,6 +564,66 @@
       ],
       "frame_count": 2,
       "file": "enemies/parakeet.png"
+    },
+    "locust": {
+      "title": "Crowned Locuste",
+      "behaviour": "swarms: hovers about its place, then drifts after the knight; stompable",
+      "frame": [
+        56,
+        40
+      ],
+      "frame_count": 2,
+      "file": "enemies/locust.png"
+    },
+    "horseman_white": {
+      "title": "Ye Ryder on ye White Horse",
+      "behaviour": "one of the four horsemen: gallops in from behind and across the realm, leaping gaps; leap him, or stomp him",
+      "frame": [
+        104,
+        128
+      ],
+      "frame_count": 2,
+      "file": "enemies/horseman_white.png"
+    },
+    "horseman_red": {
+      "title": "Ye Ryder on ye Red Horse",
+      "behaviour": "one of the four horsemen: gallops in from behind and across the realm, leaping gaps; leap him, or stomp him",
+      "frame": [
+        104,
+        128
+      ],
+      "frame_count": 2,
+      "file": "enemies/horseman_red.png"
+    },
+    "horseman_black": {
+      "title": "Ye Ryder on ye Blacke Horse",
+      "behaviour": "one of the four horsemen: gallops in from behind and across the realm, leaping gaps; leap him, or stomp him",
+      "frame": [
+        104,
+        128
+      ],
+      "frame_count": 2,
+      "file": "enemies/horseman_black.png"
+    },
+    "horseman_pale": {
+      "title": "Death on ye Pale Horse",
+      "behaviour": "one of the four horsemen: gallops in from behind and across the realm, leaping gaps; leap him, or stomp him",
+      "frame": [
+        104,
+        128
+      ],
+      "frame_count": 2,
+      "file": "enemies/horseman_pale.png"
+    },
+    "hydra_neck": {
+      "title": "neck",
+      "behaviour": "a segment of a neck of the seven-headed beast",
+      "frame": [
+        20,
+        20
+      ],
+      "frame_count": 1,
+      "file": "enemies/hydra_neck.png"
     }
   },
   "bosses": {
@@ -637,6 +697,36 @@
       "frame_count": 4,
       "file": "bosses/lady_unicorn.png"
     },
+    "hydra_body": {
+      "title": "Ye Beaste of Seven Heddes",
+      "behaviour": "boss body (the heads and necks are drawn separately)",
+      "frame": [
+        270,
+        150
+      ],
+      "frame_count": 2,
+      "file": "bosses/hydra_body.png"
+    },
+    "hydra_head": {
+      "title": "A Crowned Hedde",
+      "behaviour": "one of seven heads: rises, spits fire, then droops dazed - strike it then",
+      "frame": [
+        60,
+        48
+      ],
+      "frame_count": 3,
+      "file": "bosses/hydra_head.png"
+    },
+    "cat_king_afoot": {
+      "title": "The Cat King",
+      "behaviour": "final boss afoot: flings soup from his throne, summons Soup Cats, then leaps down and prowls - stomp him then",
+      "frame": [
+        104,
+        132
+      ],
+      "frame_count": 5,
+      "file": "bosses/cat_king_afoot.png"
+    },
     "whale_boss": {
       "title": "Aspidochelone, the Island-Whale",
       "behaviour": "boss; surfaces from the sea, spouts water, snaps; knights must jump on its scaly back and strike the eye",
@@ -708,6 +798,16 @@
       ],
       "frame_count": 2,
       "file": "projectiles/comfit.png"
+    },
+    "star": {
+      "title": "Falling Starre",
+      "behaviour": "falls from heaven at the sounding of a trumpet",
+      "frame": [
+        32,
+        32
+      ],
+      "frame_count": 2,
+      "file": "projectiles/star.png"
     }
   },
   "items": {
@@ -1505,6 +1605,69 @@
       ],
       "file": "scenery/castle_bower.png"
     },
+    "apoc_top": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/apoc_top.png"
+    },
+    "apoc_fill": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/apoc_fill.png"
+    },
+    "gothic_block": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/gothic_block.png"
+    },
+    "cloud_scroll": {
+      "size": [
+        48,
+        18
+      ],
+      "file": "scenery/cloud_scroll.png"
+    },
+    "trumpet_angel": {
+      "size": [
+        104,
+        104
+      ],
+      "file": "scenery/trumpet_angel.png"
+    },
+    "cat_throne": {
+      "size": [
+        164,
+        140
+      ],
+      "file": "scenery/cat_throne.png"
+    },
+    "castle_heaven_gate": {
+      "size": [
+        240,
+        252
+      ],
+      "file": "scenery/castle_heaven_gate.png"
+    },
+    "castle_city_gate": {
+      "size": [
+        240,
+        256
+      ],
+      "file": "scenery/castle_city_gate.png"
+    },
+    "castle_cat_keep": {
+      "size": [
+        240,
+        264
+      ],
+      "file": "scenery/castle_cat_keep.png"
+    },
     "fire": {
       "size": [
         48,
@@ -1752,6 +1915,27 @@
         540
       ],
       "file": "backgrounds/pavilion_far.png"
+    },
+    "apoc_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/apoc_far.png"
+    },
+    "apoc_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/apoc_near.png"
+    },
+    "hall_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/hall_far.png"
     }
   }
 }

@@ -113,8 +113,20 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
     - Stomp **the Lyon** while he crouches to spring; stomp **the Unicorne** while it rears. At any other time you just bounce off.
     - Each blow to one makes the other angrier and faster. When both are overcome the way on opens, and Brother Odo waits beyond.
 - **Unicorn bricks:** from World 6, some bricks hold the spared unicorn.
+- **Worlde 7-1, Ye Seven Trumpettes** (World 7: the Apocalypse Tapestry of Angers): scenes on alternating red and blue grounds under a border of clouds.
+  - **Seven angels** sound their trumpets in turn. Each blast drives you backward, so wait for the silence, then go.
+  - **Stars fall from heaven,** often right above you. It has a solemn fanfare and ends at **Ye Gate of Heaven**.
+- **Worlde 7-2, Ye Locustes:** swarms of **crowned locusts** with men's faces drift after you. **Soup Cats** (the Cat King's servants) guard the ground. It has a buzzing, restless tune and ends at **Ye Gate of ye Holy Citie**.
+- **Worlde 7-3, Ye Foure Horsemen:** the White, Red and Black Riders and Death on the Pale Horse gallop in from behind, one after another. Leap them, wait on a cloud ledge, or stomp them. Bayard waits in the bricks.
+  - It has a thundering gallop and ends at **Ye Keep of ye Cat King**.
+- **Worlde 7-4, Ye Beaste of Seven Heddes:** the World 7 castle.
+  - **The boss:** seven crowned heads sway on long necks. Each in turn spits fire, then lunges low across the floor and droops there, dazed: **stomp it then** (or two bolts).
+  - Fell all seven. The fewer that are left, the faster they strike.
+- **Worlde 7-5, Ye Greate Halle (the finale):** the Cat King's hall, hung with his banners.
+  - **The Cat King** stands upon his throne flinging soup, and summons Soup Cats. On his throne he cannot be harmed. Every few flings he leaps down and **prowls after you: stomp him then!** Four blows.
+  - Then the gate behind the throne crumbles and **Princess Aelfgyva** is free. Walk to her, and the story of the whole adventure scrolls past: **Ye Ende**.
 
-**Briefing:** before each realme, a parchment names its beasts and hazards (with a picture and a word of counsel for each) and, in a castle, how to vanquish its boss. Press JUMPE or touch to ride on. It isn't shown again after a death.
+**Briefing:** before each realme, a parchment names its beasts and hazards, and the things that help or must be done (the unicorn's horn, mounts in the bricks, the halfway banner, and so on), each with a picture and a word of counsel. In a castle it also says how to vanquish the boss. Press JUMPE or touch to ride on. It isn't shown again after a death.
 
 **Gauntlets:** after every holy relique a run of beasts waits along the way. Keep running while the relique lasts (nine seconds), and the fifth beast smitten in a row gives a lyfe.
 
