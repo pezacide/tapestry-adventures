@@ -9,7 +9,7 @@ namespace Tapestry
     {
         public static GameManager I { get; private set; }
 
-        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering }
+        enum State { Title, Playing, Paused, Dying, Won, GameOver, Entering, Briefing }
         State state = State.Title;
 
         const float ViewHalfHeight = 5.625f;           // 540 design px tall = 11.25 tiles
@@ -89,7 +89,17 @@ namespace Tapestry
             LoadLevel();
             player.SetKnight(Knights.All[knightIndex]);
             Audio.Play("confirm");
-            SetState(State.Playing);
+            briefedTitle = null;
+            SetState(FirstState());
+        }
+        // the briefing before each level: its beasts, hazards and boss (shown once per realme, not after a death)
+        string briefedTitle; List<Bestiary.Entry> briefing; Bestiary.Entry briefBoss;
+        State FirstState()
+        {
+            if (L.Title == briefedTitle) return State.Playing;   // the later parts of a realme (1-3) were already told of
+            briefedTitle = L.Title;
+            briefing = Bestiary.For(L, out briefBoss);
+            return briefing.Count > 0 || briefBoss != null ? State.Briefing : State.Playing;
         }
         string toast; float toastTime;
         class Popup { public Vector2 Pos; public string Text; public float T; }
@@ -323,6 +333,10 @@ namespace Tapestry
                         else { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     }
                     break;
+                case State.Briefing:
+                    if (stateTime > 0.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
+                    { Audio.Play("select"); SetState(State.Playing); }
+                    break;
                 case State.Entering:   // walked into the crypt door: fade, then on to the next part
                     if (stateTime > 1.1f) NextLevel();
                     break;
@@ -342,7 +356,7 @@ namespace Tapestry
             levelIndex++;
             checkpointClaimed = false;
             LoadLevel();
-            SetState(State.Playing);
+            SetState(FirstState());
         }
 
         void SetState(State s)
@@ -353,8 +367,10 @@ namespace Tapestry
             switch (s)
             {
                 case State.Title: Audio.Music("title"); break;
+                case State.Briefing: Audio.Music(L.Music); break;
                 case State.Playing:
                     if (was == State.Paused) Audio.ResumeMusic();
+                    else if (was == State.Briefing) Toast(L.Title + "  ·  " + L.Name);
                     else { relicMusic = false; Audio.Music(LevelMusic); Toast(L.Title + "  ·  " + L.Name); }
                     break;
                 case State.Paused: Audio.PauseMusic(); Audio.Play("pause"); break;
@@ -1103,7 +1119,7 @@ namespace Tapestry
         }
 
         // ------------------------------------------------------------------ GUI
-        GUIStyle big, small, center, popupStyle;
+        GUIStyle big, small, center, popupStyle, tipName, tipText;
 
         /// <summary>GUI unit: screen height, or less when the window is narrower than 16:9.</summary>
         static float U { get { return Mathf.Min(Screen.height, Screen.width * 9f / 16f); } }
@@ -1116,6 +1132,8 @@ namespace Tapestry
             small = new GUIStyle(GUI.skin.label) { fontSize = Mathf.RoundToInt(U / 30f) };
             small.normal.textColor = Thread;
             center = new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, wordWrap = true };
+            tipName = new GUIStyle(small) { fontStyle = FontStyle.Bold, alignment = TextAnchor.LowerLeft, fontSize = Mathf.RoundToInt(U / 28f) };
+            tipText = new GUIStyle(small) { alignment = TextAnchor.UpperLeft, wordWrap = true, fontSize = Mathf.RoundToInt(U / 34f) };
             popupStyle = new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
             popupStyle.normal.textColor = new Color(0.66f, 0.26f, 0.18f);
         }
@@ -1145,6 +1163,7 @@ namespace Tapestry
             float W = Screen.width, H = Screen.height;
             switch (state)
             {
+                case State.Briefing: DrawBriefing(W, H); break;
                 case State.Title:
                     Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
                     if (titleStep == 1) { DrawRealmSelect(W, H); break; }
@@ -1309,6 +1328,54 @@ namespace Tapestry
             GUI.Label(new Rect(0, H * 0.62f, W, U * 0.08f), Knights.All[knightIndex].Title + " shall ryde", center);
             GUI.Label(new Rect(W * 0.05f, H * 0.78f, W * 0.9f, U * 0.1f),
                 TapestryInput.ShowTouchControls ? "Touche a realme, and touche agayne to ryde" : "LEFTE or RYGHTE to chuse  -  JUMPE to ryde  -  RUNNE to chuse another knyghte", center);
+        }
+
+        /// <summary>The briefing: a parchment with the realme's name, its beasts and hazards (picture, name, counsel), and how to vanquish its boss.</summary>
+        void DrawBriefing(float W, float H)
+        {
+            Panel(new Rect(0, 0, W, H));
+            var safe = TapestryInput.Safe;
+            float x0 = Mathf.Max(safe.x, W * 0.04f), x1 = Mathf.Min(safe.xMax, W * 0.96f);
+            GUI.Label(new Rect(0, H * 0.04f, W, U * 0.08f), L.Title + "  ·  " + L.Name, big);
+            GUI.Label(new Rect(0, H * 0.04f + U * 0.08f, W, U * 0.05f), "Beware, sir knyghte, of these:", center);
+            int n = Mathf.Min(briefing.Count, 12);
+            int rows = Mathf.Max(1, (n + 1) / 2);
+            float top = H * 0.06f + U * 0.14f;
+            float bottom = H * (briefBoss != null ? 0.7f : 0.86f);
+            float rowH = Mathf.Min(U * 0.12f, (bottom - top) / rows);
+            float colW = (x1 - x0) * 0.5f;
+            for (int i = 0; i < n; i++)
+            {
+                var e = briefing[i];
+                float x = x0 + (i % 2) * colW, y = top + (i / 2) * rowH;
+                DrawIcon(e.Sprite, new Rect(x, y + rowH * 0.05f, rowH * 1.25f, rowH * 0.9f));
+                GUI.Label(new Rect(x + rowH * 1.35f, y, colW - rowH * 1.45f, rowH * 0.4f), e.Name, tipName);
+                GUI.Label(new Rect(x + rowH * 1.35f, y + rowH * 0.36f, colW - rowH * 1.45f, rowH * 0.64f), e.Tip, tipText);
+            }
+            if (briefBoss != null)
+            {
+                float y = H * 0.71f, h = H * 0.17f;
+                var c = GUI.color; GUI.color = new Color(0.66f, 0.26f, 0.18f, 0.18f);
+                GUI.DrawTexture(new Rect(x0, y, x1 - x0, h), Texture2D.whiteTexture); GUI.color = c;
+                DrawIcon(briefBoss.Sprite, new Rect(x0 + 8f, y + 6f, h * 1.3f, h - 12f));
+                GUI.Label(new Rect(x0 + h * 1.45f, y + h * 0.05f, x1 - x0 - h * 1.55f, h * 0.35f), "To vanquishe " + briefBoss.Name + ":", tipName);
+                GUI.Label(new Rect(x0 + h * 1.45f, y + h * 0.38f, x1 - x0 - h * 1.55f, h * 0.6f), briefBoss.Tip, tipText);
+            }
+            float a = 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.time * 2.5f));
+            var cc = GUI.color; GUI.color = new Color(1f, 1f, 1f, a);
+            GUI.Label(new Rect(0, H * 0.9f, W, U * 0.06f), TapestryInput.ShowTouchControls ? "Touche to ryde forth" : "JUMPE to ryde forth", center);
+            GUI.color = cc;
+        }
+
+        /// <summary>A sprite's first frame, fitted into r without stretching.</summary>
+        void DrawIcon(string key, Rect r)
+        {
+            var tex = Art.Texture(key);
+            if (tex == null) return;
+            int n = Mathf.Max(1, Art.Sheet(key).Frames);
+            float fw = tex.width / (float)n, fh = tex.height, k = Mathf.Min(r.width / fw, r.height / fh);
+            var d = new Rect(r.x + (r.width - fw * k) * 0.5f, r.y + (r.height - fh * k) * 0.5f, fw * k, fh * k);
+            GUI.DrawTextureWithTexCoords(d, tex, new Rect(0f, 0f, 1f / n, 1f));
         }
 
         void Manicule()

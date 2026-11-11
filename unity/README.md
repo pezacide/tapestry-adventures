@@ -101,6 +101,10 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
     - **Spared:** it is calmed, and stays to be ridden. **Ye Unicorne** is a second mount: faster than Bayard, and at a gallop (hold RUN) its **horn fells any beast it runs into**. It has no flutter-leap.
     - If you are riding Bayard you can change to the unicorn by touching it. A hit throws you off either steed, and it carries on into the next level like Bayard. From World 6, **unicorn bricks** can hold it too.
 
+**Briefing:** before each realme, a parchment names its beasts and hazards (with a picture and a word of counsel for each) and, in a castle, how to vanquish its boss. Press JUMPE or touch to ride on. It isn't shown again after a death.
+
+**Gauntlets:** after every holy relique a run of beasts waits along the way. Keep running while the relique lasts (nine seconds), and the fifth beast smitten in a row gives a lyfe.
+
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 
 **Level select:** once you have passed a realme, the title screen lets you choose it (after choosing your knight). Progress is saved.

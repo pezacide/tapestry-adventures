@@ -23,7 +23,7 @@ namespace Tapestry
                 "                                                                                          g                               oooo             oo",
                 "                        BRB               oo                 g                ooo                                                                          B1B            g      B",
                 "               ooo                             ?W?                                                                                                                              BB",
-                "       ?M?                                                                                           BHB                                   VV                                  BBB",
+                "       ?M?                                               g                                           BHB                                   VV                                  BBB",
                 "                                          VV                                                                                               VV                                 BBBB",
                 "                       Y                  VV                                 Y       VV                                  U                 VV            Y                   BBBBB",
                 "   P          Y                 U         VV  Y           x        U                 VV Y         C      x     Y                   Y       VV  U                      x     BBBBBB      G",

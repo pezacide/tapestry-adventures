@@ -31,6 +31,20 @@
           "leap",
           "rear"
         ]
+      },
+      "unicorn": {
+        "file": "heroes/rubeus_unicorn.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
       }
     },
     "azura": {
@@ -51,6 +65,20 @@
       "file": "heroes/azura.png",
       "mounted": {
         "file": "heroes/azura_mounted.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
+      },
+      "unicorn": {
+        "file": "heroes/azura_unicorn.png",
         "frame": [
           104,
           128
@@ -93,6 +121,20 @@
           "leap",
           "rear"
         ]
+      },
+      "unicorn": {
+        "file": "heroes/verdain_unicorn.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
       }
     },
     "aurelia": {
@@ -113,6 +155,20 @@
       "file": "heroes/aurelia.png",
       "mounted": {
         "file": "heroes/aurelia_mounted.png",
+        "frame": [
+          104,
+          128
+        ],
+        "frames": [
+          "idle",
+          "walk1",
+          "walk2",
+          "leap",
+          "rear"
+        ]
+      },
+      "unicorn": {
+        "file": "heroes/aurelia_unicorn.png",
         "frame": [
           104,
           128

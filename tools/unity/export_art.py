@@ -27,8 +27,9 @@ for cat in ("heroes", "mounts", "princess", "enemies", "bosses", "projectiles", 
     for name, v in atlas[cat].items():
         n = len(v["frames"]) if "frames" in v else v.get("frame_count", 1)
         add(v["file"][:-4], v["frame"][0], v["frame"][1], n)
-        if "mounted" in v:
-            m = v["mounted"]; add(m["file"][:-4], m["frame"][0], m["frame"][1], len(m["frames"]))
+        for mk in ("mounted", "unicorn"):   # the knight upon Bayard, and upon the spared unicorn
+            if mk in v:
+                m = v[mk]; add(m["file"][:-4], m["frame"][0], m["frame"][1], len(m["frames"]))
 for cat in ("scenery", "backgrounds"):
     for name, v in atlas[cat].items():
         add(v["file"][:-4], v["size"][0], v["size"][1], v.get("frame_count", 1))

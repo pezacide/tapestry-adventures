@@ -25,6 +25,7 @@ for k, cfg in knights.KNIGHTS.items():
     atlas["heroes"][k]["mounted"] = dict(file=f"heroes/{k}_mounted.png", frame=[allies.HW, allies.HH + allies.MOUNT_PAD], frames=allies.POSES)
     um = allies.mounted(knights.knight_body(cfg, "ride"), lambda p, rider: world5.unicorn_steed(p, rider))
     sheets[f"heroes/{k}_unicorn"] = [job(um[p], f"{k}_u_{p}", allies.HW, allies.HH + allies.MOUNT_PAD) for p in allies.POSES]
+    atlas["heroes"][k]["unicorn"] = dict(file=f"heroes/{k}_unicorn.png", frame=[allies.HW, allies.HH + allies.MOUNT_PAD], frames=allies.POSES)
 
 sheets["mounts/bayard"] = [job(doc(allies.HW, allies.HH, allies.horse(p)), f"bayard_{p}", allies.HW, allies.HH) for p in allies.POSES]
 atlas["mounts"]["bayard"] = dict(title="Bayard, the magic horse", frame=[allies.HW, allies.HH], frames=allies.POSES, file="mounts/bayard.png",

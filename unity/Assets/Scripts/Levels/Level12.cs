@@ -23,7 +23,7 @@ namespace Tapestry
                 "        ?M?                       ?W?                 BRB                               B1B                  VVV                 VVV",
                 "                   Z                         Z                          Z                        Z                      4",
                 "",
-                "   P                        d  F                         l   C                        c                                                     N",
+                "   P                        d  F                         l   C d                 l    c                                                     N",
                 "VVVVVVVVVVVVV*************VVVVVVVVVVVVVV************VVVVVVVVVVVVVVV************VVVVVVVVVVVVVV*********VVVVVVVVVVVVVVVV*****VVVVVVVVVVVVVVVVVVVVVVVVVVV",
                 "VVVVVVVVVVVVV*************VVVVVVVVVVVVVV************VVVVVVVVVVVVVVV************VVVVVVVVVVVVVV*********VVVVVVVVVVVVVVVV*****VVVVVVVVVVVVVVVVVVVVVVVVVVV",
             },
