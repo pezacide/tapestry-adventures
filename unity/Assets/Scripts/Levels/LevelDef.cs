@@ -27,6 +27,6 @@ namespace Tapestry
     public static class Levels
     {
         /// <summary>The levels in order. Add new ones here.</summary>
-        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def, Level6.Def, Level7.Def, Level8.Def, Level9.Def, Level10.Def, Level11.Def, Level12.Def, Level13.Def, Level14.Def, Level15.Def, Level16.Def, Level17.Def, Level18.Def, Level19.Def, Level20.Def };
+        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def, Level6.Def, Level7.Def, Level8.Def, Level9.Def, Level10.Def, Level11.Def, Level12.Def, Level13.Def, Level14.Def, Level15.Def, Level16.Def, Level17.Def, Level18.Def, Level19.Def, Level20.Def, Level21.Def, Level22.Def, Level23.Def, Level24.Def };
     }
 }

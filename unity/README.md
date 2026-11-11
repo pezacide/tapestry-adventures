@@ -100,6 +100,19 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
     - It rears, then charges. Leap over it so that it rams the **fence gate** on the right. Each ram splinters the gate (its bar shows the gate's strength), and the third breaks it. The stone wall on the left only stuns it.
     - **Spared:** it is calmed, and stays to be ridden. **Ye Unicorne** is a second mount: faster than Bayard, and at a gallop (hold RUN) its **horn fells any beast it runs into**. It has no flutter-leap.
     - If you are riding Bayard you can change to the unicorn by touching it. A hit throws you off either steed, and it carries on into the next level like Bayard. From World 6, **unicorn bricks** can hold it too.
+- **Worlde 6-1, Sight** (World 6: The Lady and the Unicorn): red millefleur grounds strewn with flowers and rabbits, blue flower islands, and banners with the Le Viste crescents.
+  - **Ye Ladye's Mirrour:** strike a mirror block from below and the **gold panes** and **silver panes** change places. Only the bright set bears you; the faint one is just a reflection.
+  - Bridges of panes cross the pits. Near the end, stand on the stone pillar to strike the mirror, so the gold vanishes from under someone else's feet, not yours.
+  - It has a courtly chanson and ends at **Ye Ladye's Tente**.
+- **Worlde 6-2, Hearing:** great **organ pipes** cross the pits and rise and fall with the music, changing height on every second beat. Together they make a staircase that climbs and falls away. **Popinjayes** (parakeets) flutter overhead.
+  - It has an organ tune and ends at **Ye Halle of Musick**.
+- **Worlde 6-3, Taste and Smell:** **baskets of flowers** spring you high (hold JUMP to spring higher), over wide pits and up to high garlands. **Monkeys** fling comfits at you in arcs; **foxes** dart at you when your back is turned; **lapdogs** yap and hop.
+  - It has a merry dance and ends at **Ye Rose Bower**.
+- **Worlde 6-4, A mon seul desir:** the World 6 castle, the Lady's tent.
+  - **The boss, Ye Lyon and ye Unicorne:** two foes at once, three blows each.
+    - Stomp **the Lyon** while he crouches to spring; stomp **the Unicorne** while it rears. At any other time you just bounce off.
+    - Each blow to one makes the other angrier and faster. When both are overcome the way on opens, and Brother Odo waits beyond.
+- **Unicorn bricks:** from World 6, some bricks hold the spared unicorn.
 
 **Briefing:** before each realme, a parchment names its beasts and hazards (with a picture and a word of counsel for each) and, in a castle, how to vanquish its boss. Press JUMPE or touch to ride on. It isn't shown again after a death.
 

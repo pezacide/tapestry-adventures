@@ -92,6 +92,14 @@ def horn(f, dur, vel=1.0):
     tone = lowpass(tone, 0.08 + 0.04 * min(1.0, dur))
     return np.tanh(tone * 0.9) * env(n, 0.06, min(0.12, dur * 0.4), 0.9) * vel * 0.3
 
+def organ(f, dur, vel=1.0):
+    """A portative organ: flue pipes - fundamental, octave and twelfth, a little wind in the tone, steady while held."""
+    tt = t(dur); n = len(tt)
+    ph = 2 * np.pi * f * tt
+    y = np.sin(ph) + 0.5 * np.sin(2 * ph) + 0.3 * np.sin(3 * ph) + 0.15 * np.sin(4 * ph + 0.3)
+    y += 0.02 * rng.standard_normal(n)
+    return y * env(n, 0.03, min(0.08, dur * 0.3), 1.0) * vel * 0.22
+
 def bell(f, dur, vel=1.0):
     tt = t(dur); n = len(tt)
     parts = ((1, 1.0, 3.0), (2.76, 0.5, 5.0), (5.4, 0.25, 8.0), (8.93, 0.12, 12.0))

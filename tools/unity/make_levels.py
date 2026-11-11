@@ -58,8 +58,8 @@ class Map:
             for y in range(0, top + 1): self.put(x, y, "*")
     def rows(self): return ["".join(self.g[y]).rstrip() for y in range(self.H - 1, -1, -1)]
 
-WALKERS, FLIERS, SWIMMERS = "sShldcujyqIx", "gbawp", "fzm"
-STANDABLE = set("#BV?X=^HMW1R8")
+WALKERS, FLIERS, SWIMMERS = "sShldcujyqIx{}", "gbawp!", "fzm"
+STANDABLE = set("#BV?X=^HMW1R87")
 def gauntlet(m, underwater=False):
     """After every holy relique (R brick), a run of six beasts spaced over the next ~32 tiles: a knight who keeps
     running in the relique's nine seconds of glory can smite five in a row (the fifth gives a lyfe), but not idly.
@@ -590,3 +590,88 @@ m.put(136, 2, "N")
 write("Level20", "Worlde 5-4", "Ye Unicorne in Captivitie", "HERE YE UNICORNE IS FENCED IN, AND SPARED", m,
       [], "", 0, "castle", "backgrounds/garden_far", "backgrounds/castle_near",
       skin=W5, plank="scenery/rail", gate="scenery/gate_paling")
+
+# ======================================================= World 6: The Lady and the Unicorn (red millefleurs, blue islands)
+W6 = ("scenery/island_top", "scenery/island_fill", "scenery/coffer")
+
+# ---- 6-1  Sight: the Lady's mirror - gold panes and silver panes change places when the mirror block is struck
+m = Map(200)
+m.ground(0, 33); m.ground(42, 49); m.ground(58, 80); m.ground(91, 109); m.ground(126, 134); m.ground(147, 199)
+m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.put(18, 2, "{"); m.row(22, 5, "BWB"); m.put(28, 2, "h")
+m.row(34, 1, "((((((((")                                        # a gold bridge (solid at first)
+m.put(46, 5, "7")                                               # the mirror: strike it, and gold and silver change places
+m.row(50, 1, "))))))))")                                        # a silver bridge
+m.put(64, 5, "7"); m.row(68, 5, "B8B"); m.put(74, 2, "}"); m.put(66, 8, "!")
+m.row(81, 1, "))))))))))"); m.row(81, 3, "((((((((((")         # two bridges: whichever is bright bears thee
+m.row(84, 7, "ooo")
+m.row(92, 5, "BRB"); m.put(98, 2, "C"); m.put(104, 2, "{")
+m.put(107, 5, "7")
+m.row(110, 1, "))))))))))))))))")                               # the reflecting lake: silver
+m.put(115, 8, "!"); m.put(128, 2, "}")
+m.put(131, 5, "7")                                              # back to gold
+m.row(135, 1, "((((((")                                         # gold to the pillar...
+m.put(141, 1, "X")                                              # ...stand on the pillar, strike the mirror above...
+m.put(141, 5, "7")
+m.row(142, 1, ")))))")                                          # ...and the silver panes bear thee on
+m.put(152, 2, "h"); m.row(156, 5, "B1B"); m.put(160, 2, "{")
+m.stairs(166, 6)
+m.put(178, 2, "G")
+write("Level21", "Worlde 6-1", "Sight", "HERE YE LADYE HOLDETH UP HER MIRROUR TO YE UNICORNE", m,
+      [], "scenery/castle_lady_tent", 190, "sight", "backgrounds/red_far", "backgrounds/red_near",
+      skin=W6, plank="scenery/garland")
+
+# ---- 6-2  Hearing: the great organ pipes rise and fall with the musick
+m = Map(200)
+m.ground(0, 29); m.ground(42, 69); m.ground(84, 119); m.ground(134, 199)
+m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.put(16, 2, "h"); m.row(20, 5, "B8B"); m.put(25, 2, "{")
+for x in range(30, 42, 2): m.put(x, 1, "9")                      # six pipes across the first pit
+m.row(30, 8, "ooooo")
+m.put(50, 2, "}"); m.row(54, 5, "BWB"); m.put(60, 2, "h"); m.put(64, 8, "!")
+for x in range(70, 84, 2): m.put(x, 1, "9")                      # seven pipes
+m.put(78, 9, "!")
+m.row(88, 5, "BRB"); m.put(94, 2, "C"); m.put(100, 2, "{"); m.row(104, 5, "?B?"); m.put(110, 2, "}")
+for x in range(120, 134, 2): m.put(x, 1, "9")                    # seven pipes, with popinjayes above
+m.put(124, 9, "!"); m.put(130, 9, "!")
+m.put(142, 2, "h"); m.row(150, 5, "B1B"); m.put(156, 2, "{")
+m.stairs(166, 6)
+m.put(178, 2, "G")
+write("Level22", "Worlde 6-2", "Hearing", "HERE YE LADYE PLAYETH UPON YE ORGAN", m,
+      [], "scenery/castle_music_hall", 190, "organ", "backgrounds/organ_far", "backgrounds/red_near",
+      skin=W6, plank="scenery/garland")
+
+# ---- 6-3  Taste and Smell: baskets of flowers spring thee high; monkeys fling comfits
+m = Map(200)
+m.ground(0, 40); m.ground(48, 90); m.ground(98, 140); m.ground(148, 199)
+m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.put(18, 2, "{"); m.row(24, 4, "===="); m.put(25, 5, "@")
+m.put(38, 2, "%")                                                # spring over the pit
+m.row(58, 4, "====="); m.put(60, 5, "@"); m.put(66, 2, "}")
+m.put(70, 2, "%"); m.row(72, 8, "======="); m.row(73, 9, "ooooo")   # spring up to the high garland
+m.row(80, 5, "B8B"); m.put(86, 9, "!")
+m.put(89, 2, "%")
+m.row(100, 5, "BRB"); m.put(106, 2, "C"); m.put(112, 2, "{"); m.row(116, 4, "===="); m.put(117, 5, "@")
+m.put(124, 2, "}"); m.row(126, 4, "===="); m.put(128, 5, "@"); m.put(134, 8, "!")
+m.put(139, 2, "%")
+m.put(152, 2, "{"); m.row(156, 5, "B1B"); m.put(160, 2, "%"); m.row(160, 8, "ooo")
+m.stairs(166, 6)
+m.put(178, 2, "G")
+write("Level23", "Worlde 6-3", "Taste and Smell", "HERE YE LADYE TAKETH A SWEETE, AND WEAVETH A GARLANDE", m,
+      [], "scenery/castle_bower", 190, "taste", "backgrounds/red_far", "backgrounds/red_near",
+      skin=W6, plank="scenery/garland")
+
+# ---- 6-4  A mon seul desir: the Lady's tent, and the twin boss - Ye Lyon and ye Unicorne
+m = Map(150)
+m.vault(0, 149); m.floor(0, 149)
+m.put(3, 2, "P"); m.row(8, 5, "?M?")
+m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "}"); m.put(26, 5, "F")
+m.row(30, 5, "?W?"); m.put(34, 2, "@")
+m.fire(38, 43); m.row(39, 4, "==="); m.put(47, 2, "{"); m.row(50, 5, "BRB")
+m.put(55, 2, "C")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "}")
+m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
+for y in range(2, 5): m.put(98, y, "V")                          # a low wall: leap it
+for y in range(2, 9): m.put(122, y, "D")                         # the way on, shut until both are overcome
+m.put(110, 2, "$")
+m.put(136, 2, "N")
+write("Level24", "Worlde 6-4", "A mon seul desir", "HERE YE LYON AND YE UNICORNE GUARDE YE LADYE'S TENTE", m,
+      [], "", 0, "castle", "backgrounds/pavilion_far", "backgrounds/castle_near",
+      skin=W6, plank="scenery/garland")

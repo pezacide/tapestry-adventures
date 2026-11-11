@@ -15,8 +15,8 @@ All of these works are centuries old and in the public domain. We redraw them in
 | 3 | Tapestry of Creation (Girona) | Romanesque needlework; roundels and compartments | wind-heads that blow you, sky platforms | Ye Foure Windes | **done** (3-1 to 3-4) |
 | 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | **done** (4-1 to 4-4) |
 | 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | **done** (5-1 to 5-4) |
-| 6 | The Lady and the Unicorn | woven; red mille-fleur grounds, blue flower islands | one level for each of the five senses | Ye Lyon and ye Unicorne (twin boss) | next |
-| 7 | Apocalypse Tapestry | woven; alternating red and blue grounds | falling stars, trumpet blasts | The Seven-Headed Dragon, then the **Cat King** finale | planned |
+| 6 | The Lady and the Unicorn | woven; red mille-fleur grounds, blue flower islands | one level for each of the five senses | Ye Lyon and ye Unicorne (twin boss) | **done** (6-1 to 6-4) |
+| 7 | Apocalypse Tapestry | woven; alternating red and blue grounds | falling stars, trumpet blasts | The Seven-Headed Dragon, then the **Cat King** finale | next |
 
 **The art changes with each tapestry.** Worlds 1–3 keep the stitched-on-linen look. From World 4 the backgrounds become fully woven (dense hatching and a weave texture), while the knights stay stitched. The contrast is deliberate: embroidered heroes walking into woven worlds.
 
@@ -70,9 +70,9 @@ Six tapestries: Sight, Hearing, Taste, Smell, Touch, and "À mon seul désir".
 
 | Level | Name | Idea |
 |---|---|---|
-| 6-1 | Sight | **mirror platforms** that only exist in their reflection |
-| 6-2 | Hearing | the **organ**: platforms rise and fall with the music; the hares from your reference picture play it |
-| 6-3 | Taste and Smell | sweets and flower garlands; monkeys and parakeets |
+| 6-1 | Sight | **mirror panes**: gold and silver change places when the Lady's mirror is struck |
+| 6-2 | Hearing | the **organ**: great pipes rise and fall with the music |
+| 6-3 | Taste and Smell | baskets of flowers that spring you high; monkeys fling comfits; parakeets |
 | 6-4 | À mon seul désir | the Lady's pavilion tent; boss **Ye Lyon and ye Unicorne**, the heraldic pair come to life (defeat both; each hit makes the other angrier) |
 
 ## World 7: Apocalypse Tapestry

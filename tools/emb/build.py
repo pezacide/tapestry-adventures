@@ -2,7 +2,7 @@
 import json, os, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from PIL import Image
-import knights, creatures, scenery, bosses, allies, items, castles, ui, world4, world5  # castles, ui, world4 and world5 add themselves
+import knights, creatures, scenery, bosses, allies, items, castles, ui, world4, world5, world6  # castles, ui and the world modules add themselves
 from embroider import doc, g
 
 ROOT = os.path.normpath(os.path.join(HERE, "..", "..", "assets"))
@@ -59,7 +59,7 @@ for n, bb in bosses.B.items():
 
 for n, c in creatures.C.items():
     w, h = c["size"]
-    cat = "bosses" if n.endswith("_boss") else "projectiles" if n in ("fireball", "soup_glob") else "enemies"
+    cat = "bosses" if n.endswith("_boss") else "projectiles" if n in ("fireball", "soup_glob", "comfit") else "enemies"
     sheets[f"{cat}/{n}"] = [job(creatures.build_svg(n, f), f"{n}_{f}", w, h) for f in range(c["frames"])]
     atlas[cat][n] = dict(title=c["title"], behaviour=c["behaviour"], frame=[w, h], frame_count=c["frames"], file=f"{cat}/{n}.png")
 

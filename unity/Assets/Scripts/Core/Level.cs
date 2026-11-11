@@ -22,6 +22,9 @@ namespace Tapestry
     ///              j wild boar  i otter  n swan  a falcon  r raft launch (rafts drift right on the current)  5 Ye Greate Boar
     ///              D boss gate (solid until the boss is beaten, then it crumbles)
     ///              ; poisoned stream (hurts until purified; then the knight wades it)  8 brick hiding ye unicorne (the second mount)
+    ///              ( gold mirror pane  ) silver mirror pane (only one set is solid at a time)  7 mirror block (bump: they change places)
+    ///              % basket of flowers (springs thee high)  9 organ pipe (rises and falls with the musick)  $ Ye Lyon and ye Unicorne
+    ///              { lapdog  } fox  @ monkey (flings comfits)  ! parakeet
     ///              y huntsman (hurls spears)  q greyhound  p pheasant  I genet  0 ye fountaine  + ye unicorne's horne  6 Ye Spotted Unicorne
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
@@ -62,7 +65,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
-                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D': case ';': case '8':
+                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D': case ';': case '8': case '(': case ')': case '7': case '%':
                             tiles[x, y] = c; break;
                         case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
@@ -73,6 +76,7 @@ namespace Tapestry
                 }
             }
             BuildViews();
+            ShadePanes();
         }
 
         static int Key(int x, int y) { return x * 1024 + y; }
@@ -90,7 +94,9 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': return true;
+                case '(': return MirrorState == 0;
+                case ')': return MirrorState == 1;
                 default: return false;
             }
         }
@@ -98,6 +104,22 @@ namespace Tapestry
         public bool Platform(int x, int y) { char c = Get(x, y); return c == '=' || c == '^'; }
         public bool Water(int x, int y) { return Get(x, y) == '~'; }
         public bool Fire(int x, int y) { return Get(x, y) == '*'; }
+        public bool Basket(int x, int y) { return Get(x, y) == '%'; }
+
+        /// <summary>World 6-1 (Sight): the gold panes are solid while MirrorState is 0, the silver ones while it is 1.
+        /// The pane-set that is not solid is drawn faint, like a reflection.</summary>
+        public int MirrorState { get; private set; }
+        readonly List<KeyValuePair<char, SpriteRenderer>> panes = new List<KeyValuePair<char, SpriteRenderer>>();
+        public void FlipMirrors()
+        {
+            MirrorState = 1 - MirrorState;
+            ShadePanes();
+        }
+        void ShadePanes()
+        {
+            foreach (var p in panes)
+                if (p.Value != null) p.Value.color = new Color(1f, 1f, 1f, (p.Key == '(') == (MirrorState == 0) ? 1f : 0.22f);
+        }
 
         /// <summary>World 5: the poisoned stream hurts until ye unicorne's horne is brought to ye fountaine.</summary>
         public bool Purified { get; private set; }
@@ -189,6 +211,10 @@ namespace Tapestry
                         case 'V': case 'F': key = skin.Vault; break;
                         case 'D': key = string.IsNullOrEmpty(skin.Gate) ? skin.Brick : skin.Gate; break;
                         case ';': key = "scenery/stream_foul"; break;
+                        case '(': key = "scenery/mirror_gold"; break;
+                        case ')': key = "scenery/mirror_silver"; break;
+                        case '7': key = "scenery/mirror_block"; break;
+                        case '%': key = "scenery/basket"; break;
                         case '*': key = "scenery/fire"; break;
                         case '_': key = "scenery/drawbridge"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case 'T':
@@ -206,11 +232,12 @@ namespace Tapestry
                     {
                         views[Key(x, y)] = Art.Make(key, root, new Vector2(x + 0.5f, y + dy), c == '~' || c == ';' ? 6 : c == '*' ? 6 : c == '|' ? -6 : c == '^' ? 1 : 0, c == '*' ? (x + y) % 2 : 0);
                         if (c == '*') fires.Add(views[Key(x, y)]);
+                        if (c == '(' || c == ')') panes.Add(new KeyValuePair<char, SpriteRenderer>(c, views[Key(x, y)]));
                     }
                 }
         }
 
-        public enum BumpResult { None, Bezant, Bayard, Unicorn, Chalice, Capon, Crossbow, Relic, Broke, Thud }
+        public enum BumpResult { None, Bezant, Bayard, Unicorn, Mirror, Chalice, Capon, Crossbow, Relic, Broke, Thud }
 
         /// <summary>A knight's head hit tile (x, y) from below.</summary>
         public BumpResult HitFromBelow(int x, int y)
@@ -234,6 +261,7 @@ namespace Tapestry
                         case 'R': return BumpResult.Relic;
                         default: return BumpResult.Bezant;
                     }
+                case '7': StartBump(v); return BumpResult.Mirror;
                 case 'B':
                     tiles[x, y] = ' ';
                     if (v != null) { Object.Destroy(v.gameObject); views.Remove(Key(x, y)); }

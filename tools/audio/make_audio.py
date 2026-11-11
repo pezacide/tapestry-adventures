@@ -400,6 +400,62 @@ def chase_theme():
     mix_into(buf, drone(freq("D3"), L + 1, 0.3) + drone(freq("A3"), L + 1, 0.15), 0)
     return finish(buf, L, 0.25)
 
+def sight_theme():
+    """World 6-1, Sight: a courtly 4/4 chanson in F, recorder and lute, with bells like glints in a mirror."""
+    bpm = 88; beat = 60 / bpm; bar = 4 * beat
+    A = ("F5:2 A5:1 G5:1 F5:2 C5:2 D5:1 E5:1 F5:1 G5:1 A5:4 Bb5:2 A5:1 G5:1 F5:2 D5:2 E5:1 F5:1 G5:1 E5:1 F5:4")
+    roots = ["F2", "Bb2", "F2", "C3", "Bb2", "F2", "C3", "F2"]
+    L = 8 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 8 * bar
+        play(buf, recorder, A, bpm, t0, 0.7)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (16, 1), (19, 1), (16, 1), (12, 1), (7, 1)], 0.4)
+            mix_into(buf, bell(freq(up(r, 36)), 1.0, 0.12), t0 + i * bar + beat * 1.5)
+            if k: mix_into(buf, bell(freq(up(r, 31)), 1.0, 0.1), t0 + i * bar + beat * 3.5)
+    mix_into(buf, drone(freq("F2"), L + 1, 0.25, False), 0)
+    return finish(buf, L, 0.4)
+
+def organ_theme():
+    """World 6-2, Hearing: the Lady's portative organ, a stately 4/4 in C. A low pipe sounds every second beat -
+    the great pipes of the level rise and fall in time with it."""
+    bpm = 100; beat = 60 / bpm; bar = 4 * beat
+    A = ("C5:1 E5:1 G5:1 C6:1 B5:2 G5:2 A5:1 G5:1 F5:1 E5:1 D5:4 E5:1 G5:1 C6:1 E6:1 D6:2 B5:2 C6:1 B5:1 A5:1 G5:1 C6:4")
+    roots = ["C3", "G2", "F2", "G2", "C3", "G2", "F2", "C3"]
+    L = 8 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 8 * bar
+        play(buf, organ, A, bpm, t0, 0.8, 0.98)
+        for i, r in enumerate(roots):
+            for semis in (12, 19, 24):
+                mix_into(buf, organ(freq(up(r, semis)), bar * 0.98, 0.22), t0 + i * bar)
+            mix_into(buf, organ(freq(r), beat * 1.6, 0.5), t0 + i * bar)                  # the pedal pipe, every 2nd beat
+            mix_into(buf, organ(freq(up(r, 7)), beat * 1.6, 0.4), t0 + i * bar + 2 * beat)
+            if k: arp_bar(buf, r, t0 + i * bar, beat / 2, [(12, 1), (19, 1), (24, 1), (19, 1)] * 2, 0.25)
+    return finish(buf, L, 0.5)
+
+def taste_theme():
+    """World 6-3, Taste and Smell: a merry 3/4 dance in G - recorder (and shawm the second time), tabor and jingles."""
+    bpm = 132; beat = 60 / bpm; bar = 3 * beat
+    A = ("G5:1 B5:1 D6:1 C6:1 B5:1 A5:1 B5:2 G5:1 D5:3 E5:1 F#5:1 G5:1 A5:1 B5:1 C6:1 B5:2 A5:1 G5:3 "
+         "D6:1 C6:1 B5:1 C6:1 B5:1 A5:1 B5:1 A5:1 G5:1 A5:3 G5:1 B5:1 D6:1 E6:1 D6:1 C6:1 B5:1 A5:1 F#5:1 G5:3")
+    roots = ["G2", "C3", "G2", "D3", "C3", "D3", "D3", "G2", "G2", "C3", "G2", "D3", "G2", "C3", "D3", "G2"]
+    L = 16 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 16 * bar
+        play(buf, recorder, A, bpm, t0, 0.7)
+        if k: play(buf, shawm, " ".join(f"{up(n.split(':')[0], -12)}:{n.split(':')[1]}" for n in A.split()), bpm, t0, 0.3)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (7, 1), (16, 1), (7, 1)], 0.4)
+            mix_into(buf, tabor(0.2, 0.45), t0 + i * bar)
+            mix_into(buf, jingle(0.15, 0.25), t0 + i * bar + beat)
+            mix_into(buf, jingle(0.15, 0.2), t0 + i * bar + 2 * beat)
+    mix_into(buf, drone(freq("G2"), L + 1, 0.3) + drone(freq("D3"), L + 1, 0.15), 0)
+    return finish(buf, L, 0.3)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -501,13 +557,17 @@ def sfx():
     pu = np.zeros(int(1.6 * SR))
     for k, n in enumerate(("C5", "E5", "G5", "C6", "E6", "G6", "C7")): mix_into(pu, bell(freq(n), 0.9, 0.8), k * 0.08)
     S["purify"] = fx(pu, 0.6, 0.35)
+    mi = np.zeros(int(0.9 * SR))
+    for k, n in enumerate(("E6", "B5", "E6", "G#6")): mix_into(mi, bell(freq(n), 0.6, 0.7), k * 0.05)
+    S["mirror"] = fx(mi, 0.55, 0.3)
+    S["spring"] = fx(add(sweep(200, 900, 0.22, "sine", 0.8), lute(freq("G4"), 0.3, 0.5)), 0.6)
     S["spear"] = fx(noise(0.25, 800, 3000, 12, 0.7) + sweep(900, 400, 0.25, "sine", 0.2), 0.5)
     S["horn"] = fx(np.concatenate([horn(freq("C4"), 0.3, 1.0), horn(freq("G4"), 0.3, 1.0), horn(freq("C5"), 0.6, 1.0)]), 0.6, 0.3)
     S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "eden": eden_theme, "hunt": hunt_theme, "river": river_theme, "heath": heath_theme, "unicorn": unicorn_theme, "fountain": fountain_theme, "chase": chase_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "eden": eden_theme, "hunt": hunt_theme, "river": river_theme, "heath": heath_theme, "unicorn": unicorn_theme, "fountain": fountain_theme, "chase": chase_theme, "sight": sight_theme, "organ": organ_theme, "taste": taste_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

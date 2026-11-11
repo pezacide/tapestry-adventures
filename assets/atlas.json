@@ -524,6 +524,46 @@
       ],
       "frame_count": 2,
       "file": "enemies/genet.png"
+    },
+    "lapdog": {
+      "title": "Lappe-Dogge",
+      "behaviour": "scampers to and fro, yapping, and hops at the knight; stompable",
+      "frame": [
+        48,
+        30
+      ],
+      "frame_count": 2,
+      "file": "enemies/lapdog.png"
+    },
+    "fox": {
+      "title": "Foxe",
+      "behaviour": "slinks along, then darts at the knight when he turns his back; stompable",
+      "frame": [
+        62,
+        34
+      ],
+      "frame_count": 2,
+      "file": "enemies/fox.png"
+    },
+    "monkey": {
+      "title": "Monkeye",
+      "behaviour": "sits and nibbles sweets; when the knight is in range it flings comfits in arcs; stompable",
+      "frame": [
+        48,
+        46
+      ],
+      "frame_count": 2,
+      "file": "enemies/monkey.png"
+    },
+    "parakeet": {
+      "title": "Popinjaye",
+      "behaviour": "a parakeet: flutters in a wavering line across the sky toward the knight; stompable",
+      "frame": [
+        46,
+        36
+      ],
+      "frame_count": 2,
+      "file": "enemies/parakeet.png"
     }
   },
   "bosses": {
@@ -576,6 +616,26 @@
       ],
       "frame_count": 5,
       "file": "bosses/spotted_unicorn.png"
+    },
+    "heraldic_lion": {
+      "title": "Ye Lyon",
+      "behaviour": "twin boss with the unicorn: crouches, then springs at the knight; stomp him while he crouches",
+      "frame": [
+        170,
+        140
+      ],
+      "frame_count": 4,
+      "file": "bosses/heraldic_lion.png"
+    },
+    "lady_unicorn": {
+      "title": "Ye Unicorne",
+      "behaviour": "twin boss with the lion: rears, then charges across the tent; stomp it while it rears",
+      "frame": [
+        170,
+        172
+      ],
+      "frame_count": 4,
+      "file": "bosses/lady_unicorn.png"
     },
     "whale_boss": {
       "title": "Aspidochelone, the Island-Whale",
@@ -638,6 +698,16 @@
       ],
       "frame_count": 2,
       "file": "projectiles/soup_glob.png"
+    },
+    "comfit": {
+      "title": "Comfit",
+      "behaviour": "a sugared sweet flung by monkeys",
+      "frame": [
+        16,
+        16
+      ],
+      "frame_count": 2,
+      "file": "projectiles/comfit.png"
     }
   },
   "items": {
@@ -1351,6 +1421,90 @@
       ],
       "file": "scenery/castle_gatehouse.png"
     },
+    "island_top": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/island_top.png"
+    },
+    "island_fill": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/island_fill.png"
+    },
+    "coffer": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/coffer.png"
+    },
+    "garland": {
+      "size": [
+        48,
+        18
+      ],
+      "file": "scenery/garland.png"
+    },
+    "mirror_gold": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/mirror_gold.png"
+    },
+    "mirror_silver": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/mirror_silver.png"
+    },
+    "mirror_block": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/mirror_block.png"
+    },
+    "organ_pipe": {
+      "size": [
+        96,
+        300
+      ],
+      "file": "scenery/organ_pipe.png"
+    },
+    "basket": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/basket.png"
+    },
+    "castle_lady_tent": {
+      "size": [
+        240,
+        252
+      ],
+      "file": "scenery/castle_lady_tent.png"
+    },
+    "castle_music_hall": {
+      "size": [
+        240,
+        256
+      ],
+      "file": "scenery/castle_music_hall.png"
+    },
+    "castle_bower": {
+      "size": [
+        240,
+        252
+      ],
+      "file": "scenery/castle_bower.png"
+    },
     "fire": {
       "size": [
         48,
@@ -1570,6 +1724,34 @@
         540
       ],
       "file": "backgrounds/garden_far.png"
+    },
+    "red_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/red_far.png"
+    },
+    "red_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/red_near.png"
+    },
+    "organ_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/organ_far.png"
+    },
+    "pavilion_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/pavilion_far.png"
     }
   }
 }

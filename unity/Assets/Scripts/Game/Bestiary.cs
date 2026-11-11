@@ -40,6 +40,13 @@ namespace Tapestry
             { 'q', new Entry("enemies/greyhound", "Greyhounde", "It lyeth in wayte, then raceth at thee.") },
             { 'p', new Entry("enemies/pheasant", "Pheasaunt", "It bursteth up from ye flowers as thou drawest neare.") },
             { 'I', new Entry("enemies/genet", "Genette", "It pounceth in long lowe leapes.") },
+            { '{', new Entry("enemies/lapdog", "Lappe-Dogge", "It yappeth and hoppeth at thee. Stompe it.") },
+            { '}', new Entry("enemies/fox", "Foxe", "It darteth at thee when thy backe is turned. Face it, or stompe it.") },
+            { '@', new Entry("enemies/monkey", "Monkeye", "It flingeth comfits in arcs. Stompe it.") },
+            { '!', new Entry("enemies/parakeet", "Popinjaye", "It fluttereth at thee in a wavering lyne.") },
+            { '7', new Entry("scenery/mirror_block", "Ye Ladye's Mirrour", "Strike it from below: ye golde panes and ye silver change places. Only ye bright ones beare thee.") },
+            { '%', new Entry("scenery/basket", "Baskettes of Flowres", "Lande on one and it springeth thee high. Holde JUMPE to springe higher.") },
+            { '9', new Entry("scenery/organ_pipe", "Organ Pypes", "They ryse and falle with ye musick, every seconde beate.") },
             { 'Q', new Entry("scenery/log", "Rolling Logges", "Leape them, or stompe them awaye.") },
             { '*', new Entry("scenery/fire", "Fyre-pittes", "They burne. Leape them.") },
             { 'F', new Entry("scenery/flail_ball", "Iron Flailes", "They swinge rounde. Tyme thy passing.") },
@@ -57,6 +64,7 @@ namespace Tapestry
             { 'J', new Entry("bosses/whale_boss", "Aspidochelone, ye Island-Whale", "When it surfaceth, strike its eye: stompe it or shoote it, three tymes.") },
             { '4', new Entry("scenery/wind_head", "Ye Foure Windes", "Each hedde in turne draweth breath and gloweth golde: touche it or shoote it then.") },
             { '5', new Entry("bosses/great_boar", "Ye Greate Boar", "Leape it, that it ramme ye wall; then stompe it whyle it is dazed. Three blowes.") },
+            { '$', new Entry("bosses/heraldic_lion", "Ye Lyon and ye Unicorne", "Two at once! Stompe ye Lyon whyle he croucheth, ye Unicorne whyle it reareth; three blowes each. Each blowe angereth ye other.") },
             { '6', new Entry("bosses/spotted_unicorn", "Ye Spotted Unicorne", "It may not be harmed. Leape it, that it ramme ye GATE thrice: then it is spared, and shall beare thee.") },
         };
 

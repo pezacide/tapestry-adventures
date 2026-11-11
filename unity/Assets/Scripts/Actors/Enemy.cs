@@ -42,6 +42,10 @@ namespace Tapestry
                 case "talbot": speed = 6.5f; dir = 1f; break;
                 case "boar": speed = 1.3f; break;
                 case "hunter": speed = 1.0f; timer = 1f; break;
+                case "lapdog": speed = 2.6f; break;
+                case "fox": speed = 1.4f; break;
+                case "monkey": speed = 0f; timer = 1f; break;
+                case "parakeet": gravity = false; break;
                 case "greyhound": speed = 0f; break;
                 case "genet": speed = 1.2f; break;
                 case "pheasant": gravity = false; break;
@@ -213,6 +217,51 @@ namespace Tapestry
                         else { Walk(lv, true); WalkFrames(0, 0, 1f); }
                     }
                     else view.SetFrame(1);
+                    break;
+
+                case "lapdog":   // scampers to and fro, yapping, and hops at the knight when he is near
+                    Walk(lv, true); WalkFrames(0, 1, 9f);
+                    if (Body.Grounded && timer > 1.4f && Mathf.Abs(dx) < 5f) { timer = 0f; Body.Vel.y = 8f; dir = Mathf.Sign(dx); Audio.Play("jump", 0.25f); }
+                    break;
+
+                case "fox":   // slinks along; darts at the knight when his back is turned
+                    if (charging)
+                    {
+                        Body.Vel.x = dir * 7f; view.Face(dir > 0f); WalkFrames(0, 1, 12f);
+                        if (timer > 1.1f || Body.HitWall) { charging = false; timer = 0f; }
+                    }
+                    else
+                    {
+                        Walk(lv, true); WalkFrames(0, 1, 4f);
+                        bool backTurned = (dx > 0f) == p.FacingRight;   // the knight faces away from the fox
+                        if (timer > 1.5f && Mathf.Abs(dx) < 7f && backTurned && Mathf.Abs(p.Body.Pos.y - Body.Pos.y) < 1.5f)
+                        { charging = true; timer = 0f; dir = Mathf.Sign(dx); }
+                    }
+                    break;
+
+                case "monkey":   // sits nibbling; flings comfits in arcs at a knight in range
+                    Body.Vel.x = 0f; view.Face(dx > 0f);
+                    if (timer > 2.4f && Mathf.Abs(dx) < 9f)
+                    {
+                        view.SetFrame(1);
+                        if (timer > 2.7f)
+                        {
+                            timer = 0f;
+                            GameManager.I.SpawnShot("comfit", Body.Pos + new Vector2(Mathf.Sign(dx) * 0.4f, Body.H), new Vector2(Mathf.Clamp(dx * 0.7f, -5f, 5f), 8f));
+                            Audio.Play("jump", 0.3f);
+                        }
+                    }
+                    else view.SetFrame(0);
+                    break;
+
+                case "parakeet":   // flutters in a wavering line toward the knight, then on past
+                    if (!swooping) { if (Mathf.Abs(dx) < 13f) { swooping = true; dir = Mathf.Sign(dx); timer = 0f; } }
+                    else
+                    {
+                        Body.Vel = new Vector2(dir * 3.2f, Mathf.Cos(timer * 4f) * 1.6f);
+                        if (Mathf.Abs(Body.Pos.x - home.x) > 30f) Remove();
+                    }
+                    view.Face(dir > 0f); WalkFrames(0, 1, 8f);
                     break;
 
                 case "otter":   // hides in the river, then leaps up at the knight and drops back in
@@ -515,7 +564,7 @@ namespace Tapestry
         public Shot(string kind, Vector2 pos, Vector2 vel, Transform parent)
         {
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
-            gravity = kind == "soup_glob" || kind == "spear";
+            gravity = kind == "soup_glob" || kind == "spear" || kind == "comfit";
             Friendly = kind == "bolt";
             Kind = kind;
             life = Friendly ? 1.1f : 4f;

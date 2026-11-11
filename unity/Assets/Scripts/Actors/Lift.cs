@@ -19,7 +19,9 @@ namespace Tapestry
         readonly SpriteRenderer view;
         float t;
 
-        public enum Kind { BoardSideways, BoardUpDown, ShipRocking, ShipSailing }
+        public enum Kind { BoardSideways, BoardUpDown, ShipRocking, ShipSailing, OrganPipe }
+        public const float PipeStep = 1.2f;   // two beats of the organ tune (100 a minute): the pipes change height on every second beat
+        int pipeIndex;
 
         public Lift(Vector2 tileLeftTop, Kind kind, Transform parent, float phase, string boardSkin = "scenery/lift")
         {
@@ -29,15 +31,17 @@ namespace Tapestry
             {
                 case Kind.BoardUpDown: key = boardSkin; Width = 3f; ampY = 2.5f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
                 case Kind.ShipRocking: key = "scenery/longship"; Width = 5.4f; ampY = 0.35f; speed = 1.6f; rock = 3f; spriteH = 110f; deckFromTop = 58f; break;
+                case Kind.OrganPipe: key = "scenery/organ_pipe"; Width = 2f; spriteH = 300f; deckFromTop = 4f; pipeIndex = (int)phase; t = 0f; break;
                 case Kind.ShipSailing: key = "scenery/longship"; Width = 5.4f; ampX = 3f; ampY = 0.25f; speed = 0.7f; rock = 2f; spriteH = 110f; deckFromTop = 58f; break;
                 default: key = boardSkin; Width = 3f; ampX = 3f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
             }
-            view = Art.Make(key, parent, Vector2.zero, kind == Kind.ShipRocking || kind == Kind.ShipSailing ? -2 : 2);
+            view = Art.Make(key, parent, Vector2.zero, kind == Kind.ShipRocking || kind == Kind.ShipSailing ? -2 : kind == Kind.OrganPipe ? -1 : 2);
+            organ = kind == Kind.OrganPipe;
             Place();
         }
 
         // a board riding round the rim of a turning wheel (it stays level, like a fair's big wheel)
-        bool onWheel; Vector2 centre; float radius;
+        bool onWheel, organ; Vector2 centre; float radius;
 
         public static Lift OnWheel(Vector2 centre, float radius, float phase, float speed, Transform parent, string skin)
         {
@@ -70,6 +74,15 @@ namespace Tapestry
                 t += dt;
                 Pos = new Vector2(Pos.x + 1.4f * dt, home.y + Mathf.Sin(t * 2.2f) * 0.12f);
                 if (Pos.x > driftEnd) { Gone = true; view.enabled = false; }
+                Delta = Pos - before;
+                Place();
+                return;
+            }
+            if (organ)   // three heights, stepping in turn with the musick: a staircase that climbs and falls away
+            {
+                t += dt;
+                int k = ((int)(t / PipeStep) + pipeIndex) % 3;
+                Pos = new Vector2(home.x, Mathf.MoveTowards(Pos.y, home.y + k * 1.5f, 7f * dt));
                 Delta = Pos - before;
                 Place();
                 return;

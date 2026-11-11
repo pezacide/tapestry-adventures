@@ -36,7 +36,7 @@ namespace Tapestry
         bool carry; int carryHearts; bool carryCrossbow; string carryMount;
         // World 5: ye unicorne's horne and ye poysoned fountaine; and the hunt closing in (the chase)
         SpriteRenderer hornView, huntView; Vector2 hornPos, fountainPos; bool hasHorn, carryingHorn, hasFountain, purifiedSaved, toldFoul, toldFountain;
-        float huntX, huntDelay; int hornCombo;
+        float huntX, huntDelay; int hornCombo, pipeCount;
         // castles: flails, the boss, the axe that drops the bridge, and the rescued monk
         readonly List<Flail> flails = new List<Flail>();
         readonly List<Log> logs = new List<Log>();
@@ -197,7 +197,7 @@ namespace Tapestry
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
-            hornView = huntView = null; hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
+            hornView = huntView = null; pipeCount = 0; hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -267,6 +267,12 @@ namespace Tapestry
                     case 'q': kind = "greyhound"; break;
                     case 'p': kind = "pheasant"; break;
                     case 'I': kind = "genet"; break;
+                    case '{': kind = "lapdog"; break;
+                    case '}': kind = "fox"; break;
+                    case '@': kind = "monkey"; break;
+                    case '!': kind = "parakeet"; break;
+                    case '$': boss = new TwinBoss(p, world); break;
+                    case '9': lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), Lift.Kind.OrganPipe, world, pipeCount++ % 3)); break;
                     case '6': boss = new SpottedUnicorn(p, world); break;
                     case '0': hasFountain = true; fountainPos = p; Art.Make("scenery/fountain", world, p, -4); break;
                     case '+':
@@ -755,6 +761,9 @@ namespace Tapestry
                 return;
             }
 
+            // a basket of flowers springs the knight high
+            if (pb.Grounded && pb.Vel.y <= 0f && level.Basket(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y - 0.1f)))
+            { pb.Vel.y = TapestryInput.JumpHeld ? 21f : 17f; pb.Grounded = false; Audio.Play("spring"); }
             TickHornAndFountain(pb);
             if (player.Dead) return;
             if (hasCheckpoint && !checkpointClaimed && pb.Pos.x >= checkpointPos.x - 0.3f)
@@ -906,6 +915,10 @@ namespace Tapestry
                     if (!player.Mounted && bayard == null) { bayard = new Bayard(top, world); bayard.Hop(); }
                     else { bezants.Add(new Bezant(top, world, true)); AddBezant(); }
                     break;
+                case Level.BumpResult.Mirror:
+                    level.FlipMirrors(); Audio.Play("mirror");
+                    UnstickFromPanes(player.Body);
+                    break;
                 case Level.BumpResult.Unicorn:
                     if (!player.OnUnicorn && (bayard == null || bayard.Kind != "unicorn"))
                     { if (bayard != null) bayard.Destroy(); bayard = new Bayard(top, world, "unicorn"); bayard.Hop(); }
@@ -986,6 +999,21 @@ namespace Tapestry
             bossMusic = false;
             Audio.Music(L.Music);
             Toast(boss != null ? boss.DefeatedText : "Huzzah! Ye beaste is slayne!");
+        }
+
+        /// <summary>When the mirror panes change places, lift anything now standing inside a solid pane up on top of it.</summary>
+        void UnstickFromPanes(Body b)
+        {
+            for (int guard = 0; guard < 4; guard++)
+            {
+                bool moved = false;
+                int x0 = Mathf.FloorToInt(b.Left + 0.02f), x1 = Mathf.FloorToInt(b.Right - 0.02f);
+                int y0 = Mathf.FloorToInt(b.Pos.y + 0.02f), y1 = Mathf.FloorToInt(b.Top - 0.02f);
+                for (int x = x0; x <= x1 && !moved; x++)
+                    for (int y = y0; y <= y1 && !moved; y++)
+                        if (level.Solid(x, y)) { b.Pos.y = y + 1f; b.Vel.y = 0f; moved = true; }
+                if (!moved) return;
+            }
         }
 
         /// <summary>Ye Spotted Unicorne rammed the gate: knock out part of it.</summary>
