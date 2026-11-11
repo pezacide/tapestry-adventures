@@ -202,21 +202,35 @@ namespace Tapestry
                     view.Face(dir > 0f); WalkFrames(0, 1, 3f);
                     break;
 
-                case "hippocamp":   // paddles in place, then gallops through the water at the knight
+                case "hippocamp":
+                    // Paddles near its home. When the knight is in front of it, close by and level with it, it rears
+                    // (a half-second warning), then makes ONE straight dash of about 4 tiles - no steering - and rests.
+                    // It never strays more than 6 tiles from home.
                     if (charging)
                     {
-                        Body.Pos.x += dir * 6f * dt;
-                        Body.Pos.y = Mathf.MoveTowards(Body.Pos.y, p.Body.Pos.y + 0.3f, 1.5f * dt);
-                        WalkFrames(0, 1, 10f);
-                        if (timer > 1.6f) { charging = false; timer = 0f; }
+                        if (timer < 0.5f)   // the warning: rearing and flashing in place
+                        {
+                            view.SetFrame(1);
+                            view.Renderer.enabled = Mathf.Repeat(timer, 0.12f) > 0.05f;
+                        }
+                        else
+                        {
+                            view.Renderer.enabled = true;
+                            Body.Pos.x += dir * 5f * dt;
+                            WalkFrames(0, 1, 10f);
+                            if (timer > 1.3f || Mathf.Abs(Body.Pos.x - home.x) > 6f) { charging = false; timer = 0f; }
+                        }
                     }
                     else
                     {
-                        Body.Pos.y = home.y + Mathf.Sin(anim * 2f) * 0.3f;
-                        Body.Pos.x = Mathf.MoveTowards(Body.Pos.x, home.x, 1.5f * dt);
+                        view.Renderer.enabled = true;
+                        Body.Pos.x = Mathf.MoveTowards(Body.Pos.x, home.x, 2f * dt);
+                        Body.Pos.y = Mathf.MoveTowards(Body.Pos.y, home.y + Mathf.Sin(anim * 2f) * 0.3f, 2f * dt);
                         dir = dx > 0f ? 1f : -1f;
                         WalkFrames(0, 1, 3f);
-                        if (Mathf.Abs(dx) < 8f && Mathf.Abs(p.Body.Pos.y - Body.Pos.y) < 3f && timer > 1.5f) { charging = true; timer = 0f; Audio.Play("mount", 0.4f); }
+                        bool inFront = Mathf.Abs(dx) < 6f && Mathf.Abs(p.Body.Pos.y - Body.Pos.y) < 1.5f;
+                        bool homeSide = Mathf.Abs(Body.Pos.x - home.x) < 1f;
+                        if (inFront && homeSide && timer > 3f) { charging = true; timer = 0f; Audio.Play("mount", 0.4f); }
                     }
                     view.Face(dir > 0f);
                     break;

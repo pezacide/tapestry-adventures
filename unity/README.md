@@ -61,7 +61,7 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
   - It has a tune in the manner of early organum (a melody doubled a fifth below, with bells) and ends at **Ye Gate of Paradyse**.
 - **Worlde 3-2, Ye Waters Above:** swimming in the waters above the firmament, with the wheel of creation behind.
   - **The way through:** white cloud walls and a cloud-reef tunnel to swim around.
-  - **Creatures:** the new **hippocamp** (the bestiary's sea-horse) paddles in place, then gallops through the water at you; fish, sea-serpents and sea-monks swim among the clouds. The crossbowe is right at the start.
+  - **Creatures:** the new **hippocamp** (the bestiary's sea-horse) paddles near its home. If you come close and level with it, it rears and flashes as a warning, then makes one straight dash of about 4 tiles and rests (swim up or down out of its line to dodge); fish, sea-serpents and sea-monks swim among the clouds. The crossbowe is right at the start.
   - It has a slow 6/8 tune in G Dorian and ends at **Ye Fountaine of Lyfe**.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
