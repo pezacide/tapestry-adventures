@@ -536,21 +536,54 @@ namespace Tapestry
             if (TapestryInput.RunPressed) { titleStep = 0; Audio.Play("select"); return; }   // back to the knights
             bool go = stateTime > 0.25f && (TapestryInput.JumpPressed || TapestryInput.StartPressed);
             if (TapestryInput.TapPosition.HasValue)
-                for (int i = 0; i < n; i++)
-                    if (RealmRect(i).Contains(TapestryInput.TapPosition.Value))
+            {
+                var tap = TapestryInput.TapPosition.Value;
+                var page = RealmPage(realmChoice);
+                for (int k = 0; k < page.Count; k++)
+                    if (RealmRect(k, page.Count).Contains(tap))
                     {
-                        if (i == realmChoice) go = true; else Audio.Play("select");
-                        realmChoice = i;
+                        if (page[k] == realmChoice) go = true; else Audio.Play("select");
+                        realmChoice = page[k];
                     }
+                if (PageArrowRect(-1).Contains(tap)) TurnPage(-1);
+                if (PageArrowRect(1).Contains(tap)) TurnPage(1);
+            }
             if (go) { titleStep = 0; StartAt(realmStarts[realmChoice]); }
         }
 
-        Rect RealmRect(int i)
+        // The realme select shows one worlde at a time (its passed levels, up to four), with arrows to turn the page.
+        static readonly string[] WorldNames = { "", "Ye Bayeux Tapestrie", "Ye Crossing of ye Sea", "Ye Tapestrie of Creacioun",
+            "Ye Hunting Tapestries", "Ye Unicorne Tapestries", "Ye Lady and ye Unicorne", "Ye Apocalypse" };
+        static int WorldOf(LevelDef d)
         {
-            int n = realmStarts.Count;
-            float w = Mathf.Min(Screen.width * 0.9f / n - 10f, U * 0.42f), h = U * 0.16f;
-            float total = n * w + (n - 1) * 10f;
-            return new Rect((Screen.width - total) * 0.5f + i * (w + 10f), Screen.height * 0.42f, w, h);
+            int k = d.Title.IndexOf(' ');
+            int w; return k >= 0 && int.TryParse(d.Title.Substring(k + 1).Split('-')[0], out w) ? w : 1;
+        }
+        int RealmWorld(int i) { return WorldOf(Levels.All[realmStarts[i]]); }
+        /// <summary>The realmes (indices into realmStarts) on the same page as realme i.</summary>
+        List<int> RealmPage(int i)
+        {
+            var page = new List<int>(); int w = RealmWorld(i);
+            for (int j = 0; j < realmStarts.Count; j++) if (RealmWorld(j) == w) page.Add(j);
+            return page;
+        }
+        Rect RealmRect(int slot, int count)
+        {
+            float w = Mathf.Min(Screen.width * 0.7f / 4f - 14f, U * 0.34f), h = U * 0.2f;
+            float total = count * w + (count - 1) * 14f;
+            return new Rect((Screen.width - total) * 0.5f + slot * (w + 14f), Screen.height * 0.44f, w, h);
+        }
+        Rect PageArrowRect(int side)
+        {
+            float s = U * 0.13f;
+            return new Rect(side < 0 ? Screen.width * 0.08f : Screen.width * 0.92f - s, Screen.height * 0.44f + U * 0.035f, s, s);
+        }
+        void TurnPage(int side)
+        {
+            int w = RealmWorld(realmChoice);
+            if (side > 0) { for (int j = 0; j < realmStarts.Count; j++) if (RealmWorld(j) > w) { realmChoice = j; break; } }
+            else { int prev = -1; for (int j = 0; j < realmStarts.Count; j++) if (RealmWorld(j) < w) prev = j; if (prev >= 0) { var pg = RealmPage(prev); realmChoice = pg[pg.Count - 1]; } }
+            Audio.Play("select");
         }
 
         void TickPlay(float dt)
@@ -1254,17 +1287,25 @@ namespace Tapestry
             float y = H * 0.14f;
             if (t != null) { float tw = Mathf.Min(W * 0.9f, U * 1.3f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); }
             GUI.Label(new Rect(0, H * 0.3f, W, U * 0.08f), "Chuse thy realme", big);
-            for (int i = 0; i < realmStarts.Count; i++)
+            int world = RealmWorld(realmChoice);
+            GUI.Label(new Rect(0, H * 0.37f, W, U * 0.06f), "Worlde " + world + (world < WorldNames.Length ? " - " + WorldNames[world] : ""), center);
+            var page = RealmPage(realmChoice);
+            for (int k = 0; k < page.Count; k++)
             {
-                var r = RealmRect(i);
+                int i = page[k];
+                var r = RealmRect(k, page.Count);
                 var def = Levels.All[realmStarts[i]];
                 var c = GUI.color;
                 GUI.color = i == realmChoice ? new Color(0.66f, 0.26f, 0.18f, 0.4f) : new Color(0.2f, 0.145f, 0.114f, 0.12f);
                 GUI.DrawTexture(r, Texture2D.whiteTexture);
                 GUI.color = c;
-                GUI.Label(new Rect(r.x, r.y + r.height * 0.08f, r.width, r.height * 0.45f), def.Title, big);
-                GUI.Label(new Rect(r.x, r.y + r.height * 0.55f, r.width, r.height * 0.4f), def.Name, center);
+                string num = def.Title.Substring(def.Title.IndexOf(' ') + 1);   // "Worlde 3-2" -> "3-2"
+                GUI.Label(new Rect(r.x, r.y + r.height * 0.06f, r.width, r.height * 0.4f), num, big);
+                GUI.Label(new Rect(r.x + r.width * 0.05f, r.y + r.height * 0.48f, r.width * 0.9f, r.height * 0.5f), def.Name, center);
             }
+            bool more = RealmWorld(realmStarts.Count - 1) > world, less = RealmWorld(0) < world;
+            if (less) GUI.Label(PageArrowRect(-1), "<", big);
+            if (more) GUI.Label(PageArrowRect(1), ">", big);
             GUI.Label(new Rect(0, H * 0.62f, W, U * 0.08f), Knights.All[knightIndex].Title + " shall ryde", center);
             GUI.Label(new Rect(W * 0.05f, H * 0.78f, W * 0.9f, U * 0.1f),
                 TapestryInput.ShowTouchControls ? "Touche a realme, and touche agayne to ryde" : "LEFTE or RYGHTE to chuse  -  JUMPE to ryde  -  RUNNE to chuse another knyghte", center);

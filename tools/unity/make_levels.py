@@ -107,7 +107,7 @@ m.row(130, 4, "BBBB"); m.put(132, 5, "k")
 m.row(140, 5, "==="); m.row(140, 7, "ooo")
 m.put(150, 2, "s"); m.put(154, 2, "h"); m.put(147, 7, "w"); m.row(148, 5, "BHB?")
 m.stairs(160, 6)
-m.put(169, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(172, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level1", "Worlde 1-1", "Ye Meadowe of Beastes", "HERE YE KNYGHTES RYDE INTO YE MEADOWE OF BEASTES", m,
       [("tree", 6), ("shrub", 12), ("hill", 25), ("tree", 34), ("shrub", 45), ("tree", 66), ("hill", 86), ("tree", 95),
        ("shrub", 110), ("hill", 128), ("shrub", 138), ("tree", 150), ("tree", 172)],
@@ -134,7 +134,7 @@ m.treetop(140, 3, 4); m.treetop(144, 3, 6); m.put(143, 9, "w")   # over the thir
 m.treetop(148, 4, 5); m.row(149, 8, "1")
 m.treetop(155, 4, 5); m.put(156, 6, "O"); m.put(160, 2, "h"); m.put(165, 2, "s")
 m.stairs(170, 6)
-m.put(179, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(182, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level2", "Worlde 1-2", "Ye Foreste of Wyverns", "HERE YE KNYGHTES PASSE THORUGH YE DERKE FORESTE", m,
       [("shrub", 5), ("shrub", 30), ("shrub", 72), ("shrub", 110), ("shrub", 152), ("shrub", 178)],
       "scenery/castle_abbey", 191, "forest", "backgrounds/forest_far", "backgrounds/forest_near")
@@ -180,7 +180,7 @@ m.ground(0, 71)
 m.put(5, 2, "P")
 m.put(14, 2, "h"); m.row(17, 5, "BMB"); m.put(22, 2, "S")
 m.stairs(27, 6)
-m.put(36, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(39, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level3c", "Worlde 1-3", "Ye Lyght of Daye", "HERE YE KNYGHTES CLYMBE BACK INTO YE LYGHT", m,
       [("crypt_entrance", 2), ("tree", 38), ("shrub", 50)],
       "scenery/castle_round_tower", 60, "meadow")
@@ -231,7 +231,7 @@ m.put(112, 2, "S"); m.row(116, 5, "B1B"); m.put(118, 8, "g"); m.put(124, 2, "x")
 m.row(133, 5, "==="); m.row(133, 7, "ooo")
 m.put(142, 2, "Q"); m.put(150, 2, "d"); m.put(154, 7, "g"); m.put(158, 2, "x")
 m.stairs(164, 6)
-m.put(173, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(176, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level5", "Worlde 2-1", "Ye Shipwrights' Yarde", "HERE YE SHIPWRIGHTES FELLE YE TREES AND BUILDE YE SHIPPES", m,
       [("shrub", 6), ("ship", 36), ("ship", 110), ("shrub", 170)],
       "scenery/castle_harbour_gate", 189, "shore", "backgrounds/shore_far", "backgrounds/shore_near",
@@ -284,7 +284,7 @@ m.put(131, 2, "Y"); stack(139, 5); m.row(139, 8, "oo")
 m.put(143, 2, "U"); m.put(153, 3, "Y"); m.row(155, 7, "B1B")
 m.put(166, 2, "x"); m.put(170, 7, "g")
 m.stairs(172, 6)
-m.put(181, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(184, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level7", "Worlde 2-3", "Ye Crossing", "HERE YE FLEETE CROSSETH YE SEA", m,
       [("shrub", 4), ("shrub", 60), ("shrub", 102), ("shrub", 166)],
       "scenery/castle_beacon", 195, "crossing", "backgrounds/shore_far", "backgrounds/sea_near",
@@ -329,7 +329,7 @@ m.put(129, 3, "L"); m.row(136, 5, "===="); m.put(140, 7, "<"); m.put(143, 3, "L"
 m.put(138, 9, "b"); m.put(146, 8, "b")
 m.put(155, 2, "h"); m.row(158, 5, "B1B"); m.put(162, 2, "d")
 m.stairs(166, 6)
-m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level9", "Worlde 3-1", "Ye Firmament", "HERE YE KNYGHTES CLYMBE YE FIRMAMENT OF HEVENE", m,
       [], "scenery/castle_paradise_gate", 192, "firmament", "backgrounds/creation_far", "backgrounds/creation_near",
       skin=("scenery/cloud_top", "scenery/cloud_fill", "scenery/roundel_block"), plank="scenery/cloud_band", lift="scenery/star_board")
@@ -372,7 +372,7 @@ m.row(100, 4, "==="); m.put(110, 2, "c"); m.row(114, 5, "B?B?B")
 m.put(132, 2, "v"); m.row(122, 5, "===="); m.row(127, 7, "===="); m.put(126, 8, "b")   # the third, mounted on Bayard if you can
 m.row(149, 4, "==="); m.put(156, 2, "S"); m.row(158, 5, "B1B"); m.put(162, 2, "h")
 m.stairs(166, 6)
-m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level11", "Worlde 3-3", "Ye Naming of ye Beastes", "HERE ADAM NAMETH YE BEASTES, AND YE BEASTES DOE RUNNE", m,
       [], "scenery/castle_eden_bower", 192, "eden", "backgrounds/creation_far", "backgrounds/eden_near",
       skin=("scenery/eden_top", "scenery/eden_fill", "scenery/roundel_block"))
@@ -414,7 +414,7 @@ m.row(93, 4, "===="); m.put(104, 2, "u"); m.row(108, 5, "B?B?B"); m.put(116, 2, 
 m.row(124, 4, "==="); m.row(128, 6, "==="); m.put(134, 2, "d")
 m.row(141, 4, "====="); m.put(152, 2, "j"); m.row(156, 5, "B1B"); m.put(160, 2, "h")
 m.stairs(166, 6)
-m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level13", "Worlde 4-1", "Ye Boare Hunte", "HERE YE HUNTE RYDETH AND YE HOUNDES ARE LOOSED", m,
       [], "scenery/castle_pavilion", 192, "hunt", "backgrounds/verdure_far", "backgrounds/verdure_near",
       skin=W4, plank="scenery/branch", hounds=True)
@@ -437,7 +437,7 @@ m.put(124, 2, "i"); m.put(141, 2, "i"); m.put(146, 2, "i"); m.put(130, 2, "n")
 m.row(122, 6, "oooooo")
 m.put(156, 2, "h"); m.row(160, 5, "B1B")
 m.stairs(166, 6)
-m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level14", "Worlde 4-2", "Ye Otter and ye Swanne", "HERE YE HUNTE GOETH DOWNE TO YE RIVER", m,
       [], "scenery/castle_mill", 192, "river", "backgrounds/river_far", None,
       skin=W4, plank="scenery/branch")
@@ -454,7 +454,7 @@ m.put(96, 9, "a"); m.row(100, 5, "===="); m.row(106, 8, "====")
 m.row(121, 4, "===="); m.put(134, 2, "j"); m.row(138, 5, "BHB"); m.put(140, 9, "a")
 m.put(148, 2, "d"); m.row(152, 5, "B1B"); m.put(158, 9, "a")
 m.stairs(166, 6)
-m.put(175, 2, "G")   # four tiles past the top step: a fine leap reaches the toppe
+m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level15", "Worlde 4-3", "Ye Falconers' Heath", "HERE YE FALCONERS LOOSE YE HAWKES UPON YE HEATH", m,
       [("hunting_stand", 18), ("hunting_stand", 24), ("hunting_stand", 60), ("hunting_stand", 102), ("hunting_stand", 108)],
       "scenery/castle_mews", 192, "heath", "backgrounds/heath_far", None,
@@ -494,7 +494,7 @@ m.put(104, 2, "C"); m.put(110, 2, "y"); m.put(120, 2, "p"); m.row(124, 5, "?B?")
 m.row(146, 4, "====")
 m.put(155, 2, "p"); m.row(159, 5, "B1B"); m.put(163, 2, "y")
 m.stairs(168, 6)
-m.put(177, 2, "G")
+m.put(180, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level17", "Worlde 5-1", "Ye Hunters Set Out", "HERE YE HUNTERS SET OUT IN QUESTE OF YE UNICORNE", m,
       [], "scenery/castle_chateau", 190, "unicorn", "backgrounds/millefleur_far", "backgrounds/millefleur_near",
       skin=W5, plank="scenery/rail")
@@ -513,7 +513,7 @@ m.put(106, 2, "C")
 m.put(125, 2, "I"); m.put(128, 2, "p"); m.row(124, 5, "?B?"); m.put(146, 2, "I")
 m.put(164, 2, "y"); m.row(168, 5, "B1B")
 m.stairs(172, 6)
-m.put(181, 2, "G")
+m.put(184, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level18", "Worlde 5-2", "Ye Fountaine", "HERE YE UNICORNE DIPPETH HIS HORNE AND MAKETH YE WATERS PURE", m,
       [], "scenery/castle_chapel", 192, "fountain", "backgrounds/fountain_far", "backgrounds/millefleur_near",
       skin=W5, plank="scenery/rail")
@@ -529,7 +529,7 @@ m.put(70, 2, "p"); m.row(81, 4, "====")
 m.row(88, 5, "BRB"); m.put(95, 2, "C"); m.put(102, 2, "q"); m.put(120, 2, "p")
 m.row(131, 4, "===="); m.row(140, 5, "B1B"); m.put(146, 2, "q"); m.put(160, 2, "y")
 m.stairs(166, 6)
-m.put(175, 2, "G")
+m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level19", "Worlde 5-3", "Ye Unicorne at Baye", "HERE YE HUNTE PRESSETH HARD UPON YE UNICORNE", m,
       [], "scenery/castle_gatehouse", 190, "chase", "backgrounds/millefleur_far", "backgrounds/millefleur_near",
       skin=W5, plank="scenery/rail", chase=True)
