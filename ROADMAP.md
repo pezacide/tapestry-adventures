@@ -14,8 +14,8 @@ All of these works are centuries old and in the public domain. We redraw them in
 | 2 | Bayeux Tapestry, the Channel crossing | embroidery; sea and ships | swimming, rocking longships, wind | Aspidochelone, the Island-Whale | **done** (2-1 to 2-4) |
 | 3 | Tapestry of Creation (Girona) | Romanesque needlework; roundels and compartments | wind-heads that blow you, sky platforms | Ye Foure Windes | **done** (3-1 to 3-4) |
 | 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | **done** (4-1 to 4-4) |
-| 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | next |
-| 6 | The Lady and the Unicorn | woven; red mille-fleur grounds, blue flower islands | one level for each of the five senses | Ye Lyon and ye Unicorne (twin boss) | planned |
+| 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | **done** (5-1 to 5-4) |
+| 6 | The Lady and the Unicorn | woven; red mille-fleur grounds, blue flower islands | one level for each of the five senses | Ye Lyon and ye Unicorne (twin boss) | next |
 | 7 | Apocalypse Tapestry | woven; alternating red and blue grounds | falling stars, trumpet blasts | The Seven-Headed Dragon, then the **Cat King** finale | planned |
 
 **The art changes with each tapestry.** Worlds 1–3 keep the stitched-on-linen look. From World 4 the backgrounds become fully woven (dense hatching and a weave texture), while the knights stay stitched. The contrast is deliberate: embroidered heroes walking into woven worlds.
@@ -62,7 +62,7 @@ The hunters set out, the unicorn purifies the stream, the unicorn at bay, then c
 |---|---|---|
 | 5-1 | Ye Hunters Set Out | a verdure forest; hunters with spears are new enemies |
 | 5-2 | Ye Fountaine | a **poisoned stream** hurts you until you carry the unicorn's horn-touch upstream to purify it |
-| 5-3 | Ye Unicorne at Baye | a chase level: keep pace as the hunt closes in |
+| 5-3 | Ye Unicorne at Baye | a chase level: keep ahead as the hunt closes in from behind |
 | 5-4 | Ye Unicorne in Captivitie | boss **the Spotted Unicorn**, frantic in its fence; make it charge the fence posts until the gate breaks. It is **spared** and becomes a second mount, faster than Bayard, with a horn charge. |
 
 ## World 6: The Lady and the Unicorn

@@ -8,7 +8,7 @@ SEAT = (48, 22)          # where a rider's hip sits, in horse design units
 RIDER_HIP = (35, 63)     # hip in the knight frame
 POSES = ["idle", "walk1", "walk2", "leap", "rear"]
 
-def horse(pose, body_c="ochre", far_c="blue", mane="brown", rider=""):
+def horse(pose, body_c="ochre", far_c="blue", mane="brown", rider="", saddle=True, deco=""):
     L = dict(idle=(0, 0, 0, 0), walk1=(-20, 16, 16, -20), walk2=(16, -20, -20, 16),
              leap=(-55, -40, 50, 35), rear=(-40, -18, 12, -4))[pose]   # near-front, far-front, near-back, far-back
     s = ""
@@ -22,10 +22,12 @@ def horse(pose, body_c="ochre", far_c="blue", mane="brown", rider=""):
     s += dot(87.5, 10, 1, "dark") + dot(96.5, 19, 0.7, "dark")
     s += stem("M84,6 L91,21 M81,14 L97,16.5", "terra", 1.1, False) + stem("M95,21 Q76,30 56,22", "terra", 0.9, False)
     # saddle cloth, saddle, stirrup
-    s += fill("M38,25 L59,24 L61,40 L37,41 Z", "terra", 90, "dark", 1.1) + stem("M39,38 L60,37", "gold", 1, False)
-    s += fill("M38,19 Q37,26 42,26 L56,26 Q61,26 60,17 L56,22 L42,22 Z", "brown", 0, "dark", 1.1)
-    s += stem("M48,26 L48,46", "dark", 0.8, False) + stem("M45.5,46 L50.5,46", "grey", 1.6, False)
+    if saddle: s += fill("M38,25 L59,24 L61,40 L37,41 Z", "terra", 90, "dark", 1.1) + stem("M39,38 L60,37", "gold", 1, False)
+    if saddle:
+        s += fill("M38,19 Q37,26 42,26 L56,26 Q61,26 60,17 L56,22 L42,22 Z", "brown", 0, "dark", 1.1)
+        s += stem("M48,26 L48,46", "dark", 0.8, False) + stem("M45.5,46 L50.5,46", "grey", 1.6, False)
     s += limb(68, 44, 30, 6, body_c, L[0], "hoof") + limb(26, 44, 30, 6.5, body_c, L[2], "hoof")
+    s += deco
     if rider:
         s += g(rider, f"translate({SEAT[0] - RIDER_HIP[0]} {SEAT[1] - RIDER_HIP[1]})")
     if pose == "rear":
@@ -64,9 +66,10 @@ def princess(pose):
     return s
 
 MOUNT_PAD = 44   # extra headroom above the horse in mounted frames
-def mounted(knight_body):
-    """Horse + rider in one frame (HW x HH+MOUNT_PAD), for each horse pose."""
-    return {p: doc(HW, HH + MOUNT_PAD, g(horse(p, rider=knight_body), f"translate(0 {MOUNT_PAD})")) for p in POSES}
+def mounted(knight_body, steed=None):
+    """Horse + rider in one frame (HW x HH+MOUNT_PAD), for each horse pose. steed(pose, rider) draws another mount (the unicorn)."""
+    steed = steed or (lambda p, rider: horse(p, rider=rider))
+    return {p: doc(HW, HH + MOUNT_PAD, g(steed(p, knight_body), f"translate(0 {MOUNT_PAD})")) for p in POSES}
 
 # ---------------- the rescued monk (end of each castle) ----------------
 MW, MH = 44, 76

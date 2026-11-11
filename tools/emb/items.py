@@ -56,3 +56,18 @@ def gaze(f):
     s += stem("M2,6 L38,6", "cream", 0.8, False) + dot(36, 6, 3, "gold", "dark")
     return s
 GAZE = dict(title="Petrifying Gaze", size=(40, 12), frames=2, build=gaze)
+
+def horn(f):   # World 5: the unicorn's horn-touch, carried to the poisoned fountain to make its waters pure
+    s = ""
+    if f:
+        s += stem("M18,2 L18,8 M18,30 L18,34 M3,18 L8,18 M28,18 L33,18 M7,7 l3,3 M29,7 l-3,3", "gold", 1, False)
+    s += fill("M10,30 L26,6 L16,32 Z", "cream", 60, "dark", 1.2)
+    s += stem("M12,27 L16,27.5 M14,23 L18.5,23.5 M16.5,19 L21,19.5 M19,15 L23,15.5 M21.5,11 L24.5,11.2", "gold", 1, False)
+    return s
+I["horn"] = dict(title="Ye Unicorne's Horne", size=(36, 36), frames=2, build=horn, effect="carry it to ye fountaine and ye poysoned waters runne pure")
+
+def spear(f):
+    s = stem("M2,5 L40,5", "brown", 1.8, False) + fill("M39,2 L48,5 L39,8 Z", "grey", 0, "dark", 0.8)
+    s += stem("M4,3 L8,5 L4,7", "terra", 1, False)
+    return s
+SPEAR = dict(title="Huntsman's Speare", size=(48, 10), frames=1, build=spear)

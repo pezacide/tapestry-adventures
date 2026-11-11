@@ -11,6 +11,9 @@ namespace Tapestry
         public readonly Body Body;
         public KnightDef Def { get; private set; }
         public bool Mounted { get; private set; }
+        public string MountKind { get; private set; }   // "bayard" or "unicorn" while mounted
+        public bool OnUnicorn { get { return Mounted && MountKind == "unicorn"; } }
+        public string MountName { get { return OnUnicorn ? "ye Unicorne" : "Bayard"; } }
         public bool Dead { get; private set; }
         public int Hearts = 3;
         public bool FacingRight { get { return view.FacingRight; } }
@@ -40,7 +43,7 @@ namespace Tapestry
         public void SetKnight(KnightDef def)
         {
             Def = def;
-            view.SetSheet(Mounted ? def.MountedSheet : def.Sheet);
+            view.SetSheet(Mounted ? def.RideSheet(MountKind) : def.Sheet);
         }
 
         public void Freeze() { frozen = true; Body.Vel = Vector2.zero; }
@@ -64,7 +67,7 @@ namespace Tapestry
             else
             {
             float h = stone ? 0f : TapestryInput.Horizontal;
-            float speedMul = Mounted ? 1.2f : 1f;
+            float speedMul = OnUnicorn ? 1.45f : Mounted ? 1.2f : 1f;   // the unicorn is the swifter steed
             float target = h * (TapestryInput.RunHeld ? Def.Run : Def.Walk) * speedMul;
             float accel;
             if (Body.Grounded || coyote > 0f)
@@ -80,7 +83,7 @@ namespace Tapestry
             if (TapestryInput.JumpPressed && !stone) jumpBuffer = 0.12f; else jumpBuffer -= dt;
             if (jumpBuffer > 0f && coyote > 0f)
             {
-                Body.Vel.y = Def.Jump + Mathf.Abs(Body.Vel.x) * 0.12f + (Mounted ? 1.4f : 0f);
+                Body.Vel.y = Def.Jump + Mathf.Abs(Body.Vel.x) * 0.12f + (OnUnicorn ? 1.0f : Mounted ? 1.4f : 0f);
                 jumpBuffer = coyote = 0f;
                 Audio.Play("jump", 0.55f);
             }
@@ -93,7 +96,7 @@ namespace Tapestry
             if (Def.Glide && !Mounted && Body.Vel.y < 0f && TapestryInput.JumpHeld) maxFall = 2.6f;
 
             // Bayard's flutter-leap: once per jump, hold JUMP while falling for a short boost (like Yoshi)
-            if (Mounted && !Body.Grounded && Body.Vel.y < 0f && TapestryInput.JumpHeld && !flutterUsed) { flutterUsed = true; flutterTime = 0.45f; }
+            if (Mounted && !OnUnicorn && !Body.Grounded && Body.Vel.y < 0f && TapestryInput.JumpHeld && !flutterUsed) { flutterUsed = true; flutterTime = 0.45f; }
             if (flutterTime > 0f)
             {
                 flutterTime -= dt;
@@ -238,12 +241,12 @@ namespace Tapestry
             GameManager.I.PlayerDied(fell);
         }
 
-        public void Mount(bool silent = false)
+        public void Mount(string kind = "bayard", bool silent = false)
         {
-            Mounted = true;
+            Mounted = true; MountKind = kind;
             Body.W = RideW; Body.H = RideH;
             if (!silent) Audio.Play("mount", 0.9f);
-            view.SetSheet(Def.MountedSheet);
+            view.SetSheet(Def.RideSheet(kind));
         }
 
         void Dismount(bool thrown)
@@ -251,7 +254,7 @@ namespace Tapestry
             Mounted = false;
             Body.W = FootW; Body.H = FootH;
             view.SetSheet(Def.Sheet);
-            GameManager.I.ReleaseBayard(Body.Pos, FacingRight, thrown);
+            GameManager.I.ReleaseBayard(Body.Pos, FacingRight, thrown, MountKind);
             Body.Vel.y = thrown ? 10f : 7f;
             if (thrown) Audio.Play("thrown");
             Body.Vel.x = thrown ? (FacingRight ? -3f : 3f) : 0f;
@@ -299,11 +302,11 @@ namespace Tapestry
         }
 
         /// <summary>Carry the knight's state on into the next level or part.</summary>
-        public void ApplyCarry(int hearts, bool crossbow, bool mounted)
+        public void ApplyCarry(int hearts, bool crossbow, string mount)
         {
             Hearts = Mathf.Clamp(hearts, 1, Def.Hearts);
             if (crossbow) GiveCrossbow();
-            if (mounted) Mount(true);
+            if (!string.IsNullOrEmpty(mount)) Mount(mount, true);
         }
 
         void PlaceCrossbow()

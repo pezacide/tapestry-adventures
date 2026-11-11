@@ -10,6 +10,8 @@ namespace Tapestry
 
         public string Sheet { get { return "heroes/" + Key; } }
         public string MountedSheet { get { return "heroes/" + Key + "_mounted"; } }
+        public string UnicornSheet { get { return "heroes/" + Key + "_unicorn"; } }
+        public string RideSheet(string mount) { return mount == "unicorn" ? UnicornSheet : MountedSheet; }
     }
 
     public static class Knights

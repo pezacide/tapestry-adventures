@@ -15,6 +15,7 @@ namespace Tapestry
         public abstract void Tick(float dt, Level lv, Knight player);
         public abstract void OnKnight(Knight k, bool fromAbove);
         public abstract void Hit(float amount);
+        public virtual string DefeatedText { get { return "Huzzah! " + Title + " is slayne!"; } }
 
         /// <summary>The knight may be touching the boss: work out whether it was a stomp, and react.</summary>
         public virtual void Contact(Knight k)

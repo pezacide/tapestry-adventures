@@ -151,6 +151,22 @@
         -41
       ],
       "behaviour": "Yoshi-style mount: found in roundel blocks; ride to run faster, jump higher and trample fiery beasts. Take a hit while riding and you are thrown off - Bayard rears and bolts, and you can catch him again. Press down to dismount. Use a knight's _mounted sheet, or draw the knight 'ride' frame at rider_offset."
+    },
+    "unicorn": {
+      "title": "Ye Spotted Unicorne, spared",
+      "frame": [
+        104,
+        106
+      ],
+      "frames": [
+        "idle",
+        "walk1",
+        "walk2",
+        "leap",
+        "rear"
+      ],
+      "file": "mounts/unicorn.png",
+      "behaviour": "the second mount (won in 5-4): faster than Bayard, and its horn fells beasts it runs into at a gallop; no flutter-leap"
     }
   },
   "princess": {
@@ -412,6 +428,46 @@
       ],
       "frame_count": 2,
       "file": "enemies/falcon.png"
+    },
+    "hunter": {
+      "title": "Huntsman",
+      "behaviour": "walks its beat; when the knight is in front it hurls a spear in a long arc (frame 2); stompable",
+      "frame": [
+        60,
+        84
+      ],
+      "frame_count": 3,
+      "file": "enemies/hunter.png"
+    },
+    "greyhound": {
+      "title": "Greyhounde",
+      "behaviour": "lurks still; when the knight comes near it races at him, leaping gaps; stompable",
+      "frame": [
+        72,
+        40
+      ],
+      "frame_count": 2,
+      "file": "enemies/greyhound.png"
+    },
+    "pheasant": {
+      "title": "Pheasaunt",
+      "behaviour": "crouches in the flowers; bursts up and whirs across the sky when the knight comes near; stompable",
+      "frame": [
+        52,
+        40
+      ],
+      "frame_count": 2,
+      "file": "enemies/pheasant.png"
+    },
+    "genet": {
+      "title": "Genette",
+      "behaviour": "paces by the fountain and pounces at the knight in long low leaps; stompable",
+      "frame": [
+        62,
+        34
+      ],
+      "frame_count": 2,
+      "file": "enemies/genet.png"
     }
   },
   "bosses": {
@@ -455,6 +511,16 @@
       "frame_count": 3,
       "file": "bosses/great_boar.png"
     },
+    "spotted_unicorn": {
+      "title": "Ye Spotted Unicorne",
+      "behaviour": "boss: rears, then charges; leap aside so it rams the fence gate. Three rams break the gate and it is calmed - spared, it becomes a mount",
+      "frame": [
+        200,
+        202
+      ],
+      "frame_count": 5,
+      "file": "bosses/spotted_unicorn.png"
+    },
     "whale_boss": {
       "title": "Aspidochelone, the Island-Whale",
       "behaviour": "boss; surfaces from the sea, spouts water, snaps; knights must jump on its scaly back and strike the eye",
@@ -467,6 +533,16 @@
     }
   },
   "projectiles": {
+    "spear": {
+      "title": "Huntsman's Speare",
+      "behaviour": "hurled by huntsmen in a long arc",
+      "frame": [
+        48,
+        10
+      ],
+      "frame_count": 2,
+      "file": "projectiles/spear.png"
+    },
     "gaze": {
       "title": "Petrifying Gaze",
       "behaviour": "the Cockatrice's glare: turns a knight to stone for a moment",
@@ -548,6 +624,16 @@
       ],
       "frame_count": 2,
       "file": "items/relic.png"
+    },
+    "horn": {
+      "title": "Ye Unicorne's Horne",
+      "behaviour": "carry it to ye fountaine and ye poysoned waters runne pure",
+      "frame": [
+        36,
+        36
+      ],
+      "frame_count": 2,
+      "file": "items/horn.png"
     }
   },
   "scenery": {
@@ -1125,6 +1211,90 @@
       ],
       "file": "scenery/castle_mews.png"
     },
+    "millefleur_top": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/millefleur_top.png"
+    },
+    "millefleur_fill": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/millefleur_fill.png"
+    },
+    "paling": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/paling.png"
+    },
+    "gate_paling": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/gate_paling.png"
+    },
+    "rail": {
+      "size": [
+        48,
+        18
+      ],
+      "file": "scenery/rail.png"
+    },
+    "stream_foul": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/stream_foul.png"
+    },
+    "stream_pure": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/stream_pure.png"
+    },
+    "fountain": {
+      "size": [
+        144,
+        192
+      ],
+      "file": "scenery/fountain.png"
+    },
+    "hunt_line": {
+      "size": [
+        230,
+        310
+      ],
+      "file": "scenery/hunt_line.png"
+    },
+    "castle_chateau": {
+      "size": [
+        240,
+        260
+      ],
+      "file": "scenery/castle_chateau.png"
+    },
+    "castle_chapel": {
+      "size": [
+        240,
+        252
+      ],
+      "file": "scenery/castle_chapel.png"
+    },
+    "castle_gatehouse": {
+      "size": [
+        240,
+        260
+      ],
+      "file": "scenery/castle_gatehouse.png"
+    },
     "fire": {
       "size": [
         48,
@@ -1316,6 +1486,34 @@
         540
       ],
       "file": "backgrounds/lodge_far.png"
+    },
+    "millefleur_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/millefleur_far.png"
+    },
+    "millefleur_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/millefleur_near.png"
+    },
+    "fountain_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/fountain_far.png"
+    },
+    "garden_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/garden_far.png"
     }
   }
 }

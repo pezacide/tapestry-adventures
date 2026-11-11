@@ -21,6 +21,8 @@ namespace Tapestry
     ///              v stampede (herds of stags charge in from the right)  Z turning wheel (4 boards ride round it)  4 Ye Foure Windes
     ///              j wild boar  i otter  n swan  a falcon  r raft launch (rafts drift right on the current)  5 Ye Greate Boar
     ///              D boss gate (solid until the boss is beaten, then it crumbles)
+    ///              ; poisoned stream (hurts until purified; then the knight wades it)  8 brick hiding ye unicorne (the second mount)
+    ///              y huntsman (hurls spears)  q greyhound  p pheasant  I genet  0 ye fountaine  + ye unicorne's horne  6 Ye Spotted Unicorne
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -60,7 +62,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
-                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D':
+                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D': case ';': case '8':
                             tiles[x, y] = c; break;
                         case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
@@ -88,7 +90,7 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': return true;
                 default: return false;
             }
         }
@@ -96,6 +98,22 @@ namespace Tapestry
         public bool Platform(int x, int y) { char c = Get(x, y); return c == '=' || c == '^'; }
         public bool Water(int x, int y) { return Get(x, y) == '~'; }
         public bool Fire(int x, int y) { return Get(x, y) == '*'; }
+
+        /// <summary>World 5: the poisoned stream hurts until ye unicorne's horne is brought to ye fountaine.</summary>
+        public bool Purified { get; private set; }
+        public bool Foul(int x, int y) { return !Purified && Get(x, y) == ';'; }
+        public void Purify()
+        {
+            if (Purified) return;
+            Purified = true;
+            var pure = Art.Single("scenery/stream_pure");
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                {
+                    SpriteRenderer v;
+                    if (tiles[x, y] == ';' && views.TryGetValue(Key(x, y), out v) && v != null) v.sprite = pure;
+                }
+        }
 
         readonly List<SpriteRenderer> fires = new List<SpriteRenderer>();
         float fireT;
@@ -118,6 +136,21 @@ namespace Tapestry
                 for (int y = 0; y < Height; y++)
                     if (tiles[x, y] == 'D') { RemoveTile(x, y); n++; }
             return n;
+        }
+
+        /// <summary>Splinter the boss gate (the unicorn rams it): knock out its top tiles, keeping only `fractionLeft` of them.
+        /// Returns the tiles that fell.</summary>
+        public List<Vector2Int> CrackGate(float fractionLeft)
+        {
+            var gate = new List<Vector2Int>();
+            for (int x = 0; x < Width; x++)
+                for (int y = Height - 1; y >= 0; y--)
+                    if (tiles[x, y] == 'D') gate.Add(new Vector2Int(x, y));
+            gate.Sort((a, b) => b.y.CompareTo(a.y));   // top first
+            int keep = Mathf.CeilToInt(gate.Count * Mathf.Clamp01(fractionLeft) - 0.01f);
+            var fell = gate.GetRange(0, gate.Count - keep);
+            foreach (var t in fell) RemoveTile(t.x, t.y);
+            return fell;
         }
 
         public void RemoveTile(int x, int y)
@@ -147,14 +180,15 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': key = Get(x, y + 1) == '#' ? skin.GroundFill : skin.GroundTop; break;
-                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': key = skin.Brick; break;   // item bricks look like any other brick
+                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': case '8': key = skin.Brick; break;   // item bricks look like any other brick
                         case 'X': key = "scenery/roundel_used"; break;
                         case '~': key = "scenery/sea"; break;
                         case '=': key = skin.Plank; dy = 1f - Art.Sheet(skin.Plank).FrameH / Art.DesignPerTile; break;
                         case '^': key = "scenery/canopy"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case '|': key = "scenery/trunk"; break;
                         case 'V': case 'F': key = skin.Vault; break;
-                        case 'D': key = skin.Brick; break;
+                        case 'D': key = string.IsNullOrEmpty(skin.Gate) ? skin.Brick : skin.Gate; break;
+                        case ';': key = "scenery/stream_foul"; break;
                         case '*': key = "scenery/fire"; break;
                         case '_': key = "scenery/drawbridge"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case 'T':
@@ -170,13 +204,13 @@ namespace Tapestry
                     }
                     if (key != null)
                     {
-                        views[Key(x, y)] = Art.Make(key, root, new Vector2(x + 0.5f, y + dy), c == '~' ? 6 : c == '*' ? 6 : c == '|' ? -6 : c == '^' ? 1 : 0, c == '*' ? (x + y) % 2 : 0);
+                        views[Key(x, y)] = Art.Make(key, root, new Vector2(x + 0.5f, y + dy), c == '~' || c == ';' ? 6 : c == '*' ? 6 : c == '|' ? -6 : c == '^' ? 1 : 0, c == '*' ? (x + y) % 2 : 0);
                         if (c == '*') fires.Add(views[Key(x, y)]);
                     }
                 }
         }
 
-        public enum BumpResult { None, Bezant, Bayard, Chalice, Capon, Crossbow, Relic, Broke, Thud }
+        public enum BumpResult { None, Bezant, Bayard, Unicorn, Chalice, Capon, Crossbow, Relic, Broke, Thud }
 
         /// <summary>A knight's head hit tile (x, y) from below.</summary>
         public BumpResult HitFromBelow(int x, int y)
@@ -186,13 +220,14 @@ namespace Tapestry
             views.TryGetValue(Key(x, y), out v);
             switch (c)
             {
-                case '?': case 'H': case '1': case 'M': case 'W': case 'R':
+                case '?': case 'H': case '1': case 'M': case 'W': case 'R': case '8':
                     tiles[x, y] = 'X';   // an item brick gives its item and leaves a used block behind
                     if (v != null) v.sprite = Art.Single("scenery/roundel_used");
                     StartBump(v);
                     switch (c)
                     {
                         case 'H': return BumpResult.Bayard;
+                        case '8': return BumpResult.Unicorn;
                         case '1': return BumpResult.Chalice;
                         case 'M': return BumpResult.Capon;
                         case 'W': return BumpResult.Crossbow;

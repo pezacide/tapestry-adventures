@@ -343,6 +343,63 @@ def heath_theme():
     mix_into(buf, drone(freq("D3"), L + 1, 0.35) + drone(freq("A3"), L + 1, 0.2), 0)
     return finish(buf, L, 0.4)
 
+def unicorn_theme():
+    """World 5-1, ye Hunters Set Out: a stately 3/4 basse danse in G Dorian, recorder over lute, bells in the second pass."""
+    bpm = 96; beat = 60 / bpm; bar = 3 * beat
+    A = ("G4:1 Bb4:1 D5:1 C5:2 Bb4:1 A4:1 G4:1 A4:1 Bb4:3 D5:1 F5:1 E5:1 D5:2 C5:1 Bb4:1 A4:1 Bb4:1 A4:3 "
+         "G4:1 Bb4:1 D5:1 G5:2 F5:1 E5:1 D5:1 C5:1 D5:3 C5:1 Bb4:1 A4:1 Bb4:2 A4:1 G4:1 F4:1 A4:1 G4:3")
+    roots = ["G2", "C3", "F2", "Bb2", "Bb2", "F2", "C3", "D3", "G2", "Eb3", "C3", "D3", "C3", "Bb2", "F2", "G2"]
+    L = 16 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 16 * bar
+        play(buf, recorder, A, bpm, t0, 0.72)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (19, 1), (12, 1), (7, 1)], 0.42)
+            if k: mix_into(buf, bell(freq(up(r, 24)), 1.2, 0.18), t0 + i * bar)
+            mix_into(buf, tabor(0.25, 0.22, False), t0 + i * bar)
+    mix_into(buf, drone(freq("G2"), L + 1, 0.3) + drone(freq("D3"), L + 1, 0.18), 0)
+    return finish(buf, L, 0.35)
+
+def fountain_theme():
+    """World 5-2, ye Fountaine: a gentle, glittering 3/4 in C - recorder song, rippling lute, bells like falling water."""
+    bpm = 84; beat = 60 / bpm; bar = 3 * beat
+    A = ("E5:2 G5:1 C6:2 B5:1 A5:1 G5:1 E5:1 G5:3 F5:2 A5:1 G5:2 E5:1 D5:1 C5:1 D5:1 E5:3 "
+         "E5:2 G5:1 C6:2 D6:1 E6:1 D6:1 C6:1 B5:3 A5:2 F5:1 G5:2 D5:1 E5:1 D5:1 B4:1 C5:3")
+    roots = ["C3", "A2", "F2", "C3", "F2", "C3", "G2", "C3", "C3", "A2", "F2", "G2", "F2", "G2", "G2", "C3"]
+    L = 16 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 16 * bar
+        play(buf, recorder, A, bpm, t0, 0.68)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (16, 1), (19, 1), (24, 1)], 0.38)
+            for j, semis in enumerate((31, 28, 24)):   # drops of water
+                mix_into(buf, bell(freq(up(r, semis)), 0.9, 0.1), t0 + i * bar + (j + 1.5) * beat * 0.5)
+    mix_into(buf, drone(freq("C3"), L + 1, 0.25, False), 0)
+    return finish(buf, L, 0.45)
+
+def chase_theme():
+    """World 5-3, ye Unicorne at Baye: a breathless 2/4 chase in D minor - shawm over pounding drums, horn calls between phrases."""
+    bpm = 150; beat = 60 / bpm; bar = 2 * beat
+    A = ("D5:.5 D5:.5 A5:1 G5:.5 F5:.5 E5:1 F5:.5 G5:.5 A5:.5 F5:.5 D5:2 "
+         "C5:.5 D5:.5 E5:.5 C5:.5 F5:.5 E5:.5 D5:1 E5:.5 F5:.5 G5:.5 E5:.5 A5:2 "
+         "A5:.5 A5:.5 D6:1 C6:.5 Bb5:.5 A5:1 G5:.5 A5:.5 Bb5:.5 G5:.5 A5:2 "
+         "F5:.5 G5:.5 A5:.5 F5:.5 E5:.5 F5:.5 G5:.5 E5:.5 D5:.5 E5:.5 C#5:1 D5:2")
+    roots = ["D3", "C3", "F2", "D3", "C3", "Bb2", "C3", "A2", "D3", "F2", "G2", "A2", "Bb2", "C3", "A2", "D3"]
+    L = 16 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 16 * bar
+        play(buf, shawm, A, bpm, t0, 0.62)
+        play(buf, horn, "r:6 A4:1 D5:1 r:6 E4:1 A4:1 r:6 A4:1 D5:1 r:6 A4:1 D4:1", bpm, t0, 0.4)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (7, 1)], 0.42)
+            for j in range(4):
+                mix_into(buf, tabor(0.18, 0.5 if j % 2 == 0 else 0.3, j == 0), t0 + i * bar + j * beat / 2)
+    mix_into(buf, drone(freq("D3"), L + 1, 0.3) + drone(freq("A3"), L + 1, 0.15), 0)
+    return finish(buf, L, 0.25)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -441,12 +498,16 @@ def sfx():
     S["select"] = fx(lute(freq("D4"), 0.3, 1.0, 0.7), 0.5)
     c = np.zeros(int(0.6 * SR)); mix_into(c, lute(freq("D4"), 0.4, 1.0), 0); mix_into(c, lute(freq("A4"), 0.4, 1.0), 0.08)
     S["confirm"] = fx(c, 0.55)
+    pu = np.zeros(int(1.6 * SR))
+    for k, n in enumerate(("C5", "E5", "G5", "C6", "E6", "G6", "C7")): mix_into(pu, bell(freq(n), 0.9, 0.8), k * 0.08)
+    S["purify"] = fx(pu, 0.6, 0.35)
+    S["spear"] = fx(noise(0.25, 800, 3000, 12, 0.7) + sweep(900, 400, 0.25, "sine", 0.2), 0.5)
     S["horn"] = fx(np.concatenate([horn(freq("C4"), 0.3, 1.0), horn(freq("G4"), 0.3, 1.0), horn(freq("C5"), 0.6, 1.0)]), 0.6, 0.3)
     S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "eden": eden_theme, "hunt": hunt_theme, "river": river_theme, "heath": heath_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "eden": eden_theme, "hunt": hunt_theme, "river": river_theme, "heath": heath_theme, "unicorn": unicorn_theme, "fountain": fountain_theme, "chase": chase_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

@@ -2,19 +2,22 @@ using UnityEngine;
 
 namespace Tapestry
 {
-    /// <summary>Bayard without a rider: waits to be mounted, or bolts after throwing his knight.</summary>
+    /// <summary>A mount without a rider (Bayard, or the spared unicorn): waits to be mounted, or bolts after throwing its knight.</summary>
     public class Bayard
     {
         public readonly Body Body;
+        public readonly string Kind;   // "bayard" or "unicorn"
+        public string Name { get { return Kind == "unicorn" ? "ye Unicorne" : "Bayard"; } }
         public bool Removed, Lost;   // Lost: he galloped into a pit
         readonly SpriteView view;
         float fleeTime, cooldown, anim, rearTime;
         float dir = 1f;
 
-        public Bayard(Vector2 pos, Transform parent)
+        public Bayard(Vector2 pos, Transform parent, string kind = "bayard")
         {
+            Kind = kind;
             Body = new Body(pos, 1.25f, 1.55f);
-            view = new SpriteView("mounts/bayard", parent, 18);
+            view = new SpriteView("mounts/" + kind, parent, 18);
             view.SetPosition(pos);
             cooldown = 0.4f;
         }
@@ -44,7 +47,7 @@ namespace Tapestry
             {
                 fleeTime -= dt;
                 if (Body.HitWall) dir = -dir;
-                Body.Vel.x = dir * 7f;   // in his panic he gallops straight on - even into a pit
+                Body.Vel.x = dir * (Kind == "unicorn" ? 8.5f : 7f);   // in his panic he gallops straight on - even into a pit
                 view.SetFrame(1 + ((int)(anim * 9f) % 2));
             }
             else

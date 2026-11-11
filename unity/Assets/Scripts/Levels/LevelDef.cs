@@ -15,16 +15,18 @@ namespace Tapestry
         public string GroundTop = "scenery/ground_top", GroundFill = "scenery/ground_fill", Brick = "scenery/masonry", Vault = "scenery/vault", Plank = "scenery/plank", LiftSkin = "scenery/lift";   // per-level skins
         public int Time = 300;        // the level's tyme, counted down Mario-fashion (about 0.4 s a tick)
         public bool Underwater;       // the whole level is beneath the waves: swim, and sea beasts cannot be stomped
-        public bool EndAtDoor;
+        public bool EndAtDoor;        // no pole: entering the end building completes the level
         public bool Wind;             // gusts blow the knight about
         public bool LeapingFish;      // fish leap from the sea in arcs (stompable above water)
-        public bool HuntingHounds;    // the hunt's hounds are loosed after the knight from behind        // no pole: entering the end building completes the level
+        public bool HuntingHounds;    // the hunt's hounds are loosed after the knight from behind
+        public bool Chase;            // the hunt closes in from behind: keep ahead of its spears
+        public string Gate;           // skin for boss-gate tiles (D); the brick skin if not set
         public bool Entrance;         // a short lead-in: no pole; walking into the building goes straight on to the next part
     }
 
     public static class Levels
     {
         /// <summary>The levels in order. Add new ones here.</summary>
-        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def, Level6.Def, Level7.Def, Level8.Def, Level9.Def, Level10.Def, Level11.Def, Level12.Def, Level13.Def, Level14.Def, Level15.Def, Level16.Def };
+        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def, Level6.Def, Level7.Def, Level8.Def, Level9.Def, Level10.Def, Level11.Def, Level12.Def, Level13.Def, Level14.Def, Level15.Def, Level16.Def, Level17.Def, Level18.Def, Level19.Def, Level20.Def };
     }
 }

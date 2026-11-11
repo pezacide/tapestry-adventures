@@ -33,7 +33,10 @@ namespace Tapestry
         Vector2 checkpointPos;
         bool hasCheckpoint, checkpointClaimed;
         // what the knight carries on into the next level
-        bool carry; int carryHearts; bool carryCrossbow, carryMounted;
+        bool carry; int carryHearts; bool carryCrossbow; string carryMount;
+        // World 5: ye unicorne's horne and ye poysoned fountaine; and the hunt closing in (the chase)
+        SpriteRenderer hornView, huntView; Vector2 hornPos, fountainPos; bool hasHorn, carryingHorn, hasFountain, purifiedSaved, toldFoul, toldFountain;
+        float huntX, huntDelay; int hornCombo;
         // castles: flails, the boss, the axe that drops the bridge, and the rescued monk
         readonly List<Flail> flails = new List<Flail>();
         readonly List<Log> logs = new List<Log>();
@@ -180,6 +183,7 @@ namespace Tapestry
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            hornView = huntView = null; hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -245,15 +249,26 @@ namespace Tapestry
                     case 'u': kind = "unicorn"; break;
                     case 'O': kind = "owl_face"; break;
                     case 'k': kind = "soup_cat"; break;
+                    case 'y': kind = "hunter"; break;
+                    case 'q': kind = "greyhound"; break;
+                    case 'p': kind = "pheasant"; break;
+                    case 'I': kind = "genet"; break;
+                    case '6': boss = new SpottedUnicorn(p, world); break;
+                    case '0': hasFountain = true; fountainPos = p; Art.Make("scenery/fountain", world, p, -4); break;
+                    case '+':
+                        if (hasCheckpoint && checkpointClaimed && purifiedSaved) break;   // the waters were already made pure
+                        hasHorn = true; hornPos = p + new Vector2(0f, 0.5f); hornView = Art.Make("items/horn", world, hornPos, 12); break;
                 }
                 if (kind != null) enemies.Add(new Enemy(kind, p, world));
             }
             var start = hasCheckpoint && checkpointClaimed ? checkpointPos : level.Start;
+            if (hasCheckpoint && checkpointClaimed && purifiedSaved) level.Purify();
+            if (L.Chase) { huntX = start.x - 14f; huntDelay = 2.5f; huntView = Art.Make("scenery/hunt_line", world, new Vector2(huntX, 2f), 15); }
             player = new Knight(Knights.All[knightIndex], start, world);
             if (carry)
             {
-                if (carryMounted && L.Underwater) Toast("Bayard waiteth on ye shore. Swimme on!");
-                player.ApplyCarry(carryHearts, carryCrossbow, carryMounted && !L.Underwater);   // no horse beneath the waves
+                if (carryMount != null && L.Underwater) Toast((carryMount == "unicorn" ? "Ye Unicorne" : "Bayard") + " waiteth on ye shore. Swimme on!");
+                player.ApplyCarry(carryHearts, carryCrossbow, L.Underwater ? null : carryMount);   // no steed beneath the waves
                 carry = false;
             }
             camX = ClampCam(start.x + 4f);
@@ -323,7 +338,7 @@ namespace Tapestry
 
         void NextLevel()
         {
-            carry = true; carryHearts = player.Hearts; carryCrossbow = player.HasCrossbow; carryMounted = player.Mounted;
+            carry = true; carryHearts = player.Hearts; carryCrossbow = player.HasCrossbow; carryMount = player.Mounted ? player.MountKind : null;
             levelIndex++;
             checkpointClaimed = false;
             LoadLevel();
@@ -566,12 +581,14 @@ namespace Tapestry
             foreach (var w in winds) w.Tick(dt, level, player);
             TickStampede(dt);
             TickHuntAndRiver(dt);
+            TickChase(dt);
             TickEntities(dt);
             if (player.Dead) return;
             UpdateRelicMusic();
 
             var pb = player.Body;
             if (pb.Grounded) stompCombo = 0;
+            if (Mathf.Abs(pb.Vel.x) < 9.5f) hornCombo = 0;
             foreach (var e in enemies)
             {
                 if (!e.Active || !e.Alive || e.Carried || !pb.Overlaps(e.Body)) continue;
@@ -581,6 +598,14 @@ namespace Tapestry
                     var at = e.Body.Pos + new Vector2(0f, e.Body.H);
                     e.Flip(false);
                     ChainKill(++relicCombo, at);
+                    continue;
+                }
+                // the unicorn's horn: at a gallop it fells any beast it runs into
+                if (player.OnUnicorn && Mathf.Abs(pb.Vel.x) > 9.5f && Mathf.Sign(e.Body.Pos.x - pb.Pos.x) == Mathf.Sign(pb.Vel.x))
+                {
+                    var at = e.Body.Pos + new Vector2(0f, e.Body.H);
+                    e.Flip(false); Audio.Play("kick");
+                    ChainKill(++hornCombo, at);
                     continue;
                 }
                 bool fromAbove = !Underwater && pb.Vel.y < 0f && pb.PrevBottom >= e.Body.Pos.y + e.Body.H * (player.Mounted ? 0.35f : 0.5f);   // under water nothing can be stomped
@@ -635,11 +660,15 @@ namespace Tapestry
                 if (!it.Removed && it.Ready && it.Body.Overlaps(pb)) { Collect(it); it.Destroy(); }
             foreach (var b in bezants)
                 if (!b.Removed && b.Touches(pb)) { b.Destroy(); AddBezant(); }
-            if (bayard != null && !bayard.Removed && !player.Mounted && bayard.CanMount && pb.Overlaps(bayard.Body))
+            if (bayard != null && !bayard.Removed && bayard.CanMount && pb.Overlaps(bayard.Body)
+                && (!player.Mounted || (bayard.Kind == "unicorn" && !player.OnUnicorn)))   // from Bayard, a knight may change to the unicorn
             {
-                player.Mount();
+                string old = player.Mounted ? player.MountKind : null;
+                var at = bayard.Body.Pos;
+                player.Mount(bayard.Kind);
                 bayard.Destroy();
                 bayard = null;
+                if (old != null) { bayard = new Bayard(at, world, old); bayard.Calm(); Toast("Thou rydest ye Unicorne! Bayard shall wayte for thee."); }
             }
 
             deathFire = level.Fire(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f));
@@ -673,9 +702,11 @@ namespace Tapestry
                 return;
             }
 
+            TickHornAndFountain(pb);
+            if (player.Dead) return;
             if (hasCheckpoint && !checkpointClaimed && pb.Pos.x >= checkpointPos.x - 0.3f)
             {
-                checkpointClaimed = true;
+                checkpointClaimed = true; purifiedSaved = level.Purified;
                 if (checkpointView != null) checkpointView.sprite = Art.Frames("scenery/checkpoint")[1];
                 Audio.Play("item_appear");
                 Toast("Ye halfway banner is raysed! Here shalt thou ryse agayne.");
@@ -758,7 +789,7 @@ namespace Tapestry
                 bayard.Tick(dt, level);
                 if (bayard.Removed)
                 {
-                    if (bayard.Lost) { Toast("Alas! Bayard is loste. Seeke him agayne in ye bryckes."); Audio.Play("bayard_lost"); }
+                    if (bayard.Lost) { Toast("Alas! " + bayard.Name + " is loste. Seeke " + (bayard.Kind == "unicorn" ? "it" : "him") + " agayne in ye bryckes."); Audio.Play("bayard_lost"); }
                     bayard = null;
                 }
             }
@@ -822,6 +853,11 @@ namespace Tapestry
                     if (!player.Mounted && bayard == null) { bayard = new Bayard(top, world); bayard.Hop(); }
                     else { bezants.Add(new Bezant(top, world, true)); AddBezant(); }
                     break;
+                case Level.BumpResult.Unicorn:
+                    if (!player.OnUnicorn && (bayard == null || bayard.Kind != "unicorn"))
+                    { if (bayard != null) bayard.Destroy(); bayard = new Bayard(top, world, "unicorn"); bayard.Hop(); }
+                    else { bezants.Add(new Bezant(top, world, true)); AddBezant(); }
+                    break;
                 case Level.BumpResult.Chalice: items.Add(new Item("chalice", top, world, player.FacingRight)); break;
                 case Level.BumpResult.Capon: items.Add(new Item("capon", top, world, player.FacingRight)); break;
                 case Level.BumpResult.Crossbow: items.Add(new Item("crossbow", top, world, player.FacingRight)); break;
@@ -840,10 +876,10 @@ namespace Tapestry
                     if (e.Alive && Mathf.Abs(e.Body.Pos.x - top.x) < 0.8f && Mathf.Abs(e.Body.Pos.y - top.y) < 0.2f) e.Flip();
         }
 
-        public void ReleaseBayard(Vector2 pos, bool knightFacingRight, bool thrown)
+        public void ReleaseBayard(Vector2 pos, bool knightFacingRight, bool thrown, string kind = "bayard")
         {
             if (bayard != null) bayard.Destroy();
-            bayard = new Bayard(pos, world);
+            bayard = new Bayard(pos, world, kind ?? "bayard");
             if (thrown) bayard.Bolt(!knightFacingRight); else bayard.Calm();
         }
 
@@ -896,7 +932,78 @@ namespace Tapestry
             if (hasMonk) Toast("Ryde on to Brother Odo!");
             bossMusic = false;
             Audio.Music(L.Music);
-            Toast("Huzzah! " + (boss != null ? boss.Title : "Ye beaste") + " is slayne!");
+            Toast(boss != null ? boss.DefeatedText : "Huzzah! Ye beaste is slayne!");
+        }
+
+        /// <summary>Ye Spotted Unicorne rammed the gate: knock out part of it.</summary>
+        public void CrackGate(float strengthLeft)
+        {
+            foreach (var t in level.CrackGate(strengthLeft / 3f))
+            {
+                var c = new Vector2(t.x + 0.5f, t.y + 0.5f);
+                debris.Add(new Debris(c, new Vector2(Random.Range(-3f, 3f), Random.Range(5f, 10f)), world));
+            }
+        }
+
+        /// <summary>The calmed unicorn stays in the enclosure as a mount.</summary>
+        public void SpareUnicorn(Vector2 pos, bool facingRight)
+        {
+            if (bayard != null) bayard.Destroy();
+            bayard = new Bayard(pos, world, "unicorn");
+            bayard.Calm();
+            Toast(player.Mounted ? "Touche ye Unicorne to change thy steede!" : "Leape upon ye Unicorne, and ryde!");
+        }
+
+        /// <summary>World 5-2: carry ye unicorne's horne to ye fountaine; until then the stream is poisoned.</summary>
+        void TickHornAndFountain(Body pb)
+        {
+            if (hasHorn && !carryingHorn && hornView != null && Mathf.Abs(pb.Pos.x - hornPos.x) < 0.8f && hornPos.y > pb.Pos.y - 0.5f && hornPos.y < pb.Top + 0.5f)
+            {
+                carryingHorn = true; Audio.Play("item_appear");
+                Toast("Ye Unicorne's horne! Beare it to ye fountaine, and ye waters shall runne pure.");
+            }
+            if (carryingHorn && hornView != null)   // it floats above the knight's head as he carries it
+                hornView.transform.localPosition = new Vector3(pb.Pos.x, pb.Top + 0.45f + Mathf.Sin(Time.time * 5f) * 0.1f, 0f);
+            if (hasFountain && !level.Purified && Mathf.Abs(pb.Pos.x - fountainPos.x) < 2f)
+            {
+                if (carryingHorn)
+                {
+                    level.Purify(); carryingHorn = false; hasHorn = false;
+                    if (hornView != null) { Destroy(hornView.gameObject); hornView = null; }
+                    Audio.Play("purify");
+                    AddScore(2000, fountainPos + new Vector2(0f, 3f));
+                    Toast("Ye waters runne pure! Now thou mayst wade ye streame.");
+                }
+                else if (!toldFountain) { toldFountain = true; Toast("Ye fountaine is poysoned. Fynde ye unicorne's horne!"); }
+            }
+            if (level.Foul(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y + 0.3f)))
+            {
+                if (!toldFoul) { toldFoul = true; Toast("Ye streame is poysoned! Leape over it."); }
+                player.Hurt();
+                if (!player.Dead) pb.Vel.y = 11f;   // it stings him up out of the water
+            }
+        }
+
+        /// <summary>World 5-3: the hunt sweeps on from behind. It keeps pace; if it reaches the knight he is wounded and it falls back a little.</summary>
+        void TickChase(float dt)
+        {
+            if (!L.Chase || huntView == null || player.Dead) return;
+            var pb = player.Body;
+            if (huntDelay > 0f)
+            {
+                huntDelay -= dt;
+                if (huntDelay <= 0f) { Audio.Play("horn"); Toast("Ye hunte is upon thee! Runne!"); }
+                return;
+            }
+            if (level.GoalX > 0f && huntX > level.GoalX - 10f) return;   // it halts at the edge of the park
+            float lead = pb.Pos.x - huntX;
+            huntX += (lead > 16f ? 8f : 4.8f) * dt;   // never far behind
+            huntView.transform.localPosition = new Vector3(huntX, 2f, 0f);
+            if (pb.Left < huntX + 2.0f && !player.Invulnerable)
+            {
+                player.Hurt();
+                huntX -= 4f;
+            }
         }
 
         void TickCollapse(float dt)
@@ -1199,7 +1306,7 @@ namespace Tapestry
             var safe = TapestryInput.Safe;   // keep the HUD clear of camera notches and rounded corners
             GUI.BeginGroup(new Rect(safe.x, 0, safe.width, H));
             W = safe.width;
-            GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon Bayard" : ""), small);
+            GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon " + player.MountName : ""), small);
             HealthBar(new Rect(W * 0.02f, y + s * 1.25f, s * 6f, s * 0.75f));
             DrawFrame("scenery/bezant", 0, new Rect(W * 0.34f, y + s * 0.1f, s, s));
             GUI.Label(new Rect(W * 0.34f + s * 1.2f, y, W * 0.12f, s * 1.2f), "× " + bezantCount, small);

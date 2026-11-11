@@ -2,8 +2,8 @@
 import json, os, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from PIL import Image
-import knights, creatures, scenery, bosses, allies, items, castles, ui, world4  # castles, ui and world4 add themselves
-from embroider import doc
+import knights, creatures, scenery, bosses, allies, items, castles, ui, world4, world5  # castles, ui, world4 and world5 add themselves
+from embroider import doc, g
 
 ROOT = os.path.normpath(os.path.join(HERE, "..", "..", "assets"))
 SCALE = 2   # every PNG is rendered at 2x its design size; draw at 0.5 in a 960x540 game
@@ -23,6 +23,8 @@ for k, cfg in knights.KNIGHTS.items():
     mt = allies.mounted(knights.knight_body(cfg, "ride"))
     sheets[f"heroes/{k}_mounted"] = [job(mt[p], f"{k}_m_{p}", allies.HW, allies.HH + allies.MOUNT_PAD) for p in allies.POSES]
     atlas["heroes"][k]["mounted"] = dict(file=f"heroes/{k}_mounted.png", frame=[allies.HW, allies.HH + allies.MOUNT_PAD], frames=allies.POSES)
+    um = allies.mounted(knights.knight_body(cfg, "ride"), lambda p, rider: world5.unicorn_steed(p, rider))
+    sheets[f"heroes/{k}_unicorn"] = [job(um[p], f"{k}_u_{p}", allies.HW, allies.HH + allies.MOUNT_PAD) for p in allies.POSES]
 
 sheets["mounts/bayard"] = [job(doc(allies.HW, allies.HH, allies.horse(p)), f"bayard_{p}", allies.HW, allies.HH) for p in allies.POSES]
 atlas["mounts"]["bayard"] = dict(title="Bayard, the magic horse", frame=[allies.HW, allies.HH], frames=allies.POSES, file="mounts/bayard.png",
@@ -30,6 +32,11 @@ atlas["mounts"]["bayard"] = dict(title="Bayard, the magic horse", frame=[allies.
     behaviour="Yoshi-style mount: found in roundel blocks; ride to run faster, jump higher and trample fiery beasts. Take a hit while riding and you are "
               "thrown off - Bayard rears and bolts, and you can catch him again. Press down to dismount. Use a knight's _mounted sheet, "
               "or draw the knight 'ride' frame at rider_offset.")
+sheets["mounts/unicorn"] = [job(doc(allies.HW, allies.HH + world5.UPAD, g(world5.unicorn_steed(p), f"translate(0 {world5.UPAD})")), f"unicorn_m_{p}", allies.HW, allies.HH + world5.UPAD) for p in allies.POSES]
+atlas["mounts"]["unicorn"] = dict(title="Ye Spotted Unicorne, spared", frame=[allies.HW, allies.HH + world5.UPAD], frames=allies.POSES, file="mounts/unicorn.png",
+    behaviour="the second mount (won in 5-4): faster than Bayard, and its horn fells beasts it runs into at a gallop; no flutter-leap")
+sheets["projectiles/spear"] = [job(items.build_svg(items.SPEAR, 0), f"spear_{i}", 48, 10) for i in range(2)]
+atlas["projectiles"]["spear"] = dict(title="Huntsman's Speare", behaviour="hurled by huntsmen in a long arc", frame=[48, 10], frame_count=2, file="projectiles/spear.png")
 sheets["princess/aelfgyva"] = [job(doc(allies.PW, allies.PH, allies.princess(p)), f"aelf_{p}", allies.PW, allies.PH) for p in allies.P_POSES]
 atlas["princess"]["aelfgyva"] = dict(title="Princess Aelfgyva", frame=[allies.PW, allies.PH], frames=allies.P_POSES, file="princess/aelfgyva.png",
     note="Named after the mysterious lady in the Bayeux Tapestry. Held captive behind the Cat King's throne; idle, wave, joy (rescued).")

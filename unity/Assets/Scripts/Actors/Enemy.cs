@@ -41,6 +41,10 @@ namespace Tapestry
                 case "stag": speed = 5.2f; break;
                 case "talbot": speed = 6.5f; dir = 1f; break;
                 case "boar": speed = 1.3f; break;
+                case "hunter": speed = 1.0f; timer = 1f; break;
+                case "greyhound": speed = 0f; break;
+                case "genet": speed = 1.2f; break;
+                case "pheasant": gravity = false; break;
                 case "otter": case "swan": case "falcon": gravity = false; break;
                 case "camel_dragon": speed = 0.9f; break;
                 case "unicorn": speed = 1.2f; break;
@@ -151,6 +155,64 @@ namespace Tapestry
                     WalkFrames(0, 1, 10f);
                     lifeT += dt;
                     if (lifeT > 8f || Body.Pos.x > p.Body.Pos.x + 22f) Remove();
+                    break;
+
+                case "hunter":   // walks its beat; when the knight is in front, it hurls a spear in a long arc
+                    if (charging)
+                    {
+                        Body.Vel.x = 0f; view.SetFrame(2);
+                        if (timer > 0.4f)
+                        {
+                            charging = false; timer = 0f;
+                            Audio.Play("spear", 0.7f);
+                            GameManager.I.SpawnShot("spear", Body.Pos + new Vector2(dir * 0.6f, Body.H * 0.85f), new Vector2(dir * 7f, 4.5f));
+                        }
+                    }
+                    else
+                    {
+                        Walk(lv, true); WalkFrames(0, 1, 4f);
+                        if (timer > 2.6f && Mathf.Abs(dx) < 10f && Mathf.Abs(dx) > 1.5f && Mathf.Abs(p.Body.Pos.y - Body.Pos.y) < 3.5f)
+                        { charging = true; timer = 0f; dir = Mathf.Sign(dx); view.Face(dir > 0f); }
+                    }
+                    break;
+
+                case "greyhound":   // lies in wait; when the knight comes near it races at him, leaping gaps, and runs on
+                    if (!charging)
+                    {
+                        Body.Vel.x = 0f; view.SetFrame(1); view.Face(dx > 0f);
+                        if (Mathf.Abs(dx) < 8f && Mathf.Abs(p.Body.Pos.y - Body.Pos.y) < 3f) { charging = true; dir = Mathf.Sign(dx); Audio.Play("roar", 0.35f); }
+                    }
+                    else
+                    {
+                        if (Body.HitWall) dir = -dir;
+                        Body.Vel.x = dir * 7.5f; view.Face(dir > 0f);
+                        if (Body.Grounded && !Body.FloorAhead(lv, dir)) Body.Vel.y = 10f;
+                        WalkFrames(0, 1, 11f);
+                        if (Mathf.Abs(Body.Pos.x - p.Body.Pos.x) > 20f) Remove();
+                    }
+                    break;
+
+                case "pheasant":   // crouches in the flowers, then bursts up with a whirr and flies off across the sky
+                    if (!swooping)
+                    {
+                        view.SetFrame(0); view.Face(dx > 0f);
+                        if (Mathf.Abs(dx) < 4.5f) { swooping = true; timer = 0f; dir = Mathf.Sign(dx); Body.Vel = new Vector2(dir * 4.5f, 7f); Audio.Play("jump", 0.4f); }
+                    }
+                    else
+                    {
+                        Body.Vel.y = Mathf.MoveTowards(Body.Vel.y, 0f, 5f * dt);
+                        view.Face(dir > 0f); view.SetFrame(1);
+                        if (timer > 7f || Body.Pos.y > 14f) Remove();
+                    }
+                    break;
+
+                case "genet":   // paces, then pounces at the knight in long low leaps
+                    if (Body.Grounded)
+                    {
+                        if (timer > 1.6f && Mathf.Abs(dx) < 7f) { timer = 0f; dir = Mathf.Sign(dx); Body.Vel = new Vector2(dir * 6f, 7.5f); view.Face(dir > 0f); }
+                        else { Walk(lv, true); WalkFrames(0, 0, 1f); }
+                    }
+                    else view.SetFrame(1);
                     break;
 
                 case "otter":   // hides in the river, then leaps up at the knight and drops back in
@@ -453,7 +515,7 @@ namespace Tapestry
         public Shot(string kind, Vector2 pos, Vector2 vel, Transform parent)
         {
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
-            gravity = kind == "soup_glob";
+            gravity = kind == "soup_glob" || kind == "spear";
             Friendly = kind == "bolt";
             Kind = kind;
             life = Friendly ? 1.1f : 4f;
@@ -466,7 +528,8 @@ namespace Tapestry
         {
             if (Removed) return;
             t += dt;
-            if (gravity) Body.Vel.y -= 22f * dt;
+            if (gravity) Body.Vel.y -= (Kind == "spear" ? 9f : 22f) * dt;
+            if (Kind == "spear") view.Renderer.transform.localEulerAngles = new Vector3(0f, 0f, Mathf.Atan2(Body.Vel.y, Mathf.Abs(Body.Vel.x)) * Mathf.Rad2Deg * (Body.Vel.x >= 0f ? 1f : -1f));
             Body.Step(lv, dt);
             view.SetFrame(((int)(t * 10f)) % 2);
             view.SetPosition(Body.Pos);

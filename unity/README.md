@@ -85,6 +85,21 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
     - **Its hide is too tough** to stomp while it stands; you just bounce off.
     - **Dodge it** (leap over it) so it rams a wall. Then it is **dazed**, with stars round its head, for about two seconds: stomp it or shoot it then. Three stomps fell it.
     - Each hit makes it angrier and faster. When it falls, the gate at the far end of the hall crumbles and Brother Odo waits beyond.
+- **Worlde 5-1, Ye Hunters Set Out** (World 5: the Unicorn Tapestries): a woven **millefleur** wood, a deep blue-green ground strewn with countless little flowers, with oak, holly and orange trees and a château on the hill.
+  - **Huntsmen** walk their beat and hurl spears at you in long arcs. **Greyhounds** lie in wait, then race at you. **Pheasants** burst up out of the flowers as you pass.
+  - It has a stately basse-danse tune and ends at **Ye Castel of ye Hunte**.
+- **Worlde 5-2, Ye Fountaine:** the stream is **poisoned** (murky violet); touching it hurts.
+  - Leap the narrow stretches. Partway along, **ye Unicorne's horne** lies on the path: carry it (it floats over your head) to **ye fountaine**.
+  - The waters then run pure and blue, and you can wade the wide stretches beyond, which are too wide to leap.
+  - **Genets** pounce at you in long low leaps. It ends at **Ye Chapel by ye Fountaine**.
+- **Worlde 5-3, Ye Unicorne at Baye:** a **chase**. After a horn call, the hunt (a line of huntsmen with levelled spears, and their greyhounds) sweeps on from behind and never falls far back.
+  - If it catches you, you are wounded and it drops back a little. Keep running, and leap the paling hedges.
+  - It has a breathless chase tune and ends at **Ye Gatehouse of ye Parke**.
+- **Worlde 5-4, Ye Unicorne in Captivitie:** the World 5 castle.
+  - **The boss, Ye Spotted Unicorne:** white, spotted red with pomegranate juice, and frantic in its enclosure. It **cannot be harmed**: stomping it only bounces you off.
+    - It rears, then charges. Leap over it so that it rams the **fence gate** on the right. Each ram splinters the gate (its bar shows the gate's strength), and the third breaks it. The stone wall on the left only stuns it.
+    - **Spared:** it is calmed, and stays to be ridden. **Ye Unicorne** is a second mount: faster than Bayard, and at a gallop (hold RUN) its **horn fells any beast it runs into**. It has no flutter-leap.
+    - If you are riding Bayard you can change to the unicorn by touching it. A hit throws you off either steed, and it carries on into the next level like Bayard. From World 6, **unicorn bricks** can hold it too.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 
