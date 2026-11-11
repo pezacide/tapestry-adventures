@@ -20,7 +20,7 @@ namespace Tapestry
                 "                                                                                                                              b",
                 "                                    ====                                  ===                                                  ====                                        B",
                 "                                                                                                                                                                          BB",
-                "         ?M?    BRB           ====               b          ?W?       ====              BHB                       B?B?B   ====                                B1B        BBB",
+                "         ?M?    BRB           ====               b          ?W?       ====              BHB                  B1B  B?B?B   ====                                BBB        BBB",
                 "                                             ===                  TT                                ===                                              ===                BBBB",
                 "                                                                  tt                                                                                                   BBBBB",
                 "   P                  h  h   d   u    c v  S            d         tt          v     C         u               c                     v                       S     h   BBBBBB      G",

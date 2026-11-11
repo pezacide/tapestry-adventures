@@ -54,7 +54,19 @@ namespace Tapestry
             { '<', new Entry("scenery/wind_head", "Wynde-Heddes", "They blowe thee aboute. Leane into ye wynde.") },
             { 'Z', new Entry("scenery/wheel_year", "Wheeles of ye Yeare", "Ryde ye boardes rounde, over ye fyre.") },
             { 'r', new Entry("scenery/raft", "Raftes", "They drifte downe ye river. Ryde them across.") },
-            { '_', new Entry("scenery/bridge_axe", "Ye Axe", "Strike it, and ye bridge falleth.") },
+            { 'A', new Entry("scenery/bridge_axe", "Ye Axe", "Touche it, and ye bridge falleth - and whatsoever standeth upon it.") },
+            // things that help, and things to doe
+            { '+', new Entry("items/horn", "Ye Unicorne's Horne", "Walke into it to beare it. Bring it to ye fountaine, and ye poysoned streame runneth pure: then thou mayst wade it.") },
+            { '0', new Entry("scenery/fountain", "Ye Fountaine", "Ye source of ye poysoned streame. Bring ye unicorne's horne hither.") },
+            { 'C', new Entry("scenery/checkpoint", "Ye Halfway Banner", "Touche it: if thou art slayne after, thou shalt ryse agayne there.") },
+            { 'H', new Entry("mounts/bayard", "Bayard", "He hideth in a brycke here. Ryde him to runne faster and leape higher; holde JUMPE whyle falling to flutter.") },
+            { '8', new Entry("mounts/unicorn", "Ye Unicorne", "It hideth in a brycke here. Swifter than Bayard: at a gallop (holde RUNNE) its horne felleth beastes.") },
+            { 'W', new Entry("items/crossbow", "Ye Crossbowe", "It hideth in a brycke here. Whyle thou bearest it, RUNNE shooteth bolts.") },
+            { 'R', new Entry("items/relic", "Ye Holy Relique", "It hideth in a brycke here. Whyle it glowethe no beaste may harme thee: smite fyve in a rowe for a lyfe!") },
+            { 'L', new Entry("scenery/lift", "Hanging Boardes", "They glyde to and fro, or up and downe, and beare thee over.") },
+            { 'E', new Entry("scenery/lift", "Hanging Boardes", "They glyde to and fro, or up and downe, and beare thee over.") },
+            { 'Y', new Entry("scenery/longship", "Longshippes", "They rocke at anchor or sayle to and fro. Leape from shippe to shippe.") },
+            { 'U', new Entry("scenery/longship", "Longshippes", "They rocke at anchor or sayle to and fro. Leape from shippe to shippe.") },
         };
 
         /// <summary>Bosses, by their map character: how to vanquish each one.</summary>
@@ -74,6 +86,8 @@ namespace Tapestry
             boss = null;
             var list = new List<Entry>();
             var seen = new HashSet<string>();
+            if (def.Underwater) Add(list, seen, new Entry("scenery/seaweed", "Swymming", "Tappe JUMPE to stroke upwarde. Beneath ye waves no beaste may be stomped: swimme rounde them, or shoote."));
+            if (def.Entrance || def.EndAtDoor) Add(list, seen, new Entry(string.IsNullOrEmpty(def.Castle) ? "scenery/crypt_entrance" : def.Castle, "Ye Doore", "There is no pole here: walke into ye doore at ye ende to goe on."));
             if (def.HuntingHounds) Add(list, seen, new Entry("enemies/talbot", "Talbot Houndes", "Ye hunte's houndes runne in from behinde. Keepe moving, or stompe them."));
             if (def.Chase) Add(list, seen, new Entry("scenery/hunt_line", "Ye Hunte", "It sweepeth on from behinde and never falleth farre backe. Runne!"));
             if (def.Wind) Add(list, seen, new Entry("scenery/gust", "Gustes of Wynde", "Ye wynde bloweth by turnes, from before and behinde."));

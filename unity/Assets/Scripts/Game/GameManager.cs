@@ -1369,8 +1369,8 @@ namespace Tapestry
             var safe = TapestryInput.Safe;
             float x0 = Mathf.Max(safe.x, W * 0.04f), x1 = Mathf.Min(safe.xMax, W * 0.96f);
             GUI.Label(new Rect(0, H * 0.04f, W, U * 0.08f), L.Title + "  ·  " + L.Name, big);
-            GUI.Label(new Rect(0, H * 0.04f + U * 0.08f, W, U * 0.05f), "Beware, sir knyghte, of these:", center);
-            int n = Mathf.Min(briefing.Count, 12);
+            GUI.Label(new Rect(0, H * 0.04f + U * 0.08f, W, U * 0.05f), "Heede well, sir knyghte:", center);
+            int n = Mathf.Min(briefing.Count, 16);
             int rows = Mathf.Max(1, (n + 1) / 2);
             float top = H * 0.06f + U * 0.14f;
             float bottom = H * (briefBoss != null ? 0.7f : 0.86f);

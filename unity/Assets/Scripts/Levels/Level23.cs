@@ -21,7 +21,7 @@ namespace Tapestry
                 "                                                                        =======                                                       !                         ooo",
                 "                                                                                                                                                                           B",
                 "                                                                                                                                                                          BB",
-                "         ?M?             @                                  @                   B8B                 BRB              @          @    !                      B1B          BBB",
+                "         ?M?             @         B1B                      @                   B8B                 BRB              @          @    !                      BBB          BBB",
                 "                        ====                              =====                                                     ====      ====                                      BBBB",
                 "                                                                                                                                                                       BBBBB",
                 "   P              {                   %                           }   %                  %                C  {  {         } }  {           %            {       %     BBBBBB      G",

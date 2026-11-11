@@ -22,7 +22,7 @@ namespace Tapestry
                 "                                     ooo                        b                                   oooob       >                                 b",
                 "                                                                               <                                                            <                              B",
                 "             >  ooo                                               ====                                                                                                    BB",
-                "        ?M?             BRB              L                                  ==        ?W?                              BHB              ====                  B1B        BBB",
+                "        ?M?             BRB              L                                  ==        ?W?                              BHB B1B          ====                  BBB        BBB",
                 "                ===                                        =====        ===                                                                                             BBBB",
                 "                                  L                                                                  L                           L             L                       BBBBB",
                 "   P                      h                        S                                C     S   E             E             O                                h      d   BBBBBB      G",

@@ -21,7 +21,7 @@ namespace Tapestry
                 "",
                 "                                                                                                                                                                           B",
                 "                         ooo                                             oooo                                             oooooo                                          BB",
-                "        ?M?                                    BRB                                                    ?W?        BHB                                            B1B      BBB",
+                "        ?M?                                    BRB                                                    ?W?    B1B BHB                                            BBB      BBB",
                 "                                                                                                                                                                        BBBB",
                 "                                                                                                                                                                       BBBBB",
                 "   P         j          i   n       i                  h    S   S       i     n      i    n       C           j             i     n          i    i         h         BBBBBB      G",

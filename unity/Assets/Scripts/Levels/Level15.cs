@@ -21,7 +21,7 @@ namespace Tapestry
                 "                      ====                                      ===                                       ====",
                 "                                                                                                                                                                           B",
                 "                                                                                                                                                                          BB",
-                "         ?M?    ====                            BRB       ====                            ?W?       ====                                  BHB           B1B              BBB",
+                "         ?M?    ====                            BRB       ====                            ?W?       ====     B1B                          BHB           BBB              BBB",
                 "                               ====                                    ====                                              ====                                           BBBB",
                 "                                                                                                                                                                       BBBBB",
                 "   P                                        j            j   h   d    j           C   h                                               j             d                 BBBBBB      G",
