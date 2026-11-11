@@ -19,6 +19,8 @@ namespace Tapestry
     ///              g gull  x crab  f fish  z sea-serpent  m sea-monk  e hippocamp  Y longship rocking at anchor  U longship sailing to and fro
     ///              < wind-head blowing left  > wind-head blowing right  b bird of the air
     ///              v stampede (herds of stags charge in from the right)  Z turning wheel (4 boards ride round it)  4 Ye Foure Windes
+    ///              j wild boar  i otter  n swan  a falcon  r raft launch (rafts drift right on the current)  5 Ye Greate Boar
+    ///              D boss gate (solid until the boss is beaten, then it crumbles)
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -58,7 +60,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
-                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_':
+                        case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D':
                             tiles[x, y] = c; break;
                         case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
@@ -86,7 +88,7 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': return true;
                 default: return false;
             }
         }
@@ -106,6 +108,16 @@ namespace Tapestry
                 for (int y = 0; y < Height; y++)
                     if (tiles[x, y] == '_') list.Add(new Vector2Int(x, y));
             return list;
+        }
+
+        /// <summary>Crumble every boss-gate tile (once the boss is beaten). Returns how many fell.</summary>
+        public int OpenGates()
+        {
+            int n = 0;
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                    if (tiles[x, y] == 'D') { RemoveTile(x, y); n++; }
+            return n;
         }
 
         public void RemoveTile(int x, int y)
@@ -142,6 +154,7 @@ namespace Tapestry
                         case '^': key = "scenery/canopy"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case '|': key = "scenery/trunk"; break;
                         case 'V': case 'F': key = skin.Vault; break;
+                        case 'D': key = skin.Brick; break;
                         case '*': key = "scenery/fire"; break;
                         case '_': key = "scenery/drawbridge"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case 'T':

@@ -39,6 +39,9 @@ namespace Tapestry
                 case "fiery_lion": speed = 1.4f; timer = 1f; break;
                 case "bayeux_hound": speed = 4.2f; break;
                 case "stag": speed = 5.2f; break;
+                case "talbot": speed = 6.5f; dir = 1f; break;
+                case "boar": speed = 1.3f; break;
+                case "otter": case "swan": case "falcon": gravity = false; break;
                 case "camel_dragon": speed = 0.9f; break;
                 case "unicorn": speed = 1.2f; break;
                 case "wyvern": gravity = false; break;
@@ -141,7 +144,48 @@ namespace Tapestry
                     else { Walk(lv, true); WalkFrames(); }
                     break;
 
+                case "talbot":   // a hound of the hunt: runs on past the knight, leaping gaps, then leaves
+                    if (Body.HitWall) dir = -dir;
+                    Body.Vel.x = dir * speed; view.Face(dir > 0f);
+                    if (Body.Grounded && !Body.FloorAhead(lv, dir)) Body.Vel.y = 10f;
+                    WalkFrames(0, 1, 10f);
+                    lifeT += dt;
+                    if (lifeT > 8f || Body.Pos.x > p.Body.Pos.x + 22f) Remove();
+                    break;
+
+                case "otter":   // hides in the river, then leaps up at the knight and drops back in
+                    if (!swooping)
+                    {
+                        Body.Pos = new Vector2(home.x, home.y - 1.2f); view.Renderer.enabled = false;
+                        if (timer > 1.8f && Mathf.Abs(dx) < 5f) { swooping = true; timer = 0f; Body.Pos = new Vector2(home.x, home.y - 0.6f); Body.Vel = new Vector2(Mathf.Sign(dx) * 1.5f, 11f); Audio.Play("soup", 0.5f); }
+                    }
+                    else
+                    {
+                        view.Renderer.enabled = true; view.SetFrame(1); view.Face(Body.Vel.x > 0f);
+                        Body.Vel.y -= 22f * dt;
+                        if (Body.Pos.y < home.y - 0.8f && Body.Vel.y < 0f) { swooping = false; timer = 0f; Body.Vel = Vector2.zero; }
+                    }
+                    break;
+
+                case "swan":   // glides on the water; charges at a knight on its level, hissing
+                    Body.Pos.y = home.y + Mathf.Sin(anim * 2f) * 0.06f;
+                    if (charging)
+                    {
+                        Body.Vel = new Vector2(dir * 5.5f, 0f);
+                        if (timer > 1.2f || Mathf.Abs(Body.Pos.x - home.x) > 7f) { charging = false; timer = 0f; }
+                    }
+                    else
+                    {
+                        if (Body.Pos.x < home.x - 3f) dir = 1f; else if (Body.Pos.x > home.x + 3f) dir = -1f;
+                        Body.Vel = new Vector2(dir * 1.2f, 0f);
+                        if (timer > 2f && Mathf.Abs(dx) < 6f && Mathf.Abs(p.Body.Pos.y - Body.Pos.y) < 2f && Mathf.Sign(dx) == dir)
+                        { charging = true; timer = 0f; Audio.Play("fireball", 0.5f); }
+                    }
+                    view.Face(dir > 0f); WalkFrames(0, 1, charging ? 8f : 2f);
+                    break;
+
                 case "unicorn":
+                case "boar":
                     if (charging)
                     {
                         Body.Vel.x = dir * 8.5f;
@@ -179,7 +223,8 @@ namespace Tapestry
                     break;
 
                 case "gull":
-                    // wheels to and fro over its patch of shore, then dives at a knight beneath it
+                case "falcon":
+                    // wheels to and fro over its patch of ground, then dives at a knight beneath it
                     if (!swooping)
                     {
                         Body.Pos.y = Mathf.MoveTowards(Body.Pos.y, home.y + Mathf.Sin(timer * 2f) * 0.4f, 3f * dt);

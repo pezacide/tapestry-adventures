@@ -289,6 +289,60 @@ def eden_theme():
     mix_into(buf, drone(freq("F2"), L + 1, 0.4) + drone(freq("C3"), L + 1, 0.25), 0)
     return finish(buf, L, 0.2)
 
+def hunt_theme():
+    """World 4-1, ye Boare Hunte: a galloping 6/8 chase in C (Ionian, as the 15th century liked), horn calls over recorder and drum."""
+    eighth = 0.15; bar = 6 * eighth
+    A = ("G4:2 C5:1 E5:2 G5:1 E5:2 C5:1 G4:3 A4:2 C5:1 F5:2 A5:1 G5:3 E5:3 "
+         "G5:2 E5:1 C5:2 E5:1 D5:2 B4:1 G4:3 A4:2 B4:1 C5:2 D5:1 C5:6")
+    roots = ["C3", "C3", "F2", "C3", "C3", "G2", "F2", "C3"]
+    L = 32 * bar
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(4):
+        t0 = k * 8 * bar
+        play(buf, recorder, A, 60 / eighth, t0, 0.8)
+        if k % 2: play(buf, horn, "C4:3 r:3 G4:3 r:3 C5:6 r:6 G4:3 E4:3 C4:6 r:12", 60 / eighth, t0, 0.55)   # the horn calls
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, eighth, [(0, 2), (7, 1), (12, 2), (16, 1)], 0.45)
+            for e, lo in ((0, True), (3, True), (2, False), (5, False)):
+                mix_into(buf, tabor(0.2, 0.5 if lo else 0.3, lo), t0 + i * bar + e * eighth)
+    mix_into(buf, drone(freq("C3"), L + 1, 0.35) + drone(freq("G3"), L + 1, 0.2), 0)
+    return finish(buf, L, 0.22)
+
+def river_theme():
+    """World 4-2, ye Otter and ye Swanne: an easy, rippling 3/4 in F, lute running beneath a recorder song."""
+    bpm = 100; beat = 60 / bpm; bar = 3 * beat
+    A = ("C5:1 F5:1 A5:1 G5:2 F5:1 E5:1 F5:1 G5:1 A5:3 Bb5:1 A5:1 G5:1 F5:2 D5:1 E5:3 C5:3 "
+         "D5:1 E5:1 F5:1 A5:2 G5:1 F5:1 E5:1 D5:1 C5:3 D5:1 F5:1 E5:1 D5:2 E5:1 F5:6")
+    roots = ["F2", "C3", "F2", "F2", "Bb2", "C3", "C3", "C3", "Bb2", "C3", "F2", "F2", "Bb2", "C3", "F2", "F2"]
+    L = 16 * bar * 2
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 16 * bar
+        play(buf, recorder, A, bpm, t0, 0.7)
+        if k: play(buf, recorder, " ".join(f"{up(n.split(':')[0], -9)}:{n.split(':')[1]}" for n in A.split()), bpm, t0, 0.3)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (16, 1), (19, 1), (12, 1)], 0.42)
+    mix_into(buf, drone(freq("F2"), L + 1, 0.3, False), 0)
+    return finish(buf, L, 0.35)
+
+def heath_theme():
+    """World 4-3, ye Falconers' Heath: a wide, airy 4/4 in D Mixolydian - long recorder lines, horn answers, open fifths."""
+    bpm = 92; beat = 60 / bpm; bar = 4 * beat
+    A = ("D5:2 A5:2 G5:1 F#5:1 E5:2 D5:3 E5:1 F#5:2 A5:2 G5:4 "
+         "A5:2 D6:2 C6:1 A5:1 G5:2 F#5:2 E5:1 D5:1 E5:2 C5:2 D5:4")
+    roots = ["D3", "D3", "G2", "C3", "D3", "C3", "G2", "D3"]
+    L = 16 * bar
+    buf = np.zeros(int((L + 3) * SR))
+    for k in range(2):
+        t0 = k * 8 * bar
+        play(buf, recorder, A, bpm, t0, 0.75)
+        play(buf, horn, "r:4 A4:2 D5:2 r:8 G4:2 C5:2 r:4 A4:4 D4:4", bpm, t0, 0.35)
+        for i, r in enumerate(roots):
+            arp_bar(buf, r, t0 + i * bar, beat / 2, [(0, 1), (7, 1), (12, 1), (7, 1), (16, 1), (7, 1), (12, 1), (19, 1)], 0.4)
+            mix_into(buf, tabor(0.3, 0.35), t0 + i * bar)
+    mix_into(buf, drone(freq("D3"), L + 1, 0.35) + drone(freq("A3"), L + 1, 0.2), 0)
+    return finish(buf, L, 0.4)
+
 def relic_theme():
     eighth = 0.14; bar = 6 * eighth
     mel = ("G4:1 B4:1 D5:1 G5:1 F5:1 D5:1 E5:1 C5:1 A4:1 F5:1 E5:1 C5:1 "
@@ -387,11 +441,12 @@ def sfx():
     S["select"] = fx(lute(freq("D4"), 0.3, 1.0, 0.7), 0.5)
     c = np.zeros(int(0.6 * SR)); mix_into(c, lute(freq("D4"), 0.4, 1.0), 0); mix_into(c, lute(freq("A4"), 0.4, 1.0), 0.08)
     S["confirm"] = fx(c, 0.55)
+    S["horn"] = fx(np.concatenate([horn(freq("C4"), 0.3, 1.0), horn(freq("G4"), 0.3, 1.0), horn(freq("C5"), 0.6, 1.0)]), 0.6, 0.3)
     S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
     return S
 
 if __name__ == "__main__":
-    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "eden": eden_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
+    music = {"title": title_theme, "meadow": meadow_theme, "forest": forest_theme, "crypt": crypt_theme, "castle": castle_theme, "shore": shore_theme, "deep": deep_theme, "crossing": crossing_theme, "firmament": firmament_theme, "waters": waters_theme, "eden": eden_theme, "hunt": hunt_theme, "river": river_theme, "heath": heath_theme, "boss": boss_theme, "relic": relic_theme, "victory": victory, "death": death, "game_over": game_over}
     for n, fn in music.items():
         save_ogg(fn(), os.path.join(OUT, "music", n + ".ogg"))
         print("music", n)

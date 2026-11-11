@@ -362,6 +362,56 @@
       ],
       "frame_count": 2,
       "file": "enemies/stag.png"
+    },
+    "talbot": {
+      "title": "Talbot Hound",
+      "behaviour": "one of the hunt's hounds: runs in from behind the knight and on past, leaping gaps; stompable",
+      "frame": [
+        74,
+        48
+      ],
+      "frame_count": 2,
+      "file": "enemies/talbot.png"
+    },
+    "boar": {
+      "title": "Wilde Boare",
+      "behaviour": "charges when it sees the knight ahead, can't turn quickly; stompable",
+      "frame": [
+        72,
+        46
+      ],
+      "frame_count": 2,
+      "file": "enemies/boar.png"
+    },
+    "otter": {
+      "title": "Otter",
+      "behaviour": "lurks in the river, then leaps up out of the water at the knight; stompable while out of the water",
+      "frame": [
+        48,
+        34
+      ],
+      "frame_count": 2,
+      "file": "enemies/otter.png"
+    },
+    "swan": {
+      "title": "Swanne",
+      "behaviour": "glides on the river and charges at the knight with a hiss; stompable",
+      "frame": [
+        56,
+        36
+      ],
+      "frame_count": 2,
+      "file": "enemies/swan.png"
+    },
+    "falcon": {
+      "title": "Falcon",
+      "behaviour": "a hunting falcon loosed from the fist: wheels high, then stoops on the knight; stompable",
+      "frame": [
+        56,
+        42
+      ],
+      "frame_count": 2,
+      "file": "enemies/falcon.png"
     }
   },
   "bosses": {
@@ -394,6 +444,16 @@
       ],
       "frame_count": 2,
       "file": "bosses/cat_king.png"
+    },
+    "great_boar": {
+      "title": "Ye Greate Boar",
+      "behaviour": "boss: paws the ground, then charges across the lodge; if it rams the wall it is dazed - stomp it then; three blows",
+      "frame": [
+        220,
+        124
+      ],
+      "frame_count": 3,
+      "file": "bosses/great_boar.png"
     },
     "whale_boss": {
       "title": "Aspidochelone, the Island-Whale",
@@ -1002,6 +1062,69 @@
       ],
       "file": "scenery/ui_jump_aurelia.png"
     },
+    "verdure_top": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/verdure_top.png"
+    },
+    "verdure_fill": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/verdure_fill.png"
+    },
+    "wicker": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/wicker.png"
+    },
+    "branch": {
+      "size": [
+        48,
+        18
+      ],
+      "file": "scenery/branch.png"
+    },
+    "raft": {
+      "size": [
+        144,
+        22
+      ],
+      "file": "scenery/raft.png"
+    },
+    "hunting_stand": {
+      "size": [
+        96,
+        192
+      ],
+      "file": "scenery/hunting_stand.png"
+    },
+    "castle_pavilion": {
+      "size": [
+        240,
+        252
+      ],
+      "file": "scenery/castle_pavilion.png"
+    },
+    "castle_mill": {
+      "size": [
+        264,
+        252
+      ],
+      "file": "scenery/castle_mill.png"
+    },
+    "castle_mews": {
+      "size": [
+        240,
+        264
+      ],
+      "file": "scenery/castle_mews.png"
+    },
     "fire": {
       "size": [
         48,
@@ -1158,6 +1281,41 @@
         540
       ],
       "file": "backgrounds/eden_near.png"
+    },
+    "verdure_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/verdure_far.png"
+    },
+    "verdure_near": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/verdure_near.png"
+    },
+    "river_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/river_far.png"
+    },
+    "heath_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/heath_far.png"
+    },
+    "lodge_far": {
+      "size": [
+        960,
+        540
+      ],
+      "file": "backgrounds/lodge_far.png"
     }
   }
 }

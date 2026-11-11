@@ -51,9 +51,29 @@ namespace Tapestry
         float wheelSpeed;
         void SetSpeed(float s) { wheelSpeed = s; }
 
+        // a raft drifting downstream on the current, from where it was launched to the end of its run
+        bool drifting; float driftEnd;
+        public bool Gone;   // drifted past the end of its run and sank
+        public static Lift Raft(Vector2 tileLeftTop, float run, Transform parent)
+        {
+            var l = new Lift(tileLeftTop, Kind.BoardSideways, parent, 0f, "scenery/raft");
+            l.drifting = true; l.driftEnd = tileLeftTop.x + run;
+            l.Tick(0f);
+            return l;
+        }
+
         public void Tick(float dt)
         {
             var before = Pos;
+            if (drifting)
+            {
+                t += dt;
+                Pos = new Vector2(Pos.x + 1.4f * dt, home.y + Mathf.Sin(t * 2.2f) * 0.12f);
+                if (Pos.x > driftEnd) { Gone = true; view.enabled = false; }
+                Delta = Pos - before;
+                Place();
+                return;
+            }
             if (onWheel)
             {
                 t += dt * wheelSpeed;

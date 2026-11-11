@@ -40,6 +40,8 @@ namespace Tapestry
         readonly List<WindHead> winds = new List<WindHead>();
         readonly List<Transform> wheels = new List<Transform>(); const float WheelSpeed = 0.6f; float wheelAngle;
         readonly List<Vector2> herds = new List<Vector2>(); readonly List<int> herdsSent = new List<int>(); float herdT;
+        readonly List<Vector2> raftLaunches = new List<Vector2>(); readonly List<float> raftTimers = new List<float>();
+        float houndT; bool houndsToldOf;
         const int HerdsPerStampede = 3;
         readonly List<Vector2> logPiles = new List<Vector2>(); readonly List<float> logTimers = new List<float>();
         BossBase boss;
@@ -177,7 +179,7 @@ namespace Tapestry
             enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
-            flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
+            flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -201,6 +203,12 @@ namespace Tapestry
                     case 'x': kind = "crab"; break;
                     case 'b': kind = "bird"; break;
                     case 'v': herds.Add(p); herdsSent.Add(0); break;
+                    case 'j': kind = "boar"; break;
+                    case 'i': kind = "otter"; break;
+                    case 'n': kind = "swan"; break;
+                    case 'a': kind = "falcon"; break;
+                    case 'r': raftLaunches.Add(p); raftTimers.Add(0f); break;
+                    case '5': boss = new GreatBoar(p, world); break;
                     case '<': case '>': winds.Add(new WindHead(p, s.Key == '>', world)); break;
                     case 'f': kind = "fish"; break;
                     case 'z': kind = "sea_serpent"; break;
@@ -413,6 +421,38 @@ namespace Tapestry
             Toast("A stampede! Leap them or stomp them!");
         }
 
+        /// <summary>The hunt's hounds loosed after the knight from behind; and rafts launched downstream on the river.</summary>
+        void TickHuntAndRiver(float dt)
+        {
+            if (L.HuntingHounds && !player.Dead && player.Body.Pos.x < level.Width - 30f)
+            {
+                houndT -= dt;
+                if (houndT <= 0f)
+                {
+                    houndT = 4.5f;
+                    float x = camX - HalfWidth - 1f;
+                    if (x > 1f)
+                    {
+                        enemies.Add(new Enemy("talbot", new Vector2(x, level.GroundAt(x)), world) { Active = true });
+                        Audio.Play("horn", 0.8f);
+                        if (!houndsToldOf) { houndsToldOf = true; Toast("Ye hounds are loosed! Runne, or stomp them!"); }
+                    }
+                }
+            }
+            for (int i = 0; i < raftLaunches.Count; i++)
+            {
+                if (Mathf.Abs(raftLaunches[i].x - player.Body.Pos.x) > HalfWidth + 14f) continue;
+                raftTimers[i] -= dt;
+                if (raftTimers[i] <= 0f)
+                {
+                    raftTimers[i] = 3.6f;
+                    lifts.Add(Lift.Raft(new Vector2(raftLaunches[i].x - 0.5f, raftLaunches[i].y + 1f), 12f, world));
+                }
+            }
+            if (riding != null && riding.Gone) riding = null;
+            lifts.RemoveAll(l => l.Gone);
+        }
+
         void UpdateRelicMusic()
         {
             if (!player.Blessed) relicCombo = 0;
@@ -521,6 +561,7 @@ namespace Tapestry
             TickWindAndSea(dt);
             foreach (var w in winds) w.Tick(dt, level, player);
             TickStampede(dt);
+            TickHuntAndRiver(dt);
             TickEntities(dt);
             if (player.Dead) return;
             UpdateRelicMusic();
@@ -846,6 +887,7 @@ namespace Tapestry
 
         public void BossDefeated()
         {
+            if (level.OpenGates() > 0) Audio.Play("brick");   // the way on is opened
             showManicule = hasMonk;
             if (hasMonk) Toast("Ryde on to Brother Odo!");
             bossMusic = false;

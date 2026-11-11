@@ -13,8 +13,8 @@ All of these works are centuries old and in the public domain. We redraw them in
 | 1 | Bayeux Tapestry | wool embroidery on bare linen | Bayard, shells, lifts | The Cockatrice | **done** |
 | 2 | Bayeux Tapestry, the Channel crossing | embroidery; sea and ships | swimming, rocking longships, wind | Aspidochelone, the Island-Whale | **done** (2-1 to 2-4) |
 | 3 | Tapestry of Creation (Girona) | Romanesque needlework; roundels and compartments | wind-heads that blow you, sky platforms | Ye Foure Windes | **done** (3-1 to 3-4) |
-| 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | next |
-| 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | planned |
+| 4 | Devonshire Hunting Tapestries | **woven**; dense verdure | hounds that chase you, rafts on the river | Ye Greate Boar | **done** (4-1 to 4-4) |
+| 5 | The Unicorn Tapestries | woven; rich flowers, gold thread | chase levels; a poisoned stream to purify | The Spotted Unicorn (spared, becomes an ally) | next |
 | 6 | The Lady and the Unicorn | woven; red mille-fleur grounds, blue flower islands | one level for each of the five senses | Ye Lyon and ye Unicorne (twin boss) | planned |
 | 7 | Apocalypse Tapestry | woven; alternating red and blue grounds | falling stars, trumpet blasts | The Seven-Headed Dragon, then the **Cat King** finale | planned |
 
@@ -50,7 +50,7 @@ Aristocratic hunts: boar, bear, otter and swan, and falconry.
 
 | Level | Name | Idea |
 |---|---|---|
-| 4-1 | Ye Boare Hunte | a forest run; **hunting hounds chase you** from behind (gentle auto-scroll) |
+| 4-1 | Ye Boare Hunte | a forest run; **hunting hounds chase you** from behind |
 | 4-2 | Ye Otter and ye Swanne | the river: **log rafts** drift on the current; otters pop up; swans charge |
 | 4-3 | Ye Falconers' Heath | open heath with tall hunting stands to climb; **falcons dive** at you |
 | 4-4 | Ye Hunting Lodge | boss **Ye Greate Boar**: charges across the hall; dodge so it rams the wall, then stomp it while it's dazed |

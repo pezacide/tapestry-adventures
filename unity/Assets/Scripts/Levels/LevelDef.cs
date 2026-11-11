@@ -17,13 +17,14 @@ namespace Tapestry
         public bool Underwater;       // the whole level is beneath the waves: swim, and sea beasts cannot be stomped
         public bool EndAtDoor;
         public bool Wind;             // gusts blow the knight about
-        public bool LeapingFish;      // fish leap from the sea in arcs (stompable above water)        // no pole: entering the end building completes the level
+        public bool LeapingFish;      // fish leap from the sea in arcs (stompable above water)
+        public bool HuntingHounds;    // the hunt's hounds are loosed after the knight from behind        // no pole: entering the end building completes the level
         public bool Entrance;         // a short lead-in: no pole; walking into the building goes straight on to the next part
     }
 
     public static class Levels
     {
         /// <summary>The levels in order. Add new ones here.</summary>
-        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def, Level6.Def, Level7.Def, Level8.Def, Level9.Def, Level10.Def, Level11.Def, Level12.Def };
+        public static readonly LevelDef[] All = { Level1.Def, Level2.Def, Level3a.Def, Level3.Def, Level3c.Def, Level4.Def, Level5.Def, Level6.Def, Level7.Def, Level8.Def, Level9.Def, Level10.Def, Level11.Def, Level12.Def, Level13.Def, Level14.Def, Level15.Def, Level16.Def };
     }
 }

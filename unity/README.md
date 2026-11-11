@@ -72,6 +72,19 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
     - **Blowing:** in turn, each one blows a strong wind that shoves you across the hall toward the fire.
     - **Drawing breath:** then it flashes gold for about three seconds and a manicule points at it. While it does, touch it or shoot it to defeat it.
     - **Reaching them:** ledges lead up to the high heads. Beat all four and Brother Odo waits beyond.
+- **Worlde 4-1, Ye Boare Hunte** (World 4: the Devonshire Hunting Tapestries): from here the worlds are **woven**, with dense verdure of oak leaves and flowers. The knights stay stitched.
+  - **Hounds:** a hunting horn sounds and **talbots** (hunting hounds) come running in from behind you every few seconds. Keep moving, leap them, or stomp them.
+  - **Wild boars** charge when they see you. It has a horn-call hunting tune and ends at **Ye Hunting Pavilion**.
+- **Worlde 4-2, Ye Otter and ye Swanne:** the river.
+  - **Rafts:** log rafts set off from the near bank and drift downstream (to the right). Ride them across; they sink away at the far end of their run.
+  - **Otters** leap up out of the water at you as you pass; **swans** glide on the water and charge if you are level with them.
+  - It has a flowing river tune and ends at **Ye Mill**.
+- **Worlde 4-3, Ye Falconers' Heath:** open purple heath with tall **hunting stands** to climb. **Falcons** circle high and dive at you. It ends at **Ye Mews** (the falcons' tower).
+- **Worlde 4-4, Ye Hunting Lodge:** the World 4 castle, with hearth fires and flails.
+  - **The boss, Ye Greate Boar:** it paws the ground, then charges across the hall.
+    - **Its hide is too tough** to stomp while it stands; you just bounce off.
+    - **Dodge it** (leap over it) so it rams a wall. Then it is **dazed**, with stars round its head, for about two seconds: stomp it or shoot it then. Three stomps fell it.
+    - Each hit makes it angrier and faster. When it falls, the gate at the far end of the hall crumbles and Brother Odo waits beyond.
 
 Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
 

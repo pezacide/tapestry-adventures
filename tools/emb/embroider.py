@@ -38,6 +38,13 @@ def defs(seed=3):
             f'<circle cx="1.25" cy="1.1" r="1" fill="none" stroke="{_mix(c, 0.62)}" stroke-width="0.6"/>'
             f'<circle cx="3.75" cy="3.35" r="1" fill="none" stroke="{_mix(c, 0.62)}" stroke-width="0.6"/>'
             "</pattern>")
+        # woven tapestry (for the later worlds): tight weft lines with the warp showing as fine ticks
+        out.append(
+            f'<pattern id="wv-{name}" width="4" height="3" patternUnits="userSpaceOnUse">'
+            f'<rect width="4" height="3" fill="{c}"/>'
+            f'<rect y="1.5" width="4" height="1.5" fill="{_mix(c, 0.9)}"/>'
+            f'<rect x="1.8" width="0.4" height="3" fill="{_mix(c, 0.8)}"/>'
+            "</pattern>")
     # linen ground: plain weave
     out.append('<pattern id="linen" width="3" height="3" patternUnits="userSpaceOnUse">'
                f'<rect width="3" height="3" fill="{WOOL["linen"]}"/>'
@@ -63,6 +70,13 @@ def fill(d, color, angle=0, outline=OUTLINE, ow=1.6, extra=""):
     s = f'<path d="{d}" fill="url(#w-{color}-{a})" {extra}/>'
     if outline:
         s += stem(d, outline, ow)
+    return s
+
+def woven(d, color, outline=None, ow=1.2, extra=""):
+    """An area of woven tapestry (worlds 4 onward): flat colour, fine weft lines, the warp ticking through."""
+    s = f'<path d="{d}" fill="url(#wv-{color})" {extra}/>'
+    if outline:
+        s += f'<path d="{d}" fill="none" stroke="{WOOL.get(outline, outline)}" stroke-width="{ow}" stroke-linejoin="round"/>'
     return s
 
 def mail(d, color, outline=OUTLINE, ow=1.6):

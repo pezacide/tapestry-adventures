@@ -84,6 +84,14 @@ def drone(f, dur, vel=1.0, buzz=True):
         out *= 1 + 0.25 * np.maximum(0, np.sin(2 * np.pi * 2.0 * tt)) ** 6
     return out * env(n, 0.15, 0.3, 1.0) * vel
 
+def horn(f, dur, vel=1.0):
+    """A hunting horn: a brassy tone with a soft swell."""
+    tt = t(dur); n = len(tt)
+    ph = 2 * np.pi * f * tt
+    tone = sum((0.9 ** k) * np.sin(k * ph) for k in range(1, 9))
+    tone = lowpass(tone, 0.08 + 0.04 * min(1.0, dur))
+    return np.tanh(tone * 0.9) * env(n, 0.06, min(0.12, dur * 0.4), 0.9) * vel * 0.3
+
 def bell(f, dur, vel=1.0):
     tt = t(dur); n = len(tt)
     parts = ((1, 1.0, 3.0), (2.76, 0.5, 5.0), (5.4, 0.25, 8.0), (8.93, 0.12, 12.0))
