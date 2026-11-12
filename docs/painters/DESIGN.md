@@ -178,11 +178,34 @@ Each painter has a **style card**. The game is 2D side-scrolling; style is appli
 - Klimt gold-leaf palace as a bonus world; Munch, Rousseau, Hopper, Vermeer as alternates.
 - Daily "gallery challenge" levels.
 
-## 15. Open questions
+## 15. Decisions so far
 
-1. **Playable painters or apprentices?** I've assumed the four heroes *are* the painters. The alternative is four anonymous apprentices who each learn a painter's technique, which avoids depicting real people.
-2. **Same repo and engine as the tapestry game, or a new one?** Reusing the Unity project saves a lot, but it's a separate game.
-3. **Art look:** stylised vector sprites run through a painter filter (my recommendation), or hand-drawn pixel art in each painter's style?
-4. **Hokusai** is a printmaker as well as a painter. Fine to keep, or swap for another painter (Winslow Homer, Turner)?
-5. **Tone:** gentle and whimsical (as written), or a darker dream?
-6. Target platform (mobile like the tapestry game's Play Store plan, or desktop/web)?
+1. **Heroes are the real painters, drawn from their self-portraits.** Cézanne, Van Gogh and Monet all have usable self-portraits. **Seurat has no well-known painted self-portrait**, so his character will be drawn from period photographs/portraits of him, redrawn in our own style (check rights on any photograph). Hokusai has a self-portrait drawing; Bosch has no authenticated one (the best-known likeness is by someone else), so he stays a world, not a playable.
+2. **A new repo and project.** This doc moves there when it exists.
+3. **Art:** vector sprites run through a per-painter filter.
+4. **Hokusai stays.**
+5. **Tone:** gentle and whimsical.
+6. **Platforms: phone first, then PC, then possibly consoles** (section 16).
+
+## 16. Platforms
+
+**Order:** phone (iOS and Android) → PC on Steam (Windows, plus Mac/Linux/Steam Deck) → consoles if it earns it.
+
+**Is Steam a good fit?** Yes, as the second step. A pick-and-throw platformer with a strong art identity suits it, and Steam Deck compatibility is nearly free if we support controllers. The cost is a one-off fee per game (about US$100 at the time of writing; check Steamworks), a store page with trailer, and the fact that Steam's audience expects more content and polish than a mobile game does. Plan on the Steam version being a fuller edition (extra levels, gallery extras, achievements, controller support), not just a port.
+
+**Consoles:** Nintendo Switch, PlayStation and Xbox each need a developer-programme application (Xbox's ID@Xbox is the easiest to enter), certification, and ratings. Unity has official console support; Godot needs a third-party porting company. A platformer like this is a natural Switch game. Treat consoles as "decide after Steam".
+
+**Engine:** stay with **Unity** (the tapestry game already uses it, we know its touch and audio setup, and every target platform above is supported).
+
+**Design consequences of phone-first:**
+- Controls must be **a virtual stick plus two buttons**: *Jump* and *Action* (tap to pull, hold to carry, tap again to throw; hold Action while crouching for a gentle drop). Crouch is down on the stick. No input needs more than two thumbs.
+- Everything must work with **see-through touch controls** that don't hide the action (the tapestry game already has these).
+- Short levels (about 3 to 5 minutes) with checkpoints so a phone session fits; the Underpainting timer must be forgiving.
+- Gamepad and keyboard layouts are designed from day one so the PC port is not a rewrite.
+- Cloud save and a "free first world, one unlock purchase" model are the tapestry game's mobile approach and could carry over.
+
+## 17. Open questions
+
+1. Name: *Dream Palette* is still a working title.
+2. Where does the new repo live, and under which account? (I can't create repositories from this session, so you'd create it and I'd move the doc across.)
+3. Free first world + one unlock (like the tapestry game), or a paid game?
