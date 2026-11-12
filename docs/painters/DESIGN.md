@@ -206,6 +206,6 @@ Each painter has a **style card**. The game is 2D side-scrolling; style is appli
 
 ## 17. Open questions
 
-1. Name: *Dream Palette* is still a working title.
-2. Where does the new repo live, and under which account? (I can't create repositories from this session, so you'd create it and I'd move the doc across.)
-3. Free first world + one unlock (like the tapestry game), or a paid game?
+1. Name: **Dream Palette** is confirmed.
+2. Business model: **first world free, one unlock purchase** (same as the tapestry game). Confirmed.
+3. Where does the new repo live, and under which account? (Setup steps are in the chat; once it exists, this doc moves across.)
