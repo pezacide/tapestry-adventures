@@ -23,3 +23,7 @@
 /[Bb]ackup*/
 *.keystore
 *.jks
+
+# Unity's autosave of an unsaved scene (a local backup, not part of the game)
+/Assets/_Recovery/
+/Assets/_Recovery.meta
