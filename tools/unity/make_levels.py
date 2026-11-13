@@ -117,6 +117,16 @@ def bonus_heaven(m, x0):
     m.row(x0 + 36, 3, "oooo")
     m.put(x0 + 40, 2, ":")
 
+def bonus_cellar(m, x0):
+    """A secret cellar of bezants, far to the right of the level and reached by dropping into a well: an earth floor, a few
+    bezant bricks, and bezants in rows. '[' (at x0) is where the knight arrives; ':' (at x0+40) is the rope that leads back up."""
+    m.ground(x0 - 3, x0 + 43)
+    m.put(x0, 2, "[")
+    m.row(x0 + 3, 3, "ooooooo"); m.row(x0 + 13, 3, "ooooooo")
+    m.row(x0 + 22, 5, "?B?B?"); m.row(x0 + 22, 7, "ooooo")
+    m.row(x0 + 27, 3, "ooooooooo")
+    m.put(x0 + 40, 2, ":")
+
 def place_chalice(m):
     """Keep the golden chalice (the 1-up) away from the very end of a level: if it sits in the last third, move it to an
     open stretch of ground - in the first third when the relique is mid-level, or just past halfway when the relique
@@ -207,7 +217,7 @@ write("Level1", "Worlde 1-1", "Ye Meadowe of Beastes", "HERE YE KNYGHTES RYDE IN
       "scenery/castle_keep", 187, "meadow")
 
 # ======================================================= 1-2  Ye Foreste of Wyverns
-m = Map()
+m = Map(262)                                                  # 200 tiles of level, then the secret cellar far to the right
 m.ground(0, 22); m.ground(27, 60); m.water(61, 68); m.ground(69, 100); m.ground(106, 140); m.ground(147, 199)
 m.put(3, 2, "P")
 m.treetop(8, 4, 4); m.treetop(14, 5, 6); m.row(14, 8, "ooooo")
@@ -226,6 +236,8 @@ m.treetop(126, 5, 5); m.row(126, 7, "ooooo"); m.row(132, 5, "B?B"); m.put(137, 2
 m.treetop(140, 3, 4); m.treetop(144, 3, 6); m.put(143, 9, "w")   # over the third gap
 m.treetop(148, 4, 5); m.row(149, 8, "1")
 m.treetop(155, 4, 5); m.put(156, 6, "O"); m.put(160, 2, "h"); m.put(165, 2, "s")
+m.put(120, 2, "ŵ")                                             # a well: stand on it and hold DOWN to climb in (a cellar of bezantes)
+bonus_cellar(m, 216)
 m.stairs(170, 6)
 m.put(182, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level2", "Worlde 1-2", "Ye Foreste of Wyverns", "HERE YE KNYGHTES PASSE THORUGH YE DERKE FORESTE", m,
@@ -307,7 +319,7 @@ write("Level4", "Worlde 1-4", "Ye Cockatrice's Keepe", "HERE YE KNYGHTES ASSAYLE
       [], "", 0, "castle", "backgrounds/castle_far", "backgrounds/castle_near")
 
 # ======================================================= 2-1  Ye Shipwrights' Yarde (World 2: the Channel crossing)
-m = Map(200)
+m = Map(262)
 m.ground(0, 38); m.ground(44, 79); m.water(80, 86); m.ground(87, 132); m.ground(138, 199)
 m.put(3, 2, "P")
 m.row(9, 5, "B?BMB"); m.put(14, 7, "g")
@@ -323,6 +335,8 @@ m.put(96, 2, "x"); m.row(100, 5, "BHB"); m.put(106, 2, "Q")
 m.put(112, 2, "S"); m.row(116, 5, "B1B"); m.put(118, 8, "g"); m.put(124, 2, "x")
 m.row(133, 5, "==="); m.row(133, 7, "ooo")
 m.put(142, 2, "Q"); m.put(150, 2, "d"); m.put(154, 7, "g"); m.put(158, 2, "x")
+m.put(109, 2, "ŵ")                                             # a well: hold DOWN upon it
+bonus_cellar(m, 216)
 m.stairs(164, 6)
 m.put(176, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level5", "Worlde 2-1", "Ye Shipwrights' Yarde", "HERE YE SHIPWRIGHTES FELLE YE TREES AND BUILDE YE SHIPPES", m,
@@ -561,7 +575,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "j"); m.put(26, 5, "F")       
 m.row(30, 5, "?W?")
 m.fire(36, 42); m.row(37, 4, "==="); m.put(46, 2, "d"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "j")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 # the boar's hall: walls at both ends (the far one is a gate that crumbles when the boar falls)
 for y in range(2, 5): m.put(98, y, "V")      # low wall: leap it, the boar rams it
@@ -586,6 +600,7 @@ m.row(96, 4, "=====")
 m.put(104, 2, "C"); m.put(110, 2, "y"); m.put(120, 2, "p"); m.row(124, 5, "?B?"); m.put(130, 2, "q")
 m.row(146, 4, "====")
 m.put(155, 2, "p"); m.row(159, 5, "B1B"); m.put(163, 2, "y")
+m.put(38, 2, "ø"); m.put(93, 2, "ø"); m.put(140, 2, "ø")      # urns, each with a biting plant
 m.stairs(168, 6)
 m.put(180, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level17", "Worlde 5-1", "Ye Hunters Set Out", "HERE YE HUNTERS SET OUT IN QUESTE OF YE UNICORNE", m,
@@ -635,7 +650,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "y"); m.put(26, 5, "F")
 m.row(30, 5, "?W?")
 m.fire(36, 42); m.row(37, 4, "==="); m.put(46, 2, "I"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "y")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 # the enclosure: a low stone wall to the left (leap it), the fence gate to the right (the unicorn must break it)
 for y in range(2, 5): m.put(98, y, "V")
@@ -669,6 +684,7 @@ m.put(141, 1, "X")                                              # ...stand on th
 m.put(141, 5, "7")
 m.row(142, 1, ")))))")                                          # ...and the silver panes bear thee on
 m.put(152, 2, "h"); m.row(156, 5, "B1B"); m.put(160, 2, "{")
+m.put(101, 2, "ø"); m.put(150, 2, "ø")                          # urns with biting plants
 m.stairs(166, 6)
 m.put(178, 2, "G")
 write("Level21", "Worlde 6-1", "Sight", "HERE YE LADYE HOLDETH UP HER MIRROUR TO YE UNICORNE", m,
@@ -707,6 +723,7 @@ m.row(100, 5, "BRB"); m.put(106, 2, "C"); m.put(112, 2, "{"); m.row(116, 4, "===
 m.put(124, 2, "}"); m.row(126, 4, "===="); m.put(128, 5, "@"); m.put(134, 8, "!")
 m.put(139, 2, "%")
 m.put(152, 2, "{"); m.row(156, 5, "B1B"); m.put(160, 2, "%"); m.row(160, 8, "ooo")
+m.put(32, 2, "ø"); m.put(52, 2, "ø")                            # urns with biting plants
 m.stairs(166, 6)
 m.put(178, 2, "G")
 write("Level23", "Worlde 6-3", "Taste and Smell", "HERE YE LADYE TAKETH A SWEETE, AND WEAVETH A GARLANDE", m,
@@ -721,7 +738,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "}"); m.put(26, 5, "F")
 m.row(30, 5, "?W?"); m.put(34, 2, "@")
 m.fire(38, 43); m.row(39, 4, "==="); m.put(47, 2, "{"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "}")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 for y in range(2, 5): m.put(98, y, "V")                          # a low wall: leap it
 for y in range(2, 9): m.put(122, y, "D")                         # the way on, shut until both are overcome
@@ -796,7 +813,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "k"); m.put(26, 5, "F")
 m.row(30, 5, "?W?"); m.put(34, 6, "&")
 m.fire(38, 43); m.row(39, 4, "==="); m.put(47, 2, "k"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "k")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 for y in range(2, 5): m.put(98, y, "V")
 for y in range(2, 9): m.put(122, y, "D")

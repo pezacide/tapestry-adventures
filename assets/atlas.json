@@ -628,6 +628,26 @@
       ],
       "frame_count": 1,
       "file": "enemies/hydra_neck.png"
+    },
+    "smith": {
+      "title": "Smythe",
+      "behaviour": "walks a short beat, hops now and then, and hurls hammers in arcs at the knight; always in pairs; stompable",
+      "frame": [
+        76,
+        108
+      ],
+      "frame_count": 3,
+      "file": "enemies/smith.png"
+    },
+    "urn_plant": {
+      "title": "Urn-Plante",
+      "behaviour": "rises out of its urn and snaps, then sinks again; stays down while the knight is near or upon the urn; stomping it hurts; bolts fell it",
+      "frame": [
+        44,
+        54
+      ],
+      "frame_count": 2,
+      "file": "enemies/urn_plant.png"
     }
   },
   "bosses": {
@@ -812,6 +832,16 @@
       ],
       "frame_count": 2,
       "file": "projectiles/star.png"
+    },
+    "hammer": {
+      "title": "Smith's Hammer",
+      "behaviour": "hurled by a smith in a long arc",
+      "frame": [
+        28,
+        24
+      ],
+      "frame_count": 1,
+      "file": "projectiles/hammer.png"
     }
   },
   "items": {
@@ -1678,6 +1708,34 @@
         264
       ],
       "file": "scenery/castle_cat_keep.png"
+    },
+    "logo": {
+      "size": [
+        480,
+        240
+      ],
+      "file": "scenery/logo.png"
+    },
+    "bell": {
+      "size": [
+        32,
+        36
+      ],
+      "file": "scenery/bell.png"
+    },
+    "urn": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/urn.png"
+    },
+    "well": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/well.png"
     },
     "fire": {
       "size": [

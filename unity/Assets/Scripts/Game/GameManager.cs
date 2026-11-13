@@ -332,6 +332,16 @@ namespace Tapestry
         readonly List<Layer> layers = new List<Layer>();
 
         int knightIndex, bezantCount, lives = 3, score, levelIndex;
+
+        // the saved best score ("Best Glorie"), Ye Wronge Syde (a harder second playing, unlocked by finishing the game), the bells at the pole
+        const string BestKey = "best:glorie", BeatenKey = "beaten:game";
+        int BestScore { get { return PlayerPrefs.GetInt(BestKey, 0); } }
+        bool Beaten { get { return PlayerPrefs.GetInt(BeatenKey, 0) == 1; } }
+        bool hardMode, newBest; int menuIndex;
+        void RecordBest() { if (score > BestScore) { PlayerPrefs.SetInt(BestKey, score); PlayerPrefs.Save(); newBest = true; } }
+        int bellsLeft; float bellT;
+        class BellFx { public Transform T; public float Age; public Vector2 Base; }
+        readonly List<BellFx> bellFx = new List<BellFx>();
         LevelDef L { get { return Levels.All[levelIndex]; } }
         string farKey, nearKey;
         float stateTime, camX, winTime;
@@ -420,7 +430,7 @@ namespace Tapestry
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
-            hornView = huntView = null; pipeCount = 0; hasBonus = inBonus = false; bonusToldOf = false; starT = 3f; horsemanT = 4f; horsemanNext = 0; princessView = null; hasPrincess = rescuedPrincess = false; pendingEnemies.Clear(); hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
+            hornView = huntView = null; pipeCount = 0; hasBonus = inBonus = false; bonusToldOf = false; bellsLeft = 0; bellFx.Clear(); starT = 3f; horsemanT = 4f; horsemanNext = 0; princessView = null; hasPrincess = rescuedPrincess = false; pendingEnemies.Clear(); hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -489,6 +499,8 @@ namespace Tapestry
                     case 'y': kind = "hunter"; break;
                     case 'q': kind = "greyhound"; break;
                     case 'p': kind = "pheasant"; break;
+                    case 'ß': kind = "smith"; break;
+                    case 'ø': kind = "urn_plant"; break;
                     case 'I': kind = "genet"; break;
                     case '{': kind = "lapdog"; break;
                     case '}': kind = "fox"; break;
@@ -535,14 +547,25 @@ namespace Tapestry
         /// <summary>The knight has climbed to the top of a beanstalk: up to the heaven of bezants.</summary>
         public void EnterBonus(int vineX)
         {
-            if (!hasBonus || inBonus) return;
             int b = level.VineBottom(vineX);
-            bonusReturn = new Vector2(vineX + 0.5f, b >= 0 ? b : player.Body.Pos.y);   // back down to the top of the beanstalk brick
+            EnterBonusAt(new Vector2(vineX + 0.5f, b >= 0 ? b : player.Body.Pos.y), "Ye heaven of bezantes! Gather alle thou canst, then ryde ye vine downe.");   // back down to the top of the beanstalk brick
+        }
+
+        /// <summary>The knight has climbed into a well: down to a secret cellar of bezants.</summary>
+        public void EnterWell(int wx, int wy)
+        {
+            EnterBonusAt(new Vector2(wx + 0.5f, wy + 1f), "Ye secret cellar! Gather ye bezantes, then climbe ye rope.");   // and back out on top of the well
+        }
+
+        void EnterBonusAt(Vector2 returnPos, string welcome)
+        {
+            if (!hasBonus || inBonus) return;
+            bonusReturn = returnPos;
             inBonus = true;
             player.Body.Pos = bonusStart; player.Body.Vel = Vector2.zero;
             camX = ClampCam(bonusStart.x + 4f); PlaceCamera();
             Audio.Play("powerup");
-            if (!bonusToldOf) { bonusToldOf = true; Toast("Ye heaven of bezantes! Gather alle thou canst, then ryde ye vine downe."); }
+            if (!bonusToldOf) { bonusToldOf = true; Toast(welcome); }
         }
 
         void ExitBonus()
@@ -616,7 +639,7 @@ namespace Tapestry
                     break;
                 case State.GameOver:
                     if (stateTime > 1.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
-                    { lives = 3; bezantCount = 0; score = 0; levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
+                    { lives = 3; bezantCount = 0; score = 0; newBest = false; levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     break;
             }
         }
@@ -637,6 +660,7 @@ namespace Tapestry
         void SetState(State s)
         {
             var was = state;
+            if (s == State.Title || s == State.GameOver || s == State.Won || s == State.Ending) RecordBest();
             if (s == State.Title) titleStep = 0;
             state = s; stateTime = 0f;
             switch (s)
@@ -645,7 +669,7 @@ namespace Tapestry
                 case State.Briefing: Audio.Music(L.Music); break;
                 case State.About: Audio.Music("title"); if (was != State.About) aboutPage = 0; break;
                 case State.Tapestries: if (was != State.Tapestries) tapestryPage = 0; break;
-                case State.Ending: Audio.Music("ending", false); break;
+                case State.Ending: Audio.Music("ending", false); PlayerPrefs.SetInt(BeatenKey, 1); PlayerPrefs.Save(); break;   // Ye Wronge Syde is unlocked
                 case State.Playing:
                     if (was == State.Paused) Audio.ResumeMusic();
                     else if (was == State.Briefing) Toast(L.Title + "  ·  " + L.Name);
@@ -776,6 +800,26 @@ namespace Tapestry
         /// <summary>After touching the pole: slide down it, walk into the castle, then show the verse.</summary>
         void TickWin(float dt)
         {
+            // the bells peal, 500 glorie each
+            if (bellsLeft > 0)
+            {
+                bellT -= dt;
+                if (bellT <= 0f)
+                {
+                    bellT = 0.5f; bellsLeft--;
+                    float bx = L.CastleX + Random.Range(-4f, 4f), by = level.GroundAt(L.CastleX) + Random.Range(3.5f, 6.5f);
+                    bellFx.Add(new BellFx { T = Art.Make("scenery/bell", world, new Vector2(bx, by), 30).transform, Age = 0f, Base = new Vector2(bx, by) });
+                    Audio.Play("bezant", 1f);
+                    AddScore(500, new Vector2(bx, by + 0.9f));
+                }
+            }
+            for (int i = bellFx.Count - 1; i >= 0; i--)
+            {
+                var b = bellFx[i]; b.Age += dt;
+                if (b.T == null || b.Age > 1.3f) { if (b.T != null) Destroy(b.T.gameObject); bellFx.RemoveAt(i); continue; }
+                b.T.localPosition = new Vector3(b.Base.x, b.Base.y + b.Age * 0.8f, 0f);
+                b.T.localEulerAngles = new Vector3(0f, 0f, Mathf.Sin(b.Age * 18f) * 14f);   // swinging
+            }
             var pb = player.Body;
             winTime += dt;
             float ground = level.GroundAt(pb.Pos.x);
@@ -802,7 +846,11 @@ namespace Tapestry
             int n = Knights.All.Length;
             if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
             if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
-            bool go = stateTime > 0.3f && (TapestryInput.JumpPressed || TapestryInput.StartPressed);
+            int items = Beaten ? 2 : 1;
+            if (menuIndex >= items) menuIndex = 0;
+            if (items > 1 && (TapestryInput.UpPressed || TapestryInput.DownPressed)) { menuIndex = 1 - menuIndex; Audio.Play("select"); }
+            // the Up key also jumps, so only a real jump button (or ENTER) starts the game from the title
+            bool go = stateTime > 0.3f && (TapestryInput.JumpOnlyPressed || TapestryInput.StartPressed);
             if (TapestryInput.TapPosition.HasValue && TapestriesLinkRect().Contains(TapestryInput.TapPosition.Value))
             { Audio.Play("select"); SetState(State.Tapestries); return; }
             if (TapestryInput.TapPosition.HasValue && AboutLinkRect().Contains(TapestryInput.TapPosition.Value))
@@ -811,16 +859,25 @@ namespace Tapestry
             { Audio.Play("select"); OpenPaywall(FirstLockedLevel()); return; }
             if (TapestryInput.TapPosition.HasValue)
             {
+                var tap = TapestryInput.TapPosition.Value;
                 for (int i = 0; i < n; i++)
-                    if (PortraitRect(i).Contains(TapestryInput.TapPosition.Value))
+                    if (PortraitRect(i).Contains(tap))
                     {
                         if (i == knightIndex) go = true;
                         else Audio.Play("select");
                         knightIndex = i;
                     }
+                for (int m = 0; m < items; m++)
+                    if (MenuRect(m).Contains(tap))
+                    {
+                        if (m == menuIndex) go = true; else Audio.Play("select");
+                        menuIndex = m;
+                    }
             }
             if (go)
             {
+                hardMode = menuIndex == 1;
+                Enemy.TimeScale = hardMode ? 1.3f : 1f;
                 FindRealms();
                 if (realmStarts.Count <= 1) { StartAt(0); return; }
                 titleStep = 1; realmChoice = realmStarts.Count - 1; stateTime = 0f;   // offer the furthest realme first
@@ -891,7 +948,7 @@ namespace Tapestry
             if (TapestryInput.StartPressed) { SetState(State.Paused); return; }
             if (!collapsing && !rescuedMonk)
             {
-                tymeLeft -= dt / TymeTick;
+                tymeLeft -= dt / TymeTick * (hardMode ? 1.25f : 1f);
                 if (!hurried && tymeLeft <= 100f)
                 {
                     hurried = true;
@@ -925,7 +982,7 @@ namespace Tapestry
             if (Mathf.Abs(pb.Vel.x) < 9.5f) hornCombo = 0;
             foreach (var e in enemies)
             {
-                if (!e.Active || !e.Alive || e.Carried || !pb.Overlaps(e.Body)) continue;
+                if (!e.Active || !e.Alive || e.Carried || e.Untouchable || !pb.Overlaps(e.Body)) continue;
                 // a stomp if we were falling and our feet were in the top half of the beast last frame
                 if (player.Blessed)   // the holy relique smites any beast it touches - and the glory doubles each time
                 {
@@ -988,7 +1045,7 @@ namespace Tapestry
                     if (!lg.Removed && s.Body.Overlaps(lg.Body)) { lg.Destroy(); s.Destroy(); AddScore(200, lg.Body.Pos + new Vector2(0f, 1f)); break; }
                 if (s.Removed) continue;
                 foreach (var e in enemies)   // a crossbowe bolt fells any beast, burning lions too
-                    if (e.Active && e.Alive && !e.Carried && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
+                    if (e.Active && e.Alive && !e.Carried && !e.Untouchable && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
             }
             foreach (var it in items)
                 if (!it.Removed && it.Ready && it.Body.Overlaps(pb)) { Collect(it); it.Destroy(); }
@@ -1099,6 +1156,9 @@ namespace Tapestry
                 player.Freeze();
                 player.FaceRight();
                 TymeBonus();
+                int lastFigure = Mathf.CeilToInt(Mathf.Max(0f, tymeLeft)) % 10;   // as Mario's fireworks: a last figure of 1, 3 or 6 sets the bells ringing
+                bellsLeft = lastFigure == 1 ? 1 : lastFigure == 3 ? 3 : lastFigure == 6 ? 6 : 0; bellT = 1.2f;
+                if (bellsLeft > 0) Toast("Ye bells ring for thy happy tyme!");
                 PoleScore(pb.Pos.y - level.GroundAt(level.GoalX), new Vector2(level.GoalX, pb.Pos.y + pb.H));
                 pb.Pos.x = level.GoalX - pb.W * 0.5f - 0.05f;
                 winPhase = 0; winTime = 0f;
@@ -1499,7 +1559,7 @@ namespace Tapestry
         }
 
         // ------------------------------------------------------------------ GUI
-        GUIStyle big, small, center, popupStyle, tipName, tipText;
+        GUIStyle big, small, center, popupStyle, tipName, tipText, menuStyle, menuCenter, linkStyle;
 
         /// <summary>GUI unit: screen height, or less when the window is narrower than 16:9.</summary>
         static float U { get { return Mathf.Min(Screen.height, Screen.width * 9f / 16f); } }
@@ -1516,6 +1576,10 @@ namespace Tapestry
             tipText = new GUIStyle(small) { alignment = TextAnchor.UpperLeft, wordWrap = true, fontSize = Mathf.RoundToInt(U / 34f) };
             popupStyle = new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
             popupStyle.normal.textColor = new Color(0.66f, 0.26f, 0.18f);
+            menuStyle = new GUIStyle(small) { fontSize = Mathf.RoundToInt(U / 24f), fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleLeft };
+            menuCenter = new GUIStyle(menuStyle) { alignment = TextAnchor.MiddleCenter };
+            linkStyle = new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, wordWrap = true, fontSize = Mathf.RoundToInt(U / 38f) };
+            linkStyle.normal.textColor = new Color(0.95f, 0.9f, 0.76f);
         }
 
         void DrawFrame(string key, int frame, Rect r)
@@ -1526,14 +1590,16 @@ namespace Tapestry
             GUI.DrawTextureWithTexCoords(r, tex, new Rect(frame / (float)n, 0f, 1f / n, 1f));
         }
 
+        float TitleGroundTop { get { return Screen.height - 2f * Screen.height * 0.085f; } }
+
+        /// <summary>The four knights stand in a row on the ground at the left of the title scene.</summary>
         Rect PortraitRect(int i)
         {
-            // four portraits + three gaps must fit in 92% of the width, and in a third of the height
-            float w = Mathf.Min(Screen.height * 0.32f * 64f / 96f, Screen.width * 0.92f / (Knights.All.Length + (Knights.All.Length - 1) * 0.35f));
-            float h = w * 96f / 64f, gap = w * 0.35f;
-            float total = Knights.All.Length * w + (Knights.All.Length - 1) * gap;
-            return new Rect((Screen.width - total) * 0.5f + i * (w + gap), Screen.height * 0.36f, w, h);
+            float kh = Screen.height * 0.18f, kw = kh * 64f / 96f;
+            return new Rect(Screen.width * 0.03f + i * kw * 1.25f, TitleGroundTop - kh + Screen.height * 0.004f, kw, kh);
         }
+
+        Rect MenuRect(int i) { return new Rect(Screen.width * 0.42f, Screen.height * (0.545f + i * 0.068f), Screen.width * 0.4f, Screen.height * 0.062f); }
 
         void Panel(Rect r) { var c = GUI.color; GUI.color = new Color(Linen.r, Linen.g, Linen.b, 0.88f); GUI.DrawTexture(r, Texture2D.whiteTexture); GUI.color = c; }
 
@@ -1549,29 +1615,8 @@ namespace Tapestry
                 case State.About: DrawAbout(W, H); break;
                 case State.Tapestries: DrawTapestries(W, H); break;
                 case State.Title:
-                    Panel(new Rect(0, H * 0.12f, W, H * 0.88f));
-                    if (titleStep == 1) { DrawRealmSelect(W, H); break; }
-                    float y = H * 0.14f;
-                    var t = Art.Texture("scenery/title");
-                    if (t != null) { float tw = Mathf.Min(W * 0.9f, U * 1.3f), th = tw * t.height / t.width; GUI.DrawTexture(new Rect((W - tw) * 0.5f, y, tw, th), t); y += th; }
-                    GUI.Label(new Rect(0, y, W, U * 0.07f), Levels.All[0].Title + " · " + Levels.All[0].Name, center);
-                    for (int i = 0; i < Knights.All.Length; i++)
-                    {
-                        var r = PortraitRect(i);
-                        if (i == knightIndex) { var c = GUI.color; GUI.color = new Color(0.66f, 0.26f, 0.18f, 0.35f); GUI.DrawTexture(new Rect(r.x - 6, r.y - 6, r.width + 12, r.height + 12), Texture2D.whiteTexture); GUI.color = c; }
-                        else GUI.color = new Color(1f, 1f, 1f, 0.55f);
-                        DrawFrame(Knights.All[i].Sheet, i == knightIndex ? (int)(Time.time * 3f) % 3 : 0, r);
-                        GUI.color = Color.white;
-                    }
-                    var def = Knights.All[knightIndex];
-                    y = PortraitRect(0).yMax + U * 0.03f;
-                    GUI.Label(new Rect(0, y, W, U * 0.08f), def.Title, big); y += U * 0.09f;
-                    GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.07f), def.Trait, center); y += U * 0.07f;
-                    GUI.Label(new Rect(W * 0.05f, y, W * 0.9f, U * 0.1f),
-                        TapestryInput.ShowTouchControls ? "Touche a knyghte to chuse, and touche agayne to ryde forth" : "LEFTE or RYGHTE to chuse thy knyghte  -  JUMPE or Entre to ryde forth", center);
-                    if (!Store.Owned) GUI.Label(UnlockLinkRect(), "Unlocke Worldes 2 to 7  (touche here)", center);
-                    GUI.Label(AboutLinkRect(), "What is this?", center);
-                    GUI.Label(TapestriesLinkRect(), "Ye Tapestries", center);
+                    if (titleStep == 1) { Panel(new Rect(0, H * 0.12f, W, H * 0.88f)); DrawRealmSelect(W, H); break; }
+                    DrawTitle(W, H);
                     break;
 
                 case State.Playing:
@@ -1625,7 +1670,8 @@ namespace Tapestry
                     {
                         Panel(new Rect(W * 0.25f, H * 0.3f, W * 0.5f, H * 0.3f));
                         GUI.Label(new Rect(0, H * 0.34f, W, H * 0.12f), "HERE ENDETH YE TALE", big);
-                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.1f), "Ye beastes have wonne this daye. Presse JUMPE.", center);
+                        GUI.Label(new Rect(0, H * 0.46f, W, H * 0.06f), "Ye beastes have wonne this daye. Presse JUMPE.", center);
+                        GUI.Label(new Rect(0, H * 0.52f, W, H * 0.06f), (newBest ? "A NEW BEST GLORIE:  " : "Thy glorie:  ") + score.ToString("000000") + "     Best:  " + BestScore.ToString("000000"), center);
                     }
                     if (state == State.Playing && TapestryInput.ShowTouchControls) TouchButtons();
                     break;
@@ -1685,6 +1731,79 @@ namespace Tapestry
                 GUI.Label(new Rect(sp.x - U * 0.15f, Screen.height - sp.y - U * 0.03f, U * 0.3f, U * 0.06f), p.Text, popupStyle);
                 GUI.color = c;
             }
+        }
+
+        /// <summary>The title scene, laid out as an old arcade title: a row of figures along the top, the banner, the menu with its
+        /// cursor, the best score, and the knights standing on the ground before a hill and a shrub.</summary>
+        void DrawTitle(float W, float H)
+        {
+            Panel(new Rect(0, 0, W, H));
+            float ts = H * 0.085f, groundTop = TitleGroundTop;
+            var def = Knights.All[knightIndex];
+
+            // the scene: stitched trees and a shrub, then two rows of earth
+            var tree = Art.Texture("scenery/tree");
+            if (tree != null)
+            {
+                float th = H * 0.46f, tw = th * tree.width / tree.height;
+                GUI.DrawTexture(new Rect(W * 0.005f, groundTop - th, tw, th), tree);
+                float th2 = H * 0.36f, tw2 = th2 * tree.width / tree.height;
+                GUI.DrawTexture(new Rect(W * 0.9f, groundTop - th2, tw2, th2), tree);
+            }
+            var shrub = Art.Texture("scenery/shrub");
+            if (shrub != null) { float sh = H * 0.1f, sw = sh * shrub.width / shrub.height; GUI.DrawTexture(new Rect(W * 0.8f, groundTop - sh, sw, sh), shrub); GUI.DrawTexture(new Rect(W * 0.68f, groundTop - sh * 0.7f, sw * 0.7f, sh * 0.7f), shrub); }
+            var gt = Art.Texture("scenery/ground_top"); var gf = Art.Texture("scenery/ground_fill");
+            for (float x = 0f; x < W; x += ts)
+            {
+                if (gt != null) GUI.DrawTexture(new Rect(x, groundTop, ts + 1f, ts), gt);
+                if (gf != null) GUI.DrawTexture(new Rect(x, groundTop + ts, ts + 1f, ts + 1f), gf);
+            }
+
+            // the row of figures along the top
+            float hy = H * 0.02f, hl = U * 0.045f;
+            string knightName = def.Title.Substring(def.Title.LastIndexOf(' ') + 1).ToUpper();
+            GUI.Label(new Rect(W * 0.07f, hy, W * 0.22f, hl), "KNYGHT", small);
+            GUI.Label(new Rect(W * 0.07f, hy + hl, W * 0.22f, hl), knightName, small);
+            DrawFrame("scenery/bezant", 0, new Rect(W * 0.33f, hy + hl * 0.9f, hl, hl));
+            GUI.Label(new Rect(W * 0.33f + hl * 1.1f, hy + hl, W * 0.15f, hl), "\u00D7" + "00", small);
+            GUI.Label(new Rect(W * 0.58f, hy, W * 0.2f, hl), "WORLDE", small);
+            GUI.Label(new Rect(W * 0.58f, hy + hl, W * 0.2f, hl), "1-1", small);
+            GUI.Label(new Rect(W * 0.8f, hy, W * 0.2f, hl), "TYME", small);
+
+            // the banner
+            var lg = Art.Texture("scenery/logo");
+            if (lg != null) { float lh = H * 0.36f, lw = lh * lg.width / lg.height; GUI.DrawTexture(new Rect((W - lw) * 0.5f, H * 0.105f, lw, lh), lg); }
+            GUI.Label(new Rect(W * 0.1f, H * 0.468f, W * 0.8f, U * 0.05f), def.Trait, center);
+
+            // the menu, with a capon for its cursor
+            int items = Beaten ? 2 : 1;
+            for (int m = 0; m < items; m++)
+            {
+                var r = MenuRect(m);
+                GUI.Label(new Rect(r.x + r.height * 1.4f, r.y, r.width, r.height), m == 0 ? "1 KNYGHT ADVENTURE" : "YE WRONGE SYDE", menuStyle);
+                if (m == menuIndex) { float bob = Mathf.Sin(Time.time * 6f) * r.height * 0.05f; DrawFrame("items/capon", 0, new Rect(r.x, r.y + bob, r.height * 1.1f, r.height * 1.1f)); }
+            }
+            var br = MenuRect(items - 1);
+            GUI.Label(new Rect(br.x + br.height * 1.4f, H * (0.545f + items * 0.068f + 0.005f), br.width, br.height), "BEST GLORIE  -  " + BestScore.ToString("000000"), menuStyle);
+
+            // the knights, standing before the hill; the chosen one walks on the spot
+            for (int i = 0; i < Knights.All.Length; i++)
+            {
+                var r = PortraitRect(i);
+                bool sel = i == knightIndex;
+                if (sel) { var c = GUI.color; GUI.color = new Color(0.66f, 0.26f, 0.18f, 0.16f); GUI.DrawTexture(new Rect(r.x - r.width * 0.2f, r.y - r.height * 0.06f, r.width * 1.4f, r.height * 1.06f), Texture2D.whiteTexture); GUI.color = c; }
+                else GUI.color = new Color(1f, 1f, 1f, 0.6f);
+                DrawFrame(Knights.All[i].Sheet, sel ? 1 + (int)(Time.time * 4f) % 2 : 0, r);
+                GUI.color = Color.white;
+            }
+
+            // instructions and links, in cream upon the earth
+            GUI.Label(new Rect(0, groundTop + H * 0.012f, W, H * 0.05f),
+                TapestryInput.ShowTouchControls ? "Touche a knyghte to chuse, and touche agayne to ryde forth" : "LEFTE / RYGHTE chuse thy knyghte  -  UPPE / DOWNE chuse  -  JUMPE or ENTER ryde forth", linkStyle);
+            if (!Store.Owned) GUI.Label(UnlockLinkRect(), "Unlocke Worldes 2 to 7  (touche here)", linkStyle);
+            GUI.Label(AboutLinkRect(), "What is this?", linkStyle);
+            GUI.Label(TapestriesLinkRect(), "Ye Tapestries", linkStyle);
+            GUI.Label(new Rect(0, H * 0.96f, W, H * 0.04f), "Anno Domini MMXXVI", linkStyle);
         }
 
         void DrawRealmSelect(float W, float H)
@@ -1870,6 +1989,7 @@ namespace Tapestry
             if (hurried) small.normal.textColor = new Color(0.66f, 0.26f, 0.18f);   // red when tyme is short
             GUI.Label(new Rect(W * 0.80f, y, W * 0.2f, s * 1.2f), "Tyme " + Roman(Mathf.CeilToInt(Mathf.Max(0f, tymeLeft))), small);
             small.normal.textColor = tc;
+            if (hardMode) GUI.Label(new Rect(W * 0.80f, y + s * 1.2f, W * 0.2f, s * 1.2f), "Wronge Syde", small);
             float ix = W * 0.02f + s * 6.4f;
             if (player.HasCrossbow) { DrawFrame("items/crossbow", 0, new Rect(ix, y + s * 1.15f, s * 1.3f, s)); ix += s * 1.5f; }
             if (player.Blessed) DrawFrame("items/relic", 1, new Rect(ix, y + s * 1.1f, s * 1.1f, s * 1.1f));

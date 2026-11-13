@@ -29,6 +29,7 @@ namespace Tapestry
     ///              { lapdog  } fox  @ monkey (flings comfits)  ! parakeet
     ///              y huntsman (hurls spears)  q greyhound  p pheasant  I genet  0 ye fountaine  + ye unicorne's horne  6 Ye Spotted Unicorne
     ///              / beanstalk brick (bump it: a vine grows up from it; climb the vine to a bonus heaven of bezants)  - vine tile (climbable)
+    ///              ß smith (hurls hammers; always in pairs)  ø urn with a biting plant (solid urn)  ŵ well-head (stand on it, hold DOWN: a treasure cellar)
     ///              [ where the knight arrives in the bonus heaven  : ye way down from it (a hanging vine)
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
@@ -76,6 +77,8 @@ namespace Tapestry
                         case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D': case ';': case '8': case '(': case ')': case '7': case '%':
                         case ',': case '.': case '/': case '-':
                             tiles[x, y] = c; break;
+                        case 'ø': tiles[x, y] = 'ø'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 1f))); break;   // an urn (solid) with a biting plant upon it
+                        case 'ŵ': tiles[x, y] = 'ŵ'; break;                                                                                  // a well-head (solid)
                         case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
                         case 'G': GoalX = x + 0.5f; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y))); break;
@@ -144,7 +147,7 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': case ',': case '/': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': case ',': case '/': case 'ø': case 'ŵ': return true;
                 case '(': return MirrorState == 0;
                 case ')': return MirrorState == 1;
                 default: return false;
@@ -167,6 +170,9 @@ namespace Tapestry
             tiles[x, y] = '-';
             views[Key(x, y)] = Art.Make("scenery/vine", root, new Vector2(x + 0.5f, y), 1);
         }
+
+        /// <summary>A well-head: stand upon it and hold DOWN to climb in.</summary>
+        public bool Well(int x, int y) { return Get(x, y) == 'ŵ'; }
 
         public bool Platform(int x, int y) { char c = Get(x, y); return c == '=' || c == '^'; }
         public bool Water(int x, int y) { return Get(x, y) == '~'; }
@@ -276,6 +282,8 @@ namespace Tapestry
                         case '^': key = "scenery/canopy"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case '|': key = "scenery/trunk"; break;
                         case '-': key = "scenery/vine"; break;
+                        case 'ø': key = "scenery/urn"; break;
+                        case 'ŵ': key = "scenery/well"; break;
                         case 'V': case 'F': key = skin.Vault; break;
                         case 'D': key = string.IsNullOrEmpty(skin.Gate) ? skin.Brick : skin.Gate; break;
                         case ';': key = "scenery/stream_foul"; break;

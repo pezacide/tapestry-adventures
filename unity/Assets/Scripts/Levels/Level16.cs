@@ -24,7 +24,7 @@ namespace Tapestry
                 "        ?M?               F   ?W?                 BRB          d                B1B                                       D",
                 "              ===                    ===                     ====                      ===        V                       D",
                 "                                                                                                  V                       D",
-                "   P                  j                       d        C   j       j    d   j      d              V           5           D             N",
+                "   P                  j                       d        C   j       j    d ß  ß     d              V           5           D             N",
                 "VVVVVVVVVVVVV******VVVVVVVVVVVVVVVVV*******VVVVVVVVVVVVVVVVV*******VVVVVVVVVVVVVVVVVVV******VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
                 "VVVVVVVVVVVVV******VVVVVVVVVVVVVVVVV*******VVVVVVVVVVVVVVVVV*******VVVVVVVVVVVVVVVVVVV******VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
             },

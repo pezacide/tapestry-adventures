@@ -20,7 +20,11 @@ namespace Tapestry
         readonly Vector2 home;
         float dir = -1f, timer, anim, kickGrace, deadTimer, shellVx, lifeT;
         bool shell, squashed, flipped, charging, swooping, gravity = true;
-        float speed;
+        float speed, plantLevel;
+        /// <summary>A plant sunk inside its urn: it cannot touch, or be touched.</summary>
+        public bool Untouchable { get; private set; }
+        /// <summary>1 normally; faster on 'Ye Wronge Syde' (the beasts, their hammers and spears all move and wait that much quicker).</summary>
+        public static float TimeScale = 1f;
 
         public Enemy(string kind, Vector2 pos, Transform parent)
         {
@@ -43,6 +47,8 @@ namespace Tapestry
                 case "boar": speed = 1.3f; break;
                 case "hunter": speed = 1.0f; timer = 1f; break;
                 case "lapdog": speed = 2.6f; break;
+                case "smith": speed = 1.4f; break;
+                case "urn_plant": gravity = false; break;
                 case "fox": speed = 1.4f; break;
                 case "monkey": speed = 0f; timer = 1f; break;
                 case "parakeet": gravity = false; break;
@@ -62,12 +68,14 @@ namespace Tapestry
                 case "crab": speed = 2f; break;
                 case "soup_cat": speed = 0f; timer = 1.2f; break;
             }
+            if (kind == "urn_plant") view.Renderer.sortingOrder = -1;   // it rises from behind the urn
             view.SetPosition(pos);
         }
 
         public void Tick(float dt, Level lv, Knight player)
         {
             if (Removed) return;
+            dt *= TimeScale;
             if (!Alive) { TickDead(dt); return; }
             timer += dt; anim += dt; kickGrace -= dt;
             if (carried) { TickCarried(); return; }
@@ -239,6 +247,40 @@ namespace Tapestry
                     WalkFrames(0, 1, 9f);
                     lifeT += dt;
                     if (lifeT > 9f || Body.Pos.x > p.Body.Pos.x + 24f) Remove();
+                    break;
+
+                case "smith":   // paces a short beat, hops now and then, and hurls hammers in arcs at a knight in range (they come in pairs)
+                    if (charging)
+                    {
+                        Body.Vel.x = 0f; view.SetFrame(2); view.Face(dx > 0f);
+                        if (timer > 0.35f)
+                        {
+                            charging = false; timer = 0f;
+                            float d = dx > 0f ? 1f : -1f;
+                            GameManager.I.SpawnShot("hammer", Body.Pos + new Vector2(d * 0.3f, Body.H + 0.2f), new Vector2(Mathf.Clamp(dx * 0.55f, -5.5f, 5.5f), 9.5f));
+                            Audio.Play("spear", 0.5f);
+                        }
+                        break;
+                    }
+                    if (Mathf.Abs(Body.Pos.x - home.x) > 2.4f) dir = Body.Pos.x < home.x ? 1f : -1f;
+                    else if (Body.HitWall) dir = -dir;
+                    Body.Vel.x = dir * speed * 0.8f; view.Face(dir > 0f);
+                    if (Body.Grounded) WalkFrames(0, 1, 3f); else view.SetFrame(1);
+                    lifeT += dt;
+                    if (Body.Grounded && lifeT > 2.6f + (home.x % 1f)) { lifeT = 0f; Body.Vel.y = 11f; }   // a hop
+                    else if (Body.Grounded && timer > 1.9f && Mathf.Abs(dx) < 11f && Mathf.Abs(dx) > 1.2f) { charging = true; timer = 0f; }
+                    break;
+
+                case "urn_plant":   // rises from its urn, snaps, and sinks again; it stays down while a knight is near or upon the urn
+                    {
+                        bool near = Mathf.Abs(dx) < 1.5f && p.Body.Pos.y < home.y + 3f;
+                        bool shouldBeUp = (timer % 4.4f) < 2.8f && !near;
+                        plantLevel = Mathf.MoveTowards(plantLevel, shouldBeUp ? 1f : 0f, dt * 1.6f);
+                        Body.Pos = new Vector2(home.x, home.y - 1.1f * (1f - plantLevel));
+                        view.Renderer.enabled = plantLevel > 0.05f;
+                        view.SetFrame(plantLevel > 0.9f ? 1 : 0);
+                        Untouchable = plantLevel < 0.35f;
+                    }
                     break;
 
                 case "lapdog":   // scampers to and fro, yapping, and hops at the knight when he is near
@@ -498,6 +540,7 @@ namespace Tapestry
                 }
                 return false;
             }
+            if (Kind == "urn_plant") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
             if (!fromAbove) { k.Hurt(); return false; }
             if (k.Mounted) { k.Bounce(); Squash(false); return true; }   // Bayard's hooves crush every beast, burning or not
             if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return false; }   // burning mane
@@ -586,7 +629,7 @@ namespace Tapestry
         public Shot(string kind, Vector2 pos, Vector2 vel, Transform parent)
         {
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
-            gravity = kind == "soup_glob" || kind == "spear" || kind == "comfit" || kind == "star";
+            gravity = kind == "soup_glob" || kind == "spear" || kind == "comfit" || kind == "star" || kind == "hammer";
             Friendly = kind == "bolt";
             Kind = kind;
             life = Friendly ? 1.1f : 4f;
@@ -598,8 +641,10 @@ namespace Tapestry
         public void Tick(float dt, Level lv)
         {
             if (Removed) return;
+            dt *= Enemy.TimeScale;
             t += dt;
             if (gravity) Body.Vel.y -= (Kind == "spear" ? 9f : Kind == "star" ? 5f : 22f) * dt;
+            if (Kind == "hammer") view.Renderer.transform.localEulerAngles = new Vector3(0f, 0f, -t * 720f * (Body.Vel.x >= 0f ? 1f : -1f));   // end over end
             if (Kind == "spear") view.Renderer.transform.localEulerAngles = new Vector3(0f, 0f, Mathf.Atan2(Body.Vel.y, Mathf.Abs(Body.Vel.x)) * Mathf.Rad2Deg * (Body.Vel.x >= 0f ? 1f : -1f));
             Body.Step(lv, dt);
             view.SetFrame(((int)(t * 10f)) % 2);

@@ -134,3 +134,22 @@ The seven trumpets, the locusts with human faces, the four horsemen, and the sev
 4. Under **Signing & Capabilities**, choose your Apple ID as the **Team**.
 5. Plug in the iPhone, choose it at the top of Xcode, and press **▶ Run**.
 6. **For TestFlight and the App Store:** in Xcode use **Product → Archive → Distribute App → App Store Connect**, then create the app listing in App Store Connect.
+
+---
+
+## Ideas from a look at the old Mario games
+
+**Built:** Best Glorie (saved high score), bells at the pole, Smythes (hammer throwers), Urn-Plantes, wells with a treasure cellar, Ye Wronge Syde (hard mode after the ending), and a title screen laid out like the old one (banner, menu with cursor, top score).
+
+**Still to do (not yet built):**
+- **Winged beasts** that bob or flutter in the air, and can be stomped to knock the wings off.
+- **Falling and balance lifts**: platforms that sink once stood on, and a pulley pair that see-saw.
+- **Leaping embers** that jump out of the lava in the castles.
+- **An armoured snail** whose spiked shell cannot be stomped (only shot or kicked).
+- **A cloud-riding imp** who drops hedgehog-like spiny eggs from above.
+- **Bombards**: cannons that fire slow balls across the screen.
+- **A secret door and warp room**: hidden rooms that skip ahead a world.
+- **Looping castle mazes**: a castle that sends you back unless you take the right route.
+- **Night and snow variants** of the early levels.
+- **"Ye Frayed Edge"**: a secret place at the very end of the cloth for finding everything.
+- **Two players, taking turns.**

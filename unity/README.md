@@ -166,6 +166,13 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - At 0 the knight is lost.
   - Each tick left at the goal is worth 50 glory.
 - **Small and large:** a **small** knight dies from one blow and can only *bump* ordinary bricks (they do not break); a **large** knight is taller, breaks bricks, and when struck is only made small again (he loses his crossbowe, and is safe for a moment). Item bricks work for both. If a capon grows you where there is no headroom, you stay crouched until there is room.
+- **Title screen:** a top row (knight, bezants, world, tyme), a hanging banner for the name, a cursor-and-menu (a capon points at "1 KNYGHT ADVENTURE"; UP/DOWN or touch to choose, JUMP or ENTER to ride forth) and "BEST GLORIE" (the saved high score). Four knights stand on the ground; LEFT/RIGHT picks one.
+- **Best Glorie:** the highest score is saved and shown on the title and the game-over screen ("A new Best Glorie!" when beaten).
+- **Bells at the pole:** when a level ends, the last figure of your Tyme count decides the bells: 1, 3 or 6 ring (1, 3 or 6 bells) as the knight walks into the castle, each worth 500 glory. Others ring none.
+- **Smythes:** hammer-throwing smiths (Worlds 4 and up; always in pairs). They walk a short beat, hop, and hurl hammers in arcs. Stomp or shoot them.
+- **Urn-Plantes:** a biting plant that rises from an urn and snaps, then sinks; it stays down while you stand on or beside the urn. Stomping it hurts; bolts fell it.
+- **Wells:** stand on a stone well and press DOWN to climb in to a treasure cellar (about thirty coins); a pipe-like exit leads back to the well. Wells are in Levels 2 and 5.
+- **Ye Wronge Syde:** after finishing the game, a "Wronge Syde" choice appears on the title menu: the same tapestries with beasts that are faster and with the Tyme running 25% quicker.
 - **Rules:** your size is shown as a strip of tapestry stitched in two halves (one filled: small; both: large), and you have three lives. 100 bezants earn an extra life. The sea and pits kill. Touch the goal pole, slide down it and walk into the castle. The higher you grasp the pole, the more glory: 100, 200, 400, 800, 2000 or 5000, and the very top gives an extra life. Points float up wherever they are won.
 - **Text:** all the on-screen writing is in olde English.
 - **Music and sound:** original tunes in medieval modes on a synthesized band of recorder, lute, hurdy-gurdy drone, shawm and tabor.
