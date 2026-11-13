@@ -538,7 +538,7 @@ If 39 levels feels too few for the main route and the ideas above are too good t
 
 This pass covers the wiki's individual pages for Worlds 3 to 8: every numbered level, the fortresses, the airships, the World 8 special levels, and the Koopaling and Bowser fights. Each row below is a **specific SMB3 level** and what we could take from it. They are menus of ideas, not a commitment to build all of them.
 
-**Pages I could not read:** 5-9, 6-10, the World 5 tower, the second Piranha Plant level, and Bowser's own page (the Castle of Koopa page did describe the fight). The Koopaling pages only gave me their first 100,000 characters, so boss details are what those first sections said.
+**Pages I still could not read:** the World 5 tower (the wiki's page for it is a list pointing to several games). Bowser's own page is about 614,000 characters, and the first 300,000 held no description of the SMB3 fight, only background (he introduced the Koopalings; his first theme, "King of the Koopas"). The fight description comes from the Castle of Koopa page. The Koopaling pages only gave me their first 100,000 characters, so boss details are what those first sections said. 5-9, 6-10, the second Piranha Plant level and the first World 5 fortress were read from the links you sent and are included below.
 
 #### Act II, Crete (SMB3 World 3)
 
@@ -584,6 +584,7 @@ This pass covers the wiki's individual pages for Worlds 3 to 8: every numbered l
 | **7-8** | A level of **Ptooies and Walking Piranhas**; a **Hammer Suit** bonus | **Acanthus Snappers that walk** (a *Garden Room* variant); Mallet bonus |
 | **7-9** | A **broken pipe maze**: study the whole map before moving; **White Blocks** to clear | A broken-aqueduct maze to plan before you move |
 | **Piranha Plant stage** | Short, optional; **Munchers open and close in rhythm**; **200-second timer**; ends with a P-Wing | **Garden Room**: thistles that **open and close to a beat**; the prize is **Winged Sandals** |
+| **Second Piranha Plant stage** | A short optional level unlocked after the second fortress and leading to the airship; **41 Munchers** that **slip in and out of pipes in a steady rhythm**; hanging pipes with Venus Fire Traps; a **Koopa Paratroopa** carries you over the Munchers; the **end item is a Super Mushroom**; 200 seconds, no secrets | A **second Garden Room** unlocked after the Hypogeum: **41 thistles** that **rise and sink to a drumbeat** (a beat level in the style of the Dancers' Triclinium), a **flying Chelone** to ride over them, and a **cake** as the prize; it leads to the ship |
 | **Fortress 1** | **No enemies**; a **brick room** turned to coins; a **reset trick** gives infinite coins (we cap it); Roto-Discs and Hot Feet; "Mario has to **fly** to reach the end" | **The Treasury** puzzle room; the Winged Sandals needed to finish |
 | **Fortress 2** | **Pipe platforms over lava**; Boos; Roto-Discs; crouch-slide under a wall | **Hypogeum lifts over lava** |
 | **Airship / Ludwig** | **Bolt Lifts that move backward** when stepped on; Ludwig fires **rapid wand shots** and **charges** after a stomp; **he can hide in his shell at will** | A liburnian with **backward-moving platforms**; the **Colossus** can **sit down** to protect his head |
@@ -600,7 +601,8 @@ This pass covers the wiki's individual pages for Worlds 3 to 8: every numbered l
 | **5-6** | **Para-Beetles** as moving platforms in an autoscroll | **Pegasus and winged horses** as platforms (above) |
 | **5-7** | **Pile Driver Micro-Goombas** between blocks; Lakitu; Turtle Cannons; a pipe to a hidden ground area | **Mudbrick Mimics** again; a hidden **ground** below the clouds |
 | **5-8** | **Clouds**, a **Lakitu that chases you** to the end, the manga's **7/10** | **Nephele's chase**: the hardest scene in the Act, with a *throw a shell at her* answer |
-| **Fortress 1** | **Roto-Disc orbs**; stand on a disc's **middle** to bypass a Thwomp | **Spinning shield-discs**; stand on the centre hub |
+| **5-9** | A **diagonal autoscroll** over sixteen lifts ("never stops moving"); a **Fire Chomp** begins following you in the second half; a Lakitu waits just before the goal; 300 seconds | **The Helios Climb**: a diagonal autoscroll up the sun-chariot's road over sixteen drifting cloud-lifts, chased by a **Chimera's fire head** that picks up your trail halfway; Nephele waits at the end |
+| **Fortress 1** | **Roto-Disc orbs** (seven), five Thwomps, a Podoboo, a Boo; **stand on a disc's middle** to bypass a Thwomp; flight reaches a red pipe to a coin room with **three hidden 1-Up blocks** | **Spinning shield-discs**; stand on the centre hub; **flight reaches a hidden room with three comedy masks** |
 | **Fortress 2** | **Lava above and below**, about 22 Podoboos, a Starman | **Sun-fire above and below** |
 | **Airship / Roy** | A **rotating cannon** with a **ditch** that avoids its fire; Roy **shakes the room when he lands**, and **paralyses you if you're standing** | **Zeus's boat**; the **shockwave** from Zeus's stamp paralyses you unless you're **in the air** |
 
@@ -631,6 +633,7 @@ This pass covers the wiki's individual pages for Worlds 3 to 8: every numbered l
 | **6-6** | A large underground cave with a Starman and zero secrets | A **cistern** with calm swimming |
 | **6-7** | **Diagonal autoscroll**; **Frozen Coins** you **melt with fire**; **78 coins** unlock an Anchor house | **Tesserae in glass** you melt with the Lamp; 78 tesserae |
 | **6-8** | **White Blocks** to kill enemies cleverly; the manga's **7/10**; Hammer Suit | **Marble blocks** thrown at the Whitewashers; the Mallet |
+| **6-10** | A level made **entirely of Ice Blocks**: a hidden **beanstalk** to a **P Switch** that turns a pillar into coins and *unfreezes* **24 frozen Munchers**; **race to defrost them** near a pipe for a secret **Hammer Suit** room; the manga's **7/10** | **The Glass Gallery**: **24 thistles sealed in glass** that melt when you press a Kiln Switch; if you are quick, a hidden alcove with the **Mallet**; the thaw is a **timed race**, with a sound to warn you |
 | **6-9** | A **flight shortcut** over the structure, or a **flooded cavern** with Munchers; a **Frog Suit** secret | A **flooded crypt**; the Laurel glide skips it |
 | **Fortress 1** | An **elevator block**, a **long rail-lift** section | **Rising lifts**, a long treadwheel |
 | **Fortress 2** | **Seven sliding Thwomps**, Boos, Roto-Discs, all on **ice** | **Sliding column drums** on a polished floor |
