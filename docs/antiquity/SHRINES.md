@@ -135,7 +135,7 @@ Thalia's shrine runs **Vase Match**, SMB3's card-matching game with vases: 18 fa
 
 ## 6. Still to draw
 
-- Screens for **pause**, **settings** and the **Gallery**.
+- Nothing from the screen list. The pause, settings and gallery screens are in [`MENUS.md`](MENUS.md).
 
 ## 7. Decisions to confirm
 
