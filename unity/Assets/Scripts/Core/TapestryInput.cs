@@ -10,11 +10,13 @@ namespace Tapestry
     public static class TapestryInput
     {
         public static float Horizontal;
+        public static bool UpHeld, JumpOnlyPressed;   // UP climbs a beanstalk; JumpOnlyPressed is JUMP without the Up keys (so a knight can leap off the vine)
         public static bool JumpHeld, JumpPressed, RunHeld, RunPressed, DownHeld, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed, MutePressed;
         public static bool LeftPressed, RightPressed;
         public static bool TouchSeen;
         public static Vector2? TapPosition;    // GUI coordinates (top-left origin) of a new touch/click this frame
 
+        static bool prevJumpOnly;
         static bool prevMute, prevJump, prevRun, prevDown, prevStart, prevNext, prevPrev, prevLeft, prevRight;
 
         // ---- on-screen touch controls (GUI coordinates, top-left origin), laid out inside the safe area ----
@@ -38,7 +40,7 @@ namespace Tapestry
         public static void Poll()
         {
             float h = 0f;
-            bool jump = false, run = false, down = false, start = false, next = false, prev = false, mute = false;
+            bool jump = false, jumpOnly = false, up = false, run = false, down = false, start = false, next = false, prev = false, mute = false;
             TapPosition = null;
             JoyKnob = Vector2.zero; joyTaken = false; stickRun = false; TouchJump = TouchRun = false;
 
@@ -48,7 +50,9 @@ namespace Tapestry
             {
                 if (kb.leftArrowKey.isPressed || kb.aKey.isPressed) h -= 1f;
                 if (kb.rightArrowKey.isPressed || kb.dKey.isPressed) h += 1f;
-                jump |= kb.spaceKey.isPressed || kb.zKey.isPressed || kb.kKey.isPressed || kb.upArrowKey.isPressed || kb.wKey.isPressed;
+                jumpOnly |= kb.spaceKey.isPressed || kb.zKey.isPressed || kb.kKey.isPressed;
+                up |= kb.upArrowKey.isPressed || kb.wKey.isPressed;
+                jump |= jumpOnly || up;
                 run |= kb.leftShiftKey.isPressed || kb.rightShiftKey.isPressed || kb.xKey.isPressed || kb.jKey.isPressed;
                 down |= kb.downArrowKey.isPressed || kb.sKey.isPressed;
                 start |= kb.enterKey.isPressed || kb.escapeKey.isPressed || kb.pKey.isPressed;
@@ -62,6 +66,8 @@ namespace Tapestry
                 Vector2 s = pad.leftStick.ReadValue();
                 if (pad.dpad.left.isPressed || s.x < -0.35f) h -= 1f;
                 if (pad.dpad.right.isPressed || s.x > 0.35f) h += 1f;
+                jumpOnly |= pad.buttonSouth.isPressed;
+                up |= pad.dpad.up.isPressed || s.y > 0.6f;
                 jump |= pad.buttonSouth.isPressed;
                 run |= pad.buttonWest.isPressed || pad.rightTrigger.ReadValue() > 0.4f;
                 down |= pad.dpad.down.isPressed || s.y < -0.6f;
@@ -80,7 +86,7 @@ namespace Tapestry
                     touchCount++;
                     TouchSeen = true;
                     Vector2 p = t.position.ReadValue();
-                    ApplyTouch(new Vector2(p.x, Screen.height - p.y), ref h, ref jump, ref run, ref down, ref start);
+                    ApplyTouch(new Vector2(p.x, Screen.height - p.y), ref h, ref jump, ref jumpOnly, ref up, ref run, ref down, ref start);
                     if (t.press.wasPressedThisFrame) TapPosition = new Vector2(p.x, Screen.height - p.y);
                 }
             }
@@ -99,8 +105,10 @@ namespace Tapestry
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) h += 1f;
             float ax = Input.GetAxisRaw("Horizontal");
             if (Mathf.Abs(ax) > 0.35f) h += Mathf.Sign(ax);
-            jump |= Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.K) || Input.GetKey(KeyCode.UpArrow)
-                    || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.JoystickButton0);
+            bool jo = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.K) || Input.GetKey(KeyCode.JoystickButton0);
+            bool upk = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.GetAxisRaw("Vertical") > 0.6f;
+            jumpOnly |= jo; up |= upk;
+            jump |= jo || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
             run |= Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.J)
                    || Input.GetKey(KeyCode.JoystickButton2);
             down |= Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) || Input.GetAxisRaw("Vertical") < -0.6f;
@@ -115,7 +123,7 @@ namespace Tapestry
                 touchCount++;
                 TouchSeen = true;
                 var gp = new Vector2(t.position.x, Screen.height - t.position.y);
-                ApplyTouch(gp, ref h, ref jump, ref run, ref down, ref start);
+                ApplyTouch(gp, ref h, ref jump, ref jumpOnly, ref up, ref run, ref down, ref start);
                 if (t.phase == UnityEngine.TouchPhase.Began) TapPosition = gp;
             }
             if (Input.GetMouseButtonDown(0) && Input.touchCount == 0)
@@ -124,6 +132,7 @@ namespace Tapestry
 
             Horizontal = Mathf.Clamp(h, -1f, 1f);
             JumpPressed = jump && !prevJump; JumpHeld = jump; prevJump = jump;
+            JumpOnlyPressed = jumpOnly && !prevJumpOnly; prevJumpOnly = jumpOnly; UpHeld = up;
             // pushing the stick all the way runs, but only the button fires the crossbowe
             RunHeld = run || stickRun; RunPressed = run && !prevRun; prevRun = run;
             DownHeld = down; DownPressed = down && !prevDown; prevDown = down;
@@ -136,7 +145,7 @@ namespace Tapestry
             RightPressed = right && !prevRight; prevRight = right;
         }
 
-        static void ApplyTouch(Vector2 gui, ref float h, ref bool jump, ref bool run, ref bool down, ref bool start)
+        static void ApplyTouch(Vector2 gui, ref float h, ref bool jump, ref bool jumpOnly, ref bool up, ref bool run, ref bool down, ref bool start)
         {
             var d = gui - JoyCentre;
             if (!joyTaken && d.magnitude < JoyRadius * 1.9f)
@@ -149,9 +158,10 @@ namespace Tapestry
                 if (Mathf.Abs(nx) > 0.25f) h += Mathf.Sign(nx);
                 if (Mathf.Abs(nx) > 0.85f) stickRun = true;
                 if (ny > 0.6f && Mathf.Abs(nx) < 0.7f) down = true;
+                if (ny < -0.6f && Mathf.Abs(nx) < 0.7f) up = true;   // pushed up (the GUI's y grows downward): climb
                 return;
             }
-            if ((gui - JumpCentre).magnitude < JumpRadius * 1.15f) { jump = true; TouchJump = true; }
+            if ((gui - JumpCentre).magnitude < JumpRadius * 1.15f) { jump = true; jumpOnly = true; TouchJump = true; }
             if ((gui - RunCentre).magnitude < RunRadius * 1.15f) { run = true; TouchRun = true; }
             if ((gui - PauseCentre).magnitude < PauseRadius * 1.4f) start = true;
         }

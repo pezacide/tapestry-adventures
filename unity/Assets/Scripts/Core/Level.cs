@@ -28,6 +28,8 @@ namespace Tapestry
     ///              % basket of flowers (springs thee high)  9 organ pipe (rises and falls with the musick)  $ Ye Lyon and ye Unicorne
     ///              { lapdog  } fox  @ monkey (flings comfits)  ! parakeet
     ///              y huntsman (hurls spears)  q greyhound  p pheasant  I genet  0 ye fountaine  + ye unicorne's horne  6 Ye Spotted Unicorne
+    ///              / beanstalk brick (bump it: a vine grows up from it; climb the vine to a bonus heaven of bezants)  - vine tile (climbable)
+    ///              [ where the knight arrives in the bonus heaven  : ye way down from it (a hanging vine)
     ///              V vault stone (unbreakable)  L lift (glides sideways)  E lift (rises and falls)
     ///              ^ treetop (one-way)  | tree trunk (scenery)  T/t tower top/body (2 wide)  ~ sea  o bezant  P start  G goal pole
     ///              s snail-hound (red shell, kick)  S mossy snail-hound (green shell, carry & throw)  h killer hare  l fiery lion  d bayeux hound  c camel-dragon
@@ -45,6 +47,8 @@ namespace Tapestry
         public Vector2 Start = new Vector2(2.5f, 2f);
         public float GoalX = -1f;
         public readonly List<KeyValuePair<char, Vector2>> Spawns = new List<KeyValuePair<char, Vector2>>();
+        /// <summary>Where the level itself ends: the bonus heaven (if any) lies beyond it, and is not part of the level's length.</summary>
+        public int MainWidth { get; private set; }
 
         class Bump { public SpriteRenderer View; public float T; public Vector3 Home; }
 
@@ -70,7 +74,7 @@ namespace Tapestry
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
                         case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D': case ';': case '8': case '(': case ')': case '7': case '%':
-                        case ',': case '.':
+                        case ',': case '.': case '/': case '-':
                             tiles[x, y] = c; break;
                         case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
@@ -80,6 +84,8 @@ namespace Tapestry
                     }
                 }
             }
+            MainWidth = Width;
+            foreach (var sp in Spawns) if (sp.Key == '[') MainWidth = Mathf.Min(Width, Mathf.FloorToInt(sp.Value.x) - 3);
             ShuffleRewards();
             BuildViews();
             ShadePanes();
@@ -113,7 +119,7 @@ namespace Tapestry
                 {
                     if (prizes[i] != '1') continue;
                     int x = spots[i].x;
-                    if (x > Width * 0.68f) ok = false;                              // not near the end
+                    if (x > MainWidth * 0.68f) ok = false;                          // not near the end
                     foreach (int rx in relics) if (Mathf.Abs(x - rx) < 20) ok = false;   // nor beside the relique
                 }
                 if (ok) break;
@@ -138,7 +144,7 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': case ',': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': case ',': case '/': return true;
                 case '(': return MirrorState == 0;
                 case ')': return MirrorState == 1;
                 default: return false;
@@ -147,6 +153,20 @@ namespace Tapestry
 
         /// <summary>A hidden chalice block: no collision, no picture, until a knight bumps it from below.</summary>
         public bool Hidden(int x, int y) { return Get(x, y) == '.'; }
+
+        // ---- the beanstalk: a bumped '/' brick grows a vine of '-' tiles upward (one every 0.05 s) to the top row or the first solid tile
+        public bool Vine(int x, int y) { return Get(x, y) == '-'; }
+        /// <summary>The highest vine tile in column x (or -1).</summary>
+        public int VineTop(int x) { for (int y = Height - 1; y >= 0; y--) if (Get(x, y) == '-') return y; return -1; }
+        /// <summary>The lowest vine tile in column x (or -1).</summary>
+        public int VineBottom(int x) { for (int y = 0; y < Height; y++) if (Get(x, y) == '-') return y; return -1; }
+        int growX = -1, growY; float growT;
+        void GrowVine(int x, int y) { growX = x; growY = y; growT = 0f; }
+        void AddVineTile(int x, int y)
+        {
+            tiles[x, y] = '-';
+            views[Key(x, y)] = Art.Make("scenery/vine", root, new Vector2(x + 0.5f, y), 1);
+        }
 
         public bool Platform(int x, int y) { char c = Get(x, y); return c == '=' || c == '^'; }
         public bool Water(int x, int y) { return Get(x, y) == '~'; }
@@ -249,12 +269,13 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': key = Get(x, y + 1) == '#' ? skin.GroundFill : skin.GroundTop; break;
-                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': case '8': case ',': key = skin.Brick; break;   // item bricks look like any other brick
+                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': case '8': case ',': case '/': key = skin.Brick; break;   // item bricks look like any other brick
                         case 'X': key = "scenery/roundel_used"; break;
                         case '~': key = "scenery/sea"; break;
                         case '=': key = skin.Plank; dy = 1f - Art.Sheet(skin.Plank).FrameH / Art.DesignPerTile; break;
                         case '^': key = "scenery/canopy"; dy = 1f - 26f / Art.DesignPerTile; break;
                         case '|': key = "scenery/trunk"; break;
+                        case '-': key = "scenery/vine"; break;
                         case 'V': case 'F': key = skin.Vault; break;
                         case 'D': key = string.IsNullOrEmpty(skin.Gate) ? skin.Brick : skin.Gate; break;
                         case ';': key = "scenery/stream_foul"; break;
@@ -277,14 +298,14 @@ namespace Tapestry
                     }
                     if (key != null)
                     {
-                        views[Key(x, y)] = Art.Make(key, root, new Vector2(x + 0.5f, y + dy), c == '~' || c == ';' ? 6 : c == '*' ? 6 : c == '|' ? -6 : c == '^' ? 1 : 0, c == '*' ? (x + y) % 2 : 0);
+                        views[Key(x, y)] = Art.Make(key, root, new Vector2(x + 0.5f, y + dy), c == '~' || c == ';' ? 6 : c == '*' ? 6 : c == '|' ? -6 : c == '^' || c == '-' ? 1 : 0, c == '*' ? (x + y) % 2 : 0);
                         if (c == '*') fires.Add(views[Key(x, y)]);
                         if (c == '(' || c == ')') panes.Add(new KeyValuePair<char, SpriteRenderer>(c, views[Key(x, y)]));
                     }
                 }
         }
 
-        public enum BumpResult { None, Bezant, Bayard, Unicorn, Mirror, Chalice, Capon, Crossbow, Relic, Broke, Thud }
+        public enum BumpResult { None, Bezant, Bayard, Unicorn, Mirror, Vine, Chalice, Capon, Crossbow, Relic, Broke, Thud }
 
         /// <summary>A knight's head hit tile (x, y) from below.</summary>
         public BumpResult HitFromBelow(int x, int y, bool large)
@@ -333,6 +354,12 @@ namespace Tapestry
                         StartBump(nv);
                         return BumpResult.Chalice;
                     }
+                case '/':
+                    tiles[x, y] = 'X';   // the beanstalk brick is used up, and the vine climbs from the tile above it
+                    if (v != null) v.sprite = Art.Single("scenery/roundel_used");
+                    StartBump(v);
+                    GrowVine(x, y + 1);
+                    return BumpResult.Vine;
                 case '7': StartBump(v); return BumpResult.Mirror;
                 case 'B':
                     if (!large) { StartBump(v); return BumpResult.Thud; }   // a small knight can only bump a brick, not break it
@@ -356,6 +383,16 @@ namespace Tapestry
 
         public void Tick(float dt)
         {
+            if (growX >= 0)   // the vine climbs, a tile at a time, until it meets the sky or a solid tile
+            {
+                growT += dt;
+                while (growT >= 0.05f && growX >= 0)
+                {
+                    growT -= 0.05f;
+                    if (growY >= Height || Solid(growX, growY) || Get(growX, growY) != ' ') { growX = -1; break; }
+                    AddVineTile(growX, growY); growY++;
+                }
+            }
             fireT += dt;
             if (fireT > 0.16f)   // the flames flicker
             {

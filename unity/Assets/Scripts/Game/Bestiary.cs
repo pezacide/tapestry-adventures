@@ -42,6 +42,8 @@ namespace Tapestry
             { 'I', new Entry("enemies/genet", "Genette", "It pounceth in long lowe leapes.") },
             { '&', new Entry("enemies/locust", "Crowned Locustes", "They swarme after thee with men's faces. Stompe them.") },
             { ']', new Entry("princess/aelfgyva", "Ye Princesse Aelfgyva", "She is held behind ye Cat King's throne. Overthrowe him, and go to her!") },
+            { '/', new Entry("scenery/vine", "Beanstalk Brick", "Bumpe it from beneath and a vine groweth. Stande upon ye brick and presse UP to climbe it, to a heaven of bezantes. JUMPE leapeth off.") },
+            { ',', new Entry("scenery/masonry", "Brick of Manie Bezantes", "A brick like any other, but it payeth a bezant at every bumpe, for a few seconds. Bumpe it agayne and agayne.") },
             { '{', new Entry("enemies/lapdog", "Lappe-Dogge", "It yappeth and hoppeth at thee. Stompe it.") },
             { '}', new Entry("enemies/fox", "Foxe", "It darteth at thee when thy backe is turned. Face it, or stompe it.") },
             { '@', new Entry("enemies/monkey", "Monkeye", "It flingeth comfits in arcs. Stompe it.") },

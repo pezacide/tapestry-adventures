@@ -74,6 +74,7 @@ namespace Tapestry
             if (Petrified > 0f) Petrified -= dt;
             bool stone = Petrified > 0f;
             if (GameManager.I.Underwater) Swim(dt, lv, stone);
+            else if (UpdateClimb(dt, lv, stone)) { }   // hanging on a beanstalk: no running, no gravity
             else
             {
             float h = stone ? 0f : TapestryInput.Horizontal;
@@ -159,6 +160,62 @@ namespace Tapestry
             Body.W = StandW; Body.H = crouching ? CrouchHeight : StandH;
         }
 
+        // ---- the beanstalk: UP grabs a vine tile the knight overlaps; UP and DOWN climb, LEFT and RIGHT drift (leaving the vine's
+        // column lets go), and a JUMP press that is not the Up key leaps off. Reaching the top carries him up to the bonus heaven.
+        bool climbing, climbMoving; float vineCooldown, climbAnim;
+        public bool Climbing { get { return climbing; } }
+        public void EndClimb() { climbing = false; vineCooldown = 0.3f; }
+
+        bool OnVine(Level lv)
+        {
+            int vx = Mathf.FloorToInt(Body.Pos.x);
+            return lv.Vine(vx, Mathf.FloorToInt(Body.Pos.y + 0.1f)) || lv.Vine(vx, Mathf.FloorToInt(Body.Pos.y + Body.H * 0.5f));
+        }
+
+        /// <summary>Returns true while the knight is on a vine (and so has handled his own movement this frame).</summary>
+        bool UpdateClimb(float dt, Level lv, bool stone)
+        {
+            vineCooldown -= dt;
+            if (Mounted || lying) { climbing = false; return false; }
+            if (!climbing)
+            {
+                if (stone || vineCooldown > 0f || !TapestryInput.UpHeld || !OnVine(lv)) return false;
+                climbing = true;
+                if (crouching) { crouching = false; Body.H = StandH; }
+                Body.Vel = Vector2.zero; flutterTime = 0f;
+                Audio.Play("select", 0.4f);
+            }
+            if (stone || !OnVine(lv)) { climbing = false; flutterUsed = false; return false; }   // slipped off the vine's column (or turned to stone)
+
+            float h = TapestryInput.Horizontal;
+            float v = (TapestryInput.UpHeld ? 1f : 0f) - (TapestryInput.DownHeld ? 1f : 0f);
+            if (TapestryInput.JumpOnlyPressed)   // leap off, in whichever direction he leans
+            {
+                climbing = false; vineCooldown = 0.3f; flutterUsed = false;
+                Body.Vel = new Vector2(h * Def.Walk, Def.Jump * 0.85f);
+                if (h > 0.1f) view.Face(true); else if (h < -0.1f) view.Face(false);
+                Audio.Play("jump", 0.55f);
+                return false;
+            }
+            float centre = Mathf.Floor(Body.Pos.x) + 0.5f;
+            Body.Vel.x = Mathf.Abs(h) > 0.1f ? h * 2.2f : Mathf.Clamp((centre - Body.Pos.x) * 8f, -2f, 2f);   // hangs neatly in the middle
+            Body.Vel.y = v * 4f;
+            if (h > 0.1f) view.Face(true); else if (h < -0.1f) view.Face(false);
+            Body.Step(lv, dt);
+            climbMoving = Mathf.Abs(v) > 0.1f || Mathf.Abs(h) > 0.1f;
+            climbAnim += dt * (climbMoving ? 6f : 0f);
+
+            int top = lv.VineTop(Mathf.FloorToInt(Body.Pos.x));
+            if (v > 0f && top >= 0 && Body.Pos.y >= top - 1.0f)   // up through the top of the vine
+            {
+                climbing = false; vineCooldown = 0.3f;
+                GameManager.I.EnterBonus(Mathf.FloorToInt(Body.Pos.x));
+                return true;
+            }
+            if (v < 0f && Body.Grounded) { climbing = false; vineCooldown = 0.2f; }   // stepped off at the bottom
+            return true;
+        }
+
         float stroke;   // time since the last swimming stroke
         bool crouching; // ducking low (DOWNE held, or the stick pulled down)
         public bool Crouching { get { return crouching; } }
@@ -208,7 +265,8 @@ namespace Tapestry
         void Animate(float dt)
         {
             int frame;
-            if (crouching && !GameManager.I.Underwater) frame = 5;
+            if (climbing) frame = climbMoving ? 1 + ((int)climbAnim % 2) : 1;
+            else if (crouching && !GameManager.I.Underwater) frame = 5;
             else if (GameManager.I.Underwater && !Body.Grounded && !frozen) frame = stroke < 0.25f ? 1 : 3;   // a kick, then a glide
             else if (!Body.Grounded && !frozen) frame = 3;
             else if (Mathf.Abs(Body.Vel.x) < 0.3f) frame = 0;
@@ -256,7 +314,7 @@ namespace Tapestry
         public void Die(bool fell = false)
         {
             if (Dead) return;
-            Dead = true; if (crouching) { crouching = false; Body.H = StandH; }
+            Dead = true; climbing = false; if (crouching) { crouching = false; Body.H = StandH; }
             if (Mounted) { Mounted = false; view.SetSheet(Def.Sheet); }
             view.Renderer.enabled = true;
             RelicTime = 0f; ShowGlory(false); HasCrossbow = false; PlaceCrossbow();

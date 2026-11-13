@@ -223,6 +223,17 @@ def trunk():
     return s
 S["trunk"] = (48, 48, trunk, False)
 
+def vine():
+    """A beanstalk tile: a green stalk winding up through the tile (it meets itself at the top and bottom edges, so tiles
+    stack into one long vine) with broad leaves and a curling tendril."""
+    path = "M24,48 Q36,36 24,24 Q12,12 24,0"
+    s = stem(path, "green", 5.5, False) + stem(path, "dark", 0.8, False)
+    for d in ("M28,38 Q42,36 45,27 Q33,25 28,38 Z", "M20,14 Q7,12 4,4 Q16,3 20,14 Z", "M20,33 Q8,35 4,44 Q16,45 20,33 Z", "M28,12 Q40,10 44,2 Q33,2 28,12 Z"):
+        s += fill(d, "sage", 70, "dark", 1.1)
+    s += stem("M28,24 Q40,22 42,16 Q38,12 36,16", "green", 1.2, False)
+    return s
+S["vine"] = (48, 48, vine, False)
+
 def forest_tree(cols, scale=1.0, trunk_c="brown"):
     """A Bayeux tree in other colours, for the forest backdrops."""
     s = ""

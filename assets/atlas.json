@@ -1000,6 +1000,13 @@
       ],
       "file": "scenery/trunk.png"
     },
+    "vine": {
+      "size": [
+        48,
+        48
+      ],
+      "file": "scenery/vine.png"
+    },
     "health_empty": {
       "size": [
         240,

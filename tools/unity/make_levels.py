@@ -65,7 +65,7 @@ def gauntlet(m, underwater=False):
     """After every holy relique (R brick), a run of six beasts spaced over the next ~32 tiles: a knight who keeps
     running in the relique's nine seconds of glory can smite five in a row (the fifth gives a lyfe), but not idly.
     The beasts are drawn from the level's own bestiary."""
-    W, H = m.W, m.H
+    W, H = main_width(m), m.H
     present = [c for c in "".join("".join(r) for r in m.g)]
     pool = [c for c in dict.fromkeys(present) if c in (SWIMMERS + WALKERS if underwater else WALKERS + FLIERS)]
     if not pool: return
@@ -96,11 +96,32 @@ def gauntlet(m, underwater=False):
                 if below in STANDABLE and here == " " and all(m.g[y][xx] not in WALKERS + FLIERS + "CPGN" for xx in (x - 1, x + 1) if 0 <= xx < W):
                     m.put(x, y, kind); break
 
+def main_width(m):
+    """Where the level itself ends: a bonus heaven ('[' marks its start) lies beyond that, and does not count as the level's length."""
+    for x in range(m.W):
+        for y in range(m.H):
+            if m.g[y][x] == "[": return x - 3
+    return m.W
+
+def bonus_heaven(m, x0):
+    """A heaven of bezants, far to the right of the level and reached by climbing a beanstalk: a cloud floor, a stair of cloud
+    planks, and bezants everywhere. '[' (at x0) is where the knight arrives; ':' (at x0+40) is the hanging vine that leads down."""
+    m.row(x0 - 3, 1, "=" * 46)                              # the cloud floor
+    m.put(x0, 2, "[")
+    m.row(x0 + 3, 3, "ooooooo")
+    m.row(x0 + 11, 4, "====="); m.row(x0 + 11, 5, "ooooo")
+    m.row(x0 + 17, 6, "====="); m.row(x0 + 17, 7, "ooooo")
+    m.row(x0 + 23, 8, "====="); m.row(x0 + 23, 9, "ooooo")
+    m.row(x0 + 29, 6, "====="); m.row(x0 + 29, 7, "ooooo")
+    m.row(x0 + 34, 4, "==="); m.row(x0 + 34, 5, "ooo")
+    m.row(x0 + 36, 3, "oooo")
+    m.put(x0 + 40, 2, ":")
+
 def place_chalice(m):
     """Keep the golden chalice (the 1-up) away from the very end of a level: if it sits in the last third, move it to an
     open stretch of ground - in the first third when the relique is mid-level, or just past halfway when the relique
     comes early - so the chalice and the relique stay well apart. A plain brick is left where it was."""
-    W, H = m.W, m.H
+    W, H = main_width(m), m.H
     has_pole = any(m.g[y][x] == "G" for x in range(W) for y in range(H))
     if not has_pole: return
     chal = [(x, y) for x in range(W) for y in range(H) if m.g[y][x] == "1"]
@@ -156,7 +177,7 @@ def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=
     print(f"== {cls}: {title} - {name}"); print("\n".join(m.rows()))
 
 # ======================================================= 1-1  Ye Meadowe of Beastes
-m = Map()
+m = Map(262)                                                  # 200 tiles of level, then the bonus heaven far to the right
 m.ground(0, 29); m.ground(33, 69); m.ground(77, 139); m.ground(144, 199); m.water(70, 76)
 m.put(3, 2, "P")
 m.row(10, 5, "M"); m.row(14, 5, "B?BHB"); m.row(16, 8, "1")
@@ -172,6 +193,8 @@ m.put(88, 2, "c"); m.put(96, 7, "w")
 m.put(97, 2, "C"); m.row(100, 5, "B?B?BHB"); m.row(101, 8, "o o o")
 m.put(112, 2, "u"); m.put(117, 2, "S")
 m.row(119, 5, "B,B")                                         # a brick that pays many bezants: bump it again and again
+m.put(109, 4, "/")                                             # a beanstalk brick: bump it, climb the vine (UP) to a heaven of bezantes
+bonus_heaven(m, 216)
 m.tower(124, 3); m.put(124, 5, "O")
 m.row(130, 4, "BBBB"); m.put(132, 5, "k")
 m.row(140, 5, "==="); m.row(140, 7, "ooo")

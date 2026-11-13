@@ -146,12 +146,13 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
 
 ## What's in the game
 - **Knights:** all four, chosen on the title screen. Azura glides, Verdain begins every realme large, and Aurelia is fastest. The others begin small.
-- **Bricks:** every brick breaks when bumped from below. Some hide something; those give it up and leave a used block.
+- **Bricks:** every brick breaks when a **large** knight bumps it from below (a small knight only bumps it). Some hide something; those give it up and leave a used block.
   - a bezant (the coin)
   - **Bayard**, the horse (Mario's Yoshi)
   - a **Golden Chalice**: one more life (the 1-Up). It slides along, so chase it.
   - a **Roast Capon**: makes a **small** knight **large** (the mushroom). A knight who is already large gets a feast of glory (2000) instead. It also slides along.
   - a **Crossbowe**: RUN shoots bolts, at most two in the air at once (the fire flower). Bolts fell any beast, even the burning lion. A hit makes a large knight small and knocks the crossbowe away. A crossbowe block gives a **capon** to a small knight (as the fire flower is only a mushroom to a small Mario).
+  - a **Beanstalk** (a brick like any other, here and there): bump it and a **vine grows** up from it. Stand on the brick (or beside the vine, above it) and press **UP** to climb (W or the arrow keys, the d-pad or stick up, or push the touch joystick up). UP and DOWN climb, left and right drift off the vine, and a JUMP button (not the Up key) leaps off. At the top you are carried up to a **heaven of bezants**: a cloud floor, a stair of cloud planks and about thirty-five bezants. Walk to the hanging vine at the far end to come back down onto the beanstalk brick. The coins stay collected, so it cannot be farmed. Beasts below stay asleep while you are up there, and no pole, door or banner counts. (Level 1-1 has one, past the halfway banner.)
   - a **Holy Relique** (always found before the level's halfway banner): about nine seconds in which no beast can harm you and any beast you touch is smitten (the star). It bounces about. While it lasts, the knight flickers gold and white inside a spinning aura of golden rays; the flicker slows in the last two seconds.
 - **Bayard:**
   - Riding him makes you faster and lets you jump higher.

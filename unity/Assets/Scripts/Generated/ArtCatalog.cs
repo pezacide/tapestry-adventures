@@ -111,6 +111,7 @@ namespace Tapestry
             { "scenery/motte", new Sheet("Art/scenery/motte", 128f, 128f, 1, 0f, 15f, 128f, 128f) },
             { "scenery/canopy", new Sheet("Art/scenery/canopy", 48f, 26f, 1, 0f, 3f, 48f, 26f) },
             { "scenery/trunk", new Sheet("Art/scenery/trunk", 48f, 48f, 1, 15f, 0f, 33f, 48f) },
+            { "scenery/vine", new Sheet("Art/scenery/vine", 48f, 48f, 1, 3.5f, 0f, 45.5f, 48f) },
             { "scenery/health_empty", new Sheet("Art/scenery/health_empty", 240f, 30f, 1, 0.5f, 2.5f, 239.5f, 27.5f) },
             { "scenery/health_full", new Sheet("Art/scenery/health_full", 240f, 30f, 1, 0.5f, 2.5f, 239.5f, 27.5f) },
             { "scenery/aura", new Sheet("Art/scenery/aura", 128f, 152f, 1, 1.5f, 13.5f, 126.5f, 139f) },

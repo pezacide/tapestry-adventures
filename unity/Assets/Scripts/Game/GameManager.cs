@@ -37,6 +37,8 @@ namespace Tapestry
         // World 5: ye unicorne's horne and ye poysoned fountaine; and the hunt closing in (the chase)
         SpriteRenderer hornView, huntView; Vector2 hornPos, fountainPos; bool hasHorn, carryingHorn, hasFountain, purifiedSaved, toldFoul, toldFountain;
         float huntX, huntDelay; int hornCombo, pipeCount;
+        // the bonus heaven up a beanstalk (a stretch of the same map far to the right of the level)
+        bool hasBonus, inBonus, bonusToldOf; Vector2 bonusStart, bonusExit, bonusReturn; float bonusMinX, bonusMaxX;
         // World 7: falling stars, the four horsemen, and the Princesse (the finale)
         float starT, horsemanT; int horsemanNext;
         SpriteRenderer princessView; Vector2 princessPos; bool hasPrincess, rescuedPrincess;
@@ -228,8 +230,8 @@ namespace Tapestry
                 "Thy foes are strange beastes lifted from ye bestiaries and ye margins of olde manuscripts.",
 
                 (touch
-                    ? "Moove with ye joystick: push it to ye rim to runne, and pull it downe to crouche (or, when thou ridest, to dismounte). Ye large button leapeth (holde it to leape higher); ye small one runneth, and shooteth a crossbowe if thou bearest one."
-                    : "LEFTE and RYGHTE moove thee; holde RUNNE to runne, and it shooteth a crossbowe if thou bearest one. JUMPE leapeth (holde it to leape higher); DOWNE crouchethe (or dismounteth, when thou ridest). Crouche to duck spears and flung sweetes, or to creepe through a low passage.") + "\n\n" +
+                    ? "Moove with ye joystick: push it to ye rim to runne, pull it downe to crouche (or, when thou ridest, to dismounte), and push it up to climbe a beanstalk. Ye large button leapeth (holde it to leape higher); ye small one runneth, and shooteth a crossbowe if thou bearest one."
+                    : "LEFTE and RYGHTE moove thee; holde RUNNE to runne, and it shooteth a crossbowe if thou bearest one. JUMPE leapeth (holde it to leape higher); DOWNE crouchethe (or dismounteth, when thou ridest), and UPPE climbeth a beanstalk. Crouche to duck spears and flung sweetes, or to creepe through a low passage.") + "\n\n" +
                 "Thou begynnest small: one blow slayeth thee, and a small knyghte can but bumpe a brick, not breake it. A roaste capon maketh thee great, and a great knyght who is struck is but made small agayne. Stompe beastes from above; touche them from ye side and thou art hurte. Bumpe bricks from beneath (a great knyght breaketh them): some hide a bezant (a few give many, if thou bumpest them again and again), a capon (maketh thee great), a golden chalice (a lyfe; one is hidden in a block thou canst not see), a crossbowe (but a small knyghte findeth a capon there), a holy relique (nothing may harme thee for a whyle), or Bayard ye magic horse, whom thou mayst ryde.\n\n" +
                 "Touche a halfway banner and thou shalt ryse agayne there. Mind ye Tyme, for it runneth out.",
 
@@ -418,7 +420,7 @@ namespace Tapestry
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
-            hornView = huntView = null; pipeCount = 0; starT = 3f; horsemanT = 4f; horsemanNext = 0; princessView = null; hasPrincess = rescuedPrincess = false; pendingEnemies.Clear(); hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
+            hornView = huntView = null; pipeCount = 0; hasBonus = inBonus = false; bonusToldOf = false; starT = 3f; horsemanT = 4f; horsemanNext = 0; princessView = null; hasPrincess = rescuedPrincess = false; pendingEnemies.Clear(); hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -499,6 +501,8 @@ namespace Tapestry
                     case ']': hasPrincess = true; princessPos = p; princessView = Art.Make("princess/aelfgyva", world, p, 9); princessView.flipX = true; break;
                     case '9': lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), Lift.Kind.OrganPipe, world, pipeCount++ % 3)); break;
                     case '6': boss = new SpottedUnicorn(p, world); break;
+                    case '[': hasBonus = true; bonusStart = p; break;
+                    case ':': bonusExit = p; Art.Make("scenery/vine", world, new Vector2(p.x, p.y + 1f), 2); Art.Make("scenery/vine", world, p, 2); break;   // a hanging vine: the way down
                     case '0': hasFountain = true; fountainPos = p; Art.Make("scenery/fountain", world, p, -4); break;
                     case '+':
                         if (hasCheckpoint && checkpointClaimed && purifiedSaved) break;   // the waters were already made pure
@@ -506,6 +510,7 @@ namespace Tapestry
                 }
                 if (kind != null) enemies.Add(new Enemy(kind, p, world));
             }
+            if (hasBonus) { bonusMinX = bonusStart.x - 3f; bonusMaxX = Mathf.Min(level.Width, bonusExit.x + 4f); if (bonusExit.x <= bonusStart.x) hasBonus = false; }
             var start = hasCheckpoint && checkpointClaimed ? checkpointPos : level.Start;
             if (hasCheckpoint && checkpointClaimed && purifiedSaved) level.Purify();
             if (L.Chase) { huntX = start.x - 14f; huntDelay = 2.5f; huntView = Art.Make("scenery/hunt_line", world, new Vector2(huntX, 2f), 15); }
@@ -520,7 +525,33 @@ namespace Tapestry
             PlaceCamera();
         }
 
-        float ClampCam(float x) { return Mathf.Clamp(x, HalfWidth, Mathf.Max(HalfWidth, level.Width - HalfWidth)); }
+        float ClampCam(float x)
+        {
+            float lo = HalfWidth, hi = Mathf.Max(HalfWidth, (hasBonus ? bonusMinX : level.Width) - HalfWidth);   // the level ends where the heaven begins
+            if (inBonus) { lo = bonusMinX + HalfWidth; hi = Mathf.Max(lo, bonusMaxX - HalfWidth); }
+            return Mathf.Clamp(x, lo, hi);
+        }
+
+        /// <summary>The knight has climbed to the top of a beanstalk: up to the heaven of bezants.</summary>
+        public void EnterBonus(int vineX)
+        {
+            if (!hasBonus || inBonus) return;
+            int b = level.VineBottom(vineX);
+            bonusReturn = new Vector2(vineX + 0.5f, b >= 0 ? b : player.Body.Pos.y);   // back down to the top of the beanstalk brick
+            inBonus = true;
+            player.Body.Pos = bonusStart; player.Body.Vel = Vector2.zero;
+            camX = ClampCam(bonusStart.x + 4f); PlaceCamera();
+            Audio.Play("powerup");
+            if (!bonusToldOf) { bonusToldOf = true; Toast("Ye heaven of bezantes! Gather alle thou canst, then ryde ye vine downe."); }
+        }
+
+        void ExitBonus()
+        {
+            inBonus = false;
+            player.Body.Pos = bonusReturn; player.Body.Vel = Vector2.zero;
+            camX = ClampCam(bonusReturn.x + 4f); PlaceCamera();
+            Audio.Play("item_appear");
+        }
 
         void PlaceCamera()
         {
@@ -987,6 +1018,18 @@ namespace Tapestry
                 Audio.Play("kick");
             }
 
+            // the bonus heaven: held within its own stretch of the map, and nothing there counts as progress through the level
+            if (hasBonus)
+            {
+                if (inBonus)
+                {
+                    pb.Pos.x = Mathf.Clamp(pb.Pos.x, bonusMinX + pb.W * 0.5f, bonusMaxX - pb.W * 0.5f);
+                    if (Mathf.Abs(pb.Pos.x - bonusExit.x) < 1.0f && Mathf.Abs(pb.Pos.y - bonusExit.y) < 3f) ExitBonus();
+                }
+                else if (pb.Right > bonusMinX) { pb.Pos.x = bonusMinX - pb.W * 0.5f; if (pb.Vel.x > 0f) pb.Vel.x = 0f; }
+            }
+            if (inBonus) return;
+
             // the finale: the Princesse, behind the Cat King's throne
             if (hasPrincess && !rescuedPrincess && pb.Pos.x >= princessPos.x - 1.4f && (boss == null || boss.Dead))
             {
@@ -1067,7 +1110,7 @@ namespace Tapestry
         void TickEntities(float dt)
         {
             Cleanup();
-            float wake = camX + HalfWidth + 2f;
+            float wake = (inBonus ? bonusReturn.x : camX) + HalfWidth + 2f;   // up in heaven nothing below wakes
             if (boss != null)
             {
                 if (!boss.Active && boss.Body.Pos.x < wake - 2f)
@@ -1175,6 +1218,7 @@ namespace Tapestry
                     if (!player.Mounted && bayard == null) { bayard = new Bayard(top, world); bayard.Hop(); }
                     else { bezants.Add(new Bezant(top, world, true)); AddBezant(); }
                     break;
+                case Level.BumpResult.Vine: Toast("A beanstalk! Presse UP to climbe it."); break;
                 case Level.BumpResult.Mirror:
                     level.FlipMirrors(); Audio.Play("mirror");
                     UnstickFromPanes(player.Body);
