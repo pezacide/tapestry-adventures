@@ -538,7 +538,7 @@ If 39 levels feels too few for the main route and the ideas above are too good t
 
 This pass covers the wiki's individual pages for Worlds 3 to 8: every numbered level, the fortresses, the airships, the World 8 special levels, and the Koopaling and Bowser fights. Each row below is a **specific SMB3 level** and what we could take from it. They are menus of ideas, not a commitment to build all of them.
 
-**Pages I still could not read:** the World 5 tower (the wiki's page for it is a list pointing to several games). Bowser's own page is about 614,000 characters, and the first 300,000 held no description of the SMB3 fight, only background (he introduced the Koopalings; his first theme, "King of the Koopas"). The fight description comes from the Castle of Koopa page. The Koopaling pages only gave me their first 100,000 characters, so boss details are what those first sections said. 5-9, 6-10, the second Piranha Plant level and the first World 5 fortress were read from the links you sent and are included below.
+**The World 5 tower** is covered in the Act V table below (read from the link you sent). **Pages I still could not read:** none of the level pages. Bowser's own page is about 614,000 characters, and the first 300,000 held no description of the SMB3 fight, only background (he introduced the Koopalings; his first theme, "King of the Koopas"). The fight description comes from the Castle of Koopa page. The Koopaling pages only gave me their first 100,000 characters, so boss details are what those first sections said. 5-9, 6-10, the second Piranha Plant level and the first World 5 fortress were read from the links you sent and are included below.
 
 #### Act II, Crete (SMB3 World 3)
 
@@ -593,6 +593,7 @@ This pass covers the wiki's individual pages for Worlds 3 to 8: every numbered l
 
 | SMB3 level | What it does | Our scene idea |
 |---|---|---|
+| **Tower** | The **bridge from ground to sky**: a stack of small rooms and one outdoor stretch; **Roto-Discs, Thwomps, Spike Traps**; **Pile Driver Micro-Goombas disguised as bricks**; a brick that gives a **1-Up when tail-hit**; an empty room with **hanging lamps**; a **vine from three ? Blocks** to a cloud and the exit pipe; **falling off the side drops you back to the sky map**; the exit pipe means you must redo it; completing it unlocks the sky; difficulty 4/10 | **Pelion upon Ossa** (see Act V table above): rooms stacked inside a **pile of mountains**, a **stone-lamp room**, **Mudbrick Mimics** in the outdoor stretch, a **laurel-sprig strike** that releases a comedy mask from a brick, a **grapevine** from three amphora blocks to the first cloud; **falling off sends you back to the clouds** and you must redo it |
 | **5-1** | A **block mountain** where **Chain Chomps bite from below**; flight reaches a Music Box chest | A cloud mountain where **Cerberus's pups bite from below**; flight to the **Lyre** |
 | **5-2** | You **fall down a pipe** and **must stay still to land on a note block**; two routes, the secret one leads to a **three-1-Up room** | **Fall from Olympus**: stand still on the aulos block; a secret route to a Muse Shrine |
 | **5-3** | The only level with **Kuribo's Shoe**; the shoe lets you **stomp Munchers** | A **Giant Sandal** scene across a thistle field |
