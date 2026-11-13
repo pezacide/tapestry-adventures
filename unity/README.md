@@ -171,6 +171,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
 - **Bells at the pole:** when a level ends, the last figure of your Tyme count decides the bells: 1, 3 or 6 ring (1, 3 or 6 bells) as the knight walks into the castle, each worth 500 glory. Others ring none.
 - **Smythes:** hammer-throwing smiths (Worlds 4 and up; always in pairs). They walk a short beat, hop, and hurl hammers in arcs. Stomp or shoot them.
 - **Leaping Embers:** in castles, a spark leaps out of the middle of every fire pit three or more tiles wide, then falls back in. It cannot be stomped or shot, and burns a knight who touches it.
+- **Bombards:** an iron cannon on a wooden carriage that turns to face you and, when you are within nine tiles, fires a slow iron ball straight along the ground every few seconds. Leap the ball; land on the barrel and you just bounce. Bolts do not harm it, but the holy relique smites it. Three in Level 5-1.
 - **Falling and balance lifts:** a reddish board shudders when you stand on it, then drops away (and is hung again a few seconds later). Balance boards come in pairs: your weight lowers one and raises the other, so hop across as it sinks. Both are in Level 4-3.
 - **Winged Snail-Hound:** a blue snail-hound that flies a lazy loop. Stomp it once to clip its wings (it drops and walks), then stomp it into its shell as usual. Two in Level 4-1.
 - **Armoured Snail-Hound:** a grey, spiked snail that plods along. Stomping it hurts the knight; shoot it or smite it with the relique. Three in Level 4-1.

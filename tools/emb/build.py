@@ -59,7 +59,7 @@ for n, bb in bosses.B.items():
 
 for n, c in creatures.C.items():
     w, h = c["size"]
-    cat = "bosses" if n.endswith("_boss") else "projectiles" if n in ("fireball", "soup_glob", "comfit", "star", "hammer") else "enemies"
+    cat = "bosses" if n.endswith("_boss") else "projectiles" if n in ("fireball", "soup_glob", "comfit", "star", "hammer", "cannonball") else "enemies"
     sheets[f"{cat}/{n}"] = [job(creatures.build_svg(n, f), f"{n}_{f}", w, h) for f in range(c["frames"])]
     atlas[cat][n] = dict(title=c["title"], behaviour=c["behaviour"], frame=[w, h], frame_count=c["frames"], file=f"{cat}/{n}.png")
 

@@ -35,6 +35,7 @@ namespace Tapestry
             { 'j', new Entry("enemies/boar", "Wilde Boare", "It chargeth when it seeth thee. Leape it, then stompe it.") },
             { 'þ', new Entry("enemies/snail_spike", "Armoured Snaile", "Its spikes bite a stomper. Shoote it, or leape over.") },
             { 'ƒ', new Entry("enemies/snail_wing", "Winged Snaile-Hounde", "Stompe it once to clippe its wings, agayne to hyde it.") },
+            { 'ȼ', new Entry("enemies/bombard", "Bombarde", "It sendeth a slow iron ball. Leape it, or stande upon ye barrel.") },
             { 'i', new Entry("enemies/otter", "Otter", "It leapeth from ye river as thou passest.") },
             { 'n', new Entry("enemies/swan", "Swanne", "It chargeth along ye water. Stompe it.") },
             { 'a', new Entry("enemies/falcon", "Falcon", "It wheeleth high, then stoopeth on thee.") },

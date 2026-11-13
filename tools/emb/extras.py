@@ -158,3 +158,22 @@ def snail_wing(f):
     return s
 C["snail_wing"] = dict(title="Winged Snail-Hound", size=(64, 64), frames=5, build=snail_wing,
                        behaviour="flies in a lazy loop; a stomp knocks its wings off and it walks, then hides in its shell like any snail-hound")
+
+# ---------------------------------------------------------------- the bombard (a cannon) and its ball
+def bombard(f):
+    """A bombard on a wooden carriage, muzzle to the left: 0 waiting, 1 firing (smoke at the muzzle)."""
+    s = woven("M14,38 L58,38 L62,50 L10,50 Z", "brown", "dark", 1.4)                                   # the carriage
+    for x in (22, 50): s += dot(x, 50, 8, "brown", "dark") + dot(x, 50, 2.4, "gold", "dark")           # wheels
+    s += fill("M4,18 L50,14 Q60,18 60,30 Q58,40 48,40 L4,36 Z", "grey", 90, "dark", 1.6)               # the barrel
+    s += stem("M4,18 L4,36", "dark", 3, False) + stem("M22,16 L22,38 M36,15 L36,39", "dark", 1.6, False)
+    s += dot(58, 24, 3, "dark")
+    if f == 1:
+        s += dot(0, 27, 5, "cream", "grey") + dot(-4, 20, 4, "white", "grey") + dot(-3, 33, 4, "white", "grey")
+    return g(s, "translate(4 6)")
+C["bombard"] = dict(title="Bombarde", size=(72, 64), frames=2, build=bombard,
+                    behaviour="stands fast and fires a slow iron ball along the ground at a knight in range; stomping its barrel only bounces you; the relique smites it")
+
+def cannonball(f):
+    s = dot(10, 10, 9, "dark", "grey") + dot(7, 7, 2.6, "cream")
+    return s
+C["cannonball"] = dict(title="Cannonball", size=(22, 22), frames=1, build=cannonball, behaviour="rolls on in a straight line until it strikes a wall")

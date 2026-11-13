@@ -601,6 +601,7 @@ m.row(96, 4, "=====")
 m.put(104, 2, "C"); m.put(110, 2, "y"); m.put(120, 2, "p"); m.row(124, 5, "?B?"); m.put(130, 2, "q")
 m.row(146, 4, "====")
 m.put(155, 2, "p"); m.row(159, 5, "B1B"); m.put(163, 2, "y")
+m.put(66, 2, "ȼ"); m.put(114, 2, "ȼ"); m.put(152, 2, "ȼ")      # bombards
 m.put(38, 2, "ø"); m.put(93, 2, "ø"); m.put(140, 2, "ø")      # urns, each with a biting plant
 m.stairs(168, 6)
 m.put(180, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe

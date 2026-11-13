@@ -50,6 +50,7 @@ namespace Tapestry
                 case "lapdog": speed = 2.6f; break;
                 case "smith": speed = 1.4f; break;
                 case "snail_spike": speed = 1.0f; break;
+                case "bombard": speed = 0f; timer = 1f; break;
                 case "snail_wing": speed = 1.1f; gravity = false; winged = true; break;
                 case "urn_plant": gravity = false; break;
                 case "ember": gravity = false; timer = (pos.x * 0.37f) % 2f; break;
@@ -111,6 +112,18 @@ namespace Tapestry
             float dx = ToPlayer(p);
             switch (Kind)
             {
+                case "bombard":   // stands fast, faces the knight, and fires a slow iron ball along the ground when he is in range
+                    view.Face(dx > 0f);
+                    if (timer > 0.3f) view.SetFrame(0);
+                    if (timer > 2.8f && Mathf.Abs(dx) < 9f && Mathf.Abs(dx) > 1.2f)
+                    {
+                        timer = 0f; view.SetFrame(1);
+                        float sd = Mathf.Sign(dx);
+                        GameManager.I.SpawnShot("cannonball", Body.Pos + new Vector2(sd * 1.0f, 0.55f), new Vector2(sd * 4.5f, 0f));
+                        Audio.Play("kick", 0.6f);
+                    }
+                    break;
+
                 case "snail_wing":
                     if (winged)   // a lazy loop in the air, wings beating
                     {
@@ -550,6 +563,7 @@ namespace Tapestry
         public bool OnKnight(Knight k, bool fromAbove)
         {
             if (!Alive || k.Dead) return false;
+            if (Kind == "bombard") { if (fromAbove) k.Bounce(); else k.Hurt(); return false; }   // a firm iron thing: land on it and bounce off
             if (winged)   // a stomp clips its wings: it drops and walks
             {
                 if (!fromAbove) { k.Hurt(); return false; }

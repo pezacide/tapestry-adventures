@@ -678,6 +678,16 @@
       ],
       "frame_count": 5,
       "file": "enemies/snail_wing.png"
+    },
+    "bombard": {
+      "title": "Bombarde",
+      "behaviour": "stands fast and fires a slow iron ball along the ground at a knight in range; stomping its barrel only bounces you; the relique smites it",
+      "frame": [
+        72,
+        64
+      ],
+      "frame_count": 2,
+      "file": "enemies/bombard.png"
     }
   },
   "bosses": {
@@ -872,6 +882,16 @@
       ],
       "frame_count": 1,
       "file": "projectiles/hammer.png"
+    },
+    "cannonball": {
+      "title": "Cannonball",
+      "behaviour": "rolls on in a straight line until it strikes a wall",
+      "frame": [
+        22,
+        22
+      ],
+      "frame_count": 1,
+      "file": "projectiles/cannonball.png"
     }
   },
   "items": {
