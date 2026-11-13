@@ -184,9 +184,12 @@ Three plinths show an animal, a person and a bird. Stand on the person plinth an
 
 ---
 
-## 6. Still to draw
+## 6. Acts II to VIII
 
-- The maps for **Acts II to VIII** (one Great Floor panel each) and sketches of their scenes.
+The maps and scene sketches for the other seven Acts are in [`LEVEL_MAPS_ACTS_II-VIII.md`](LEVEL_MAPS_ACTS_II-VIII.md).
+
+## 7. Still to draw
+
 - A mock-up of the **in-level HUD** (masks, tesserae count, the winged meter, the Capsa button) at phone size.
 - A mock-up of the **Muse Shrine** and **Vase Match** screens.
 - A **Zodiac Room** map for the Star Chart warp.
