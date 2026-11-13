@@ -191,5 +191,5 @@ The maps and scene sketches for the other seven Acts are in [`LEVEL_MAPS_ACTS_II
 ## 7. Still to draw
 
 - (Done: the in-level HUD is in [`HUD.md`](HUD.md).)
-- A mock-up of the **Muse Shrine** and **Vase Match** screens.
+- (Done: the Muse Shrine and Capsa screens are in [`SHRINES.md`](SHRINES.md).) The **Vase Match** screen is still to draw.
 - A **Zodiac Room** map for the Star Chart warp.

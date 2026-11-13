@@ -72,9 +72,12 @@ Resume · Restart from the last brazier · Quit to the map · Controls (move, re
 - **Gamepad and keyboard** (PC): the on-screen controls are hidden, the HUD stays, and button prompts show the controller's glyphs.
 - **Audio cues** for the meter filling and for a pip being lost.
 
-## 6. Decisions to confirm
+## 6. Decisions (confirmed)
 
-1. **Boss mask pips**: three small pips under the scene tag. Recommended: yes.
-2. **Reserve slot** named the **Niche** (distinct from the Capsa). Recommended: yes.
-3. **Tessera count shown as a three-digit number** next to a small gold tile, with no score counter at all. Recommended: yes (SMB3's score does not matter on a phone).
-4. **Run by full stick push** rather than a run button. Recommended: yes; it keeps the controls to two buttons.
+All four were accepted:
+1. **Boss mask pips**: three small pips under the scene tag.
+2. **Reserve slot** named the **Niche** (distinct from the Capsa).
+3. **Tessera count shown as a three-digit number** next to a small gold tile, with no score counter at all.
+4. **Run by full stick push** rather than a run button.
+
+The Capsa and the Muse Shrine screens are in [`SHRINES.md`](SHRINES.md).
