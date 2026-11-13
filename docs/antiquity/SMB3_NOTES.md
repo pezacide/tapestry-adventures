@@ -46,7 +46,7 @@ Added after reading the Super Mario Wiki's page on SMB3. Each is mapped to our s
 - **Tank levels, Battleships and Hand Traps** (SMB3's world 8): our Act VIII fleet scene (VIII-3) can use *tank* analogues (siege towers and war elephants as moving platforms) and a **hand-trap** room (statues' stone hands that grab at you) before the lair.
 - **Towers** (SMB3 has a tower in some worlds): Act V's Atlas climb is ours.
 - **Coin Ship and bonus courses:** a **treasure ship** that appears on the map for a one-screen bonus, and a **Diogenes pithos** as a bonus-room door.
-- **Warp Zone:** Urania's Star Chart takes you to a **Zodiac Room** of nodes labelled with constellations, one per Act (and one deliberately blank).
+- **Warp Zone:** Urania's Star Chart takes you to a **Star Room** of nodes labelled with constellations, one per Act (and one deliberately blank).
 - **Map items beyond the suits:** SMB3's **hammer** (breaks map boulders and reveals shortcuts) becomes the **Chisel** item for the map; **Jugem's Cloud** (skips a level) becomes **Nephele's cloud**; the **Anchor** (stops an airship from leaving) becomes the **Sea Anchor** that keeps a Satyr's boat from fleeing.
 
 **Rules and feel:**

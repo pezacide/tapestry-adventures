@@ -69,7 +69,7 @@ The eight Acts are islands (panels) on one big floor. Each Act's panel has its o
 Notes:
 - **Start** is the Nile at the bottom left; the path winds up through Crete and Heroes' Vases to the sky, then down to Rome, Etruria and Byzantium, and finally into the centre.
 - **Cracks** begin in the centre (the Hoard) and spread; each recovered emblema mends the part of the floor nearest its Act.
-- The **Star Chart** warp (Urania) jumps between these panels via the **Zodiac Room** (one constellation per Act).
+- The **Star Chart** warp (Urania) jumps between these panels via the **Star Room** (one constellation per Act).
 - Act V's panel is drawn **above** the floor, on clouds, with the ground map showing through below it.
 
 ## 5. Act I scenes
@@ -192,4 +192,4 @@ The maps and scene sketches for the other seven Acts are in [`LEVEL_MAPS_ACTS_II
 
 - (Done: the in-level HUD is in [`HUD.md`](HUD.md).)
 - (Done: the Muse Shrine and Capsa screens are in [`SHRINES.md`](SHRINES.md).) The Vase Match screen is in `SHRINES.md` section 4 as well.
-- A **Zodiac Room** map for the Star Chart warp.
+- (Done: the Star Room warp map is in [`SHRINES.md`](SHRINES.md) section 5.)

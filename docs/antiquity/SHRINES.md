@@ -101,12 +101,43 @@ Thalia's shrine runs **Vase Match**, SMB3's card-matching game with vases: 18 fa
 - **Audio:** a lyre pluck on each flip, a tessera clink on a match, an aulos sting on a win.
 - The patience number, the miss rate and the prize rungs are **tuning values** to set in playtesting.
 
-## 5. Still to draw
+## 5. The Star Room (warp map)
 
-- The **Zodiac Room** (the Star Chart warp map).
+![The Star Room](mockups/star_room_states.png)
+
+**Urania's Star Chart** is the Muse item that works like SMB3's Warp Whistle: it takes you to a screen where you pick an Act to warp to. SMB3's whistle lists destinations in a Warp Zone for Worlds 2 to 8, with one slot marked as none. Ours is a night sky of constellations, one per Act and one deliberately blank. (I have renamed it the **Star Room**: "Zodiac" strictly means the twelve constellations along the sun's path, and only Taurus is one of them.)
+
+**Left: the full game** (Act V selected, with the warp card). **Right: the free version** (only Act I is open; tapping a locked Act shows an unlock prompt).
+
+| Act | Constellation | Why |
+|---|---|---|
+| I | **Sirius** (Canis Major), the Nile star | the Egyptians watched Sirius (Sopdet) rise to announce the Nile's flood |
+| II | **Taurus**, the bull | Zeus took the shape of a bull to carry Europa to Crete |
+| III | **Hercules** | the hero of the vases |
+| IV | **Aquila**, the eagle | the eagle of the Roman legions (and of Jupiter) |
+| V | **Pegasus** | the winged horse, who carries platforms in Act V |
+| VI | **Orion**, the hunter | the Tarquinian hunting scenes |
+| VII | **Corona Borealis**, the crown | the crown of the emperors (and of Ariadne, from Act II) |
+| VIII | **(blank)**: the sky has been swept clean | the Vandal's work; the stars return when you win |
+
+**How it works**
+1. In the Capsa, **USE** the Star Chart. It is a map item, spent on use.
+2. The screen fades to night and the constellations twinkle into place along a faint curved road (the sun's path). A **YOU ARE HERE** marker sits on your current Act.
+3. **Tap a constellation:** a card at the bottom names it and its Act. **WARP** sends a shooting star to that Act's start node on the Great Floor, and **BACK** closes the screen without spending the Chart.
+4. **Gold** means a visited Act, **white** means an open one you have not visited, and a **padlock** (free version) means locked. The **blank ring** is Act VIII, which is dark until Act VII is cleared; then its constellation (the Sweeper's broom) lights.
+5. You may warp **forward** (skipping ahead, as SMB3 does) or **backward** to any Act you own, so the Chart also serves as a way to revisit old Acts.
+
+**Where Charts come from:** a Chart is **hidden in Act I** (scene 2, behind the crouch-panel, and a second copy in the fortress) and is a gift from **Urania's shrine** in Act VIII. Charts stack to 9 in the Capsa.
+
+**Free version:** only Act I is open; the other constellations show padlocks and tapping one shows "The rest of the play is one purchase" with an **UNLOCK** button (the purchase is described in `DESIGN.md` section 15). There is no other nag.
+
+**Accessibility:** every constellation is a **distinct shape**, not only a colour; the state is also shown by a marker (arrow, ring, padlock); labels are written out; and tapping a name works as well as tapping the stars.
+
+## 6. Still to draw
+
 - Screens for **pause**, **settings** and the **Gallery**.
 
-## 6. Decisions to confirm
+## 7. Decisions to confirm
 
 1. **Visible choices, not hidden chests.** The three gifts are shown and you choose one. Recommended: yes.
 2. **One gift per shrine**, with a free tip on revisits. Recommended: yes.
@@ -116,3 +147,6 @@ Thalia's shrine runs **Vase Match**, SMB3's card-matching game with vases: 18 fa
 6. **Vase Match: 8 patience masks**, cumulative prizes at 3, 5, 7 and 9 pairs, and a 2-second peek at the start. Recommended: yes (to be tuned in playtests).
 7. **One prized round per shrine**, with prize-free replays. Recommended: yes.
 8. **A relaxed mode** with unlimited patience. Recommended: yes.
+9. **Rename the Zodiac Room to the Star Room**, since most of the constellations are not zodiac signs. Recommended: yes.
+10. **Forward and backward warps allowed** with a spent Star Chart, as in SMB3. Recommended: yes.
+11. **Act VIII's constellation is blank until Act VII is cleared.** Recommended: yes.
