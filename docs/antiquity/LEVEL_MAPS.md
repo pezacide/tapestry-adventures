@@ -190,6 +190,6 @@ The maps and scene sketches for the other seven Acts are in [`LEVEL_MAPS_ACTS_II
 
 ## 7. Still to draw
 
-- A mock-up of the **in-level HUD** (masks, tesserae count, the winged meter, the Capsa button) at phone size.
+- (Done: the in-level HUD is in [`HUD.md`](HUD.md).)
 - A mock-up of the **Muse Shrine** and **Vase Match** screens.
 - A **Zodiac Room** map for the Star Chart warp.

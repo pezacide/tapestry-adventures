@@ -4,7 +4,7 @@
 
 Status: **planning only**. Nothing here is built. This is part 3 of a series. It lives in `docs/antiquity/` until we decide where it goes (decision 9, section 18), alongside `docs/painters/DESIGN.md` (part 2) and the tapestry game in the rest of this repo (part 1).
 
-**Contents:** [0 Names](#0-names) · [1 Pitch](#1-pitch) · [2 The series](#2-the-series) · [3 Pillars](#3-pillars) · [4 SMB3 mapping](#4-what-we-keep-from-smb3-and-what-we-change) · [5 Artists](#5-the-four-artists-playable) · [6 Suits and items](#6-suits-and-items) · [7 Enemies](#7-enemies) · [8 The Great Floor](#8-the-great-floor-the-map) · [9 Acts and levels](#9-worlds-acts-and-levels) · [10 Vandal and ending](#10-the-great-vandal-and-the-ending) · [11 Art direction](#11-art-direction) · [12 Audio](#12-audio) · [13 Tech](#13-tech-notes) · [14 Legal](#14-legal-and-sourcing) · [15 Platforms](#15-platforms-and-business) · [16 Roadmap](#16-roadmap-order-not-dates) · [17 Stretch](#17-stretch-ideas-and-alternatives) · [18 Decisions](#18-decisions). Research notes: [SMB3_NOTES.md](SMB3_NOTES.md). Mock-ups and Act I maps: [LEVEL_MAPS.md](LEVEL_MAPS.md). Acts II to VIII: [LEVEL_MAPS_ACTS_II-VIII.md](LEVEL_MAPS_ACTS_II-VIII.md).
+**Contents:** [0 Names](#0-names) · [1 Pitch](#1-pitch) · [2 The series](#2-the-series) · [3 Pillars](#3-pillars) · [4 SMB3 mapping](#4-what-we-keep-from-smb3-and-what-we-change) · [5 Artists](#5-the-four-artists-playable) · [6 Suits and items](#6-suits-and-items) · [7 Enemies](#7-enemies) · [8 The Great Floor](#8-the-great-floor-the-map) · [9 Acts and levels](#9-worlds-acts-and-levels) · [10 Vandal and ending](#10-the-great-vandal-and-the-ending) · [11 Art direction](#11-art-direction) · [12 Audio](#12-audio) · [13 Tech](#13-tech-notes) · [14 Legal](#14-legal-and-sourcing) · [15 Platforms](#15-platforms-and-business) · [16 Roadmap](#16-roadmap-order-not-dates) · [17 Stretch](#17-stretch-ideas-and-alternatives) · [18 Decisions](#18-decisions). Research notes: [SMB3_NOTES.md](SMB3_NOTES.md). Mock-ups and Act I maps: [LEVEL_MAPS.md](LEVEL_MAPS.md). Acts II to VIII: [LEVEL_MAPS_ACTS_II-VIII.md](LEVEL_MAPS_ACTS_II-VIII.md). HUD and controls: [HUD.md](HUD.md).
 
 ---
 
@@ -502,6 +502,7 @@ Same plan as parts 1 and 2 (see `docs/painters/DESIGN.md`, section 16):
 - **Phone first** (iOS and Android), then **PC on Steam** (and Steam Deck), then consoles if it earns it. Engine: Unity.
 - **Business model: first Act free (the Nile), one unlock purchase** for the rest, no ads, as in the other two games.
 - **Phone-first design consequences:** a stick (full push = run) plus **Jump** and **Action**; levels of **3 to 5 minutes** with braziers as checkpoints; see-through controls; and gamepad and keyboard layouts planned from the start.
+- **HUD and controls:** see [`HUD.md`](HUD.md) for the phone-size layout, button sizes, states and options.
 - **SMB3-specific phone worries:** flight (tap Jump repeatedly) must be forgiving, and the 28-slot Capsa must be easy to scroll with a thumb. Playtest both early.
 
 ## 16. Roadmap (order, not dates)
