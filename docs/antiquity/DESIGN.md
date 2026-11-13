@@ -4,7 +4,7 @@
 
 Status: **planning only**. Nothing here is built. This is part 3 of a series. It lives in `docs/antiquity/` until we decide where it goes (decision 9, section 18), alongside `docs/painters/DESIGN.md` (part 2) and the tapestry game in the rest of this repo (part 1).
 
-**Contents:** [0 Names](#0-names) · [1 Pitch](#1-pitch) · [2 The series](#2-the-series) · [3 Pillars](#3-pillars) · [4 SMB3 mapping](#4-what-we-keep-from-smb3-and-what-we-change) · [5 Artists](#5-the-four-artists-playable) · [6 Suits and items](#6-suits-and-items) · [7 Enemies](#7-enemies) · [8 The Great Floor](#8-the-great-floor-the-map) · [9 Acts and levels](#9-worlds-acts-and-levels) · [10 Vandal and ending](#10-the-great-vandal-and-the-ending) · [11 Art direction](#11-art-direction) · [12 Audio](#12-audio) · [13 Tech](#13-tech-notes) · [14 Legal](#14-legal-and-sourcing) · [15 Platforms](#15-platforms-and-business) · [16 Roadmap](#16-roadmap-order-not-dates) · [17 Stretch](#17-stretch-ideas-and-alternatives) · [18 Decisions](#18-decisions). Research notes: [SMB3_NOTES.md](SMB3_NOTES.md).
+**Contents:** [0 Names](#0-names) · [1 Pitch](#1-pitch) · [2 The series](#2-the-series) · [3 Pillars](#3-pillars) · [4 SMB3 mapping](#4-what-we-keep-from-smb3-and-what-we-change) · [5 Artists](#5-the-four-artists-playable) · [6 Suits and items](#6-suits-and-items) · [7 Enemies](#7-enemies) · [8 The Great Floor](#8-the-great-floor-the-map) · [9 Acts and levels](#9-worlds-acts-and-levels) · [10 Vandal and ending](#10-the-great-vandal-and-the-ending) · [11 Art direction](#11-art-direction) · [12 Audio](#12-audio) · [13 Tech](#13-tech-notes) · [14 Legal](#14-legal-and-sourcing) · [15 Platforms](#15-platforms-and-business) · [16 Roadmap](#16-roadmap-order-not-dates) · [17 Stretch](#17-stretch-ideas-and-alternatives) · [18 Decisions](#18-decisions). Research notes: [SMB3_NOTES.md](SMB3_NOTES.md). Mock-ups and Act I maps: [LEVEL_MAPS.md](LEVEL_MAPS.md).
 
 ---
 
@@ -443,6 +443,8 @@ Three layers of look, as in the other two games.
 - **Game over:** the **tragedy mask** on the black stage; the Chorus gently turns it back into a comedy mask. Tap to continue.
 - **Level clear:** the **Victor's Dais** card, with tesserae counted up.
 - Every one of these reuses the one set of assets (the floor, the curtain, the masks), so it costs almost nothing.
+
+**Mock-ups:** see [`LEVEL_MAPS.md`](LEVEL_MAPS.md) for pictures of the title screen, the loading card and the Act I map (`mockups/`).
 
 **Build notes:** the logo is vector text run through the mosaic filter (`tools/mos/`), so we can change the title without redrawing. The checkerboard floor is a tiling pattern. The curtain is a simple animated vector. All four heroes' title poses come free from their normal idle sprites.
 
