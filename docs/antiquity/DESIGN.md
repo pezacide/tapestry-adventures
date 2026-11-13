@@ -344,6 +344,9 @@ Added after reading the Super Mario Wiki's page on SMB3. Each is mapped to our s
 - **Board-game map.** The wiki notes the SMB3 map was reportedly modelled on a board game. Our **Great Floor** is literally a game board (the Romans played board games on floors and steps), so **Satyrs can be represented as game pieces**.
 - **Battle Mode** (two players who touch on the map fight): a **Duel on the Dais**, a versus mini-game for two players in a one-screen arena, and the natural first piece of the co-op stretch idea (section 17).
 - **Development lesson.** SMB3 began as a Zelda-like overhead view and switched to side-on because judging jumps was hard. Our map is top-down but the levels are side-on; keep it that way, and do not put a top-down level in the main route.
+- **Level types named on the wiki's navigation:** *Ghost House*, *Pyramid*, *Mini-Fortress*, *Enemy Course* and *Treasure Ship*. Ours: a **Shade House** (a small Act VI or Act IV room where Shades move only when you look away; one per Act at most), a real **Pyramid** interior in Act I (SMB3's has ceiling-walking Buzzy Beetles, so ours has **Tessera Beetles on the ceiling** that drop when you pass), a **half-length fortress** on the map, **Enemy Courses** (the one-screen Satyr fights), and a **Treasure Ship** bonus (already listed).
+- **Climb out of water.** The manual calls out jumping out of water as new in SMB3. Our swimming should let you **leap from the water onto a ledge** cleanly; it matters a lot on a phone.
+- **Ending beat.** The wiki notes SMB3's ending has a praying Koopa. We have a similar quiet joke already: the Vandal's front-row seat and the mouse on the last tile.
 - **Secret reward.** After the credits SMB3 starts a new game with every P-Wing. Ours can give **the Winged Sandals in the Capsa** as a replay reward.
 
 ## 10. The Great Vandal and the ending
