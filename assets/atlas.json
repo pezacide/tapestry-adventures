@@ -658,6 +658,16 @@
       ],
       "frame_count": 2,
       "file": "enemies/ember.png"
+    },
+    "snail_spike": {
+      "title": "Armoured Snail-Hound",
+      "behaviour": "walker with a spiked iron shell: stomping it hurts the knight; shoot it, or smite it with the relique",
+      "frame": [
+        64,
+        64
+      ],
+      "frame_count": 2,
+      "file": "enemies/snail_spike.png"
     }
   },
   "bosses": {

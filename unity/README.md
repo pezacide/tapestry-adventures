@@ -171,6 +171,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
 - **Bells at the pole:** when a level ends, the last figure of your Tyme count decides the bells: 1, 3 or 6 ring (1, 3 or 6 bells) as the knight walks into the castle, each worth 500 glory. Others ring none.
 - **Smythes:** hammer-throwing smiths (Worlds 4 and up; always in pairs). They walk a short beat, hop, and hurl hammers in arcs. Stomp or shoot them.
 - **Leaping Embers:** in castles, a spark leaps out of the middle of every fire pit three or more tiles wide, then falls back in. It cannot be stomped or shot, and burns a knight who touches it.
+- **Armoured Snail-Hound:** a grey, spiked snail that plods along. Stomping it hurts the knight; shoot it or smite it with the relique. Three in Level 4-1.
 - **Urn-Plantes:** a biting plant that rises from an urn and snaps, then sinks; it stays down while you stand on or beside the urn. Stomping it hurts; bolts fell it.
 - **Wells:** stand on a stone well and press DOWN to climb in to a treasure cellar (about thirty coins); a pipe-like exit leads back to the well. Wells are in Levels 2 and 5.
 - **Ye Wronge Syde:** after finishing the game, a "Wronge Syde" choice appears on the title menu: the same tapestries with beasts that are faster and with the Tyme running 25% quicker.

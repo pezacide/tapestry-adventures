@@ -515,6 +515,7 @@ m = Map(200)
 m.ground(0, 40); m.ground(45, 92); m.ground(97, 140); m.ground(146, 199)
 m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.row(15, 5, "BRB")
 m.put(22, 2, "j"); m.row(26, 4, "==="); m.row(30, 6, "===")
+m.put(48, 2, "þ"); m.put(100, 2, "þ"); m.put(148, 2, "þ")   # armoured snails
 m.row(41, 4, "===="); m.put(52, 2, "h"); m.row(56, 5, "?W?"); m.put(62, 2, "j")
 m.put(70, 2, "C"); m.row(74, 5, "BHB"); m.put(80, 2, "S"); m.put(86, 2, "j")
 m.row(93, 4, "===="); m.put(104, 2, "u"); m.row(108, 5, "B?B?B"); m.put(116, 2, "j")

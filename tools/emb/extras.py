@@ -125,3 +125,16 @@ def ember(f):
     return s
 C["ember"] = dict(title="Leaping Ember", size=(44, 46), frames=2, build=ember,
                   behaviour="leaps out of castle fire pits at intervals and falls back in; cannot be stomped or shot, only avoided")
+
+# ---------------------------------------------------------------- the armoured snail
+def snail_spike(f):
+    """A snail-hound in a grey iron shell studded with spikes: never stomp it."""
+    from creatures import make_snail
+    s = make_snail("grey", "sage", "buff", "cream")(f)
+    for a in range(-70, 71, 35):   # spikes fanned over the top of the shell
+        x = 24 + 22 * math.sin(math.radians(a)); y = 20 - 22 * math.cos(math.radians(a))
+        dx = 9 * math.sin(math.radians(a)); dy = -9 * math.cos(math.radians(a))
+        s += fill(f"M{x - 3 * math.cos(math.radians(a)):.1f},{y - 3 * math.sin(math.radians(a)):.1f} L{x + dx:.1f},{y + dy:.1f} L{x + 3 * math.cos(math.radians(a)):.1f},{y + 3 * math.sin(math.radians(a)):.1f} Z", "white", 0, "dark", 1)
+    return s
+C["snail_spike"] = dict(title="Armoured Snail-Hound", size=(64, 64), frames=2, build=snail_spike,
+                        behaviour="walker with a spiked iron shell: stomping it hurts the knight; shoot it, or smite it with the relique")

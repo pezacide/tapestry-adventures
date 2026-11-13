@@ -48,6 +48,7 @@ namespace Tapestry
                 case "hunter": speed = 1.0f; timer = 1f; break;
                 case "lapdog": speed = 2.6f; break;
                 case "smith": speed = 1.4f; break;
+                case "snail_spike": speed = 1.0f; break;
                 case "urn_plant": gravity = false; break;
                 case "ember": gravity = false; timer = (pos.x * 0.37f) % 2f; break;
                 case "fox": speed = 1.4f; break;
@@ -117,6 +118,10 @@ namespace Tapestry
                         Body.Vel.x = shellVx;
                     }
                     else { Walk(lv, true); WalkFrames(); }
+                    break;
+
+                case "snail_spike":   // plods along; its spikes forbid a stomp
+                    Walk(lv, true); WalkFrames();
                     break;
 
                 case "stag":   // runs with its herd, leaping gaps, turning back at walls; leaves the field after a while
@@ -556,7 +561,7 @@ namespace Tapestry
                 }
                 return false;
             }
-            if (Kind == "urn_plant" || Kind == "ember") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
+            if (Kind == "urn_plant" || Kind == "ember" || Kind == "snail_spike") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
             if (!fromAbove) { k.Hurt(); return false; }
             if (k.Mounted) { k.Bounce(); Squash(false); return true; }   // Bayard's hooves crush every beast, burning or not
             if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return false; }   // burning mane
