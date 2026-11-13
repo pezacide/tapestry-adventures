@@ -65,13 +65,44 @@ The Capsa is the **inventory on the map screen**: 28 slots in 7 columns and 4 ro
 - Item icons are the same as the ones on the pedestals and in the Niche, so a player learns them once.
 - **Empty slots** are drawn but dimmed, so the 28-slot size is visible at a glance.
 
-## 4. Vase Match (next screen to design)
+## 4. Vase Match
 
-Thalia's shrine runs **Vase Match**, the card-matching game. The rules are in `DESIGN.md` section 8: 18 face-down vases, nine shapes, flip two at a time, matches clear. The screen is still to be drawn.
+![Vase Match states](mockups/vase_match_states.png)
+
+Thalia's shrine runs **Vase Match**, SMB3's card-matching game with vases: 18 face-down vases in a 6 by 3 grid, nine shapes, each twice. **Left: in play** (3 pairs found, a miss showing). **Right: the result card** (7 pairs, three prizes).
+
+**How a round plays**
+1. **Peek.** All 18 vases show face-up for 2 seconds (3 in Assist), then flip down.
+2. **Turn.** Tap one vase, then another. Both stay up for about a second.
+3. **Match:** the pair clears with a gold flash and a tessera clink, and leaves a faint ghost with a green check. **No match:** both flip back, and Thalia says a mild "oh!"; one of **Thalia's patience** masks turns from comedy to tragedy.
+4. **End.** The round ends when all 9 pairs are found, or when the 8 patience masks run out. There is **no timer**, and you never lose anything: you keep every prize you reached.
+5. **Prizes** (cumulative, shown as a ladder in the side panel): 3 pairs gives 20 tesserae, 5 gives an Ambrosia Cake, 7 adds a Comedy Mask, 9 adds Winged Sandals. The 7-pair result card in the mock-up shows the first three.
+6. **After the round:** prizes go to the Capsa. You get **one prized round per Vase Match shrine**; **replays are for fun, with no prizes.** The result card offers PLAY AGAIN and CONTINUE.
+
+**The nine shapes**, each with a gallery card the first time you match it (the gallery text names real Greek vase shapes):
+
+| Shape | What it was for |
+|---|---|
+| **Amphora** | a two-handled jar for storing and carrying wine or oil |
+| **Hydria** | a water jar with three handles: two to lift and one to pour |
+| **Kylix** | a shallow drinking cup on a stem, used at drinking parties |
+| **Krater** | a big bowl for mixing wine with water |
+| **Lekythos** | a tall, narrow oil flask, often left at graves |
+| **Oinochoe** | a jug for pouring wine |
+| **Pelike** | a squat storage jar, a stubbier cousin of the amphora |
+| **Skyphos** | a deep drinking cup with two small horizontal handles |
+| **Rhyton** | a drinking horn, often ending in an animal's head |
+
+**Readability and accessibility**
+- Each vase is a **black-figure silhouette with incised lines** on an orange card, and the **silhouettes differ clearly in outline**, so matching never depends on colour. The name is written on every face-up card.
+- Card backs are one uniform lapis mosaic with a small comedy mask, so no card back gives anything away.
+- A card is **88 by 100 points** with an 8-point gap, far above the 48-point minimum.
+- **Assist options:** a longer peek, a **relaxed mode** with unlimited patience, and reduced motion.
+- **Audio:** a lyre pluck on each flip, a tessera clink on a match, an aulos sting on a win.
+- The patience number, the miss rate and the prize rungs are **tuning values** to set in playtesting.
 
 ## 5. Still to draw
 
-- The **Vase Match** screen.
 - The **Zodiac Room** (the Star Chart warp map).
 - Screens for **pause**, **settings** and the **Gallery**.
 
@@ -82,3 +113,6 @@ Thalia's shrine runs **Vase Match**, the card-matching game. The rules are in `D
 3. **Signature gift plus two helpers** per Muse, with the helper pairs in the table above. Recommended: yes.
 4. **Stacks up to 9 per item** in the Capsa, on 28 distinct slots. Recommended: yes.
 5. **A second tap to confirm** (the TAKE IT button) before the gift is given. Recommended: yes.
+6. **Vase Match: 8 patience masks**, cumulative prizes at 3, 5, 7 and 9 pairs, and a 2-second peek at the start. Recommended: yes (to be tuned in playtests).
+7. **One prized round per shrine**, with prize-free replays. Recommended: yes.
+8. **A relaxed mode** with unlimited patience. Recommended: yes.
