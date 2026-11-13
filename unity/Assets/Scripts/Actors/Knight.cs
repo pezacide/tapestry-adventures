@@ -5,7 +5,10 @@ namespace Tapestry
     /// <summary>The player: Mario-style running and jumping, plus riding Bayard.</summary>
     public class Knight
     {
-        const float FootW = 0.62f, FootH = 1.72f, RideW = 1.25f, RideH = 1.9f, CrouchH = 0.95f;   // crouched, he fits a one-tile gap
+        // A LARGE knight is 0.62 x 1.72 (crouched 0.95, so he fits a one-tile gap); a SMALL one is 0.5 x 1.05 (crouched 0.62),
+        // drawn at the same proportions scaled down. On a steed the knight is always drawn full size.
+        const float FootW = 0.62f, FootH = 1.72f, RideW = 1.25f, RideH = 1.9f, CrouchH = 0.95f;
+        const float SmallW = 0.5f, SmallH = 1.05f, SmallCrouchH = 0.62f, SmallScale = SmallH / FootH;
         const float RiseGravity = 24f, FallGravity = 60f, MaxFall = 17f;
 
         public readonly Body Body;
@@ -15,7 +18,12 @@ namespace Tapestry
         public bool OnUnicorn { get { return Mounted && MountKind == "unicorn"; } }
         public string MountName { get { return OnUnicorn ? "ye Unicorne" : "Bayard"; } }
         public bool Dead { get; private set; }
-        public int Hearts = 3;
+        public bool Large { get; private set; }   // small: one blow slays him and he breaks no bricks; large: a blow only shrinks him
+        float StandW { get { return Large ? FootW : SmallW; } }
+        float StandH { get { return Large ? FootH : SmallH; } }
+        float CrouchHeight { get { return Large ? CrouchH : SmallCrouchH; } }
+        float VisualScale { get { return (!Large && !Mounted) ? SmallScale : 1f; } }
+        float SwimScale { get { return Large ? 1f : SmallScale; } }
         public bool FacingRight { get { return view.FacingRight; } }
         public bool HasCrossbow { get; private set; }
         public float RelicTime;     // > 0: the holy relique protects the knight and smites beasts
@@ -34,10 +42,11 @@ namespace Tapestry
         public Knight(KnightDef def, Vector2 pos, Transform parent)
         {
             Def = def;
-            Body = new Body(pos, FootW, FootH);
+            Large = def.StartsLarge;
+            Body = new Body(pos, StandW, StandH);
             Body.HitsHidden = true;
-            Hearts = def.Hearts;
             view = new SpriteView(def.Sheet, parent, 20);
+            ApplyScale();
             view.SetPosition(pos);
         }
 
@@ -71,8 +80,8 @@ namespace Tapestry
             // crouch: on foot, on the ground, holding DOWN. He ducks low (under spears, flung comfits and the like) and creeps; he stands
             // again as soon as there is room above him (so he stays crouched in a low passage).
             bool wantCrouch = !Mounted && !stone && Body.Grounded && TapestryInput.DownHeld;
-            if (wantCrouch && !crouching) { crouching = true; Body.H = CrouchH; }
-            else if (crouching && !wantCrouch && RoomToStand(lv)) { crouching = false; Body.H = FootH; }
+            if (wantCrouch && !crouching) { crouching = true; Body.H = CrouchHeight; }
+            else if (crouching && !wantCrouch && RoomToStand(lv)) { crouching = false; Body.H = StandH; }
             float speedMul = OnUnicorn ? 1.45f : Mounted ? 1.2f : 1f;   // the unicorn is the swifter steed
             float target = h * (TapestryInput.RunHeld && !crouching ? Def.Run : Def.Walk) * speedMul * (crouching ? 0.4f : 1f);
             float accel;
@@ -121,7 +130,7 @@ namespace Tapestry
             // the crossbowe: RUN shoots (as Mario throws fireballs with the run button)
             if (!stone && HasCrossbow && Carrying == null && TapestryInput.RunPressed && GameManager.I.BoltCount < 2)
             {
-                GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, lying ? 0.35f : Mounted ? 1.45f : crouching ? 0.55f : 0.95f), FacingRight);
+                GameManager.I.SpawnBolt(Body.Pos + new Vector2(FacingRight ? 0.6f : -0.6f, lying ? 0.35f : Mounted ? 1.45f : (crouching ? 0.55f : 0.95f) * VisualScale), FacingRight);
                 Audio.Play("crossbow", 0.8f);
             }
 
@@ -135,8 +144,19 @@ namespace Tapestry
             else view.Renderer.color = stone ? new Color(0.55f, 0.56f, 0.6f) : Color.white;   // grey as stone while petrified
             PlaceCrossbow();
             Animate(dt);
-            view.SetTilt(lying ? (FacingRight ? -80f : 80f) : 0f, Body.H * 0.5f);
+            ApplyScale();
+            view.SetTilt(lying ? (FacingRight ? -80f : 80f) : 0f, Body.H * 0.5f / VisualScale);   // the tilt's height is in the drawing's own (scaled) space
             view.SetPosition(Body.Pos);
+        }
+
+        void ApplyScale() { float s = VisualScale; view.Root.transform.localScale = new Vector3(s, s, 1f); }
+
+        /// <summary>Fit the body to the knight's present state (on a steed, swimming, crouched or standing; small or large).</summary>
+        void RefreshBodySize()
+        {
+            if (Mounted) { Body.W = RideW; Body.H = RideH; return; }
+            if (lying) { Body.W = SwimW * SwimScale; Body.H = SwimH * SwimScale; return; }
+            Body.W = StandW; Body.H = crouching ? CrouchHeight : StandH;
         }
 
         float stroke;   // time since the last swimming stroke
@@ -148,20 +168,19 @@ namespace Tapestry
         /// <summary>Is there room above the knight's feet to stand up straight?</summary>
         bool RoomToStand(Level lv)
         {
-            int x0 = Mathf.FloorToInt(Body.Pos.x - FootW * 0.5f), x1 = Mathf.FloorToInt(Body.Pos.x + FootW * 0.5f);
-            int y0 = Mathf.FloorToInt(Body.Pos.y + 0.05f), y1 = Mathf.FloorToInt(Body.Pos.y + FootH - 0.05f);
+            int x0 = Mathf.FloorToInt(Body.Pos.x - StandW * 0.5f), x1 = Mathf.FloorToInt(Body.Pos.x + StandW * 0.5f);
+            int y0 = Mathf.FloorToInt(Body.Pos.y + 0.05f), y1 = Mathf.FloorToInt(Body.Pos.y + StandH - 0.05f);
             for (int x = x0; x <= x1; x++)
                 for (int y = y0; y <= y1; y++)
                     if (lv.Solid(x, y)) return false;
-            return Body.Pos.y + FootH <= 9.6f;
+            return Body.Pos.y + StandH <= 9.6f;
         }
 
         void SetLying(bool on)
         {
             if (on == lying) return;
             lying = on;
-            if (on) { Body.W = SwimW; Body.H = SwimH; }
-            else { Body.W = FootW; Body.H = FootH; }
+            RefreshBodySize();
         }
 
         /// <summary>Under the waves: tap JUMPE to stroke upward; the knight sinks slowly and cannot rise past the surface.</summary>
@@ -219,26 +238,25 @@ namespace Tapestry
                 invuln = 1.4f;
                 return;
             }
-            if (HasCrossbow)
+            if (Large)
             {
-                // like losing the fire flower: the crossbowe is knocked away, but no health is lost
+                // a blow makes a large knight small again (and knocks his crossbowe away); a small one is slain
+                Large = false; RefreshBodySize(); ApplyScale();
                 HasCrossbow = false; PlaceCrossbow();
-                invuln = 1.4f;
-                Audio.Play("hurt", 0.6f);
-                GameManager.I.Toast("Thy crossbowe is knocked from thy hande!");
+                invuln = 1.6f;
+                Audio.Play("hurt");
+                GameManager.I.Toast("Ouch! Thou art shrunken. Seeke a roaste capon!");
                 return;
             }
-            Hearts--;
-            invuln = 1.6f;
             Audio.Play("hurt");
-            if (Hearts <= 0) Die();
+            Die();
         }
 
         /// <summary>fell = dropped into a pit or the sea: pop back up into view so the death is seen.</summary>
         public void Die(bool fell = false)
         {
             if (Dead) return;
-            Dead = true; if (crouching) { crouching = false; Body.H = FootH; }
+            Dead = true; if (crouching) { crouching = false; Body.H = StandH; }
             if (Mounted) { Mounted = false; view.SetSheet(Def.Sheet); }
             view.Renderer.enabled = true;
             RelicTime = 0f; ShowGlory(false); HasCrossbow = false; PlaceCrossbow();
@@ -260,8 +278,8 @@ namespace Tapestry
 
         void Dismount(bool thrown)
         {
-            Mounted = false;
-            Body.W = FootW; Body.H = FootH;
+            Mounted = false; crouching = false;
+            RefreshBodySize(); ApplyScale();
             view.SetSheet(Def.Sheet);
             GameManager.I.ReleaseBayard(Body.Pos, FacingRight, thrown, MountKind);
             Body.Vel.y = thrown ? 10f : 7f;
@@ -280,7 +298,16 @@ namespace Tapestry
             PlaceCrossbow();
         }
 
-        public void Heal() { Hearts = Mathf.Min(Hearts + 1, Def.Hearts); }
+        /// <summary>A roast capon: a small knight grows large (returns true); a large one gets nothing more from it.
+        /// If there is no headroom to stand in, he stays crouched at the large crouching height.</summary>
+        public bool Grow(Level lv)
+        {
+            if (Large) return false;
+            Large = true; RefreshBodySize();
+            if (!Mounted && !lying && !crouching && !RoomToStand(lv)) { crouching = true; Body.H = CrouchHeight; }
+            ApplyScale();
+            return true;
+        }
 
         static readonly Color[] gloryColours =
         {
@@ -304,18 +331,19 @@ namespace Tapestry
             view.Renderer.color = gloryColours[i];
             float pulse = 1f + 0.12f * Mathf.Sin(Time.time * 12f);
             float size = Mounted ? 1.45f : 1f;
-            auraPivot.localPosition = new Vector3(0f, Body.H * 0.5f, 0f);
+            auraPivot.localPosition = new Vector3(0f, Body.H * 0.5f / VisualScale, 0f);
             auraPivot.localScale = new Vector3(pulse * size, pulse * size, 1f);
             auraPivot.localEulerAngles = new Vector3(0f, 0f, Time.time * 40f);
             auraView.color = new Color(1f, 1f, 1f, i % 2 == 0 ? 1f : 0.65f);
         }
 
         /// <summary>Carry the knight's state on into the next level or part.</summary>
-        public void ApplyCarry(int hearts, bool crossbow, string mount)
+        public void ApplyCarry(bool large, bool crossbow, string mount)
         {
-            Hearts = Mathf.Clamp(hearts, 1, Def.Hearts);
+            Large = large || Def.StartsLarge; RefreshBodySize();
             if (crossbow) GiveCrossbow();
             if (!string.IsNullOrEmpty(mount)) Mount(mount, true);
+            ApplyScale();
         }
 
         void PlaceCrossbow()

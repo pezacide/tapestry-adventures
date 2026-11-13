@@ -15,7 +15,7 @@ namespace Tapestry
     /// Map legend:  , brick that gives many bezants if bumped again and again (up to ten in five seconds)
     ///              . hidden block (cannot be seen or touched until a knight bumps it from beneath; it hides a golden chalice)
     ///              # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
-    ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
+    ///              1 brick hiding a golden chalice (life)  M roast capon (grows a small knight large)  W crossbowe  R holy relique (star)
     ///              * fire pit (burns)  _ drawbridge (falls when the axe is struck)  F flail block (iron flail swings round it)
     ///              A the axe that drops the bridge  K the Cockatrice  J the Island-Whale  N the rescued monk  Q log pile (rolls logs)
     ///              g gull  x crab  f fish  z sea-serpent  m sea-monk  e hippocamp  Y longship rocking at anchor  U longship sailing to and fro
@@ -287,7 +287,7 @@ namespace Tapestry
         public enum BumpResult { None, Bezant, Bayard, Unicorn, Mirror, Chalice, Capon, Crossbow, Relic, Broke, Thud }
 
         /// <summary>A knight's head hit tile (x, y) from below.</summary>
-        public BumpResult HitFromBelow(int x, int y)
+        public BumpResult HitFromBelow(int x, int y, bool large)
         {
             char c = Get(x, y);
             SpriteRenderer v;
@@ -335,6 +335,7 @@ namespace Tapestry
                     }
                 case '7': StartBump(v); return BumpResult.Mirror;
                 case 'B':
+                    if (!large) { StartBump(v); return BumpResult.Thud; }   // a small knight can only bump a brick, not break it
                     tiles[x, y] = ' ';
                     if (v != null) { Object.Destroy(v.gameObject); views.Remove(Key(x, y)); }
                     return BumpResult.Broke;

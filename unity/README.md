@@ -138,20 +138,20 @@ If something looks off, the **Tapestry** menu has *Create Main Scene*, *Reimport
 
 **Gauntlets:** after every holy relique a run of beasts waits along the way. Keep running while the relique lasts (nine seconds), and the fifth beast smitten in a row gives a lyfe.
 
-Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your hearts, crossbowe and Bayard.
+Finishing a level rides on to the next one. Lives, bezants and glory carry over, and so do your size (small or large), crossbowe and Bayard.
 
 **Level select:** once you have passed a realme, the title screen lets you choose it (after choosing your knight). Progress is saved.
 
 The longer levels have a **halfway banner**. Touch it and it turns red; if you die after that, you rise again at the banner instead of the start.
 
 ## What's in the game
-- **Knights:** all four, chosen on the title screen. Azura glides, Verdain has four hearts, and Aurelia is fastest.
+- **Knights:** all four, chosen on the title screen. Azura glides, Verdain begins every realme large, and Aurelia is fastest. The others begin small.
 - **Bricks:** every brick breaks when bumped from below. Some hide something; those give it up and leave a used block.
   - a bezant (the coin)
   - **Bayard**, the horse (Mario's Yoshi)
   - a **Golden Chalice**: one more life (the 1-Up). It slides along, so chase it.
-  - a **Roast Capon**: mends one heart (the mushroom). It also slides along.
-  - a **Crossbowe**: RUN shoots bolts, at most two in the air at once (the fire flower). Bolts fell any beast, even the burning lion. A hit knocks the crossbowe away instead of costing health.
+  - a **Roast Capon**: makes a **small** knight **large** (the mushroom). A knight who is already large gets a feast of glory (2000) instead. It also slides along.
+  - a **Crossbowe**: RUN shoots bolts, at most two in the air at once (the fire flower). Bolts fell any beast, even the burning lion. A hit makes a large knight small and knocks the crossbowe away. A crossbowe block gives a **capon** to a small knight (as the fire flower is only a mushroom to a small Mario).
   - a **Holy Relique** (always found before the level's halfway banner): about nine seconds in which no beast can harm you and any beast you touch is smitten (the star). It bounces about. While it lasts, the knight flickers gold and white inside a spinning aura of golden rays; the flicker slows in the last two seconds.
 - **Bayard:**
   - Riding him makes you faster and lets you jump higher.
@@ -164,7 +164,8 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
   - At 100 a warning appears, the counter turns red and the music quickens.
   - At 0 the knight is lost.
   - Each tick left at the goal is worth 50 glory.
-- **Rules:** health is shown as a long strip of tapestry, stitched in three segments (Verdain has four), and you have three lives. 100 bezants earn an extra life. The sea and pits kill. Touch the goal pole, slide down it and walk into the castle. The higher you grasp the pole, the more glory: 100, 200, 400, 800, 2000 or 5000, and the very top gives an extra life. Points float up wherever they are won.
+- **Small and large:** a **small** knight dies from one blow and can only *bump* ordinary bricks (they do not break); a **large** knight is taller, breaks bricks, and when struck is only made small again (he loses his crossbowe, and is safe for a moment). Item bricks work for both. If a capon grows you where there is no headroom, you stay crouched until there is room.
+- **Rules:** your size is shown as a strip of tapestry stitched in two halves (one filled: small; both: large), and you have three lives. 100 bezants earn an extra life. The sea and pits kill. Touch the goal pole, slide down it and walk into the castle. The higher you grasp the pole, the more glory: 100, 200, 400, 800, 2000 or 5000, and the very top gives an extra life. Points float up wherever they are won.
 - **Text:** all the on-screen writing is in olde English.
 - **Music and sound:** original tunes in medieval modes on a synthesized band of recorder, lute, hurdy-gurdy drone, shawm and tabor.
   - **Tunes:** a stately title theme (D Dorian), a lively meadow dance (G Mixolydian), a fast shawm-and-drum tune while the relique lasts, and short victory, death and game-over pieces.

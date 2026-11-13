@@ -19,7 +19,7 @@ def capon(f):   # super mushroom: a roast capon leg - mends a heart
     s += fill("M19,18 L25,24 L23.5,25.5 L17.5,19.5 Z", "cream", 45, "dark", 1)
     s += dot(25.5, 23.5, 2, "cream", "dark") + dot(23.5, 26.5, 2, "cream", "dark")
     return s
-I["capon"] = dict(title="Roast Capon", size=(32, 32), frames=1, build=capon, effect="mends one herte (the mushroom)")
+I["capon"] = dict(title="Roast Capon", size=(32, 32), frames=1, build=capon, effect="a small knyghte groweth large (the mushroom)")
 
 def crossbow(f):   # fire flower: the crossbow - shoot bolts with RUN
     s = stem("M16,3 Q24,14 16,25", "brown", 2.6, False)              # the bow (prod)

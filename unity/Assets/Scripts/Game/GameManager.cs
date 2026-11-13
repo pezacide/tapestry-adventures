@@ -33,7 +33,7 @@ namespace Tapestry
         Vector2 checkpointPos;
         bool hasCheckpoint, checkpointClaimed;
         // what the knight carries on into the next level
-        bool carry; int carryHearts; bool carryCrossbow; string carryMount;
+        bool carry; bool carryLarge, carryCrossbow; string carryMount;
         // World 5: ye unicorne's horne and ye poysoned fountaine; and the hunt closing in (the chase)
         SpriteRenderer hornView, huntView; Vector2 hornPos, fountainPos; bool hasHorn, carryingHorn, hasFountain, purifiedSaved, toldFoul, toldFountain;
         float huntX, huntDelay; int hornCombo, pipeCount;
@@ -230,7 +230,7 @@ namespace Tapestry
                 (touch
                     ? "Moove with ye joystick: push it to ye rim to runne, and pull it downe to crouche (or, when thou ridest, to dismounte). Ye large button leapeth (holde it to leape higher); ye small one runneth, and shooteth a crossbowe if thou bearest one."
                     : "LEFTE and RYGHTE moove thee; holde RUNNE to runne, and it shooteth a crossbowe if thou bearest one. JUMPE leapeth (holde it to leape higher); DOWNE crouchethe (or dismounteth, when thou ridest). Crouche to duck spears and flung sweetes, or to creepe through a low passage.") + "\n\n" +
-                "Stompe beastes from above; touche them from ye side and thou art hurte. Bumpe bricks from beneath to breake them: some hide a bezant (a few give many, if thou bumpest them again and again), a capon (mendeth a herte), a golden chalice (a lyfe; one is hidden in a block thou canst not see), a crossbowe, a holy relique (nothing may harme thee for a whyle), or Bayard ye magic horse, whom thou mayst ryde.\n\n" +
+                "Thou begynnest small: one blow slayeth thee, and a small knyghte can but bumpe a brick, not breake it. A roaste capon maketh thee great, and a great knyght who is struck is but made small agayne. Stompe beastes from above; touche them from ye side and thou art hurte. Bumpe bricks from beneath (a great knyght breaketh them): some hide a bezant (a few give many, if thou bumpest them again and again), a capon (maketh thee great), a golden chalice (a lyfe; one is hidden in a block thou canst not see), a crossbowe (but a small knyghte findeth a capon there), a holy relique (nothing may harme thee for a whyle), or Bayard ye magic horse, whom thou mayst ryde.\n\n" +
                 "Touche a halfway banner and thou shalt ryse agayne there. Mind ye Tyme, for it runneth out.",
 
                 "Seven tapestries, four realmes in each, and a castle with a mighty boss at ye ende of every one:\n\n" + tapestries.ToString() + "\nTouche \"Ye Tapestries\" on ye title screene to learne of ye true tapestries that inspired them.",
@@ -513,7 +513,7 @@ namespace Tapestry
             if (carry)
             {
                 if (carryMount != null && L.Underwater) Toast((carryMount == "unicorn" ? "Ye Unicorne" : "Bayard") + " waiteth on ye shore. Swimme on!");
-                player.ApplyCarry(carryHearts, carryCrossbow, L.Underwater ? null : carryMount);   // no steed beneath the waves
+                player.ApplyCarry(carryLarge, carryCrossbow, L.Underwater ? null : carryMount);   // no steed beneath the waves
                 carry = false;
             }
             camX = ClampCam(start.x + 4f);
@@ -595,7 +595,7 @@ namespace Tapestry
 
         void NextLevel()
         {
-            carry = true; carryHearts = player.Hearts; carryCrossbow = player.HasCrossbow; carryMount = player.Mounted ? player.MountKind : null;
+            carry = true; carryLarge = player.Large; carryCrossbow = player.HasCrossbow; carryMount = player.Mounted ? player.MountKind : null;
             if (levelIndex + 1 < Levels.All.Length && Locked(levelIndex + 1)) { OpenPaywall(levelIndex + 1); return; }   // the end of the free tapestry
             levelIndex++;
             checkpointClaimed = false;
@@ -1158,7 +1158,7 @@ namespace Tapestry
         // ------------------------------------------------------------------ called by actors
         public void KnightHitBlock(int x, int y)
         {
-            var r = level.HitFromBelow(x, y);
+            var r = level.HitFromBelow(x, y, player.Large);
             switch (r)
             {
                 case Level.BumpResult.Broke: Audio.Play("brick"); break;
@@ -1186,7 +1186,8 @@ namespace Tapestry
                     break;
                 case Level.BumpResult.Chalice: items.Add(new Item("chalice", top, world, player.FacingRight)); break;
                 case Level.BumpResult.Capon: items.Add(new Item("capon", top, world, player.FacingRight)); break;
-                case Level.BumpResult.Crossbow: items.Add(new Item("crossbow", top, world, player.FacingRight)); break;
+                case Level.BumpResult.Crossbow:   // like the fire flower, which is only a mushroom to a small Mario
+                    items.Add(new Item(player.Large ? "crossbow" : "capon", top, world, player.FacingRight)); break;
                 case Level.BumpResult.Relic: items.Add(new Item("relic", top, world, player.FacingRight)); break;
                 case Level.BumpResult.Broke:
                     score += 50;
@@ -1260,7 +1261,11 @@ namespace Tapestry
             switch (it.Kind)
             {
                 case "chalice": Audio.Play("oneup"); lives++; Toast("A golden chalice! One more lyfe is thyne."); break;
-                case "capon": Audio.Play("powerup"); player.Heal(); Toast("A roaste capon! Thy herte is mended."); break;
+                case "capon":
+                    Audio.Play("powerup");
+                    if (player.Grow(level)) Toast("A roaste capon! Thou growest great and strong.");
+                    else { AddScore(2000, player.Body.Pos + new Vector2(0f, player.Body.H + 0.5f)); Toast("A roaste capon! Thou art well fed alreadie: a feast of glorie."); }
+                    break;
                 case "crossbow": Audio.Play("powerup"); player.GiveCrossbow(); Toast("A crossbowe! Presse RUNNE to loose a bolte."); break;
                 case "relic": Audio.Play("powerup"); player.RelicTime = 9f; Toast("A holy relique! No beaste may harme thee for a whyle."); break;
             }
@@ -1589,8 +1594,8 @@ namespace Tapestry
             var empty = Art.Texture("scenery/health_empty");
             var full = Art.Texture("scenery/health_full");
             if (empty == null || full == null) return;
-            int max = Mathf.Max(1, player.Def.Hearts);
-            float frac = Mathf.Clamp01(player.Hearts / (float)max);
+            const int max = 2;   // two stitched halves: small = one filled, large = both
+            float frac = player.Large ? 1f : 0.5f;
             GUI.DrawTexture(r, empty);
             // the fringe takes the first and last 8/240 of the strip; fill between them
             const float edge = 8f / 240f;
