@@ -1,8 +1,10 @@
-# Working title: *Masks & Mosaics*
+# *Masks & Mosaics* (series: *Into the Frame*, part 3)
 
 *A Super Mario Bros. 3 style platformer staged as a play in antiquity: Egyptian tomb walls, Minoan frescoes, Greek vases, Roman floors, Etruscan tombs and Byzantine gold, all drawn as the art they come from.*
 
-Status: **planning only**. Nothing here is built. This is part 3 of a series. It lives in `docs/antiquity/` until we decide where it goes (see Open questions), alongside `docs/painters/DESIGN.md` (part 2) and the tapestry game in the rest of this repo (part 1).
+Status: **planning only**. Nothing here is built. This is part 3 of a series. It lives in `docs/antiquity/` until we decide where it goes (decision 9, section 18), alongside `docs/painters/DESIGN.md` (part 2) and the tapestry game in the rest of this repo (part 1).
+
+**Contents:** [0 Names](#0-names) · [1 Pitch](#1-pitch) · [2 The series](#2-the-series) · [3 Pillars](#3-pillars) · [4 SMB3 mapping](#4-what-we-keep-from-smb3-and-what-we-change) · [5 Artists](#5-the-four-artists-playable) · [6 Suits and items](#6-suits-and-items) · [7 Enemies](#7-enemies) · [8 The Great Floor](#8-the-great-floor-the-map) · [9 Acts and levels](#9-worlds-acts-and-levels) · [10 Vandal and ending](#10-the-great-vandal-and-the-ending) · [11 Art direction](#11-art-direction) · [12 Audio](#12-audio) · [13 Tech](#13-tech-notes) · [14 Legal](#14-legal-and-sourcing) · [15 Platforms](#15-platforms-and-business) · [16 Roadmap](#16-roadmap-order-not-dates) · [17 Stretch](#17-stretch-ideas-and-alternatives) · [18 Decisions](#18-decisions). Research notes: [SMB3_NOTES.md](SMB3_NOTES.md).
 
 ---
 
@@ -44,7 +46,7 @@ It keeps what makes SMB3 special: **a map you read like a board game, suits that
 
 - **Not chronological.** Part 1 is medieval, part 2 is 19th century, part 3 is antiquity. Each part picks the corner of art history whose *medium* suits the Mario game it borrows from. Part 4 can go anywhere (see section 17).
 - **Shared conventions** (so the series feels like one family): gentle and whimsical tone; heroes who are real people from the art; a villain who erases or flattens art; a villain whose last hit sends them back where they came from rather than killing them; a small new detail in the ending; a first world free and one unlock purchase; phone first; code-drawn art.
-- **Cameos.** Each part may hide a few cameos of the others (a stitched banner on a villa wall, a grey frame in a tomb). They are jokes, not requirements.
+- **No cameos of parts 1 and 2** in this game; it stands on its own. (A later part could add them once more than one sibling exists.)
 
 ## 3. Pillars
 
@@ -76,7 +78,7 @@ It keeps what makes SMB3 special: **a map you read like a board game, suits that
 | P-meter | **Winged meter**: the little wings on your sandals fill as you run |
 | End-of-level card roulette | **Victor's Dais**: a podium with a spinning roulette of three prize icons; you take a bow. Three in a row gives extra lives |
 | Inventory (28 slots) | **The Capsa** (a Roman scroll-case), also 28 slots |
-| 88 levels | **39 levels** across 8 Acts (section 9). Part 1 is 29, part 2 is 20 |
+| 88 levels | **41 levels** across 8 Acts (section 9). Part 1 is 29, part 2 is 20 |
 | Timer | **No timer** (like part 2). Mid-level checkpoint at a **brazier** (Hestia's hearth flame) |
 
 ## 5. The four artists (playable)
@@ -186,7 +188,7 @@ The map is a huge **Roman floor mosaic**, in the manner of the Nile Mosaic of Pa
 
 ## 9. Worlds (Acts) and levels
 
-**39 levels** in 8 Acts: each of Acts I to VII has **three scenes, a fortress with a mini-boss, and a ship battle that leads to a Wonder or monster boss**; Act VIII has four. Order mirrors SMB3's biomes (the user's direction, loosely): Desert, Water, Giant, Pipe, Sky, Dark, a polished-gold "ice" world, and the final world.
+**41 levels** in 8 Acts: Act I has **five scenes, a fortress with a mini-boss, and a ship battle that leads to a Wonder or monster boss** (seven in all); each of Acts II to VII has **three scenes, a fortress and a ship battle** (five); Act VIII has four. Order mirrors SMB3's biomes (the user's direction, loosely): Desert, Water, Giant, Pipe, Sky, Dark, a polished-gold "ice" world, and the final world.
 
 | Act | Place and art | SMB3 biome | Signature mechanic | Mini-boss (fortress) | Boss (ship, then Wonder or monster) |
 |---|---|---|---|---|---|
@@ -208,8 +210,10 @@ The Egyptian tomb wall is the clearest SMB3 *tutorial* look there is: flat colou
 | I-1 | *The Marsh of Nebamun* | The fowling-in-the-marshes scene from the tomb-chapel of Nebamun (c. 1350 BC): papyrus thickets, birds and fish, and **the cat that catches the birds** | **Bending reeds** that spring you up; teaches run, jump, stomp, Tessera Beetles. Laurel Wreath hidden |
 | I-2 | *Harvest Registers* | A tomb wall as horizontal bands: ploughmen, oxen, scribes tallying grain | **Registers**: three lanes stacked, with ladders and gaps to hop between. Canopic Stacks |
 | I-3 | *The Sands of Giza* | Dunes and pyramids, no tomb | **Quicksand** pits; the **Aten** dives; sloping sand |
-| I-4 | *The Scribe's Tomb* (fortress) | A dark tomb of brick, hieroglyph-ish walls (invented glyphs, see section 14) | Bandage Scamps; **mini-boss Khepri** rolls the sun-ball: hop it, then stomp him three times |
-| I-5 | *Barque of Millions of Years* | A scrolling **solar barque** battle (the sun-boat of Ra) as a ship level | Oarsmen toss pots; then **boss: the Sphinx** (below) |
+| I-4 | *The Collapsing Causeway* | An autoscroll along a causeway of stone slabs and mudbrick on the floodplain | **Autoscroll** pressure; slabs that **crumble** if you linger; mudbrick walls a **kicked shell** breaks; collect every tessera and a **gold shrine** appears on the map |
+| I-5 | *The Shaduf Barges* | Rope-and-pulley barges and **shadufs** (the counterweight water-lifts of the Nile) | **See-saw shaduf platforms**; **rope barges**; one barge that **frays** at the end (visible fibres show it); leaping fish |
+| I-6 | *The Scribe's Tomb* (fortress) | A dark tomb of brick, hieroglyph-ish walls (invented glyphs, see section 14) | Bandage Scamps; **mini-boss Khepri** rolls the sun-ball: hop it, then stomp him three times |
+| I-7 | *Barque of Millions of Years* | A scrolling **solar barque** battle (the sun-boat of Ra) as a ship level | Oarsmen toss pots; then **boss: the Sphinx** (below) |
 
 **The Sphinx (riddle boss).** She poses the Theban riddle ("four legs in the morning, two at noon, three in the evening") as a **picture riddle**: three plinths show an animal, a person and a bird; the correct one (the person) glows when you **stand on it and strike the sun-gong**; wrong ones drop a small hail of sand. Four rounds, each faster. (The riddle is Greek, so she speaks Greek: the play is a Greek play about Egypt, and Thespis points that out.) She is a lion with a human face, not a scary one: she *loves* being right, and yelps when she's out-riddled.
 
@@ -295,88 +299,23 @@ Black-figure vases are black silhouettes on orange clay, with incised detail. Re
 | VIII-3 | *The Fleet of the Great Vandal* | A multi-ship chase, all the ship types | Each ship uses a different Act's enemies; last ship carries the Hoard |
 | VIII-4 | *The Unswept Floor* | The Vandal's lair, shaped like Sosus's mosaic of food scraps and a mouse | **Boss: the Great Vandal** (section 10) |
 
-### More SMB3 ideas worth borrowing
+### What we took from SMB3
 
-Added after reading the Super Mario Wiki's page on SMB3. Each is mapped to our setting; none are scheduled yet.
+The full research is in [`SMB3_NOTES.md`](SMB3_NOTES.md): a table per Act that maps SMB3's levels to scene ideas. This section holds what we **decided** to take.
 
-**Level furniture** (cheap to build, and each has an ancient version):
+**Rules adopted**
+- **Power-up substitution.** A power-up block gives an Ambrosia Cake if you are small, and the next item up (Laurel Wreath, Lamp) if you are already grown.
+- **Rewards on a small skill check.** Hidden things are found by side-bumping, crouching on a special panel or a run-up glide, never by guessing.
+- **Suits as keys.** Every suit opens at least one secret per Act.
+- **Tessera thresholds.** Collecting all of a scene's tesserae makes a shrine appear on the Great Floor (an anchor, Winged Sandals, and so on).
+- **Shortcuts cost something** (the hidden Star Chart in a fortress ends it early but leaves the gate shut).
+- **Every life-farm is capped:** spawner pots, bouncing enemies, brick resets.
+- **Mini-bosses change after the first hit** (SMB3's Boom Boom grows wings), and each boss reuses the previous one's pattern with one twist (below).
+- **Difficulty cap.** The wiki's manga ratings run 2/10 to 9/10. We cap main-route scenes at about **7/10** and keep 8 to 9 for optional bonus scenes.
+- **No timer.** Scenes that relied on one use a pacing device instead (a rising tide, a closing door).
+- **Gentle hit rule** (the international version's): a hit suit becomes the "grown" form, and a hit "grown" artist shrinks.
 
-| SMB3 | Ours | Act |
-|---|---|---|
-| Switch Block (bricks become coins) | **Kiln Switch** also turns mudbricks into gold tesserae for a few seconds, and reveals hidden "blue" tesserae (lapis) | all |
-| Jump (note) block | **Aulos block**: a bouncy note block; time your jump for height | all |
-| Magic Note Block to Coin Heaven | An aulos block that carries you to a cloud with a tessera shower | V |
-| Vine block | **Grapevine block**: hit it and a vine grows up (Dionysus) | III |
-| Ice block, frozen coin | **Marble block** that slides; a tessera "frozen" in glass melts by Oil Lamp | VII |
-| Conveyor, bolt lift, donut lift, rotary lift | **Treadmill** (a Roman treadwheel crane), **screw-pump** (Archimedes' screw) lifts, **crumbling plinths**, **spinning millstones** | II, IV, V |
-| Tide (rising and falling water) | **The Nile flood** (Inundation) raising and lowering the water in Act I; also Act II | I, II |
-| Bubble-jet pipes (currents underwater) | **Dolphin-jet** and fountain jets | II |
-| Waterfalls you can swim up | Same, in Act II | II |
-| White block (crouch to step behind) | **Painted-door panel**: crouch on it to step into the wall painting | VI |
-| Magic Door (changes your size) | **Mirror door** in Iaia's honour: step through and your reflection leads, mirrored controls for one room (used once) | VI |
-| Warp Door in fortresses | **False door** (already in Act VI), and **Labyrinth** doors in Act II | II, VI |
-| Brick floor breaks under Bowser | The Vandal's **tessera floor** (section 10) | VIII |
-
-**Enemy variants worth copying** (SMB3 has families, not single enemies):
-- **Satyr family** (SMB3's Hammer, Boomerang, Fire and Sledge Brothers): a Satyr with a wineskin (hammer analogue), one with a **discus** (boomerang), one with a **torch** (fire; rare), and a large **Silenus** (sledge: stuns when he lands).
-- **Giant variants** for Act III of every common enemy (a giant Tessera Beetle, giant Chelone), as in Giant Land.
-- **Muncher** (invincible plant) becomes a **thistle**; the Kiln Switch removes it, as in SMB3.
-- **Chain Chomp breaks free** after a long time: the Cave Canem Hound slips its chain if you linger.
-- **Boo** only moves when you're not looking: our **Shades** (already in).
-- **Roto-Disc** that only a Statue can stop: a **spinning shield-disc** that Thutmose's statue form can pass.
-- **Boss Bass / Big Bertha**: a **giant fish** that lunges from the water in Act II.
-- **Jelectro** (stationary electric jellyfish): a **stinging jellyfish** in Act II, a pure hazard.
-- **Hot Foot, Podoboo** (lava fireballs): hot **cinders** in the Kiln and a leaping fire in the Hoard.
-- **Tornado** pushes you back: a **dust whirlwind** (a haboob) in Act I.
-
-**Level types SMB3 has and we haven't used:**
-- **Tank levels, Battleships and Hand Traps** (SMB3's world 8): our Act VIII fleet scene (VIII-3) can use *tank* analogues (siege towers and war elephants as moving platforms) and a **hand-trap** room (statues' stone hands that grab at you) before the lair.
-- **Towers** (SMB3 has a tower in some worlds): Act V's Atlas climb is ours.
-- **Coin Ship and bonus courses:** a **treasure ship** that appears on the map for a one-screen bonus, and a **Diogenes pithos** as a bonus-room door.
-- **Warp Zone:** Urania's Star Chart takes you to a **Zodiac Room** of nodes labelled with constellations, one per Act (and one deliberately blank).
-- **Map items beyond the suits:** SMB3's **hammer** (breaks map boulders and reveals shortcuts) becomes the **Chisel** item for the map; **Jugem's Cloud** (skips a level) becomes **Nephele's cloud**; the **Anchor** (stops an airship from leaving) becomes the **Sea Anchor** that keeps a Satyr's boat from fleeing.
-
-**Rules and feel:**
-- **Hit rules.** In SMB3's international version a hit suit drops to Super form first, then small, with a puff of smoke; the Japanese version drops straight to small. We use the gentler international rule, in line with the tone: a hit suit becomes the "grown" form (with a *poof* of marble dust), and a hit "grown" artist shrinks.
-- **Carry and kick.** SMB3 lets you pick up and carry shells and throw them. Chelone shells and **marble blocks** are carry-and-throw objects.
-- **Giant Sandal doesn't replace your suit** (as in SMB3's Goomba's Shoe): it is worn *over* it.
-- **Goal roulette:** hitting the same icon panel three times in a row gives the extra-life fireworks (our Victor's Dais does the same).
-- **Board-game map.** The wiki notes the SMB3 map was reportedly modelled on a board game. Our **Great Floor** is literally a game board (the Romans played board games on floors and steps), so **Satyrs can be represented as game pieces**.
-- **Battle Mode** (two players who touch on the map fight): a **Duel on the Dais**, a versus mini-game for two players in a one-screen arena, and the natural first piece of the co-op stretch idea (section 17).
-- **Development lesson.** SMB3 began as a Zelda-like overhead view and switched to side-on because judging jumps was hard. Our map is top-down but the levels are side-on; keep it that way, and do not put a top-down level in the main route.
-- **Level types named on the wiki's navigation:** *Ghost House*, *Pyramid*, *Mini-Fortress*, *Enemy Course* and *Treasure Ship*. Ours: a **Shade House** (a small Act VI or Act IV room where Shades move only when you look away; one per Act at most), a real **Pyramid** interior in Act I (SMB3's has ceiling-walking Buzzy Beetles, so ours has **Tessera Beetles on the ceiling** that drop when you pass), a **half-length fortress** on the map, **Enemy Courses** (the one-screen Satyr fights), and a **Treasure Ship** bonus (already listed).
-- **Climb out of water.** The manual calls out jumping out of water as new in SMB3. Our swimming should let you **leap from the water onto a ledge** cleanly; it matters a lot on a phone.
-- **Ending beat.** The wiki notes SMB3's ending has a praying Koopa. We have a similar quiet joke already: the Vandal's front-row seat and the mouse on the last tile.
-- **Secret reward.** After the credits SMB3 starts a new game with every P-Wing. Ours can give **the Winged Sandals in the Capsa** as a replay reward.
-
-### Act I as the free tutorial: lessons from SMB3's World 1
-
-Act I is the free Act, so it is the first thing every player sees. I read the Super Mario Wiki pages for SMB3's World 1 (levels 1-1 to 1-6, the fortress, the airship and Larry) and took what they teach about **pacing a first world**. The wiki's difficulty ratings (from the Japanese manga guide) climb gently: 1-1 is 2/10, 1-2 and 1-3 are 3/10, 1-5 and 1-6 are 4/10, 1-4 and the fortress are 5/10.
-
-**What World 1 does, and our version of each beat**
-
-| SMB3 World 1 | What it teaches | Our version (Act I) |
-|---|---|---|
-| **1-1**: semisolid platforms, a Venus Fire Trap in a pipe, a Super Leaf in a block you can only open by throwing a shell at it | Safe first contact; the shell-as-tool idea; power-up in place | **I-1 Marsh of Nebamun.** The first amphora block sits on the ground, so you need a kicked Chelone shell to open it. It holds the **Laurel Wreath** |
-| 1-1 secret: run up, fly to a cloud area with a 1-Up, then to a bonus room whose coins form a "3" | Vertical exploration; flight shows a level is taller than it looks | A **sky-marsh of birds** above the reeds, reached by a run-up **glide** off a high reed, with tesserae spelling a **Roman numeral** |
-| 1-1 P Switch hidden under a brick stack | Rewards noticing an out-of-the-way block | A **Kiln Switch** under a mudbrick stack turns bricks to tesserae |
-| **1-2**: pipes that spawn endless enemies, a hidden switch route, Super Star in the last jump block | Low-stakes warm-up; a secret that changes the route | **Pithos nests** spawn Tessera Beetles. **Decision: cap them** (SMB3's spawners allow farming lives); each pithos spawns at most a few, then goes quiet |
-| **1-3**: a long flat plain, boomerang thrower, a **hidden note block** to Coin Heaven, side-bumping for a hidden power-up, and the **white block**: crouch on it and you drop behind the scenery to find a Toad House with the **Magic Whistle** | Off-path secrets; side-bumping; background areas; a skill check (crouching) | **I-2 Harvest Registers** hides an **aulos block** to a tessera cloud, a **painted-door panel** (crouch to step into the wall) and, behind it, **Urania's Star Chart**: the same early-warp gift SMB3 hides in its first world |
-| **1-4**: first **autoscroll**; lifts that drop when you land; bricks that can push you off | Momentum; scroll pressure; shells break bricks; a **coin threshold** (44 coins) makes a P-Wing house appear on the map | **I-3 Sands of Giza** gains an **autoscroll causeway** section of crumbling stones. If you collect all its tesserae, a **gold shrine** appears on the Great Floor with a Winged Sandals item |
-| **1-5**: opens with a slope slide into a pool; a **fork** (above-ground path with a hidden note block, underground path of pools and a power-up) that **reconverges**; Piranha Plants facing different ways | Slide and swim before enemies; fork without a second difficulty curve | A **dune slide into the Nile** at the start of a scene; a fork between the bank and the riverbed; **Acanthus Snappers** (or reed snappers here) in pots facing up, down and sideways |
-| **1-6**: island gaps, rail-mounted lifts, bounce blocks, wire-hung platforms, an erratic track; some lifts fall at the end of their track | Introduce moving platforms gradually; make risky ones look different | A **shaduf** (the Egyptian counterweight water-lift) as a **see-saw platform**, **rope-and-pulley barges** on the river, and one erratic barge that **frays** at the end (rope fibres show it) |
-| **Fortress**: Podoboos that leap between gaps, **Roto-Discs**, a Dry Bones, a **moving spiked ceiling** you must duck, a rising door; Boom Boom's room; defeating him destroys the fortress and **opens the map lock** | One new hazard at a time before combinations; timing taught through visible motion | **I-4 The Scribe's Tomb**: leaping **fire-cobras** (uraeus) from pots, spinning **sun-discs** (Roto-Disc analogue), a **Bandage Scamp**, a **descending spiked ceiling**; beating **Khepri** destroys the tomb door and **opens the Sphinx Gate** on the map |
-| Fortress secret: fill the P-meter, fly into the ceiling, reach a treasure chest with the **Whistle**; taking it **ends the fortress early but leaves the lock shut** | A power-up-gated secret with a **tradeoff** | A hidden room in the tomb with a second **Star Chart** copy: it ends the tomb at once but **doesn't open the Gate**, so you must still come back |
-| **Airship**: the Toad says the king's wand was stolen and he was **transformed**; autoscroll under cannon fire; crushed by the screen edge is fatal; a quartet cannon at the midpoint; the power-up block gives a Fire Flower if you are already powered up | Cannon placement is the whole challenge; steady forward pressure | **I-5 Barque of Millions of Years** (section 9). Cannons are **pot-lobbing catapults** and Oarsmen. The block at the midpoint gives a **Lamp** if you're already grown |
-| **Larry**: three beats: a magic blast, a shell retreat and chase after a stomp, another blast; three stomps | A readable boss pattern to copy | Our **boss template**, used for Act bosses: *attack, expose, chase*, three hits (the Sphinx and others vary it) |
-
-**Rules to copy**
-- **Power-up substitution.** A power-up block gives a Mushroom-equivalent (an Ambrosia Cake) if you are small, and the **next item up** (a Laurel Wreath or a Lamp) if you are already grown. Rewards stay meaningful at every stage.
-- **Rewards on a small skill check.** Hidden things are found by side-bumping, crouching on a special block or a run-up, not by guessing.
-- **Coin thresholds unlock map rewards** (as the 1-4 P-Wing house does). We use tessera thresholds, and a gold shrine appears.
-- **A shortcut costs something** (the Whistle that skips the fortress but leaves the lock shut).
-- **The first Act's difficulty curve:** I-1 2, I-2 3, I-3 3 to 4, I-4 5, I-5 5. Playtest against this.
-- **A cheap beginning.** SMB3's 1-1 has 57 coins, 3 Mushrooms and 3 Leaves, so a first-timer is rarely short of items. Ours should be generous.
+**Act I is seven scenes.** SMB3's World 1 has six levels, a fortress and an airship, and Act I is the free sample, so it gets two extra scenes (the Act I table above lists all seven).
 
 **The Keeper, transformed.** In SMB3 each world's king has been **turned into an animal** by the Koopaling who stole his wand, and beating the boss turns him back. Our version fits Greek myth perfectly: **each Act's Keeper has been transformed**, as in Ovid's *Metamorphoses*. Defeating the boss returns the **emblema** and restores the Keeper, and the Keeper is the Act's host at its Muse Shrine afterwards.
 
@@ -389,120 +328,6 @@ Act I is the free Act, so it is the first thing every player sees. I read the Su
 | V | The Cloud King | a **swan** |
 | VI | The Tomb's host | a **wolf** (Aita's wolf-skin cap) |
 | VII | The Emperor's steward | a **peacock** (a Byzantine symbol) |
-
-**Act I might deserve more.** SMB3's World 1 has six levels, a fortress and an airship; ours has three scenes, a fortress and a ship. Since Act I is the free sample, consider giving it two more scenes: **I-3b *The Collapsing Causeway*** (the autoscroll level) and **I-6 *The Shaduf Barges*** (the lift level). That makes **41 levels**. See Open questions.
-
-### What the other SMB3 worlds teach (Worlds 2 to 8)
-
-The same exercise for the rest of the game. I read the wiki's pages for **World 2's levels** (2-1 to 2-5, the Fortress, the Airship, Morton) and its overview pages for **Water, Giant, Sky, Ice, Pipe and Dark Land**. The overview pages give each level a line or two, so those Acts get less detail than Act I. Two gaps: the wiki's 2-Pyramid page came back with a short summary only, and I did not read the Koopalings' pages past the first 100,000 characters.
-
-**Which SMB3 world is which Act.** Our order follows the biomes in the brief, not SMB3's order, and we have no Grass Land (Act I's tutorial pacing comes from SMB3's World 1, above):
-
-| SMB3 world | Biome | Our Act |
-|---|---|---|
-| 1 Grass Land | tutorial pacing | **Act I**, pacing only |
-| 2 Desert Land | desert | **Act I** (Nile), content |
-| 3 Water Land | water | **Act II** (Crete) |
-| 4 Giant Land | giant | **Act III** (Heroes' Vases) |
-| 7 Pipe Land | pipes | **Act IV** (Rome) |
-| 5 Sky Land | sky | **Act V** (Olympus) |
-| 8 Dark Land (fortress, door mazes) | dark | **Act VI** (Etruscan tombs) |
-| 6 Ice Land | slippery | **Act VII** (Byzantium) |
-| 8 Dark Land (tanks, fleet, final castle) | final | **Act VIII** (the Hoard) |
-
-#### Act I, desert content (SMB3 World 2)
-
-| SMB3 World 2 | Our version |
-|---|---|
-| **2-1**: hidden **Pile Driver Micro-Goombas** under brick stacks; Firesnakes on the pipes; an early Starman; a hidden switch room reached by flying | **Mudbrick Mimics**: little scarabs that hide inside a mudbrick stack and pop out as you pass. **Fire-cobras** hop on the reed pots |
-| **2-2**: **quicksand** with Venus Fire Traps inside it; an **oasis** with Cheep-Cheeps in the water, crossed on a lift; collect 30 coins and a hidden switch opens a map house with an **Anchor** | **Quicksand with Snappers** that lunge out; an **oasis** crossed on a **reed raft** while fish leap; 30 tesserae plus a hidden Kiln Switch makes a **shrine** appear on the map |
-| **2-3**: three **pyramids** in a row, first semisolid, then brick; hidden P Switch; **kick a shell into the bricks** to uncover the exit pipe | Three **stepped pyramids** drawn in different materials (sandstone, mudbrick); the exit is hidden behind a brick wall that a **kicked Chelone shell** opens |
-| **2-4**: a **lower and upper route** (the upper needs flight); **128 coins** | The upper route needs a Laurel run-up glide; a tessera-rich high road |
-| **2-5**: **Chain Chomps** are the main hazard; a vine grown by kicking a shell into a gap | Chained **jackals** (the Egyptian version of the Chain Chomp; Rome gets the Cave Canem hound) and a **grapevine** (or papyrus stalk) grown by a shell |
-| **2-Pyramid**: an underground **maze** where you use **Buzzy Beetle shells to break walls** and beetles walk on the ceiling | **The Great Pyramid maze** (optional scene): crawl the corridors, break a sealed wall with a shell, and watch for **ceiling Beetles** |
-| **Fortress**: Thwomps, Dry Bones, the first **Boos** (they appear after the second Thwomp), rising and falling **spikes**; three stomps on Boom Boom opens a map door; stomping the Dry Bones is an **infinite-lives trick** | Falling **column drums** (Thwomps) in the Scribe's Tomb, Bandage Scamps that **reassemble** (cap this, as with the spawner pipes), and the first **Shade**; Khepri takes three stomps |
-| **Airship**: cannon corridors, **Rocky Wrenches** appear for the first time near the end, a single power-up at the midpoint, a tall post with crates around it before the boss | **Oarsmen** pop out of the barque's oar ports for the first time here; a post-and-crate climb before the Sphinx |
-| **Morton**: the same pattern as Larry, but **slower and with more wand shots** | **Boss progression**: each Act's boss reuses the previous boss's pattern with one twist (below) |
-
-Also from World 2: **Angry Sun** returns later in World 8, so our **Aten** returns in Act VIII, as a callback.
-
-#### Act II, Crete (SMB3 World 3: Water)
-
-| SMB3 World 3 | Our version |
-|---|---|
-| **3-1** underwater with Bloobers; **3-5** Big Berthas and Jelectros; a fully **underwater fortress** with Stretches; **3-9** mixes above-water and underwater | Swimming levels in the **Dolphin Hall** and **Marine Style Seabed**, with Octopus, Jellyfish and Giant Fish. A **flooded Labyrinth** variant. A scene that **alternates shore and sea** |
-| **3-3** and **3-8**: the **water level rises and falls** (and Boss Bass lunges) | **The tide**: the Minoan sea rises and falls in a shore scene. The Giant Fish rises with it |
-| **3-6** autoscroll with donut lifts | A **raft-and-crate** autoscroll, with crates that sink |
-| **First fortress**: **find the right door** to reach Boom Boom | **The Labyrinth**: Ariadne's thread shows the right door; wrong doors loop you back |
-| **Airship**: **diagonal cannons** (Wendy) | Talos's galley fires **rocks in diagonals** |
-| **Map**: green **bridges toggle** every time you finish a course or lose a life; a **rock broken with the Hammer yields a Canoe** to an island with houses; the **Hammer Bros** fight changes between land and water | The Great Floor's **tide bridges** rise and sink in turn; the Chisel breaks a rock to free a **dolphin** that ferries you to a **Muse island**; Satyr fights alternate between **land and a raft** |
-
-#### Act III, the Heroes' Vases (SMB3 World 4: Giant)
-
-| SMB3 World 4 | Our version |
-|---|---|
-| **4-1** introduces **oversized enemies**; **4-2** has large pipes and **leaping Cheep-Cheeps** | Giant Tessera Beetles and Chelone; **giant pithoi** as platforms; leaping **fish painted on the vase** |
-| **4-5**: **Missile Bills** (homing) | **Homing discs** thrown by a Discobolus |
-| **4-6**: **Magic Doors** that change the size of enemies and obstacles | **Kiln doors** painted on a vase that **swap scale**: you become the giant and the world shrinks. Gives us a size-change mechanic for exactly one scene |
-| **Fortresses**: **sliding Thwomps**, **Hot Feet**, donut lifts | Sliding **column drums**; **embers** that creep only when your back is turned (our Hot Foot); crumbling plinths |
-| **Sledge Brothers** (giant Hammer Bros that stun when they land) on the map, giving a Starman, a cloud or a P-Wing | **Silenus** (the big Satyr) fights, giving an Aegis, a Nephele's cloud or Winged Sandals |
-| The map **looks like a giant turtle** | The Act III island is a **tortoise**: *chelone*, and the animal Hermes made the lyre from |
-
-#### Act IV, Rome (SMB3 World 7: Pipe)
-
-| SMB3 World 7 | Our version |
-|---|---|
-| **7-1** and **7-6**: **vertical stages** climbed through pipes; **directional lifts** | **Aqueduct climbs**: vertical scenes through lead pipes; **valve-driven lifts** that change direction when you turn a tap |
-| **7-5** and **7-9**: **pipe mazes** | **The Cloaca Maxima**: Rome's great sewer as a maze of channels (a real monument, drawn gently: it is a *clean* water-channel, a cartoon, with no sewage) |
-| Two small **Piranha Plant stages** (a whole level of plants), and **7-8** with many types | **The Garden Room**: a short level that is a Roman garden fresco full of **Acanthus Snappers** of different kinds |
-| The **first fortress has no enemies**, only a room of bricks to turn into coins | **The Treasury** in the Hypogeum: no enemies, a quiet puzzle |
-| **7-7**: cross a field of **Munchers** using a **Starman** | **The Thistle Run**: cross a field of thistles using the **Aegis** |
-| **7-4**: autoscrolling **underwater** level | **The Tiber Flume**: an autoscroll down a water-channel |
-| Second fortress: **pipe platforms over lava** | **Hypogeum lifts over Vesuvius's lava** |
-| Piranha Plants on the **map** | **Acanthus** growing across the Great Floor's paths |
-
-#### Act V, Olympus (SMB3 World 5: Sky)
-
-| SMB3 World 5 | Our version |
-|---|---|
-| **Tower**: a bridge between **ground and sky**; a pipe in the clouds drops you to a short descending level | **Pelion upon Ossa**: the giants Otus and Ephialtes piled one mountain on another to reach Olympus. A tower climb from the earth to the clouds, then a short descent |
-| **5-3**: **Goomba's Shoe** debuts | Giant Sandal returns for one scene |
-| **5-4, 5-5**: first sky level, **rotary** and **donut lifts** | Cloud platforms that **rotate**, **drifting cloud puffs** that sink when stood on |
-| **5-6**: **Para-Beetles as moving platforms** | **Pegasus and winged horses** you ride between platforms |
-| **5-9**: **diagonal autoscroll**, Fire Chomps | A diagonal climb up the **Chariot of Helios** path, chased by the **Chimera's** fire head |
-| **Second fortress**: broken platforms **between lava above and below** | Atlas's climb with **sun-fire** over and under |
-| **Map**: ground path and sky path; the **airship** crosses between; **Star spaces**; the sky **Hammer Bros** leave a **Music Box** | Great Floor clouds above the ground map; **constellation spaces**; the sky Satyr leaves **Orpheus's Lyre** |
-
-#### Act VI, Etruscan Tombs (SMB3 World 8: the dark maze)
-
-| SMB3 World 8 | Our version |
-|---|---|
-| **Fortress**: a maze of doors and traps | **The Tomb of Orcus**: false doors, and a **correct-door maze** |
-| **Bowser Statues** firing lasers, **Roto-Discs**, **Hot Feet**, Thwomps | **Stone lions** (Etruscan tomb guardians) with glowing eyes, and **spinning shield-discs** (Roto-Disc analogue). Shades in place of Hot Feet |
-| **Hand Traps** (rooms packed with traps) | **Charun's workshop**: a trap room of hammers and falling slabs |
-
-#### Act VII, Byzantium (SMB3 World 6: Ice)
-
-| SMB3 World 6 | Our version |
-|---|---|
-| **6-1** icy ground, **Ptooies** (a plant that blows a spiked ball) | **Polished gold floors** (slippery); a **peacock** that spits a **feather-ball** |
-| **6-2, 6-7**: autoscrolls over **moving clouds** and **donut lifts** | Autoscroll across **floating mosaic fragments** and **swinging chandeliers** |
-| **6-3, 6-4**: **small ice blocks** and **rotary lifts** on ice pillars | **Marble blocks** that slide; rotating **icon discs** |
-| **6-10**: **Frozen Coins** and **White Blocks** | **Tesserae sealed in glass** that melt by Lamp; Mallet scrapes to reveal |
-| **Third fortress**: **conveyor belts** and Stretches | A **treadwheel** hall where the floor runs under you |
-| **Airship**: **bolt lifts** (Lemmy) | **The Dromon** with rising and sinking oar platforms |
-| Three Hammer Bro sets | Three **Whitewasher** squads on the map |
-
-#### Act VIII, the Hoard (SMB3 World 8: tanks, fleet and castle)
-
-| SMB3 World 8 | Our version |
-|---|---|
-| **Big Tanks** (autoscroll, cannons that fire cannonballs and Bob-ombs) | **Siege towers and war elephants** as moving platforms; the cannons are pot-lobbers and **Pot Bombs** |
-| **Battleships** | A fleet of **triremes** (VIII-3) |
-| **Hand Traps** | **Statue hands** that grab at you, in a room of the Whitewashed Gallery |
-| **8-2**: the **Angry Sun** returns | The **Aten** returns from Act I, as a callback |
-| **Super Tank** (a huge, heavily armed tank) | **The Trojan Horse**: a giant wooden horse on wheels, loaded with the Vandal's Hoard, that you cross on top of while it fires |
-| **Castle of Koopa**: statue lasers, Roto-Discs, Thwomps, Hot Feet, then **Bowser** | **The Unswept Floor**: callbacks of every Act's hazard in order, then the Vandal |
 
 #### Boss progression
 
@@ -530,144 +355,9 @@ The wiki's Larry and Morton share one pattern, and Morton is **slower but fires 
 | **Star spaces** (World 5) | **Constellation spaces**: warp points on the map |
 | **Map shapes** (the Giant Land map is a turtle) | Each Act's map island has a **shape** (the tortoise for Act III, a bull's horns for Act II, a ship for Act I) |
 
-#### Scene bank (optional extras)
-
-If 39 levels feels too few for the main route and the ideas above are too good to waste, these are the bonus scenes, **not** counted in the 39: *The Great Pyramid* (I), *The Collapsing Causeway* (I), *The Shaduf Barges* (I), *The Flooded Labyrinth* (II), *Kiln Doors* (III), *The Cloaca Maxima* (IV), *The Garden Room* (IV), *The Tiber Flume* (IV), *Pelion upon Ossa* (V), *The Treadwheel Hall* (VII), *Charun's Workshop* (VI), *The Trojan Horse* (VIII).
-
-### Level by level: ideas from the rest of SMB3's level pages
-
-This pass covers the wiki's individual pages for Worlds 3 to 8: every numbered level, the fortresses, the airships, the World 8 special levels, and the Koopaling and Bowser fights. Each row below is a **specific SMB3 level** and what we could take from it. They are menus of ideas, not a commitment to build all of them.
-
-**The World 5 tower** is covered in the Act V table below (read from the link you sent). **Pages I still could not read:** none of the level pages. Bowser's own page is about 614,000 characters, and the first 300,000 held no description of the SMB3 fight, only background (he introduced the Koopalings; his first theme, "King of the Koopas"). The fight description comes from the Castle of Koopa page. The Koopaling pages only gave me their first 100,000 characters, so boss details are what those first sections said. 5-9, 6-10, the second Piranha Plant level and the first World 5 fortress were read from the links you sent and are included below.
-
-#### Act II, Crete (SMB3 World 3)
-
-| SMB3 level | What it does | Our scene idea |
-|---|---|---|
-| **3-1** | Underwater, bubble-jet pipes, Bloobers; a **split** (upper path has a Blooper Nanny, lower has bouncing blocks and a 1-Up) | **Dolphin Hall**: a mother **octopus** with her little ones (the Nanny); a fork where the upper path is risky and the lower is bouncy |
-| **3-2** | Zig-zag **rail lifts** over jumping Cheep-Cheeps; a Starman hidden in an L of wood blocks | **Raft rails** across a bay of leaping fish; an **Aegis** hidden in a ring of crates |
-| **3-3, 3-8** | **Tide** rises and falls; **Boss Bass** chases you; you **throw White Blocks at it** | The tide scene: you **throw amphorae at the Giant Fish** to drive it off. Revisit the same idea with smaller platforms (3-8) |
-| **3-4** | Hills with a **Lakitu** raining Spiny Eggs for the whole second half | A hill scene where a **harpy** drops sea urchins |
-| **3-5** | A dense field of **Jelectros** (19 of them), wind pipes that push you up, a bonus room only the **Frog Suit** can reach | A **jellyfish forest** to swim through slowly; **dolphin-spouts** lift you, and the Conch is the key to a bonus room |
-| **3-6** | **Autoscroll** over Donut and Rotary Lifts | A **sinking-crates** autoscroll (above) |
-| **3-7** | **Spikes** throw spiked balls (the manga advice: "wait for the toss, then stomp"); hidden beanstalk to Coin Heaven | **Crabs** that throw urchins; a hidden **vine** to a cloud of tesserae |
-| **3-9** | Above-water and underwater halves; a Bullet Bill **life-farming trick** (we cap it) | A **shore-and-sea** scene; a Frog-Suit-equivalent bonus room |
-| **Fortress 1** | **Find the right door**; Boom Boom **grows wings after the first hit** | The Labyrinth: Ariadne's thread. **Minotaur changes after the first hit**: he rams a wall, then **charges through a gap** |
-| **Fortress 2** | **Underwater** with **Stretches** (their first appearance) between Roto-Discs | The **flooded Labyrinth**: swim between **swinging doors** |
-| **Airship / Wendy** | **Bolt Lift** over Rocket Engines; Wendy's **candy rings bounce off the walls**, and she **jumps higher after each stomp** | Talos's galley with a **rising and falling oar platform**; **Talos's rocks ricochet**, and he **leaps higher** after each hit on the ankle plug |
-
-#### Act III, the Heroes' Vases (SMB3 World 4)
-
-| SMB3 level | What it does | Our scene idea |
-|---|---|---|
-| **4-1** | Big pipes, a **Big Piranha Plant**; **kick a giant shell** into a **Mega ? Block**; swim up **waterfalls** to a hidden pipe with 1-Ups | **Giant amphora blocks** opened by a **kicked giant Chelone shell**; a waterfall painted on the vase to swim up |
-| **4-2** | **Bobbing and sinking platforms** with leaping fish; kick a White Block into the Mega block; **24 coins** unlock a map house | Floating **olive-oil rafts**; 24 tesserae unlock a shrine |
-| **4-3** | A **cavern** with Buzzy Beetles and Spinies on floor *and ceiling*; **"tricky footing"**; two **Sledge Bros** on the plain | A **kiln cave** with creatures on the ceiling; two **Silenus** on the approach |
-| **4-4** | Underwater, **Lakitus** throw Spiny Eggs, **bubble-jet** blocks the way unless you wear the **Frog Suit**; **43 blue coins** | A **vase-bottom lake** with harpies; the Conch is the key; 43 **lapis tesserae** |
-| **4-5** | A cannon gauntlet with **Missile Bills** that **make U-turns**; a hidden **vine** to a Tanooki Suit | **Homing discs** that loop back; a hidden **grapevine** to a statue suit |
-| **4-6** | Two **Magic Doors** that swap you between the giant and small sides | **Kiln doors**: two doors that swap scale (see Act III table above) |
-| **Fortress 1** | A choice of **pipes**; **sliding Thwomps**; a long **Hot Foot** hall; Boom Boom on the ground | Sliding **column drums**; **embers** in a long hall; the **Nemean Lion** on the ground |
-| **Fortress 2** | **Donut Lifts** over lava; a Switch reveals a **vertical wrap-around** area with pipes and lifts | **Crumbling plinths** over a kiln fire; a **wrap-around** room (the vase wrap) |
-| **Airship / Iggy** | **Rocket Engines firing in four directions** (some randomly skip); **uneven platforms** make stomping Iggy difficult; Iggy is **quick** and **retreats into his shell** | **Hydra fight on a tilted raft**; the Hydra is quick, retreating under the water between attacks |
-
-#### Act IV, Rome (SMB3 World 7)
-
-| SMB3 level | What it does | Our scene idea |
-|---|---|---|
-| **7-1** | **Screen wrap** and vertical climbing through pipes; **kick a shell** around a curved pipe to hit a block | The **aqueduct climb** with **wrap-around arches**; a shell bounced through a curved pipe |
-| **7-2** | Part above-ground, part underwater; **throw a White Block** into a block; **invisible Jump Blocks form a bridge**; 46 underwater coins that only the Frog Suit can collect | **Cistern scene**; **hidden marble blocks** that become a bridge; a Conch-only coin cache |
-| **7-3** | **Six Starmen** in a row, so you stay **invincible** to the goal | **The Triumph**: a chain of **Aegis** pickups to cross a whole level invincible, as a Roman triumphal parade |
-| **7-4** | An **underwater autoscroll** through a Jelectro field; a hidden area behind the wall found by flying | **The Tiber Flume**; a hidden alcove behind the wall |
-| **7-5** | An underground **pipe maze** where **Bob-ombs break bricks**, **hidden blocks bridge the gaps**, and two pipes dead-end | **The Cloaca Maxima**: **Pot Bombs** blow open walls; dead-end channels |
-| **7-6** | **Directional Lifts** that change direction each time you jump on them; a hidden 1-Up; you can fly over the stone barrier at the start | **Valve lifts** that reverse when you jump |
-| **7-7** | Cross a **Muncher** field with a chain of **Starmen**; you must **crouch-slide** | **The Thistle Run**; crouch-slide under a low arch |
-| **7-8** | A level of **Ptooies and Walking Piranhas**; a **Hammer Suit** bonus | **Acanthus Snappers that walk** (a *Garden Room* variant); Mallet bonus |
-| **7-9** | A **broken pipe maze**: study the whole map before moving; **White Blocks** to clear | A broken-aqueduct maze to plan before you move |
-| **Piranha Plant stage** | Short, optional; **Munchers open and close in rhythm**; **200-second timer**; ends with a P-Wing | **Garden Room**: thistles that **open and close to a beat**; the prize is **Winged Sandals** |
-| **Second Piranha Plant stage** | A short optional level unlocked after the second fortress and leading to the airship; **41 Munchers** that **slip in and out of pipes in a steady rhythm**; hanging pipes with Venus Fire Traps; a **Koopa Paratroopa** carries you over the Munchers; the **end item is a Super Mushroom**; 200 seconds, no secrets | A **second Garden Room** unlocked after the Hypogeum: **41 thistles** that **rise and sink to a drumbeat** (a beat level in the style of the Dancers' Triclinium), a **flying Chelone** to ride over them, and a **cake** as the prize; it leads to the ship |
-| **Fortress 1** | **No enemies**; a **brick room** turned to coins; a **reset trick** gives infinite coins (we cap it); Roto-Discs and Hot Feet; "Mario has to **fly** to reach the end" | **The Treasury** puzzle room; the Winged Sandals needed to finish |
-| **Fortress 2** | **Pipe platforms over lava**; Boos; Roto-Discs; crouch-slide under a wall | **Hypogeum lifts over lava** |
-| **Airship / Ludwig** | **Bolt Lifts that move backward** when stepped on; Ludwig fires **rapid wand shots** and **charges** after a stomp; **he can hide in his shell at will** | A liburnian with **backward-moving platforms**; the **Colossus** can **sit down** to protect his head |
-
-#### Act V, Olympus (SMB3 World 5)
-
-| SMB3 level | What it does | Our scene idea |
-|---|---|---|
-| **Tower** | The **bridge from ground to sky**: a stack of small rooms and one outdoor stretch; **Roto-Discs, Thwomps, Spike Traps**; **Pile Driver Micro-Goombas disguised as bricks**; a brick that gives a **1-Up when tail-hit**; an empty room with **hanging lamps**; a **vine from three ? Blocks** to a cloud and the exit pipe; **falling off the side drops you back to the sky map**; the exit pipe means you must redo it; completing it unlocks the sky; difficulty 4/10 | **Pelion upon Ossa** (see Act V table above): rooms stacked inside a **pile of mountains**, a **stone-lamp room**, **Mudbrick Mimics** in the outdoor stretch, a **laurel-sprig strike** that releases a comedy mask from a brick, a **grapevine** from three amphora blocks to the first cloud; **falling off sends you back to the clouds** and you must redo it |
-| **5-1** | A **block mountain** where **Chain Chomps bite from below**; flight reaches a Music Box chest | A cloud mountain where **Cerberus's pups bite from below**; flight to the **Lyre** |
-| **5-2** | You **fall down a pipe** and **must stay still to land on a note block**; two routes, the secret one leads to a **three-1-Up room** | **Fall from Olympus**: stand still on the aulos block; a secret route to a Muse Shrine |
-| **5-3** | The only level with **Kuribo's Shoe**; the shoe lets you **stomp Munchers** | A **Giant Sandal** scene across a thistle field |
-| **5-4** | **Rotary Lifts**; a **Leaf shortcut** (run, then float over everything); a **Lakitu** on the goal cloud | Spinning cloud platforms; glide over the whole level; **Nephele** at the end |
-| **5-5** | Nearly all **Donut Lifts**; **28 coins** unlock a P-Wing house | **Cloud puffs** that sink; 28 tesserae unlock a Winged Sandals shrine |
-| **5-6** | **Para-Beetles** as moving platforms in an autoscroll | **Pegasus and winged horses** as platforms (above) |
-| **5-7** | **Pile Driver Micro-Goombas** between blocks; Lakitu; Turtle Cannons; a pipe to a hidden ground area | **Mudbrick Mimics** again; a hidden **ground** below the clouds |
-| **5-8** | **Clouds**, a **Lakitu that chases you** to the end, the manga's **7/10** | **Nephele's chase**: the hardest scene in the Act, with a *throw a shell at her* answer |
-| **5-9** | A **diagonal autoscroll** over sixteen lifts ("never stops moving"); a **Fire Chomp** begins following you in the second half; a Lakitu waits just before the goal; 300 seconds | **The Helios Climb**: a diagonal autoscroll up the sun-chariot's road over sixteen drifting cloud-lifts, chased by a **Chimera's fire head** that picks up your trail halfway; Nephele waits at the end |
-| **Fortress 1** | **Roto-Disc orbs** (seven), five Thwomps, a Podoboo, a Boo; **stand on a disc's middle** to bypass a Thwomp; breaking the middle two of four bricks opens a **flight route** to a red pipe and a coin room (**arrow-shaped coins** point the way) with **three hidden 1-Up blocks**; a Roto-Disc on the ceiling and one on the floor spin together; difficulty 5/10 | **Spinning shield-discs**; stand on the centre hub; **two paired discs, one above and one below**; breaking two marked bricks lets the **Laurel glide** reach a hidden room with **tesserae laid out as an arrow** and three comedy masks |
-| **Fortress 2** | **Lava above and below**, about 22 Podoboos, a Starman | **Sun-fire above and below** |
-| **Airship / Roy** | A **rotating cannon** with a **ditch** that avoids its fire; Roy **shakes the room when he lands**, and **paralyses you if you're standing** | **Zeus's boat**; the **shockwave** from Zeus's stamp paralyses you unless you're **in the air** |
-
-#### Act VI, Etruscan Tombs and Act VIII (SMB3 World 8)
-
-| SMB3 level | What it does | Our scene idea |
-|---|---|---|
-| **Fortress** (9/10) | A **maze of doors** that loop back; **conveyor belt** over lava with spikes above (crouch); hidden **P-switch door** | **The Tomb of Orcus**: false doors; a treadmill under a **descending spiked ceiling** |
-| **Hand Traps** | Three **trap levels** on the map, each with a **50% chance** to pull you in; clearing one gives a **Super Leaf**; skipping all three has a **12.5%** chance | **Statue hands** on the Great Floor that grab you at random for a trap room; the reward is a Laurel Wreath |
-| **8-1** | Turtle Cannons, pipes, a Bullet Bill **life farm** (we cap it); flight reaches a **three-1-Up room** | A **discus-thrower gauntlet** |
-| **8-2** | The **Angry Sun returns** and chases you; a **sandfall shortcut** skips the first chasm and the Sun | **The Aten chases you** across the Hoard's desert; **a sand-slide** shortcut |
-| **Big Tanks** | **Only the tanks move**; standing on the ground doesn't scroll you; the convoy (13 tanks) ends at a **Boomerang Bro** | A **siege-tower convoy**; end with a **Silenus boss** |
-| **Battleships** | Three warships; you can **swim under** them but are **pushed down**; Small Mario can dive under | **Trireme fleet**; a diving route under the ships for the *small* artist |
-| **Airships** | **Faster autoscroll**, a Rocket Engine and a **Rocky Wrench** on almost every platform; "**step on the Wrenches' heads**" | The Vandal's **fastest ship**; **Oarsmen** to bounce on |
-| **Super Tank** | A **small lead tank** and three longer ones; many cannons, **flying Boom Boom** at the end | **The Trojan Horse** (above) |
-| **Castle of Koopa** | **Bowser Statues** fire lasers when approached; a lift that rises when stepped on; Donut Lifts over lava; a **four-way split** where two lead to Bowser | **Statue lions** with eye-beams; **lifts**; a four-way fork, two of which reach the Vandal |
-| **Bowser** | Breathes fire **at varying heights** (jump or crouch), then **jumps and breaks the bricks** under him; land him in the **same spot** two or three times to open a pit; **35 fireballs** or three hammers also work | **The Vandal** (section 10): **smashes at different heights** (jump or crouch), then **leaps and breaks tiles**; the Lamp (our fire) or the Mallet are alternative ways to win |
-
-#### Act VII, Byzantium (SMB3 World 6)
-
-| SMB3 level | What it does | Our scene idea |
-|---|---|---|
-| **6-1** | **Ptooies** (spiked balls), a **warp door visible only with a flight suit** | A **peacock** spitting spiked feather balls; a **door that only the Laurel glide can see** |
-| **6-2** | **Cloud Lifts** autoscroll with slippery landings; the manga's 7/10 | Floating **mosaic fragments** over a gold floor |
-| **6-3** | **Ice Blocks**, a hidden **beanstalk** to a Tanooki Suit | **Marble blocks**, a hidden grapevine |
-| **6-4** | **Rotary Lifts** and **96 coins**, with many in Coin Heaven | Spinning **icon discs** |
-| **6-5** | A cave you **must fly** through; **Nipper Plants** block the exit; **protect your suit**; **400-second timer** | **The Dome's attic**: glide to the exit and **don't get hit** (you'd lose the Laurel) |
-| **6-6** | A large underground cave with a Starman and zero secrets | A **cistern** with calm swimming |
-| **6-7** | **Diagonal autoscroll**; **Frozen Coins** you **melt with fire**; **78 coins** unlock an Anchor house | **Tesserae in glass** you melt with the Lamp; 78 tesserae |
-| **6-8** | **White Blocks** to kill enemies cleverly; the manga's **7/10**; Hammer Suit | **Marble blocks** thrown at the Whitewashers; the Mallet |
-| **6-10** | A level made **entirely of Ice Blocks**: a hidden **beanstalk** to a **P Switch** that turns a pillar into coins and *unfreezes* **24 frozen Munchers**; **race to defrost them** near a pipe for a secret **Hammer Suit** room; the manga's **7/10** | **The Glass Gallery**: **24 thistles sealed in glass** that melt when you press a Kiln Switch; if you are quick, a hidden alcove with the **Mallet**; the thaw is a **timed race**, with a sound to warn you |
-| **6-9** | A **flight shortcut** over the structure, or a **flooded cavern** with Munchers; a **Frog Suit** secret | A **flooded crypt**; the Laurel glide skips it |
-| **Fortress 1** | An **elevator block**, a **long rail-lift** section | **Rising lifts**, a long treadwheel |
-| **Fortress 2** | **Seven sliding Thwomps**, Boos, Roto-Discs, all on **ice** | **Sliding column drums** on a polished floor |
-| **Fortress 3** (8/10) | **Conveyor belts**, **Stretches**, a **Duo-Roto-Disc**, "**keep braking**"; Boom Boom jumps between five blocks | **Treadwheel hall** with slippery braking |
-| **Airship / Lemmy** | **Bolt Lifts**, then a flat room where Lemmy's **balls bounce around**; **bounce on his head** | The Throne of Solomon's **lions throw bouncing golden balls** |
-
-**Boss patterns, as the wiki describes them**
-
-| SMB3 boss | Pattern | Take for our boss |
-|---|---|---|
-| Larry | blast, shell retreat, blast; 3 stomps | the template (Act I) |
-| Morton | same, slower, more wand shots | the same pattern with a different **tempo** |
-| Wendy | **ricochet** rings; she **jumps higher** after each hit; 3 hits | Talos's **ricocheting rocks** |
-| Iggy | **quick**, **uneven** floor, retreats in his shell | the Hydra **on a tilted raft** |
-| Roy | **ground-shake** that **paralyses** you if you're standing; 3 hits | Zeus's **stamp** |
-| Lemmy | **bouncing balls** in a flat room | the lions' **golden balls** |
-| Ludwig | **rapid shots**, shell charge, can retreat at will | the Colossus **sits down** |
-| Bowser | **fire at varying heights**, then **floor-smash** | the Vandal |
-| Boom Boom | grounded in W1 to W2; **grows wings** after the first hit from W3 on; **jumps between blocks** in the hardest fortress | **mini-bosses get a second move after the first hit** |
-
-**Cross-cutting lessons**
-
-- **Suits as keys.** Flight, the Frog Suit, the Tanooki statue and the Hammer all open a hidden room somewhere. Make every one of our suits the key to at least one secret per Act.
-- **One power-up airships.** Several airships have a single power-up and no secrets, because the cannon gauntlet *is* the level. Ours do the same.
-- **A level of nothing but a challenge.** Some levels (5-8, 7-3, the Piranha Plant stage) have one idea and no secrets. That is fine: it keeps the Act's pace varied.
-- **Coin thresholds** vary (24, 28, 30, 44, 78) and each unlocks a map house. We use tessera thresholds with different rewards (an anchor, Winged Sandals).
-- **Life farms.** SMB3 has several (stomping Bullet Bills, Dry Bones, spawner pipes, the brick reset). Decide once: **cap each one** (my default).
-- **Difficulty.** The wiki's manga ratings run from **2/10** (1-1) up to **9/10** (the World 8 fortress and airships). For a phone game aimed at a gentle audience, **we should cap scenes at about 7/10** and keep the 8 to 9 range for optional bonus scenes.
-- **Timers.** SMB3 uses 300 seconds by default, 200 for the Piranha Plant stage and 400 for 6-5. We have no timer; scenes that rely on one (6-5's careful flight) use a **pacing device** instead (a rising tide, a closing door).
-
 ## 10. The Great Vandal and the ending
 
-**Who he is.** A towering **Sweeper**: broom in one hand, maul in the other. He cannot bear a mess, and to him every picture is mess: it *looks back at him*, it takes up wall. So he **smashes pictures into tesserae and sweeps them into the Hoard**, then whitewashes the bare wall. (Proposed characterisation: see Open questions.) The name has two layers. The Vandals were a real Germanic people who sacked Rome in AD 455, and the word "vandalism" was coined much later (in 1794) and is not fair to them; we make the character entirely fictional and the gallery card explains the word. His title is **the Iconoclast**, "image-breaker", from the real Byzantine period (726 to 843) when some images were whitewashed or removed. We **never mock any living religion's imagery**: no sacred figure is ever an enemy, a target or a prop that you smash.
+**Who he is.** A towering **Sweeper**: broom in one hand, maul in the other. He cannot bear a mess, and to him every picture is mess: it *looks back at him*, it takes up wall. So he **smashes pictures into tesserae and sweeps them into the Hoard**, then whitewashes the bare wall. (Decided: the Sweeper.) The name has two layers. The Vandals were a real Germanic people who sacked Rome in AD 455, and the word "vandalism" was coined much later (in 1794) and is not fair to them; we make the character entirely fictional and the gallery card explains the word. His title is **the Iconoclast**, "image-breaker", from the real Byzantine period (726 to 843) when some images were whitewashed or removed. We **never mock any living religion's imagery**: no sacred figure is ever an enemy, a target or a prop that you smash.
 
 **The fight (SMB3 Bowser style).** The Vandal's lair is a giant version of Sosus's *Unswept Floor*. He leaps and smashes the floor, so the tiles drop away in rows; wait for him to leap and **hit the floor so he falls through the gaps**. Phase one is Egyptian flat colour, phase two a Greek vase, phase three gold mosaic: the arena **changes medium** as he gets more frantic. Three falls, and the Hoard opens under him.
 
@@ -817,7 +507,7 @@ Same plan as parts 1 and 2 (see `docs/painters/DESIGN.md`, section 16):
 1. **Greybox**: one artist, SMB3 movement (run with the winged meter, stomp, shell kick, block bounce), a flat test level. Check that it feels good on a phone.
 2. **Filter spikes**: run three sample sprites each through the mosaic, vase, tomb and fresco filters and **look at them on a phone at arm's length**. Gate: if gold, black-figure or dark-tomb sprites aren't readable, fix the rules (section 11) before building more.
 3. **Vertical slice**: scene I-1 (*The Marsh of Nebamun*) in tomb style with the theatre-curtain intro, one Muse Shrine, the Victor's Dais and one pithos.
-4. **Act I complete**: three scenes, the Scribe's Tomb and the Sphinx; Laurel Wreath glide; first run of the Great Floor map with one Satyr.
+4. **Act I complete**: all seven scenes (including the Causeway and the Shaduf Barges), the Scribe's Tomb and the Sphinx; Laurel Wreath glide; first run of the Great Floor map with one Satyr.
 5. **Second style**: Act II (Crete), to prove the filter pipeline generalises: swimming, Conch, bull vaults, the Minotaur.
 6. **The map and meta game**: Muse Shrines, Vase Match, the Capsa, Urania's Star Chart. These systems can be built alongside Acts I and II.
 7. **Acts III to VII** in order, adding one big system each (Kiln flip and Hydra's fire; water flow and valves; Winged Sandals flight and ship autoscroll; Lamp light; whitewash scraping).
@@ -825,7 +515,7 @@ Same plan as parts 1 and 2 (see `docs/painters/DESIGN.md`, section 16):
 
 **Gallery extras.** In the part 2 style: a gallery card per hero, per Act and per source work, saying where the *real* object lives, with a note on invented faces and restorations.
 
-**Scope warning.** 39 levels is a lot: part 1 shipped 29 levels in 7 worlds and part 2 plans 20. If it is too much, merge each Act's fortress and ship into one (32 levels) or cut Act VIII's fleet scene (38). Act VII could also launch as an update.
+**Scope warning.** 41 levels is a lot: part 1 shipped 29 levels in 7 worlds and part 2 plans 20. The fallback if production slips is to merge each Act's fortress and ship into one (II to VII), which brings the total to 35, with Act I kept whole as the free sample. Act VII can also launch as an update.
 
 ## 17. Stretch ideas and alternatives
 
@@ -838,9 +528,9 @@ Same plan as parts 1 and 2 (see `docs/painters/DESIGN.md`, section 16):
   - **The Silk Road.** Persian miniatures, Chinese hand-scrolls (a level that *is* a long horizontal scroll), Japanese folding screens (a screen that opens like a level), Indian court painting. Very natural for a horizontally scrolling game, and many of the works are public domain.
   - **Islamic geometric art** and **Mesoamerican codices** are rich and underused, though tricky on cultural-sensitivity grounds.
 
-## 18. Decisions so far
+## 18. Decisions
 
-(From the brief.)
+**From the brief**
 1. **Part 3 is SMB3-style, set in antiquity.** Egypt, Crete, Greece, Rome, Etruria, Byzantium; mosaics, vases, tomb paintings and frescoes; all public domain.
 2. **Theatre staging.** A Greek theatre with masks and a curtain opens the game; the world map is a Roman floor mosaic.
 3. **Suits:** Laurel Wreath, Winged Sandals, Marble Statue, Triton's Conch, Sculptor's Mallet and Chisel, Giant Sandal, Orpheus's Lyre.
@@ -848,20 +538,24 @@ Same plan as parts 1 and 2 (see `docs/painters/DESIGN.md`, section 16):
 5. **Eight worlds** as listed in section 9, with the Great Vandal as the villain.
 6. **Tone:** gentle and whimsical. **Platforms:** phone first, then PC. **Engine:** Unity, with the code-driven art pipeline.
 
-## 19. Open questions
+**Confirmed after review** (all recommendations accepted)
+1. **Title:** *Masks & Mosaics*, in the *Into the Frame* series. (A store and trademark search is still to do.)
+2. **The Great Vandal** is a tidy-minded Sweeper with a maul and broom, who leaves one tessera out of place at the end.
+3. **Four heroes with invented faces:** Exekias, Iaia, Thutmose and Sosus. Iaia's gallery card says how little survives about her.
+4. **Scope:** keep the full set, with the fallback in section 16 if production slips.
+5. **Ship battle then boss** in every Act.
+6. **Hieroglyphs** are decorative pseudo-glyphs, flagged as such.
+7. **Heritage-image laws:** Acts IV, VI and VII are "inspired by", with no copies of specific frescoes. A lawyer's view is needed before launch, especially before selling in Italy.
+8. **No cameos** of parts 1 and 2.
+9. **Where it lives:** this document stays in `docs/antiquity/` until the repo is decided.
+10. **Business model:** first Act free (the Nile), one unlock purchase, no ads.
+11. **Act I has seven scenes**, making the total **41 levels**. (This supersedes the 39 in the scope answer: 39 is the count for the other Acts plus a five-scene Act I.)
+12. **All life-farms are capped.**
+13. **Transformed Keepers** (Ovid-style) in every Act.
+14. **Title screen** shows a random artist each time.
+15. **Scene bank** stays as stretch content; nothing is promoted beyond the two Act I scenes in decision 11.
 
-1. **Part 3 title** and **series name** (section 0). My pick: *Masks & Mosaics* in the *Into the Frame* series.
-2. **The Vandal's character.** I proposed a tidy-minded **Sweeper** with a maul and broom, who ends up leaving one tessera out of place. Alternatives: a more classic villain (a stern Iconoclast in plain robes, with no comic side), or a *former apprentice* nobody noticed. Which do we want?
-3. **Four heroes with invented faces**, or fewer (two, as SMB3 has Mario and Luigi) or more? And do we want **Iaia** (she makes a good case, but we only have Pliny's few lines about her)?
-4. **Scope:** 39 levels, 32 (fortress and ship merged), or Acts released in two halves?
-5. **Is the ship-battle-then-boss structure right for every Act**, or do some Acts end in a fortress alone?
-6. **Hieroglyphs:** decorative pseudo-glyphs (my default), or real ones with an Egyptologist's check?
-7. **Italian and other heritage-image laws:** how cautious do we want to be about Acts IV, VI and VII before launch?
-8. **Does part 3 cameo parts 1 and 2**, or stay self-contained? (They are quick and charming, but a sibling-game reference needs at least one other game to exist.)
-9. **Where does the new repo live**, and under which account? As in part 2, this document moves across when it exists.
-10. **Business model:** first Act free, one unlock (matching the other games), or something different for a larger game?
-11. **Act I's size.** Keep it at five nodes, or expand to seven (the autoscroll causeway and the shaduf barges) so the free Act matches SMB3's World 1? This raises the total to 41 levels.
-12. **Spawner pipes.** Cap the number of enemies a pithos can spawn (my default), or allow SMB3-style life farming?
-13. **Transformed Keepers.** Do we want the Ovid-style transformation of each Act's Keeper (section 9), or keep the emblema theft alone?
-14. **Title screen hero.** A random artist each time (my default), or the last one you played?
-15. **Scene bank.** Keep the optional scenes in section 9 as stretch content, or promote some of them into the main route?
+**Still open**
+- Which repo and account will hold the project (decision 9).
+- The store and trademark search for the title.
+- Legal review (decision 7), and verification of the ancient-art facts and dates in this document before release.
