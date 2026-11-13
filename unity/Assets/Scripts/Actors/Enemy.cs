@@ -49,6 +49,7 @@ namespace Tapestry
                 case "lapdog": speed = 2.6f; break;
                 case "smith": speed = 1.4f; break;
                 case "urn_plant": gravity = false; break;
+                case "ember": gravity = false; timer = (pos.x * 0.37f) % 2f; break;
                 case "fox": speed = 1.4f; break;
                 case "monkey": speed = 0f; timer = 1f; break;
                 case "parakeet": gravity = false; break;
@@ -269,6 +270,21 @@ namespace Tapestry
                     lifeT += dt;
                     if (Body.Grounded && lifeT > 2.6f + (home.x % 1f)) { lifeT = 0f; Body.Vel.y = 11f; }   // a hop
                     else if (Body.Grounded && timer > 1.9f && Mathf.Abs(dx) < 11f && Mathf.Abs(dx) > 1.2f) { charging = true; timer = 0f; }
+                    break;
+
+                case "ember":   // a spark of the fire pit: sinks from sight, then leaps high and falls back in; it cannot be stomped or shot
+                    if (!swooping)
+                    {
+                        Body.Pos = new Vector2(home.x, home.y - 0.9f); view.Renderer.enabled = false; Body.Vel = Vector2.zero;
+                        if (timer > 2.2f) { swooping = true; timer = 0f; Body.Pos = new Vector2(home.x, home.y); Body.Vel = new Vector2(0f, 12.5f); Audio.Play("soup", 0.3f); }
+                    }
+                    else
+                    {
+                        view.Renderer.enabled = true; view.SetFrame(Body.Vel.y > 0f ? 0 : 1);
+                        Body.Vel.y -= 24f * dt;
+                        if (Body.Pos.y < home.y - 0.6f && Body.Vel.y < 0f) { swooping = false; timer = 0f; }
+                    }
+                    Untouchable = !swooping;
                     break;
 
                 case "urn_plant":   // rises from its urn, snaps, and sinks again; it stays down while a knight is near or upon the urn
@@ -540,7 +556,7 @@ namespace Tapestry
                 }
                 return false;
             }
-            if (Kind == "urn_plant") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
+            if (Kind == "urn_plant" || Kind == "ember") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
             if (!fromAbove) { k.Hurt(); return false; }
             if (k.Mounted) { k.Bounce(); Squash(false); return true; }   // Bayard's hooves crush every beast, burning or not
             if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return false; }   // burning mane

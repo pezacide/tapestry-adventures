@@ -71,6 +71,7 @@ namespace Tapestry
             { "enemies/hydra_neck", new Sheet("Art/enemies/hydra_neck", 20f, 20f, 1, 0.5f, 0.5f, 19.5f, 19.5f) },
             { "enemies/smith", new Sheet("Art/enemies/smith", 76f, 108f, 3, 8.5f, 4.5f, 69f, 103f) },
             { "enemies/urn_plant", new Sheet("Art/enemies/urn_plant", 44f, 54f, 2, 3.5f, 7.5f, 41f, 54f) },
+            { "enemies/ember", new Sheet("Art/enemies/ember", 44f, 46f, 2, 8f, 1f, 38f, 43f) },
             { "bosses/cockatrice", new Sheet("Art/bosses/cockatrice", 160f, 150f, 2, 10.5f, 0f, 159.5f, 141f) },
             { "bosses/great_dragon", new Sheet("Art/bosses/great_dragon", 300f, 160f, 3, 5f, 1f, 300f, 151f) },
             { "bosses/cat_king", new Sheet("Art/bosses/cat_king", 164f, 170f, 2, 18.5f, 0f, 164f, 170f) },

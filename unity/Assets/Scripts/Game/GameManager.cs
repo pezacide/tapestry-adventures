@@ -500,6 +500,7 @@ namespace Tapestry
                     case 'q': kind = "greyhound"; break;
                     case 'p': kind = "pheasant"; break;
                     case 'ß': kind = "smith"; break;
+                    case 'é': kind = "ember"; break;
                     case 'ø': kind = "urn_plant"; break;
                     case 'I': kind = "genet"; break;
                     case '{': kind = "lapdog"; break;
@@ -1045,7 +1046,7 @@ namespace Tapestry
                     if (!lg.Removed && s.Body.Overlaps(lg.Body)) { lg.Destroy(); s.Destroy(); AddScore(200, lg.Body.Pos + new Vector2(0f, 1f)); break; }
                 if (s.Removed) continue;
                 foreach (var e in enemies)   // a crossbowe bolt fells any beast, burning lions too
-                    if (e.Active && e.Alive && !e.Carried && !e.Untouchable && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
+                    if (e.Active && e.Alive && !e.Carried && !e.Untouchable && e.Kind != "ember" && s.Body.Overlaps(e.Body)) { e.Flip(); s.Destroy(); break; }
             }
             foreach (var it in items)
                 if (!it.Removed && it.Ready && it.Body.Overlaps(pb)) { Collect(it); it.Destroy(); }

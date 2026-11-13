@@ -112,3 +112,16 @@ def well():
     s += stem("M24,10 L24,22", "brown", 1.6, False) + woven("M19,22 L29,22 L28,30 L20,30 Z", "brown", "dark", 1)   # a bucket on its rope
     return s
 S["well"] = (T, T, well, False)
+
+# ---------------------------------------------------------------- the leaping ember
+def ember(f):
+    """A spark leaping from a fire pit: 0 rising (flame trailing below), 1 falling (flame streaming above)."""
+    up = f == 0
+    s = fill("M18,40 Q4,28 12,14 Q14,24 20,22 Q18,10 24,2 Q34,14 32,24 Q40,20 36,32 Q34,42 18,40 Z" if up else
+             "M18,4 Q4,16 12,30 Q14,20 20,22 Q18,34 24,42 Q34,30 32,20 Q40,24 36,12 Q34,2 18,4 Z", "terra", 40, "dark", 1.4)
+    s += fill("M20,36 Q12,28 18,20 Q22,26 26,22 Q30,30 26,36 Q22,38 20,36 Z" if up else
+              "M20,8 Q12,16 18,24 Q22,18 26,22 Q30,14 26,8 Q22,6 20,8 Z", "gold", 0)
+    s += dot(21, 29 if up else 15, 2.2, "cream") + dot(27, 29 if up else 15, 1.6, "cream")
+    return s
+C["ember"] = dict(title="Leaping Ember", size=(44, 46), frames=2, build=ember,
+                  behaviour="leaps out of castle fire pits at intervals and falls back in; cannot be stomped or shot, only avoided")

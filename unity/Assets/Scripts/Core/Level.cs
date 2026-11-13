@@ -87,6 +87,14 @@ namespace Tapestry
                     }
                 }
             }
+            // leaping embers: every run of three or more fire tiles sends a spark out of its middle
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
+                {
+                    if (tiles[x, y] != '*' || (x > 0 && tiles[x - 1, y] == '*')) continue;
+                    int e = x; while (e + 1 < Width && tiles[e + 1, y] == '*') e++;
+                    if (e - x >= 2) Spawns.Add(new KeyValuePair<char, Vector2>('é', new Vector2((x + e + 1) * 0.5f, y + 0.5f)));
+                }
             MainWidth = Width;
             foreach (var sp in Spawns) if (sp.Key == '[') MainWidth = Mathf.Min(Width, Mathf.FloorToInt(sp.Value.x) - 3);
             ShuffleRewards();

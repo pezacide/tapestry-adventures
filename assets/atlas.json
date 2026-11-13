@@ -648,6 +648,16 @@
       ],
       "frame_count": 2,
       "file": "enemies/urn_plant.png"
+    },
+    "ember": {
+      "title": "Leaping Ember",
+      "behaviour": "leaps out of castle fire pits at intervals and falls back in; cannot be stomped or shot, only avoided",
+      "frame": [
+        44,
+        46
+      ],
+      "frame_count": 2,
+      "file": "enemies/ember.png"
     }
   },
   "bosses": {
