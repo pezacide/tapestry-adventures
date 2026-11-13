@@ -10,6 +10,9 @@ namespace Tapestry
     /// It is a non-consumable in-app product. On Google Play, Unity IAP hands back everything the player already owns each time
     /// it starts, so a re-install or a new phone restores the unlock by itself.
     ///
+    /// This is written for Unity IAP 4.x (pinned to 4.15.1 on purpose: Google Play Billing 8.3.0, and no personal data collected).
+    /// IAP 5.4+ has a different, event-based interface (StoreController) and collects personal data; see docs/PLAY_STORE.md before moving to it.
+    ///
     /// Without Unity's In-App Purchasing package (UNITY_PURCHASING) a real build cannot sell anything (and so never gives the
     /// unlock away); inside the Unity editor a "purchase" is simulated, so the paywall can be tried.</summary>
     public static class Store

@@ -1,0 +1,8 @@
+# Keep line endings the same on every machine (Windows included), so git stops warning
+# about LF/CRLF and Unity's .meta and scene files do not show phantom changes.
+* text=auto eol=lf
+*.png binary
+*.ogg binary
+*.jpg binary
+*.apk binary
+*.aab binary
