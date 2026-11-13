@@ -349,6 +349,49 @@ Added after reading the Super Mario Wiki's page on SMB3. Each is mapped to our s
 - **Ending beat.** The wiki notes SMB3's ending has a praying Koopa. We have a similar quiet joke already: the Vandal's front-row seat and the mouse on the last tile.
 - **Secret reward.** After the credits SMB3 starts a new game with every P-Wing. Ours can give **the Winged Sandals in the Capsa** as a replay reward.
 
+### Act I as the free tutorial: lessons from SMB3's World 1
+
+Act I is the free Act, so it is the first thing every player sees. I read the Super Mario Wiki pages for SMB3's World 1 (levels 1-1 to 1-6, the fortress, the airship and Larry) and took what they teach about **pacing a first world**. The wiki's difficulty ratings (from the Japanese manga guide) climb gently: 1-1 is 2/10, 1-2 and 1-3 are 3/10, 1-5 and 1-6 are 4/10, 1-4 and the fortress are 5/10.
+
+**What World 1 does, and our version of each beat**
+
+| SMB3 World 1 | What it teaches | Our version (Act I) |
+|---|---|---|
+| **1-1**: semisolid platforms, a Venus Fire Trap in a pipe, a Super Leaf in a block you can only open by throwing a shell at it | Safe first contact; the shell-as-tool idea; power-up in place | **I-1 Marsh of Nebamun.** The first amphora block sits on the ground, so you need a kicked Chelone shell to open it. It holds the **Laurel Wreath** |
+| 1-1 secret: run up, fly to a cloud area with a 1-Up, then to a bonus room whose coins form a "3" | Vertical exploration; flight shows a level is taller than it looks | A **sky-marsh of birds** above the reeds, reached by a run-up **glide** off a high reed, with tesserae spelling a **Roman numeral** |
+| 1-1 P Switch hidden under a brick stack | Rewards noticing an out-of-the-way block | A **Kiln Switch** under a mudbrick stack turns bricks to tesserae |
+| **1-2**: pipes that spawn endless enemies, a hidden switch route, Super Star in the last jump block | Low-stakes warm-up; a secret that changes the route | **Pithos nests** spawn Tessera Beetles. **Decision: cap them** (SMB3's spawners allow farming lives); each pithos spawns at most a few, then goes quiet |
+| **1-3**: a long flat plain, boomerang thrower, a **hidden note block** to Coin Heaven, side-bumping for a hidden power-up, and the **white block**: crouch on it and you drop behind the scenery to find a Toad House with the **Magic Whistle** | Off-path secrets; side-bumping; background areas; a skill check (crouching) | **I-2 Harvest Registers** hides an **aulos block** to a tessera cloud, a **painted-door panel** (crouch to step into the wall) and, behind it, **Urania's Star Chart**: the same early-warp gift SMB3 hides in its first world |
+| **1-4**: first **autoscroll**; lifts that drop when you land; bricks that can push you off | Momentum; scroll pressure; shells break bricks; a **coin threshold** (44 coins) makes a P-Wing house appear on the map | **I-3 Sands of Giza** gains an **autoscroll causeway** section of crumbling stones. If you collect all its tesserae, a **gold shrine** appears on the Great Floor with a Winged Sandals item |
+| **1-5**: opens with a slope slide into a pool; a **fork** (above-ground path with a hidden note block, underground path of pools and a power-up) that **reconverges**; Piranha Plants facing different ways | Slide and swim before enemies; fork without a second difficulty curve | A **dune slide into the Nile** at the start of a scene; a fork between the bank and the riverbed; **Acanthus Snappers** (or reed snappers here) in pots facing up, down and sideways |
+| **1-6**: island gaps, rail-mounted lifts, bounce blocks, wire-hung platforms, an erratic track; some lifts fall at the end of their track | Introduce moving platforms gradually; make risky ones look different | A **shaduf** (the Egyptian counterweight water-lift) as a **see-saw platform**, **rope-and-pulley barges** on the river, and one erratic barge that **frays** at the end (rope fibres show it) |
+| **Fortress**: Podoboos that leap between gaps, **Roto-Discs**, a Dry Bones, a **moving spiked ceiling** you must duck, a rising door; Boom Boom's room; defeating him destroys the fortress and **opens the map lock** | One new hazard at a time before combinations; timing taught through visible motion | **I-4 The Scribe's Tomb**: leaping **fire-cobras** (uraeus) from pots, spinning **sun-discs** (Roto-Disc analogue), a **Bandage Scamp**, a **descending spiked ceiling**; beating **Khepri** destroys the tomb door and **opens the Sphinx Gate** on the map |
+| Fortress secret: fill the P-meter, fly into the ceiling, reach a treasure chest with the **Whistle**; taking it **ends the fortress early but leaves the lock shut** | A power-up-gated secret with a **tradeoff** | A hidden room in the tomb with a second **Star Chart** copy: it ends the tomb at once but **doesn't open the Gate**, so you must still come back |
+| **Airship**: the Toad says the king's wand was stolen and he was **transformed**; autoscroll under cannon fire; crushed by the screen edge is fatal; a quartet cannon at the midpoint; the power-up block gives a Fire Flower if you are already powered up | Cannon placement is the whole challenge; steady forward pressure | **I-5 Barque of Millions of Years** (section 9). Cannons are **pot-lobbing catapults** and Oarsmen. The block at the midpoint gives a **Lamp** if you're already grown |
+| **Larry**: three beats: a magic blast, a shell retreat and chase after a stomp, another blast; three stomps | A readable boss pattern to copy | Our **boss template**, used for Act bosses: *attack, expose, chase*, three hits (the Sphinx and others vary it) |
+
+**Rules to copy**
+- **Power-up substitution.** A power-up block gives a Mushroom-equivalent (an Ambrosia Cake) if you are small, and the **next item up** (a Laurel Wreath or a Lamp) if you are already grown. Rewards stay meaningful at every stage.
+- **Rewards on a small skill check.** Hidden things are found by side-bumping, crouching on a special block or a run-up, not by guessing.
+- **Coin thresholds unlock map rewards** (as the 1-4 P-Wing house does). We use tessera thresholds, and a gold shrine appears.
+- **A shortcut costs something** (the Whistle that skips the fortress but leaves the lock shut).
+- **The first Act's difficulty curve:** I-1 2, I-2 3, I-3 3 to 4, I-4 5, I-5 5. Playtest against this.
+- **A cheap beginning.** SMB3's 1-1 has 57 coins, 3 Mushrooms and 3 Leaves, so a first-timer is rarely short of items. Ours should be generous.
+
+**The Keeper, transformed.** In SMB3 each world's king has been **turned into an animal** by the Koopaling who stole his wand, and beating the boss turns him back. Our version fits Greek myth perfectly: **each Act's Keeper has been transformed**, as in Ovid's *Metamorphoses*. Defeating the boss returns the **emblema** and restores the Keeper, and the Keeper is the Act's host at its Muse Shrine afterwards.
+
+| Act | Keeper | Turned into |
+|---|---|---|
+| I | The Scribe of the Nile | a **cat** |
+| II | The King of Crete | a **bull** |
+| III | A Hero's herald | a **stag** (the myth of Actaeon) |
+| IV | The Villa's master | a **goose** (Roman house-guards, the geese that saved the Capitol) |
+| V | The Cloud King | a **swan** |
+| VI | The Tomb's host | a **wolf** (Aita's wolf-skin cap) |
+| VII | The Emperor's steward | a **peacock** (a Byzantine symbol) |
+
+**Act I might deserve more.** SMB3's World 1 has six levels, a fortress and an airship; ours has three scenes, a fortress and a ship. Since Act I is the free sample, consider giving it two more scenes: **I-3b *The Collapsing Causeway*** (the autoscroll level) and **I-6 *The Shaduf Barges*** (the lift level). That makes **41 levels**. See Open questions.
+
 ## 10. The Great Vandal and the ending
 
 **Who he is.** A towering **Sweeper**: broom in one hand, maul in the other. He cannot bear a mess, and to him every picture is mess: it *looks back at him*, it takes up wall. So he **smashes pictures into tesserae and sweeps them into the Hoard**, then whitewashes the bare wall. (Proposed characterisation: see Open questions.) The name has two layers. The Vandals were a real Germanic people who sacked Rome in AD 455, and the word "vandalism" was coined much later (in 1794) and is not fair to them; we make the character entirely fictional and the gallery card explains the word. His title is **the Iconoclast**, "image-breaker", from the real Byzantine period (726 to 843) when some images were whitewashed or removed. We **never mock any living religion's imagery**: no sacred figure is ever an enemy, a target or a prop that you smash.
@@ -497,3 +540,6 @@ Same plan as parts 1 and 2 (see `docs/painters/DESIGN.md`, section 16):
 8. **Does part 3 cameo parts 1 and 2**, or stay self-contained? (They are quick and charming, but a sibling-game reference needs at least one other game to exist.)
 9. **Where does the new repo live**, and under which account? As in part 2, this document moves across when it exists.
 10. **Business model:** first Act free, one unlock (matching the other games), or something different for a larger game?
+11. **Act I's size.** Keep it at five nodes, or expand to seven (the autoscroll causeway and the shaduf barges) so the free Act matches SMB3's World 1? This raises the total to 41 levels.
+12. **Spawner pipes.** Cap the number of enemies a pithos can spawn (my default), or allow SMB3-style life farming?
+13. **Transformed Keepers.** Do we want the Ovid-style transformation of each Act's Keeper (section 9), or keep the emblema theft alone?
