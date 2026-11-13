@@ -127,14 +127,34 @@ C["ember"] = dict(title="Leaping Ember", size=(44, 46), frames=2, build=ember,
                   behaviour="leaps out of castle fire pits at intervals and falls back in; cannot be stomped or shot, only avoided")
 
 # ---------------------------------------------------------------- the armoured snail
+def _shrunk(base, f):
+    return g(base(f), "translate(6 16) scale(0.78)")
+
 def snail_spike(f):
     """A snail-hound in a grey iron shell studded with spikes: never stomp it."""
     from creatures import make_snail
-    s = make_snail("grey", "sage", "buff", "cream")(f)
-    for a in range(-70, 71, 35):   # spikes fanned over the top of the shell
-        x = 24 + 22 * math.sin(math.radians(a)); y = 20 - 22 * math.cos(math.radians(a))
-        dx = 9 * math.sin(math.radians(a)); dy = -9 * math.cos(math.radians(a))
-        s += fill(f"M{x - 3 * math.cos(math.radians(a)):.1f},{y - 3 * math.sin(math.radians(a)):.1f} L{x + dx:.1f},{y + dy:.1f} L{x + 3 * math.cos(math.radians(a)):.1f},{y + 3 * math.sin(math.radians(a)):.1f} Z", "white", 0, "dark", 1)
+    s = _shrunk(make_snail("grey", "sage", "buff", "cream"), f)
+    cx, cy, r = 24.7, 47.2, 15.6
+    for a in range(-80, 81, 32):
+        c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
+        bx, by = cx + r * sn, cy - r * c
+        s += fill(f"M{bx - 3.2 * c:.1f},{by - 3.2 * sn:.1f} L{bx + 10 * sn:.1f},{by - 10 * c:.1f} L{bx + 3.2 * c:.1f},{by + 3.2 * sn:.1f} Z", "white", 0, "dark", 1.1)
     return s
 C["snail_spike"] = dict(title="Armoured Snail-Hound", size=(64, 64), frames=2, build=snail_spike,
                         behaviour="walker with a spiked iron shell: stomping it hurts the knight; shoot it, or smite it with the relique")
+
+# ---------------------------------------------------------------- the winged snail-hound
+def snail_wing(f):
+    """Frames 0-1 walking and 2 shell (as the snail-hound, with a blue shell); 3-4 the winged flier, wings up then down."""
+    from creatures import make_snail
+    base = make_snail("sky", "rose", "buff", "white")
+    if f <= 2: return base(f)
+    s = _shrunk(base, 0)
+    if f == 3:   # wings lifted
+        w = "M22,24 Q8,20 2,6 Q14,8 18,2 Q22,12 30,8 Q28,18 30,24 Z"
+    else:        # wings swept down
+        w = "M22,24 Q8,30 2,44 Q14,40 18,46 Q22,36 30,40 Q28,30 30,24 Z"
+    s += fill(w, "white", 0, "dark", 1.3) + stem("M24,24 L10," + ("10" if f == 3 else "40") + " M26,24 L20," + ("6" if f == 3 else "42"), "grey", 0.8, False)
+    return s
+C["snail_wing"] = dict(title="Winged Snail-Hound", size=(64, 64), frames=5, build=snail_wing,
+                       behaviour="flies in a lazy loop; a stomp knocks its wings off and it walks, then hides in its shell like any snail-hound")

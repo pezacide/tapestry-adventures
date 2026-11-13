@@ -11,7 +11,7 @@ namespace Tapestry
         public bool IsShell { get { return shell; } }
         public bool ShellMoving { get { return shell && shellVx != 0f && !carried; } }
         public bool Carried { get { return carried; } }
-        bool IsSnail { get { return Kind == "snail_hound" || Kind == "snail_moss"; } }
+        bool IsSnail { get { return Kind == "snail_hound" || Kind == "snail_moss" || Kind == "snail_wing"; } }
         bool carried;      // a green (mossy) shell held by a knight
         public int ShellCombo;   // beasts this shell has felled in a row (the score doubles each time)
         Knight carrier;
@@ -21,6 +21,7 @@ namespace Tapestry
         float dir = -1f, timer, anim, kickGrace, deadTimer, shellVx, lifeT;
         bool shell, squashed, flipped, charging, swooping, gravity = true;
         float speed, plantLevel;
+        bool winged;
         /// <summary>A plant sunk inside its urn: it cannot touch, or be touched.</summary>
         public bool Untouchable { get; private set; }
         /// <summary>1 normally; faster on 'Ye Wronge Syde' (the beasts, their hammers and spears all move and wait that much quicker).</summary>
@@ -49,6 +50,7 @@ namespace Tapestry
                 case "lapdog": speed = 2.6f; break;
                 case "smith": speed = 1.4f; break;
                 case "snail_spike": speed = 1.0f; break;
+                case "snail_wing": speed = 1.1f; gravity = false; winged = true; break;
                 case "urn_plant": gravity = false; break;
                 case "ember": gravity = false; timer = (pos.x * 0.37f) % 2f; break;
                 case "fox": speed = 1.4f; break;
@@ -109,6 +111,15 @@ namespace Tapestry
             float dx = ToPlayer(p);
             switch (Kind)
             {
+                case "snail_wing":
+                    if (winged)   // a lazy loop in the air, wings beating
+                    {
+                        float a = anim * 0.9f + home.x;
+                        Body.Pos = new Vector2(home.x + Mathf.Sin(a) * 2.5f, home.y + 1.6f + Mathf.Sin(a * 2f) * 0.6f);
+                        view.Face(Mathf.Cos(a) > 0f); view.SetFrame(3 + ((int)(anim * 6f) % 2));
+                        break;
+                    }
+                    goto case "snail_hound";
                 case "snail_hound":
                 case "snail_moss":
                     if (shell)
@@ -539,6 +550,13 @@ namespace Tapestry
         public bool OnKnight(Knight k, bool fromAbove)
         {
             if (!Alive || k.Dead) return false;
+            if (winged)   // a stomp clips its wings: it drops and walks
+            {
+                if (!fromAbove) { k.Hurt(); return false; }
+                winged = false; gravity = true; Body.Vel = Vector2.zero; k.Bounce(); Audio.Play("stomp");
+                GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
+                return false;
+            }
             if (IsSnail && shell)
             {
                 if (ShellMoving)

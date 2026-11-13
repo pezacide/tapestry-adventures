@@ -501,6 +501,7 @@ namespace Tapestry
                     case 'p': kind = "pheasant"; break;
                     case 'ß': kind = "smith"; break;
                     case 'þ': kind = "snail_spike"; break;
+                    case 'ƒ': kind = "snail_wing"; break;
                     case 'é': kind = "ember"; break;
                     case 'ø': kind = "urn_plant"; break;
                     case 'I': kind = "genet"; break;

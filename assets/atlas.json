@@ -668,6 +668,16 @@
       ],
       "frame_count": 2,
       "file": "enemies/snail_spike.png"
+    },
+    "snail_wing": {
+      "title": "Winged Snail-Hound",
+      "behaviour": "flies in a lazy loop; a stomp knocks its wings off and it walks, then hides in its shell like any snail-hound",
+      "frame": [
+        64,
+        64
+      ],
+      "frame_count": 5,
+      "file": "enemies/snail_wing.png"
     }
   },
   "bosses": {
