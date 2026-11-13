@@ -557,9 +557,9 @@ m.put(3, 2, "P"); m.row(9, 5, "?M?")
 m.row(16, 5, "===="); m.row(22, 8, "===="); m.put(20, 9, "a")   # up the first hunting stand
 m.row(31, 4, "===="); m.put(44, 2, "j"); m.row(48, 5, "BRB"); m.put(54, 9, "a")
 m.row(58, 5, "===="); m.row(64, 8, "==="); m.put(66, 9, "a")
-m.row(71, 4, "===="); m.put(82, 2, "C"); m.put(86, 2, "h"); m.row(90, 5, "?W?")
+m.put(72, 2, "ĺ"); m.put(75, 2, "ĺ"); m.put(82, 2, "C"); m.put(86, 2, "h"); m.row(90, 5, "?W?")
 m.put(96, 9, "a"); m.row(100, 5, "===="); m.row(106, 8, "====")
-m.row(121, 4, "===="); m.put(134, 2, "j"); m.row(138, 5, "BHB"); m.put(140, 9, "a")
+m.put(122, 2, "ǿ"); m.put(125, 2, "ǿ"); m.put(134, 2, "j"); m.row(138, 5, "BHB"); m.put(140, 9, "a")
 m.put(148, 2, "d"); m.row(152, 5, "B1B"); m.put(158, 9, "a")
 m.stairs(166, 6)
 m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe

@@ -28,6 +28,7 @@ namespace Tapestry
         readonly List<Item> items = new List<Item>();
         readonly List<Lift> lifts = new List<Lift>();
         Lift riding;   // the lift the knight stands on
+        Lift pendingBalance;   // the first board of a balance pair, waiting for its other
         // halfway banner
         SpriteRenderer checkpointView;
         Vector2 checkpointPos;
@@ -426,7 +427,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; pendingBalance = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
@@ -487,6 +488,12 @@ namespace Tapestry
                     case 'L': case 'E': case 'Y': case 'U':
                         var kindL = s.Key == 'E' ? Lift.Kind.BoardUpDown : s.Key == 'Y' ? Lift.Kind.ShipRocking : s.Key == 'U' ? Lift.Kind.ShipSailing : Lift.Kind.BoardSideways;
                         lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), kindL, world, lifts.Count * 1.3f, L.LiftSkin));
+                        break;
+                    case 'ĺ': lifts.Add(new Lift(new Vector2(p.x - 0.5f, p.y + 1f), Lift.Kind.Falling, world, 0f, L.LiftSkin)); break;
+                    case 'ǿ':   // balance boards come in pairs: each second one is hung against the one before it
+                        var bal = new Lift(new Vector2(p.x - 0.5f, p.y + 1f), Lift.Kind.Balance, world, 0f, L.LiftSkin);
+                        if (pendingBalance != null) { bal.Partner = pendingBalance; pendingBalance.Partner = bal; pendingBalance = null; } else pendingBalance = bal;
+                        lifts.Add(bal);
                         break;
                     case 'h': kind = "killer_hare"; break;
                     case 'l': kind = "fiery_lion"; break;
@@ -964,6 +971,7 @@ namespace Tapestry
             if (TapestryInput.PrevKnightPressed) SwitchKnight(-1);
 
             level.Tick(dt);
+            foreach (var l in lifts) { l.Stood = l.StoodFrame; l.StoodFrame = false; }
             foreach (var l in lifts) l.Tick(dt);
             wheelAngle += WheelSpeed * dt;
             foreach (var w in wheels) w.localEulerAngles = new Vector3(0f, 0f, wheelAngle * Mathf.Rad2Deg);
@@ -1531,7 +1539,7 @@ namespace Tapestry
                 if (b.Right <= l.X0 + 0.05f || b.Left >= l.X1 - 0.05f) continue;
                 if (b.PrevBottom >= l.Top - 0.25f && b.Pos.y <= l.Top + 0.02f)
                 {
-                    b.Pos.y = l.Top; b.Vel.y = 0f; b.Grounded = true; riding = l;
+                    b.Pos.y = l.Top; b.Vel.y = 0f; b.Grounded = true; riding = l; if (b == player.Body) l.StoodFrame = true;
                     return;
                 }
             }

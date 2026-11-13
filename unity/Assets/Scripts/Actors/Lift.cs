@@ -19,7 +19,7 @@ namespace Tapestry
         readonly SpriteRenderer view;
         float t;
 
-        public enum Kind { BoardSideways, BoardUpDown, ShipRocking, ShipSailing, OrganPipe }
+        public enum Kind { BoardSideways, BoardUpDown, ShipRocking, ShipSailing, OrganPipe, Falling, Balance }
         public const float PipeStep = 1.2f;   // two beats of the organ tune (100 a minute): the pipes change height on every second beat
         int pipeIndex;
 
@@ -31,14 +31,24 @@ namespace Tapestry
             {
                 case Kind.BoardUpDown: key = boardSkin; Width = 3f; ampY = 2.5f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
                 case Kind.ShipRocking: key = "scenery/longship"; Width = 5.4f; ampY = 0.35f; speed = 1.6f; rock = 3f; spriteH = 110f; deckFromTop = 58f; break;
+                case Kind.Falling: key = boardSkin; Width = 3f; spriteH = 22f; deckFromTop = 8f; falling = true; break;
+                case Kind.Balance: key = boardSkin; Width = 3f; spriteH = 22f; deckFromTop = 8f; balance = true; break;
                 case Kind.OrganPipe: key = "scenery/organ_pipe"; Width = 2f; spriteH = 300f; deckFromTop = 4f; pipeIndex = (int)phase; t = 0f; break;
                 case Kind.ShipSailing: key = "scenery/longship"; Width = 5.4f; ampX = 3f; ampY = 0.25f; speed = 0.7f; rock = 2f; spriteH = 110f; deckFromTop = 58f; break;
                 default: key = boardSkin; Width = 3f; ampX = 3f; speed = 0.9f; spriteH = 22f; deckFromTop = 8f; break;
             }
             view = Art.Make(key, parent, Vector2.zero, kind == Kind.ShipRocking || kind == Kind.ShipSailing ? -2 : kind == Kind.OrganPipe ? -1 : 2);
             organ = kind == Kind.OrganPipe;
+            if (falling) view.color = new Color(1f, 0.82f, 0.7f);   // a reddish board: it will not hold
             Place();
         }
+
+        // a falling board: it gives way soon after a knight stands on it, drops out of sight, and a while later is hung again
+        bool falling, balance, hidden; float fallT, fallV, backT, off;
+        /// <summary>Set by the game when a body stands on the lift this frame (read by the next tick).</summary>
+        public bool StoodFrame, Stood;
+        /// <summary>The other board of a balance pair: weight on one lowers it and raises the other.</summary>
+        public Lift Partner;
 
         // a board riding round the rim of a turning wheel (it stays level, like a fair's big wheel)
         bool onWheel, organ; Vector2 centre; float radius;
@@ -69,6 +79,34 @@ namespace Tapestry
         public void Tick(float dt)
         {
             var before = Pos;
+            if (falling)
+            {
+                if (hidden)
+                {
+                    backT += dt;
+                    if (backT > 3.5f) { hidden = false; fallT = 0f; fallV = 0f; Pos = home; view.enabled = true; }
+                    Delta = Vector2.zero; Pos = new Vector2(home.x, hidden ? -100f : home.y); Place(); return;
+                }
+                if (Stood) fallT += dt;
+                if (fallT > 0.55f)   // dropping
+                {
+                    fallV += 22f * dt; Pos = new Vector2(home.x, Pos.y - fallV * dt);
+                    if (Pos.y < home.y - 16f) { hidden = true; backT = 0f; view.enabled = false; }
+                }
+                Delta = Pos - before; Place();
+                if (fallT > 0f && fallT <= 0.55f) view.transform.localPosition += new Vector3(Mathf.Sin(fallT * 60f) * 0.04f, 0f, 0f);   // it shudders first
+                return;
+            }
+            if (balance)
+            {
+                float target = 0f;
+                bool me = Stood, other = Partner != null && Partner.Stood;
+                if (me && !other) target = -1.8f; else if (other && !me) target = 1.8f;
+                off = Mathf.MoveTowards(off, target, 2.2f * dt);
+                Pos = new Vector2(home.x, home.y + off);
+                Delta = Pos - before; Place();
+                return;
+            }
             if (drifting)
             {
                 t += dt;
