@@ -230,7 +230,7 @@ namespace Tapestry
                 (touch
                     ? "Moove with ye joystick: push it to ye rim to runne, and pull it downe to crouche (or, when thou ridest, to dismounte). Ye large button leapeth (holde it to leape higher); ye small one runneth, and shooteth a crossbowe if thou bearest one."
                     : "LEFTE and RYGHTE moove thee; holde RUNNE to runne, and it shooteth a crossbowe if thou bearest one. JUMPE leapeth (holde it to leape higher); DOWNE crouchethe (or dismounteth, when thou ridest). Crouche to duck spears and flung sweetes, or to creepe through a low passage.") + "\n\n" +
-                "Stompe beastes from above; touche them from ye side and thou art hurte. Bumpe bricks from beneath to breake them: some hide a bezant, a capon (mendeth a herte), a golden chalice (a lyfe), a crossbowe, a holy relique (nothing may harme thee for a whyle), or Bayard ye magic horse, whom thou mayst ryde.\n\n" +
+                "Stompe beastes from above; touche them from ye side and thou art hurte. Bumpe bricks from beneath to breake them: some hide a bezant (a few give many, if thou bumpest them again and again), a capon (mendeth a herte), a golden chalice (a lyfe; one is hidden in a block thou canst not see), a crossbowe, a holy relique (nothing may harme thee for a whyle), or Bayard ye magic horse, whom thou mayst ryde.\n\n" +
                 "Touche a halfway banner and thou shalt ryse agayne there. Mind ye Tyme, for it runneth out.",
 
                 "Seven tapestries, four realmes in each, and a castle with a mighty boss at ye ende of every one:\n\n" + tapestries.ToString() + "\nTouche \"Ye Tapestries\" on ye title screene to learne of ye true tapestries that inspired them.",

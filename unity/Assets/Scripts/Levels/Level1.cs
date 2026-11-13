@@ -18,7 +18,7 @@ namespace Tapestry
                 "                1                                                                                    o o o",
                 "                                     oooo                                 s                     w                                           ooo    w                 B",
                 "                                                                       ooo===       B                                                                               BB",
-                "          M   B?BHB                  ====  BWB                    R               SBB               B?B?BHB                 O       k       ===     BHB?           BBB",
+                "          M   B?BHB                  ====  BWB     .              R               SBB               B?B?BHB            B,B  O       k       ===     BHB?           BBB",
                 "                                                      TT      TT       ===        BBB                                       TT    BBBB                            BBBB",
                 "                      TT                              tt      tt                 BBBB                                       tt                                   BBBBB",
                 "   P           s      tt  h        S            l     tt  d   tt              h BBBBB   c   d    C              u    S      tt                        s   h     BBBBBB      G",

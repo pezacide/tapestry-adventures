@@ -1,5 +1,6 @@
 """Lay out the levels and write each as an ASCII map in C# (unity/Assets/Scripts/Levels/LevelN.cs).
-Legend:  # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding Bayard   = plank (one-way)
+Legend:  , brick that pays many bezants (bump it again and again, up to ten in five seconds)   . hidden block (hides a chalice)
+         # earth   B brick (breaks)   ? brick hiding a bezant   H brick hiding Bayard   = plank (one-way)
          1 brick hiding a golden chalice (life)   M roast capon (heart)   W crossbowe   R holy relique (star)
          Q log pile (rolls logs at the knight)   g gull   x crab   f fish   z sea-serpent   m sea-monk   e hippocamp
          Y longship rocking at anchor   U longship sailing to and fro (deck one row above the letter)
@@ -160,6 +161,7 @@ m.ground(0, 29); m.ground(33, 69); m.ground(77, 139); m.ground(144, 199); m.wate
 m.put(3, 2, "P")
 m.row(10, 5, "M"); m.row(14, 5, "B?BHB"); m.row(16, 8, "1")
 m.put(15, 2, "s"); m.put(26, 2, "h"); m.put(35, 2, "S")
+m.put(51, 5, ".")                                              # a hidden block: jump beneath the empty air to find a chalice
 m.tower(22, 2)
 m.row(37, 5, "===="); m.row(37, 7, "oooo")
 m.row(43, 5, "BWB"); m.put(48, 2, "l")
@@ -169,6 +171,7 @@ m.stairs(80, 5)
 m.put(88, 2, "c"); m.put(96, 7, "w")
 m.put(97, 2, "C"); m.row(100, 5, "B?B?BHB"); m.row(101, 8, "o o o")
 m.put(112, 2, "u"); m.put(117, 2, "S")
+m.row(119, 5, "B,B")                                         # a brick that pays many bezants: bump it again and again
 m.tower(124, 3); m.put(124, 5, "O")
 m.row(130, 4, "BBBB"); m.put(132, 5, "k")
 m.row(140, 5, "==="); m.row(140, 7, "ooo")

@@ -12,7 +12,9 @@ namespace Tapestry
     /// <summary>The tile grid: builds the stitched tiles, answers collision queries, and handles block bumps.
     /// One world unit = one 48-design-unit tile. Tile (x, y) covers [x, x+1] x [y, y+1]; y = 0 is the bottom row.
     ///
-    /// Map legend:  # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
+    /// Map legend:  , brick that gives many bezants if bumped again and again (up to ten in five seconds)
+    ///              . hidden block (cannot be seen or touched until a knight bumps it from beneath; it hides a golden chalice)
+    ///              # earth  B brick (breaks)  ? brick hiding a bezant  H brick hiding Bayard  X used block  = plank (one-way)
     ///              1 brick hiding a golden chalice (life)  M roast capon (heart)  W crossbowe  R holy relique (star)
     ///              * fire pit (burns)  _ drawbridge (falls when the axe is struck)  F flail block (iron flail swings round it)
     ///              A the axe that drops the bridge  K the Cockatrice  J the Island-Whale  N the rescued monk  Q log pile (rolls logs)
@@ -37,6 +39,8 @@ namespace Tapestry
         readonly Dictionary<int, SpriteRenderer> views = new Dictionary<int, SpriteRenderer>();
         readonly Transform root;
         readonly List<Bump> bumps = new List<Bump>();
+        readonly Dictionary<int, float> multiStart = new Dictionary<int, float>();
+        readonly Dictionary<int, int> multiLeft = new Dictionary<int, int>();
 
         public Vector2 Start = new Vector2(2.5f, 2f);
         public float GoalX = -1f;
@@ -66,6 +70,7 @@ namespace Tapestry
                     {
                         case '#': case 'B': case '?': case 'H': case 'X': case '=': case 'T': case 't': case '~':
                         case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D': case ';': case '8': case '(': case ')': case '7': case '%':
+                        case ',': case '.':
                             tiles[x, y] = c; break;
                         case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
                         case 'P': Start = new Vector2(x + 0.5f, y); break;
@@ -133,12 +138,15 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': case ',': return true;
                 case '(': return MirrorState == 0;
                 case ')': return MirrorState == 1;
                 default: return false;
             }
         }
+
+        /// <summary>A hidden chalice block: no collision, no picture, until a knight bumps it from below.</summary>
+        public bool Hidden(int x, int y) { return Get(x, y) == '.'; }
 
         public bool Platform(int x, int y) { char c = Get(x, y); return c == '=' || c == '^'; }
         public bool Water(int x, int y) { return Get(x, y) == '~'; }
@@ -241,7 +249,7 @@ namespace Tapestry
                     switch (c)
                     {
                         case '#': key = Get(x, y + 1) == '#' ? skin.GroundFill : skin.GroundTop; break;
-                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': case '8': key = skin.Brick; break;   // item bricks look like any other brick
+                        case 'B': case '?': case 'H': case '1': case 'M': case 'W': case 'R': case '8': case ',': key = skin.Brick; break;   // item bricks look like any other brick
                         case 'X': key = "scenery/roundel_used"; break;
                         case '~': key = "scenery/sea"; break;
                         case '=': key = skin.Plank; dy = 1f - Art.Sheet(skin.Plank).FrameH / Art.DesignPerTile; break;
@@ -300,6 +308,31 @@ namespace Tapestry
                         case 'R': return BumpResult.Relic;
                         default: return BumpResult.Bezant;
                     }
+                case ',':
+                    {
+                        // many-bezant brick: each bump pays a bezant until ten are given or five seconds have passed since the first
+                        int k = Key(x, y);
+                        float now = Time.time;
+                        if (!multiStart.ContainsKey(k)) { multiStart[k] = now; multiLeft[k] = 10; }
+                        StartBump(v);
+                        multiLeft[k]--;
+                        if (multiLeft[k] <= 0 || now - multiStart[k] > 5f)
+                        {
+                            tiles[x, y] = 'X';
+                            if (v != null) v.sprite = Art.Single("scenery/roundel_used");
+                            multiStart.Remove(k); multiLeft.Remove(k);
+                        }
+                        return BumpResult.Bezant;
+                    }
+                case '.':
+                    {
+                        // the hidden block shows itself, and gives its chalice
+                        tiles[x, y] = 'X';
+                        var nv = Art.Make("scenery/roundel_used", root, new Vector2(x + 0.5f, y), 0);
+                        views[Key(x, y)] = nv;
+                        StartBump(nv);
+                        return BumpResult.Chalice;
+                    }
                 case '7': StartBump(v); return BumpResult.Mirror;
                 case 'B':
                     tiles[x, y] = ' ';
@@ -346,6 +379,7 @@ namespace Tapestry
         public Vector2 Pos, Vel;
         public float W, H;
         public bool UsePlatforms = true, Grounded, HitCeiling, HitWall;
+        public bool HitsHidden;     // true for knights: hidden blocks stop their heads (and show themselves)
         public int CeilX, CeilY;
         public float PrevBottom;
 
@@ -417,7 +451,7 @@ namespace Tapestry
                 int ty = Mathf.FloorToInt(Top);
                 int best = -1; float bestDist = 99f;
                 for (int x = x0; x <= x1; x++)
-                    if (lv.Solid(x, ty))
+                    if (lv.Solid(x, ty) || (HitsHidden && lv.Hidden(x, ty)))
                     {
                         float d = Mathf.Abs(x + 0.5f - Pos.x);
                         if (d < bestDist) { bestDist = d; best = x; }

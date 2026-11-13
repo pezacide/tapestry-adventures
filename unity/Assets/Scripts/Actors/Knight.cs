@@ -35,6 +35,7 @@ namespace Tapestry
         {
             Def = def;
             Body = new Body(pos, FootW, FootH);
+            Body.HitsHidden = true;
             Hearts = def.Hearts;
             view = new SpriteView(def.Sheet, parent, 20);
             view.SetPosition(pos);

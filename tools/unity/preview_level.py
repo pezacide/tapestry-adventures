@@ -30,7 +30,7 @@ def render(n):
       put(load(key), x, gy)
   sk = lambda k, d: (re.search(k + r' = "([^"]+)"', src) or re.search("(" + d + ")", d)).group(1)
   brick, gtop, gfill = sk("Brick", "scenery/masonry"), sk("GroundTop", "scenery/ground_top"), sk("GroundFill", "scenery/ground_fill")
-  tiles = {c: brick for c in "B?H1MWRD8"}; tiles[";"] = "scenery/stream_foul"; tiles["("] = "scenery/mirror_gold"; tiles[")"] = "scenery/mirror_silver"; tiles["7"] = "scenery/mirror_block"; tiles["%"] = "scenery/basket";
+  tiles = {c: brick for c in "B?H1MWRD8,"}; tiles[";"] = "scenery/stream_foul"; tiles["("] = "scenery/mirror_gold"; tiles[")"] = "scenery/mirror_silver"; tiles["7"] = "scenery/mirror_block"; tiles["%"] = "scenery/basket";
   gate = re.search(r'Gate = "([^"]+)"', src)
   if gate: tiles["D"] = gate.group(1)
   tiles["~"] = "scenery/sea"; tiles["V"] = sk("Vault", "scenery/vault"); tiles["F"] = tiles["V"]
