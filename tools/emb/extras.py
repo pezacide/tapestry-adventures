@@ -177,3 +177,9 @@ def cannonball(f):
     s = dot(10, 10, 9, "dark", "grey") + dot(7, 7, 2.6, "cream")
     return s
 C["cannonball"] = dict(title="Cannonball", size=(22, 22), frames=1, build=cannonball, behaviour="rolls on in a straight line until it strikes a wall")
+
+# ---------------------------------------------------------------- a thread-spark for the bell bursts
+def spark():
+    s = stem("M8,1 L8,15 M1,8 L15,8", "white", 1.6, False) + stem("M3,3 L13,13 M13,3 L3,13", "cream", 1, False)
+    return s + dot(8, 8, 2.6, "gold", "dark")
+S["spark"] = (16, 16, spark, False)

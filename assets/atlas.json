@@ -1787,6 +1787,13 @@
       ],
       "file": "scenery/well.png"
     },
+    "spark": {
+      "size": [
+        16,
+        16
+      ],
+      "file": "scenery/spark.png"
+    },
     "fire": {
       "size": [
         48,

@@ -343,6 +343,21 @@ namespace Tapestry
         int bellsLeft; float bellT;
         class BellFx { public Transform T; public float Age; public Vector2 Base; }
         readonly List<BellFx> bellFx = new List<BellFx>();
+        class SparkFx { public SpriteRenderer R; public Vector2 Pos, Vel; public float Age, Life; }
+        readonly List<SparkFx> sparkFx = new List<SparkFx>();
+        /// <summary>A burst of gilded thread-sparks (a stitched firework) flung out from a point.</summary>
+        void Burst(Vector2 at, int n)
+        {
+            var tints = new[] { new Color(1f, 0.85f, 0.4f), new Color(0.95f, 0.45f, 0.35f), new Color(0.55f, 0.75f, 1f), Color.white };
+            var tint = tints[Random.Range(0, tints.Length)];
+            for (int i = 0; i < n; i++)
+            {
+                float a = i * Mathf.PI * 2f / n + Random.Range(-0.15f, 0.15f), sp = Random.Range(3.2f, 5.2f);
+                var r = Art.Make("scenery/spark", world, at, 31);
+                r.color = tint;
+                sparkFx.Add(new SparkFx { R = r, Pos = at, Vel = new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * sp, Life = Random.Range(0.9f, 1.4f) });
+            }
+        }
         LevelDef L { get { return Levels.All[levelIndex]; } }
         string farKey, nearKey;
         float stateTime, camX, winTime;
@@ -431,7 +446,7 @@ namespace Tapestry
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
-            hornView = huntView = null; pipeCount = 0; hasBonus = inBonus = false; bonusToldOf = false; bellsLeft = 0; bellFx.Clear(); starT = 3f; horsemanT = 4f; horsemanNext = 0; princessView = null; hasPrincess = rescuedPrincess = false; pendingEnemies.Clear(); hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
+            hornView = huntView = null; pipeCount = 0; hasBonus = inBonus = false; bonusToldOf = false; bellsLeft = 0; bellFx.Clear(); foreach (var sf in sparkFx) if (sf.R != null) Destroy(sf.R.gameObject); sparkFx.Clear(); starT = 3f; horsemanT = 4f; horsemanNext = 0; princessView = null; hasPrincess = rescuedPrincess = false; pendingEnemies.Clear(); hasHorn = carryingHorn = hasFountain = toldFoul = toldFountain = false; hornCombo = 0;
             SetupBackdrop();
             world = new GameObject("World").transform;
             level = new Level(L.Map, world, L);
@@ -821,6 +836,7 @@ namespace Tapestry
                     float bx = L.CastleX + Random.Range(-4f, 4f), by = level.GroundAt(L.CastleX) + Random.Range(3.5f, 6.5f);
                     bellFx.Add(new BellFx { T = Art.Make("scenery/bell", world, new Vector2(bx, by), 30).transform, Age = 0f, Base = new Vector2(bx, by) });
                     Audio.Play("bezant", 1f);
+                    Burst(new Vector2(bx, by + 0.4f), 14);
                     AddScore(500, new Vector2(bx, by + 0.9f));
                 }
             }
@@ -830,6 +846,16 @@ namespace Tapestry
                 if (b.T == null || b.Age > 1.3f) { if (b.T != null) Destroy(b.T.gameObject); bellFx.RemoveAt(i); continue; }
                 b.T.localPosition = new Vector3(b.Base.x, b.Base.y + b.Age * 0.8f, 0f);
                 b.T.localEulerAngles = new Vector3(0f, 0f, Mathf.Sin(b.Age * 18f) * 14f);   // swinging
+            }
+            for (int i = sparkFx.Count - 1; i >= 0; i--)
+            {
+                var sf = sparkFx[i]; sf.Age += dt;
+                if (sf.R == null || sf.Age > sf.Life) { if (sf.R != null) Destroy(sf.R.gameObject); sparkFx.RemoveAt(i); continue; }
+                sf.Vel.y -= 4.5f * dt; sf.Vel *= 1f - 1.2f * dt;   // they slow and sag like falling thread
+                sf.Pos += sf.Vel * dt;
+                sf.R.transform.localPosition = new Vector3(sf.Pos.x, sf.Pos.y, 0f);
+                sf.R.transform.localEulerAngles = new Vector3(0f, 0f, sf.Age * 200f);
+                var c = sf.R.color; c.a = 1f - Mathf.Clamp01((sf.Age / sf.Life - 0.55f) / 0.45f); sf.R.color = c;
             }
             var pb = player.Body;
             winTime += dt;
