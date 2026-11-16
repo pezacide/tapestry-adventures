@@ -188,7 +188,7 @@ The longer levels have a **halfway banner**. Touch it and it turns red; if you d
 - **Text:** all the on-screen writing is in olde English.
 - **Music and sound:** original tunes in medieval modes on a synthesized band of recorder, lute, hurdy-gurdy drone, shawm and tabor.
   - **Tunes:** a stately title theme (D Dorian), a lively meadow dance (G Mixolydian), a fast shawm-and-drum tune while the relique lasts, and short victory, death and game-over pieces.
-  - **Sound effects:** about 32, covering jumps, stomps, coin bells, breaking bricks, the crossbowe, Bayard's hooves and whinny, the lion's roar, soup and more.
+  - **Sound effects:** about 34, covering jumps, stomps, coin bells, breaking bricks, the crossbowe, Bayard's hooves and whinny, the lion's roar, soup and more.
   - All of it is made by `tools/audio/make_audio.py` (numpy and ffmpeg), so it is free to use.
 
 ## How the code is laid out

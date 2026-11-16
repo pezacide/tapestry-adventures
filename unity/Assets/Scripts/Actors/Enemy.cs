@@ -21,7 +21,7 @@ namespace Tapestry
         float dir = -1f, timer, anim, kickGrace, deadTimer, shellVx, lifeT;
         bool shell, squashed, flipped, charging, swooping, gravity = true;
         float speed, plantLevel;
-        bool winged, snapped; float flapT;
+        bool winged, snapped, clipFall; float flapT;
         /// <summary>A plant sunk inside its urn: it cannot touch, or be touched.</summary>
         public bool Untouchable { get; private set; }
         /// <summary>1 normally; faster on 'Ye Wronge Syde' (the beasts, their hammers and spears all move and wait that much quicker).</summary>
@@ -87,6 +87,7 @@ namespace Tapestry
             timer += dt; anim += dt; kickGrace -= dt;
             if (carried) { TickCarried(); return; }
             Think(dt, lv, player);
+            if (clipFall && Body.Grounded) { clipFall = false; Audio.Play("plop", 0.5f); }   // a clipped winged snail lands with a plop
             if (gravity)
             {
                 Body.Vel.y = Mathf.Max(Body.Vel.y - 40f * dt, -16f);
@@ -594,7 +595,7 @@ namespace Tapestry
             if (winged)   // a stomp clips its wings: it drops and walks
             {
                 if (!fromAbove) { k.Hurt(); return false; }
-                winged = false; gravity = true; Body.Vel = Vector2.zero; k.Bounce(); Audio.Play("clip");
+                winged = false; gravity = true; Body.Vel = Vector2.zero; k.Bounce(); Audio.Play("clip"); Audio.Play("squawk", 0.5f); clipFall = true;
                 GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
                 return false;
             }

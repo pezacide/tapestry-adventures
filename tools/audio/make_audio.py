@@ -683,6 +683,10 @@ def sfx():
     S["scrape"] = fx(add(noise(0.18, 2500, 9000, 22, 0.8), bell(freq("F#5"), 0.25, 0.35), sweep(2400, 1500, 0.14, "sine", 0.25)), 0.6, 0.05)
     sq = np.zeros(int(0.4 * SR)); mix_into(sq, sweep(1500, 2300, 0.07, "sine", 0.8), 0); mix_into(sq, sweep(2100, 1700, 0.09, "sine", 0.7), 0.1); mix_into(sq, noise(0.12, 3000, 8000, 25, 0.25), 0.02)
     S["squeak"] = fx(sq, 0.5, 0.04)
+    # the winged snail-hound: a startled squawk when its wings are clipped, a plop when it lands
+    sk = np.zeros(int(0.45 * SR)); mix_into(sk, shawm(freq("B5"), 0.1, 0.8), 0); mix_into(sk, shawm(freq("F#5"), 0.18, 0.8), 0.08); mix_into(sk, noise(0.15, 1500, 7000, 30, 0.3), 0.0)
+    S["squawk"] = fx(sk, 0.55, 0.05)
+    S["plop"] = fx(add(sweep(260, 90, 0.14, "sine", 1.0), tabor(0.08, 0.6)), 0.6, 0.04)
     S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
     return S
 
