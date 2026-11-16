@@ -1,5 +1,7 @@
 # Ye Tapestrie Adventures: the plan
 
+> **Series:** this is part 1 of **Into the Frame**, a series of platformers where the hero jumps into a work of art. Part 2 is *Dream Palette* (famous paintings; design in `docs/painters/DESIGN.md`). Part 3 is *Masks & Mosaics* (antiquity), now in development. Titles for parts 2 and 3 are working titles. The series name still needs an app-store and trademark search.
+
 **One game.** Each world is a different medieval tapestry, and each world has four levels, the fourth being its castle and boss. The knights and Bayard stay stitched in the Bayeux manner as they cross from one tapestry into the next, chasing Princess Aelfgyva. She was carried off by the **Cat King**, who flees deeper into the tapestries world by world. The last world ends at his Great Hall.
 
 All of these works are centuries old and in the public domain. We redraw them in our own stitched or woven style rather than copying museum photographs, which can carry their own rights.
