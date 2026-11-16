@@ -50,7 +50,7 @@ namespace Tapestry
                 case "lapdog": speed = 2.6f; break;
                 case "smith": speed = 1.4f; break;
                 case "snail_spike": speed = 1.0f; break;
-                case "bombard": speed = 0f; timer = 1f; break;
+                case "bombard": speed = 0f; timer = 1f; gravity = false; Untouchable = true; break;   // its carriage is a solid tile (stand upon it); the beast is only the barrel, which fires
                 case "imp_cloud": gravity = false; timer = 1f; break;
                 case "hedgehog": speed = 1.9f; break;
                 case "snail_wing": speed = 1.1f; gravity = false; winged = true; break;
@@ -593,7 +593,6 @@ namespace Tapestry
         public bool OnKnight(Knight k, bool fromAbove)
         {
             if (!Alive || k.Dead) return false;
-            if (Kind == "bombard") { Audio.Play("clang", 0.5f); if (fromAbove) k.Bounce(); else k.Hurt(); return false; }   // a firm iron thing: land on it and bounce off
             if (winged)   // a stomp clips its wings: it drops and walks
             {
                 if (!fromAbove) { k.Hurt(); return false; }

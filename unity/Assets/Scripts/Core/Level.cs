@@ -77,6 +77,7 @@ namespace Tapestry
                         case '1': case 'M': case 'W': case 'R': case '^': case '|': case 'V': case '*': case '_': case 'D': case ';': case '8': case '(': case ')': case '7': case '%':
                         case ',': case '.': case '/': case '-':
                             tiles[x, y] = c; break;
+                        case 'ȼ': tiles[x, y] = 'ȼ'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y))); break;   // a bombard: a solid carriage to stand upon, with its drawn barrel over it
                         case 'ø': tiles[x, y] = 'ø'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 1f))); break;   // an urn (solid) with a biting plant upon it
                         case 'ŵ': tiles[x, y] = 'ŵ'; break;                                                                                  // a well-head (solid)
                         case 'F': tiles[x, y] = 'F'; Spawns.Add(new KeyValuePair<char, Vector2>(c, new Vector2(x + 0.5f, y + 0.5f))); break;
@@ -155,7 +156,7 @@ namespace Tapestry
             switch (Get(x, y))
             {
                 case '#': case 'B': case '?': case 'H': case 'X': case 'T': case 't':
-                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': case ',': case '/': case 'ø': case 'ŵ': return true;
+                case '1': case 'M': case 'W': case 'R': case 'V': case '_': case 'F': case 'D': case '8': case '7': case '%': case ',': case '/': case 'ø': case 'ŵ': case 'ȼ': return true;
                 case '(': return MirrorState == 0;
                 case ')': return MirrorState == 1;
                 default: return false;

@@ -169,9 +169,9 @@ def bombard(f):
     s += dot(58, 24, 3, "dark")
     if f == 1:
         s += dot(0, 27, 5, "cream", "grey") + dot(-4, 20, 4, "white", "grey") + dot(-3, 33, 4, "white", "grey")
-    return g(s, "translate(4 6)")
-C["bombard"] = dict(title="Bombarde", size=(72, 64), frames=2, build=bombard,
-                    behaviour="stands fast and fires a slow iron ball along the ground at a knight in range; stomping its barrel only bounces you; the relique smites it")
+    return g(s, "translate(51 4) scale(-0.75 0.75)")   # drawn muzzle to the left, then mirrored (the game draws things facing right) and shrunk to sit on one tile
+C["bombard"] = dict(title="Bombarde", size=(54, 50), frames=2, build=bombard,
+                    behaviour="a solid iron carriage to stand upon (it never harms the knight); fires a slow iron ball along the ground at a knight in range")
 
 def cannonball(f):
     s = dot(10, 10, 9, "dark", "grey") + dot(7, 7, 2.6, "cream")

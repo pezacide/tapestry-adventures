@@ -681,10 +681,10 @@
     },
     "bombard": {
       "title": "Bombarde",
-      "behaviour": "stands fast and fires a slow iron ball along the ground at a knight in range; stomping its barrel only bounces you; the relique smites it",
+      "behaviour": "a solid iron carriage to stand upon (it never harms the knight); fires a slow iron ball along the ground at a knight in range",
       "frame": [
-        72,
-        64
+        54,
+        50
       ],
       "frame_count": 2,
       "file": "enemies/bombard.png"

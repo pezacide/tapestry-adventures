@@ -74,7 +74,7 @@ namespace Tapestry
             { "enemies/ember", new Sheet("Art/enemies/ember", 44f, 46f, 2, 8f, 1f, 38f, 43f) },
             { "enemies/snail_spike", new Sheet("Art/enemies/snail_spike", 64f, 64f, 2, 0f, 15f, 56f, 64f) },
             { "enemies/snail_wing", new Sheet("Art/enemies/snail_wing", 64f, 64f, 5, 1f, 0f, 64f, 64f) },
-            { "enemies/bombard", new Sheet("Art/enemies/bombard", 72f, 64f, 2, 0f, 18.5f, 67.5f, 64f) },
+            { "enemies/bombard", new Sheet("Art/enemies/bombard", 54f, 50f, 2, 3.5f, 13.5f, 54f, 48.5f) },
             { "enemies/imp_cloud", new Sheet("Art/enemies/imp_cloud", 72f, 56f, 2, 3.5f, 3.5f, 67f, 53.5f) },
             { "enemies/hedgehog", new Sheet("Art/enemies/hedgehog", 56f, 40f, 2, 4.5f, 2f, 55.5f, 40f) },
             { "bosses/cockatrice", new Sheet("Art/bosses/cockatrice", 160f, 150f, 2, 10.5f, 0f, 159.5f, 141f) },
