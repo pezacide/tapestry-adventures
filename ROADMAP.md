@@ -139,11 +139,10 @@ The seven trumpets, the locusts with human faces, the four horsemen, and the sev
 
 ## Ideas from a look at the old Mario games
 
-**Built:** Best Glorie (saved high score), bells at the pole, Smythes (hammer throwers), Urn-Plantes, wells with a treasure cellar, the Cloud Imp (drops spiny eggs that hatch into hedgehogs; 5 worlds' worth of levels), bombards (cannons, from World 5 on), falling and balance lifts (in 4-3, 6-3, 7-1 and 7-2), the Winged Snail-Hound (a stomp clips its wings; from World 4 on), the Armoured Snail-Hound (spiked, never stomp it; from World 4 on), leaping embers (sparks that jump from castle fire pits), Ye Wronge Syde (hard mode after the ending), and a title screen laid out like the old one (banner, menu with cursor, top score).
+**Built:** Best Glorie (saved high score), bells at the pole, Smythes (hammer throwers), Urn-Plantes, wells with a treasure cellar, night and snow skies (stars and a dark wash in 1-2, 4-2, 5-3 and 7-2; falling snow in 4-1 and 5-1), the Cloud Imp (drops spiny eggs that hatch into hedgehogs; 5 worlds' worth of levels), bombards (cannons, from World 5 on), falling and balance lifts (in 4-3, 6-3, 7-1 and 7-2), the Winged Snail-Hound (a stomp clips its wings; from World 4 on), the Armoured Snail-Hound (spiked, never stomp it; from World 4 on), leaping embers (sparks that jump from castle fire pits), Ye Wronge Syde (hard mode after the ending), and a title screen laid out like the old one (banner, menu with cursor, top score).
 
 **Still to do (not yet built):**
 - **A secret door and warp room**: hidden rooms that skip ahead a world.
 - **Looping castle mazes**: a castle that sends you back unless you take the right route.
-- **Night and snow variants** of the early levels.
 - **"Ye Frayed Edge"**: a secret place at the very end of the cloth for finding everything.
 - **Two players, taking turns.**

@@ -1642,6 +1642,43 @@ namespace Tapestry
 
         void Panel(Rect r) { var c = GUI.color; GUI.color = new Color(Linen.r, Linen.g, Linen.b, 0.88f); GUI.DrawTexture(r, Texture2D.whiteTexture); GUI.color = c; }
 
+        /// <summary>The sky over the level: a night wash with twinkling stars, or snow drifting down. Drawn under the HUD.</summary>
+        void DrawWeather(float W, float H)
+        {
+            string wx = L != null ? L.Weather : null;
+            if (string.IsNullOrEmpty(wx)) return;
+            var keep = GUI.color; var white = Texture2D.whiteTexture;
+            float t = Time.time;
+            if (wx == "night")
+            {
+                GUI.color = new Color(0.04f, 0.06f, 0.22f, 0.45f); GUI.DrawTexture(new Rect(0, 0, W, H), white);
+                for (int i = 0; i < 70; i++)   // a fixed scatter of stars, each twinkling at its own pace
+                {
+                    float sx = Frac(Mathf.Sin(i * 12.9898f) * 43758.5453f), sy = Frac(Mathf.Sin(i * 78.233f) * 24634.6345f);
+                    float a = 0.35f + 0.65f * (0.5f + 0.5f * Mathf.Sin(t * (1.2f + (i % 5) * 0.6f) + i));
+                    float sz = H * (i % 7 == 0 ? 0.012f : 0.006f);
+                    GUI.color = new Color(1f, 0.95f, 0.75f, a);
+                    GUI.DrawTexture(new Rect(sx * W, sy * H * 0.5f, sz, sz), white);
+                }
+            }
+            else if (wx == "snow")
+            {
+                GUI.color = new Color(0.85f, 0.92f, 1f, 0.16f); GUI.DrawTexture(new Rect(0, 0, W, H), white);
+                for (int i = 0; i < 150; i++)
+                {
+                    float seed = Frac(Mathf.Sin(i * 12.9898f) * 43758.5453f), seed2 = Frac(Mathf.Sin(i * 4.1414f) * 9631.2f);
+                    float speed = 0.07f + seed2 * 0.1f;
+                    float y = Frac(seed2 * 7f + t * speed);
+                    float x = Frac(seed + Mathf.Sin(t * 0.7f + i) * 0.015f - t * 0.012f);
+                    float sz = H * (0.006f + seed * 0.008f);
+                    GUI.color = new Color(1f, 1f, 1f, 0.55f + 0.4f * seed2);
+                    GUI.DrawTexture(new Rect(x * W, y * H, sz, sz), white);
+                }
+            }
+            GUI.color = keep;
+        }
+        static float Frac(float v) { return v - Mathf.Floor(v); }
+
         void OnGUI()
         {
             Styles();
@@ -1664,6 +1701,7 @@ namespace Tapestry
                 case State.Won:
                 case State.GameOver:
                 case State.Entering:
+                    DrawWeather(W, H);
                     Hud(W, H);
                     if (state == State.Entering)
                     {

@@ -11,6 +11,7 @@ namespace Tapestry
             Castle = "scenery/castle_abbey", CastleX = 191f,
             Music = "forest",
             FarLayer = "backgrounds/forest_far", NearLayer = "backgrounds/forest_near",
+            Weather = "night",
             Map = new[]
             {
                 "",

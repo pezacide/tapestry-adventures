@@ -14,6 +14,7 @@ namespace Tapestry
             GroundTop = "scenery/millefleur_top", GroundFill = "scenery/millefleur_fill", Brick = "scenery/paling",
             Plank = "scenery/rail",
             Chase = true,
+            Weather = "night",
             Map = new[]
             {
                 "",

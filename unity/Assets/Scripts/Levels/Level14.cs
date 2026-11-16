@@ -13,6 +13,7 @@ namespace Tapestry
             FarLayer = "backgrounds/river_far", NearLayer = "None",
             GroundTop = "scenery/verdure_top", GroundFill = "scenery/verdure_fill", Brick = "scenery/wicker",
             Plank = "scenery/branch",
+            Weather = "night",
             Map = new[]
             {
                 "",

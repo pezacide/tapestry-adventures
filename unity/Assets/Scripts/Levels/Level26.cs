@@ -13,6 +13,7 @@ namespace Tapestry
             FarLayer = "backgrounds/apoc_far", NearLayer = "backgrounds/apoc_near",
             GroundTop = "scenery/apoc_top", GroundFill = "scenery/apoc_fill", Brick = "scenery/gothic_block",
             Plank = "scenery/cloud_scroll",
+            Weather = "night",
             Map = new[]
             {
                 "",

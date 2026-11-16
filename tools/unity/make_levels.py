@@ -98,6 +98,9 @@ def lifts_over_pits(m, kind, count=1, minwidth=7):
         x += 1
     return done
 
+# the sky over a level: after dark with stars, or a fall of snow
+WEATHER = {"Level2": "night", "Level14": "night", "Level19": "night", "Level26": "night", "Level13": "snow", "Level17": "snow"}
+
 WALKERS, FLIERS, SWIMMERS = "sShldcujyqIx{}k", "gbawp!&", "fzm"
 STANDABLE = set("#BV?X=^HMW1R87")
 def gauntlet(m, underwater=False):
@@ -215,6 +218,7 @@ def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=
     if wind_skin: cs.append(f'            WindSkin = "{wind_skin}",')
     if falling_stars: cs.append('            FallingStars = true,')
     if horsemen: cs.append('            Horsemen = true,')
+    if WEATHER.get(cls): cs.append(f'            Weather = "{WEATHER[cls]}",')
     if finale: cs.append('            Finale = true,')
     cs.append("            Map = new[]"); cs.append("            {")
     cs += [f'                "{r}",' for r in m.rows()]

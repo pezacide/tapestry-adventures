@@ -14,6 +14,7 @@ namespace Tapestry
             GroundTop = "scenery/verdure_top", GroundFill = "scenery/verdure_fill", Brick = "scenery/wicker",
             Plank = "scenery/branch",
             HuntingHounds = true,
+            Weather = "snow",
             Map = new[]
             {
                 "",
