@@ -225,6 +225,7 @@ namespace Tapestry
             { "scenery/well", new Sheet("Art/scenery/well", 48f, 48f, 1, 0f, 0f, 48f, 48f) },
             { "scenery/spark", new Sheet("Art/scenery/spark", 16f, 16f, 1, 0f, 0f, 16f, 16f) },
             { "scenery/secret_door", new Sheet("Art/scenery/secret_door", 48f, 72f, 1, 2.5f, 0.5f, 45.5f, 72f) },
+            { "scenery/moon", new Sheet("Art/scenery/moon", 72f, 76f, 1, 9f, 5f, 60.5f, 71.5f) },
             { "scenery/fire", new Sheet("Art/scenery/fire", 48f, 48f, 2, 0f, 3.5f, 48f, 48f) },
             { "scenery/checkpoint", new Sheet("Art/scenery/checkpoint", 44f, 96f, 2, 1f, 3.5f, 41.5f, 96f) },
             { "scenery/bezant", new Sheet("Art/scenery/bezant", 24f, 24f, 4, 1.5f, 1.5f, 22.5f, 22.5f) },

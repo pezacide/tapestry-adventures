@@ -1754,6 +1754,13 @@ namespace Tapestry
                     GUI.color = new Color(1f, 0.95f, 0.75f, a);
                     GUI.DrawTexture(new Rect(sx * W, sy * H * 0.5f, sz, sz), white);
                 }
+                var moon = Art.Texture("scenery/moon");   // a sleepy crescent, bobbing a little
+                if (moon != null)
+                {
+                    float mh = H * 0.17f, mw = mh * moon.width / moon.height;
+                    GUI.color = new Color(1f, 1f, 1f, 0.95f);
+                    GUI.DrawTexture(new Rect(W * 0.84f, H * 0.1f + Mathf.Sin(t * 0.5f) * H * 0.004f, mw, mh), moon);
+                }
             }
             else if (wx == "snow")
             {

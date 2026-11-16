@@ -1831,6 +1831,13 @@
       ],
       "file": "scenery/secret_door.png"
     },
+    "moon": {
+      "size": [
+        72,
+        76
+      ],
+      "file": "scenery/moon.png"
+    },
     "fire": {
       "size": [
         48,

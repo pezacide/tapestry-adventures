@@ -232,3 +232,13 @@ def secret_door():
     s += stem("M24,10 L24,20", "gold", 0.9, False) + dot(24, 9, 2.4, "gold", "dark")
     return s
 S["secret_door"] = (48, 72, secret_door, False)
+
+# ---------------------------------------------------------------- the moon (night skies)
+def moon():
+    """A stitched crescent moon with a sleepy face, in pale gold wool."""
+    s = fill("M44,6 Q10,10 10,40 Q12,66 46,70 Q20,56 24,38 Q26,18 44,6 Z", "cream", 0, "gold", 1.8)
+    s += stem("M44,6 Q10,10 10,40 Q12,66 46,70", "gold", 1.2, False)
+    s += stem("M17,34 Q20,31 23,34", "dark", 1, False) + stem("M15,46 Q19,50 24,47", "brown", 1, False)
+    for x, y, r in ((52, 22, 1.6), (58, 40, 1.2), (50, 56, 1.4)): s += dot(x, y, r, "cream", "gold")
+    return s
+S["moon"] = (72, 76, moon, False)
