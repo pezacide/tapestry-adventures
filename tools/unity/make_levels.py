@@ -59,6 +59,48 @@ class Map:
             for y in range(0, top + 1): self.put(x, y, "*")
     def rows(self): return ["".join(self.g[y]).rstrip() for y in range(self.H - 1, -1, -1)]
 
+def _clear(m, x0, x1, y0, y1):
+    return all(0 <= x < m.W and m.g[y][x] == " " for x in range(x0, x1 + 1) for y in range(y0, y1 + 1))
+def _near(m, x, chars, r):
+    return any(m.g[y][xx] in chars for y in range(m.H) for xx in range(max(0, x - r), min(m.W, x + r + 1)))
+def sprinkle(m, ch, xs, lo=14):
+    """Stand `ch` on the first flat, empty, open stretch of ground at or after each x in `xs` (never near the start,
+    a banner, the pole, or a beast already there)."""
+    placed = []
+    for x0 in xs:
+        for x in range(x0, min(m.W - 40, x0 + 45)):
+            if x < lo: continue
+            if m.g[1][x - 1] in "#V" and m.g[1][x] in "#V" and m.g[1][x + 1] in "#V" and _clear(m, x - 2, x + 2, 2, 5) \
+               and not _near(m, x, "PCG[:", 6) and not _near(m, x, "ßøŵþƒȼ" + WALKERS + FLIERS, 3):
+                m.put(x, 2, ch); placed.append(x); break
+    return placed
+def air(m, ch, xs, y=4):
+    """Hang `ch` in open air at row y at the first clear column at or after each x."""
+    placed = []
+    for x0 in xs:
+        for x in range(x0, min(m.W - 40, x0 + 30)):
+            if _clear(m, x - 1, x + 1, y, y + 1) and not _near(m, x, "PCG[:", 8) and not _near(m, x, "ĩ", 25):
+                m.put(x, y, ch); placed.append(x); break
+    return placed
+def span(m, a, b, kind):
+    """Hang two boards across the blank pit a..b (at least six wide): falling ones or a balance pair."""
+    m.put(a + 1, 2, kind); m.put(a + 4, 2, kind)
+def lifts_over_pits(m, kind, count=1, minwidth=7):
+    """Find blank pits (no ground, no water) at least `minwidth` wide with clear air above, and span them."""
+    done, x = 0, 14
+    while x < m.W - 40 and done < count:
+        if m.g[0][x] in " ~" and m.g[1][x] in " ~":
+            a = x
+            while x < m.W and m.g[0][x] in " ~" and m.g[1][x] in " ~": x += 1
+            b = x - 1
+            if b - a + 1 >= minwidth and _clear(m, a, b, 2, 7):
+                span(m, a, b, kind); done += 1
+        x += 1
+    return done
+
+# the sky over a level: after dark with stars, or a fall of snow
+WEATHER = {"Level2": "night", "Level14": "night", "Level19": "night", "Level26": "night", "Level13": "snow", "Level17": "snow"}
+
 WALKERS, FLIERS, SWIMMERS = "sShldcujyqIx{}k", "gbawp!&", "fzm"
 STANDABLE = set("#BV?X=^HMW1R87")
 def gauntlet(m, underwater=False):
@@ -117,6 +159,16 @@ def bonus_heaven(m, x0):
     m.row(x0 + 36, 3, "oooo")
     m.put(x0 + 40, 2, ":")
 
+def bonus_cellar(m, x0):
+    """A secret cellar of bezants, far to the right of the level and reached by dropping into a well: an earth floor, a few
+    bezant bricks, and bezants in rows. '[' (at x0) is where the knight arrives; ':' (at x0+40) is the rope that leads back up."""
+    m.ground(x0 - 3, x0 + 43)
+    m.put(x0, 2, "[")
+    m.row(x0 + 3, 3, "ooooooo"); m.row(x0 + 13, 3, "ooooooo")
+    m.row(x0 + 22, 5, "?B?B?"); m.row(x0 + 22, 7, "ooooo")
+    m.row(x0 + 27, 3, "ooooooooo")
+    m.put(x0 + 40, 2, ":")
+
 def place_chalice(m):
     """Keep the golden chalice (the 1-up) away from the very end of a level: if it sits in the last third, move it to an
     open stretch of ground - in the first third when the relique is mid-level, or just past halfway when the relique
@@ -166,6 +218,7 @@ def write(cls, title, name, inscription, m, props, castle, castle_x, music, far=
     if wind_skin: cs.append(f'            WindSkin = "{wind_skin}",')
     if falling_stars: cs.append('            FallingStars = true,')
     if horsemen: cs.append('            Horsemen = true,')
+    if WEATHER.get(cls): cs.append(f'            Weather = "{WEATHER[cls]}",')
     if finale: cs.append('            Finale = true,')
     cs.append("            Map = new[]"); cs.append("            {")
     cs += [f'                "{r}",' for r in m.rows()]
@@ -207,7 +260,7 @@ write("Level1", "Worlde 1-1", "Ye Meadowe of Beastes", "HERE YE KNYGHTES RYDE IN
       "scenery/castle_keep", 187, "meadow")
 
 # ======================================================= 1-2  Ye Foreste of Wyverns
-m = Map()
+m = Map(262)                                                  # 200 tiles of level, then the secret cellar far to the right
 m.ground(0, 22); m.ground(27, 60); m.water(61, 68); m.ground(69, 100); m.ground(106, 140); m.ground(147, 199)
 m.put(3, 2, "P")
 m.treetop(8, 4, 4); m.treetop(14, 5, 6); m.row(14, 8, "ooooo")
@@ -226,8 +279,11 @@ m.treetop(126, 5, 5); m.row(126, 7, "ooooo"); m.row(132, 5, "B?B"); m.put(137, 2
 m.treetop(140, 3, 4); m.treetop(144, 3, 6); m.put(143, 9, "w")   # over the third gap
 m.treetop(148, 4, 5); m.row(149, 8, "1")
 m.treetop(155, 4, 5); m.put(156, 6, "O"); m.put(160, 2, "h"); m.put(165, 2, "s")
+m.put(120, 2, "ŵ")                                             # a well: stand on it and hold DOWN to climb in (a cellar of bezantes)
+bonus_cellar(m, 216)
 m.stairs(170, 6)
 m.put(182, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
+print("L2", sprinkle(m,"ƒ",[60,120]))
 write("Level2", "Worlde 1-2", "Ye Foreste of Wyverns", "HERE YE KNYGHTES PASSE THORUGH YE DERKE FORESTE", m,
       [("shrub", 5), ("shrub", 30), ("shrub", 72), ("shrub", 110), ("shrub", 152), ("shrub", 178)],
       "scenery/castle_abbey", 191, "forest", "backgrounds/forest_far", "backgrounds/forest_near")
@@ -307,7 +363,7 @@ write("Level4", "Worlde 1-4", "Ye Cockatrice's Keepe", "HERE YE KNYGHTES ASSAYLE
       [], "", 0, "castle", "backgrounds/castle_far", "backgrounds/castle_near")
 
 # ======================================================= 2-1  Ye Shipwrights' Yarde (World 2: the Channel crossing)
-m = Map(200)
+m = Map(262)
 m.ground(0, 38); m.ground(44, 79); m.water(80, 86); m.ground(87, 132); m.ground(138, 199)
 m.put(3, 2, "P")
 m.row(9, 5, "B?BMB"); m.put(14, 7, "g")
@@ -323,6 +379,8 @@ m.put(96, 2, "x"); m.row(100, 5, "BHB"); m.put(106, 2, "Q")
 m.put(112, 2, "S"); m.row(116, 5, "B1B"); m.put(118, 8, "g"); m.put(124, 2, "x")
 m.row(133, 5, "==="); m.row(133, 7, "ooo")
 m.put(142, 2, "Q"); m.put(150, 2, "d"); m.put(154, 7, "g"); m.put(158, 2, "x")
+m.put(109, 2, "ŵ")                                             # a well: hold DOWN upon it
+bonus_cellar(m, 216)
 m.stairs(164, 6)
 m.put(176, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 write("Level5", "Worlde 2-1", "Ye Shipwrights' Yarde", "HERE YE SHIPWRIGHTES FELLE YE TREES AND BUILDE YE SHIPPES", m,
@@ -501,6 +559,7 @@ m = Map(200)
 m.ground(0, 40); m.ground(45, 92); m.ground(97, 140); m.ground(146, 199)
 m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.row(15, 5, "BRB")
 m.put(22, 2, "j"); m.row(26, 4, "==="); m.row(30, 6, "===")
+m.put(48, 2, "þ"); m.put(36, 2, "ƒ"); m.put(130, 2, "ƒ"); m.put(100, 2, "þ"); m.put(148, 2, "þ")   # armoured snails
 m.row(41, 4, "===="); m.put(52, 2, "h"); m.row(56, 5, "?W?"); m.put(62, 2, "j")
 m.put(70, 2, "C"); m.row(74, 5, "BHB"); m.put(80, 2, "S"); m.put(86, 2, "j")
 m.row(93, 4, "===="); m.put(104, 2, "u"); m.row(108, 5, "B?B?B"); m.put(116, 2, "j")
@@ -531,6 +590,7 @@ m.row(122, 6, "oooooo")
 m.put(156, 2, "h"); m.row(160, 5, "B1B")
 m.stairs(166, 6)
 m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
+print("L14", sprinkle(m,"ƒ",[56,108]), sprinkle(m,"þ",[100]))
 write("Level14", "Worlde 4-2", "Ye Otter and ye Swanne", "HERE YE HUNTE GOETH DOWNE TO YE RIVER", m,
       [], "scenery/castle_mill", 192, "river", "backgrounds/river_far", None,
       skin=W4, plank="scenery/branch")
@@ -542,12 +602,14 @@ m.put(3, 2, "P"); m.row(9, 5, "?M?")
 m.row(16, 5, "===="); m.row(22, 8, "===="); m.put(20, 9, "a")   # up the first hunting stand
 m.row(31, 4, "===="); m.put(44, 2, "j"); m.row(48, 5, "BRB"); m.put(54, 9, "a")
 m.row(58, 5, "===="); m.row(64, 8, "==="); m.put(66, 9, "a")
-m.row(71, 4, "===="); m.put(82, 2, "C"); m.put(86, 2, "h"); m.row(90, 5, "?W?")
+m.put(72, 2, "ĺ"); m.put(75, 2, "ĺ"); m.put(82, 2, "C"); m.put(86, 2, "h"); m.row(90, 5, "?W?")
 m.put(96, 9, "a"); m.row(100, 5, "===="); m.row(106, 8, "====")
-m.row(121, 4, "===="); m.put(134, 2, "j"); m.row(138, 5, "BHB"); m.put(140, 9, "a")
+m.put(122, 2, "ǿ"); m.put(125, 2, "ǿ"); m.put(134, 2, "j"); m.row(138, 5, "BHB"); m.put(140, 9, "a")
 m.put(148, 2, "d"); m.row(152, 5, "B1B"); m.put(158, 9, "a")
 m.stairs(166, 6)
 m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
+print("L15", sprinkle(m,"ƒ",[26,140]), sprinkle(m,"þ",[60,112]))
+print("Level15 imp", air(m,"ĩ",[90]))
 write("Level15", "Worlde 4-3", "Ye Falconers' Heath", "HERE YE FALCONERS LOOSE YE HAWKES UPON YE HEATH", m,
       [("hunting_stand", 18), ("hunting_stand", 24), ("hunting_stand", 60), ("hunting_stand", 102), ("hunting_stand", 108)],
       "scenery/castle_mews", 192, "heath", "backgrounds/heath_far", None,
@@ -561,7 +623,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "j"); m.put(26, 5, "F")       
 m.row(30, 5, "?W?")
 m.fire(36, 42); m.row(37, 4, "==="); m.put(46, 2, "d"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "j")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 # the boar's hall: walls at both ends (the far one is a gate that crumbles when the boar falls)
 for y in range(2, 5): m.put(98, y, "V")      # low wall: leap it, the boar rams it
@@ -586,8 +648,12 @@ m.row(96, 4, "=====")
 m.put(104, 2, "C"); m.put(110, 2, "y"); m.put(120, 2, "p"); m.row(124, 5, "?B?"); m.put(130, 2, "q")
 m.row(146, 4, "====")
 m.put(155, 2, "p"); m.row(159, 5, "B1B"); m.put(163, 2, "y")
+m.put(66, 2, "ȼ"); m.put(114, 2, "ȼ"); m.put(152, 2, "ȼ")      # bombards
+m.put(38, 2, "ø"); m.put(93, 2, "ø"); m.put(140, 2, "ø")      # urns, each with a biting plant
 m.stairs(168, 6)
 m.put(180, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
+print("L17", sprinkle(m,"ƒ",[30,125]), sprinkle(m,"þ",[80,160]))
+print("Level17 imp", air(m,"ĩ",[100]))
 write("Level17", "Worlde 5-1", "Ye Hunters Set Out", "HERE YE HUNTERS SET OUT IN QUESTE OF YE UNICORNE", m,
       [], "scenery/castle_chateau", 190, "unicorn", "backgrounds/millefleur_far", "backgrounds/millefleur_near",
       skin=W5, plank="scenery/rail")
@@ -607,6 +673,8 @@ m.put(125, 2, "I"); m.put(128, 2, "p"); m.row(124, 5, "?B?"); m.put(146, 2, "I")
 m.put(164, 2, "y"); m.row(168, 5, "B1B")
 m.stairs(172, 6)
 m.put(184, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
+print("L18", sprinkle(m,"ƒ",[40]), sprinkle(m,"þ",[70,130]), sprinkle(m,"ȼ",[90,150]))
+print("Level18 imp", air(m,"ĩ",[110]))
 write("Level18", "Worlde 5-2", "Ye Fountaine", "HERE YE UNICORNE DIPPETH HIS HORNE AND MAKETH YE WATERS PURE", m,
       [], "scenery/castle_chapel", 192, "fountain", "backgrounds/fountain_far", "backgrounds/millefleur_near",
       skin=W5, plank="scenery/rail")
@@ -635,7 +703,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "y"); m.put(26, 5, "F")
 m.row(30, 5, "?W?")
 m.fire(36, 42); m.row(37, 4, "==="); m.put(46, 2, "I"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "y")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 # the enclosure: a low stone wall to the left (leap it), the fence gate to the right (the unicorn must break it)
 for y in range(2, 5): m.put(98, y, "V")
@@ -669,8 +737,11 @@ m.put(141, 1, "X")                                              # ...stand on th
 m.put(141, 5, "7")
 m.row(142, 1, ")))))")                                          # ...and the silver panes bear thee on
 m.put(152, 2, "h"); m.row(156, 5, "B1B"); m.put(160, 2, "{")
+m.put(101, 2, "ø"); m.put(150, 2, "ø")                          # urns with biting plants
 m.stairs(166, 6)
 m.put(178, 2, "G")
+print("L21", sprinkle(m,"ƒ",[40,100]), sprinkle(m,"þ",[70]), sprinkle(m,"ȼ",[130]))
+print("Level21 imp", air(m,"ĩ",[90]))
 write("Level21", "Worlde 6-1", "Sight", "HERE YE LADYE HOLDETH UP HER MIRROUR TO YE UNICORNE", m,
       [], "scenery/castle_lady_tent", 190, "sight", "backgrounds/red_far", "backgrounds/red_near",
       skin=W6, plank="scenery/garland")
@@ -690,6 +761,7 @@ m.put(124, 9, "!"); m.put(130, 9, "!")
 m.put(142, 2, "h"); m.row(150, 5, "B1B"); m.put(156, 2, "{")
 m.stairs(166, 6)
 m.put(178, 2, "G")
+print("L22", sprinkle(m,"ƒ",[50]), sprinkle(m,"ȼ",[100]))
 write("Level22", "Worlde 6-2", "Hearing", "HERE YE LADYE PLAYETH UPON YE ORGAN", m,
       [], "scenery/castle_music_hall", 190, "organ", "backgrounds/organ_far", "backgrounds/red_near",
       skin=W6, plank="scenery/garland")
@@ -707,8 +779,11 @@ m.row(100, 5, "BRB"); m.put(106, 2, "C"); m.put(112, 2, "{"); m.row(116, 4, "===
 m.put(124, 2, "}"); m.row(126, 4, "===="); m.put(128, 5, "@"); m.put(134, 8, "!")
 m.put(139, 2, "%")
 m.put(152, 2, "{"); m.row(156, 5, "B1B"); m.put(160, 2, "%"); m.row(160, 8, "ooo")
+m.put(32, 2, "ø"); m.put(52, 2, "ø")                            # urns with biting plants
 m.stairs(166, 6)
 m.put(178, 2, "G")
+print("L23", sprinkle(m,"ƒ",[40]), sprinkle(m,"þ",[90]), sprinkle(m,"ȼ",[130]), lifts_over_pits(m,"ǿ"))
+print("Level23 imp", air(m,"ĩ",[110]))
 write("Level23", "Worlde 6-3", "Taste and Smell", "HERE YE LADYE TAKETH A SWEETE, AND WEAVETH A GARLANDE", m,
       [], "scenery/castle_bower", 190, "taste", "backgrounds/red_far", "backgrounds/red_near",
       skin=W6, plank="scenery/garland")
@@ -721,7 +796,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "}"); m.put(26, 5, "F")
 m.row(30, 5, "?W?"); m.put(34, 2, "@")
 m.fire(38, 43); m.row(39, 4, "==="); m.put(47, 2, "{"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "}")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 for y in range(2, 5): m.put(98, y, "V")                          # a low wall: leap it
 for y in range(2, 9): m.put(122, y, "D")                         # the way on, shut until both are overcome
@@ -739,18 +814,20 @@ m = Map(200)
 m.ground(0, 40); m.ground(46, 85); m.ground(92, 130); m.ground(137, 199)
 m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.put(16, 2, "k"); m.row(20, 5, "BHB")
 m.put(36, 7, "<")                                                 # the first trumpet: wait for its blast to pass
-m.row(41, 4, "=====")
+m.put(42, 2, "ĺ")                                                # a falling board over the first pit
 m.put(52, 2, "k"); m.row(56, 5, "BWB"); m.put(62, 7, "&")
 m.put(70, 7, "<"); m.put(84, 7, "<")
-m.row(86, 4, "======")
+m.put(86, 2, "ǿ"); m.put(89, 2, "ǿ")                                 # a balance pair over the second pit
 m.row(95, 5, "BRB"); m.put(101, 2, "C"); m.put(106, 2, "k")
 m.put(116, 7, "<"); m.put(110, 8, "&"); m.row(112, 5, "?B?")
 m.put(129, 7, "<")
-m.row(131, 4, "======")
+m.put(132, 2, "ĺ")
 m.put(142, 2, "k"); m.put(150, 7, "<"); m.put(148, 8, "&"); m.row(152, 5, "B?B")
 m.put(162, 7, "<")                                                # the seventh trumpet
 m.stairs(166, 6)
 m.put(178, 2, "G")
+print("L25", sprinkle(m,"ƒ",[50,120]), sprinkle(m,"þ",[80]), sprinkle(m,"ȼ",[100,150]))
+print("Level25 imp", air(m,"ĩ",[75]))
 write("Level25", "Worlde 7-1", "Ye Seven Trumpettes", "HERE YE SEVEN ANGELS SOUNDE YE SEVEN TRUMPETTES", m,
       [], "scenery/castle_heaven_gate", 190, "trumpets", "backgrounds/apoc_far", "backgrounds/apoc_near",
       skin=W7, plank="scenery/cloud_scroll", wind_skin="scenery/trumpet_angel", falling_stars=True)
@@ -759,14 +836,15 @@ write("Level25", "Worlde 7-1", "Ye Seven Trumpettes", "HERE YE SEVEN ANGELS SOUN
 m = Map(200)
 m.ground(0, 34); m.ground(40, 78); m.ground(84, 122); m.ground(128, 199)
 m.put(3, 2, "P"); m.row(9, 5, "?M?"); m.put(18, 6, "&"); m.put(22, 8, "&"); m.put(26, 2, "k")
-m.row(35, 4, "====="); m.put(38, 8, "&")
+m.put(36, 2, "ĺ"); m.put(38, 8, "&")
 m.row(46, 5, "BWB"); m.put(52, 6, "&"); m.put(55, 8, "&"); m.put(58, 5, "&"); m.put(64, 2, "k"); m.row(68, 6, "=====")
-m.row(79, 4, "=====")
+m.put(80, 2, "ĺ")
 m.row(88, 5, "BRB"); m.put(94, 2, "C"); m.put(100, 7, "&"); m.put(104, 5, "&"); m.put(108, 8, "&"); m.put(112, 2, "k")
 m.row(123, 4, "=====")
 m.row(132, 5, "B8B"); m.put(140, 6, "&"); m.put(144, 8, "&"); m.put(148, 5, "&"); m.put(152, 7, "&"); m.put(156, 2, "k")
 m.stairs(166, 6)
 m.put(178, 2, "G")
+print("L26", sprinkle(m,"þ",[50,110]), sprinkle(m,"ȼ",[80]))
 write("Level26", "Worlde 7-2", "Ye Locustes", "HERE YE LOCUSTES COME FORTH OUT OF YE PITTE", m,
       [], "scenery/castle_city_gate", 190, "locusts", "backgrounds/apoc_far", "backgrounds/apoc_near",
       skin=W7, plank="scenery/cloud_scroll")
@@ -784,6 +862,8 @@ m.row(141, 4, "====")
 m.row(150, 5, "?B?"); m.row(156, 6, "====")
 m.stairs(166, 6)
 m.put(178, 2, "G")
+print("L27", sprinkle(m,"ƒ",[40]), sprinkle(m,"þ",[70,120]), sprinkle(m,"ȼ",[100]), lifts_over_pits(m,"ĺ"))
+print("Level27 imp", air(m,"ĩ",[80]))
 write("Level27", "Worlde 7-3", "Ye Foure Horsemen", "HERE YE FOURE HORSEMEN RYDE FORTH", m,
       [], "scenery/castle_cat_keep", 190, "horsemen", "backgrounds/apoc_far", "backgrounds/apoc_near",
       skin=W7, plank="scenery/cloud_scroll", horsemen=True)
@@ -796,7 +876,7 @@ m.fire(13, 18); m.row(14, 4, "==="); m.put(22, 2, "k"); m.put(26, 5, "F")
 m.row(30, 5, "?W?"); m.put(34, 6, "&")
 m.fire(38, 43); m.row(39, 4, "==="); m.put(47, 2, "k"); m.row(50, 5, "BRB")
 m.put(55, 2, "C")
-m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(76, 2, "k")
+m.fire(60, 66); m.row(61, 4, "===="); m.put(70, 6, "F"); m.put(74, 2, "ß"); m.put(77, 2, "ß")                                   # a pair of smiths
 m.row(80, 5, "B1B"); m.fire(86, 91); m.row(87, 4, "===")
 for y in range(2, 5): m.put(98, y, "V")
 for y in range(2, 9): m.put(122, y, "D")

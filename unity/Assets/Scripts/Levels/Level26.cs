@@ -13,6 +13,7 @@ namespace Tapestry
             FarLayer = "backgrounds/apoc_far", NearLayer = "backgrounds/apoc_near",
             GroundTop = "scenery/apoc_top", GroundFill = "scenery/apoc_fill", Brick = "scenery/gothic_block",
             Plank = "scenery/cloud_scroll",
+            Weather = "night",
             Map = new[]
             {
                 "",
@@ -22,9 +23,9 @@ namespace Tapestry
                 "                                                                                                    &                                                   &                  B",
                 "                  &                                 &               =====                                                                   &                             BB",
                 "         ?M?                                  BWB         &                             BRB             &                &          B8B             &                    BBB",
-                "                                   =====                                       =====                                       =====                                        BBBB",
+                "                                                                                                                           =====                                        BBBB",
                 "                                                                                                                                                                       BBBBB",
-                "   P                      k                                     k                             C  k   k   k    k k  k                                        k         BBBBBB      G",
+                "   P                      k         ĺ                           k   þ           ĺ    ȼ        C  k   k   k    k k  kþ                                       k         BBBBBB      G",
                 "###################################     #######################################     #######################################     ########################################################################",
                 "###################################     #######################################     #######################################     ########################################################################",
             },

@@ -1,6 +1,6 @@
 # Ye Tapestrie Adventures: the plan
 
-> **Series:** this is part 1 of **Into the Frame**, a series of platformers where the hero jumps into a work of art. Part 2 is *Dream Palette* (famous paintings; design in `docs/painters/DESIGN.md`). Part 3 is *Masks & Mosaics* (antiquity), now in development. Titles for parts 2 and 3 are working titles. The series name still needs an app-store and trademark search.
+> **Series:** this is part 1 of **Into the Frame**, a series of platformers where the hero jumps into a work of art. Part 2 is *Dream Palette* (famous paintings; own repo: https://github.com/pezacide/dream-palette). Part 3 is *Masks & Mosaics* (antiquity; https://github.com/pezacide/masks-and-mosaics), now in development. Titles for parts 2 and 3 are working titles. The series name still needs an app-store and trademark search.
 
 **One game.** Each world is a different medieval tapestry, and each world has four levels, the fourth being its castle and boss. The knights and Bayard stay stitched in the Bayeux manner as they cross from one tapestry into the next, chasing Princess Aelfgyva. She was carried off by the **Cat King**, who flees deeper into the tapestries world by world. The last world ends at his Great Hall.
 
@@ -136,3 +136,15 @@ The seven trumpets, the locusts with human faces, the four horsemen, and the sev
 4. Under **Signing & Capabilities**, choose your Apple ID as the **Team**.
 5. Plug in the iPhone, choose it at the top of Xcode, and press **▶ Run**.
 6. **For TestFlight and the App Store:** in Xcode use **Product → Archive → Distribute App → App Store Connect**, then create the app listing in App Store Connect.
+
+---
+
+## Ideas from a look at the old Mario games
+
+**Built:** Best Glorie (saved high score), bells at the pole, Smythes (hammer throwers), Urn-Plantes, wells with a treasure cellar, night and snow skies (stars and a dark wash in 1-2, 4-2, 5-3 and 7-2; falling snow in 4-1 and 5-1), the Cloud Imp (drops spiny eggs that hatch into hedgehogs; 5 worlds' worth of levels), bombards (cannons, from World 5 on), falling and balance lifts (in 4-3, 6-3, 7-1 and 7-2), the Winged Snail-Hound (a stomp clips its wings; from World 4 on), the Armoured Snail-Hound (spiked, never stomp it; from World 4 on), leaping embers (sparks that jump from castle fire pits), Ye Wronge Syde (hard mode after the ending), and a title screen laid out like the old one (banner, menu with cursor, top score).
+
+**Still to do (not yet built):**
+- **A secret door and warp room**: hidden rooms that skip ahead a world.
+- **Looping castle mazes**: a castle that sends you back unless you take the right route.
+- **"Ye Frayed Edge"**: a secret place at the very end of the cloth for finding everything.
+- **Two players, taking turns.**

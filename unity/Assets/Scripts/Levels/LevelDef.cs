@@ -23,6 +23,7 @@ namespace Tapestry
         public string Gate;
         public string WindSkin;       // the picture for wind-heads (< >): World 7's trumpet angels, which blast in turns
         public bool FallingStars;     // stars fall from heaven at the sounding of the trumpets
+        public string Weather;        // "night" (dark, with stars) or "snow" (falling flakes); empty for a fair day
         public bool Horsemen;         // the four horsemen gallop in from behind, one after another
         public bool Finale;           // the last realme: rescuing the Princesse ends the game           // skin for boss-gate tiles (D); the brick skin if not set
         public bool Entrance;         // a short lead-in: no pole; walking into the building goes straight on to the next part

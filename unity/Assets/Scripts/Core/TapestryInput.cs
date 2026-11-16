@@ -10,13 +10,13 @@ namespace Tapestry
     public static class TapestryInput
     {
         public static float Horizontal;
-        public static bool UpHeld, JumpOnlyPressed;   // UP climbs a beanstalk; JumpOnlyPressed is JUMP without the Up keys (so a knight can leap off the vine)
+        public static bool UpHeld, UpPressed, JumpOnlyPressed;   // UP climbs a beanstalk; JumpOnlyPressed is JUMP without the Up keys (so a knight can leap off the vine)
         public static bool JumpHeld, JumpPressed, RunHeld, RunPressed, DownHeld, DownPressed, StartPressed, NextKnightPressed, PrevKnightPressed, MutePressed;
         public static bool LeftPressed, RightPressed;
         public static bool TouchSeen;
         public static Vector2? TapPosition;    // GUI coordinates (top-left origin) of a new touch/click this frame
 
-        static bool prevJumpOnly;
+        static bool prevJumpOnly, prevUp;
         static bool prevMute, prevJump, prevRun, prevDown, prevStart, prevNext, prevPrev, prevLeft, prevRight;
 
         // ---- on-screen touch controls (GUI coordinates, top-left origin), laid out inside the safe area ----
@@ -132,7 +132,7 @@ namespace Tapestry
 
             Horizontal = Mathf.Clamp(h, -1f, 1f);
             JumpPressed = jump && !prevJump; JumpHeld = jump; prevJump = jump;
-            JumpOnlyPressed = jumpOnly && !prevJumpOnly; prevJumpOnly = jumpOnly; UpHeld = up;
+            JumpOnlyPressed = jumpOnly && !prevJumpOnly; prevJumpOnly = jumpOnly; UpHeld = up; UpPressed = up && !prevUp; prevUp = up;
             // pushing the stick all the way runs, but only the button fires the crossbowe
             RunHeld = run || stickRun; RunPressed = run && !prevRun; prevRun = run;
             DownHeld = down; DownPressed = down && !prevDown; prevDown = down;

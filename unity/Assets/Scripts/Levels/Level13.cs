@@ -14,6 +14,7 @@ namespace Tapestry
             GroundTop = "scenery/verdure_top", GroundFill = "scenery/verdure_fill", Brick = "scenery/wicker",
             Plank = "scenery/branch",
             HuntingHounds = true,
+            Weather = "snow",
             Map = new[]
             {
                 "",
@@ -25,7 +26,7 @@ namespace Tapestry
                 "         ?M?   BRB                        d             ?W?               BHB                               B?B?B B1B                                       BBB          BBB",
                 "                          ===            ====                                                ====                           ===              =====                      BBBB",
                 "                                                                                                                                                                       BBBBB",
-                "   P                  j j   h   S    u          j   h         j       C         S     j                 u           j                 d                 j       h     BBBBBB      G",
+                "   P                  j j   h   S   ƒu          þ   h         j       C         S     j             þ   u           j             ƒ   d             þ   j       h     BBBBBB      G",
                 "#########################################    ################################################    ############################################     ######################################################",
                 "#########################################    ################################################    ############################################     ######################################################",
             },

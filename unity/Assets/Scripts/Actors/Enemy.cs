@@ -11,7 +11,7 @@ namespace Tapestry
         public bool IsShell { get { return shell; } }
         public bool ShellMoving { get { return shell && shellVx != 0f && !carried; } }
         public bool Carried { get { return carried; } }
-        bool IsSnail { get { return Kind == "snail_hound" || Kind == "snail_moss"; } }
+        bool IsSnail { get { return Kind == "snail_hound" || Kind == "snail_moss" || Kind == "snail_wing"; } }
         bool carried;      // a green (mossy) shell held by a knight
         public int ShellCombo;   // beasts this shell has felled in a row (the score doubles each time)
         Knight carrier;
@@ -20,7 +20,12 @@ namespace Tapestry
         readonly Vector2 home;
         float dir = -1f, timer, anim, kickGrace, deadTimer, shellVx, lifeT;
         bool shell, squashed, flipped, charging, swooping, gravity = true;
-        float speed;
+        float speed, plantLevel;
+        bool winged;
+        /// <summary>A plant sunk inside its urn: it cannot touch, or be touched.</summary>
+        public bool Untouchable { get; private set; }
+        /// <summary>1 normally; faster on 'Ye Wronge Syde' (the beasts, their hammers and spears all move and wait that much quicker).</summary>
+        public static float TimeScale = 1f;
 
         public Enemy(string kind, Vector2 pos, Transform parent)
         {
@@ -43,6 +48,14 @@ namespace Tapestry
                 case "boar": speed = 1.3f; break;
                 case "hunter": speed = 1.0f; timer = 1f; break;
                 case "lapdog": speed = 2.6f; break;
+                case "smith": speed = 1.4f; break;
+                case "snail_spike": speed = 1.0f; break;
+                case "bombard": speed = 0f; timer = 1f; break;
+                case "imp_cloud": gravity = false; timer = 1f; break;
+                case "hedgehog": speed = 1.9f; break;
+                case "snail_wing": speed = 1.1f; gravity = false; winged = true; break;
+                case "urn_plant": gravity = false; break;
+                case "ember": gravity = false; timer = (pos.x * 0.37f) % 2f; break;
                 case "fox": speed = 1.4f; break;
                 case "monkey": speed = 0f; timer = 1f; break;
                 case "parakeet": gravity = false; break;
@@ -62,12 +75,14 @@ namespace Tapestry
                 case "crab": speed = 2f; break;
                 case "soup_cat": speed = 0f; timer = 1.2f; break;
             }
+            if (kind == "urn_plant") view.Renderer.sortingOrder = -1;   // it rises from behind the urn
             view.SetPosition(pos);
         }
 
         public void Tick(float dt, Level lv, Knight player)
         {
             if (Removed) return;
+            dt *= TimeScale;
             if (!Alive) { TickDead(dt); return; }
             timer += dt; anim += dt; kickGrace -= dt;
             if (carried) { TickCarried(); return; }
@@ -99,6 +114,47 @@ namespace Tapestry
             float dx = ToPlayer(p);
             switch (Kind)
             {
+                case "imp_cloud":   // rides high overhead, keeping a little ahead of the knight, and lets fall spiny eggs
+                {
+                    float want = p.Body.Pos.x + 3f + Mathf.Sin(anim * 0.8f) * 3.5f;
+                    Body.Vel = new Vector2(Mathf.Clamp((want - Body.Pos.x) * 1.4f, -4.5f, 4.5f), (home.y + Mathf.Sin(anim * 1.6f) * 0.5f - Body.Pos.y) * 3f);
+                    view.Face(Body.Vel.x > 0f);
+                    if (timer > 0.4f) view.SetFrame(0);
+                    if (timer > 3.2f && Mathf.Abs(dx) < 9f && GameManager.I.CountEnemies("hedgehog") < 3)
+                    {
+                        timer = 0f; view.SetFrame(1);
+                        GameManager.I.SpawnShot("spiny_egg", Body.Pos + new Vector2(0f, -0.2f), new Vector2(Body.Vel.x * 0.5f, 0f));
+                        Audio.Play("soup", 0.5f);
+                    }
+                    break;
+                }
+
+                case "hedgehog":   // trundles toward the knight along the ground
+                    dir = dx >= 0f ? 1f : -1f;
+                    Walk(lv, false); WalkFrames();
+                    break;
+
+                case "bombard":   // stands fast, faces the knight, and fires a slow iron ball along the ground when he is in range
+                    view.Face(dx > 0f);
+                    if (timer > 0.3f) view.SetFrame(0);
+                    if (timer > 2.8f && Mathf.Abs(dx) < 9f && Mathf.Abs(dx) > 1.2f)
+                    {
+                        timer = 0f; view.SetFrame(1);
+                        float sd = Mathf.Sign(dx);
+                        GameManager.I.SpawnShot("cannonball", Body.Pos + new Vector2(sd * 1.0f, 0.55f), new Vector2(sd * 4.5f, 0f));
+                        Audio.Play("kick", 0.6f);
+                    }
+                    break;
+
+                case "snail_wing":
+                    if (winged)   // a lazy loop in the air, wings beating
+                    {
+                        float a = anim * 0.9f + home.x;
+                        Body.Pos = new Vector2(home.x + Mathf.Sin(a) * 2.5f, home.y + 1.6f + Mathf.Sin(a * 2f) * 0.6f);
+                        view.Face(Mathf.Cos(a) > 0f); view.SetFrame(3 + ((int)(anim * 6f) % 2));
+                        break;
+                    }
+                    goto case "snail_hound";
                 case "snail_hound":
                 case "snail_moss":
                     if (shell)
@@ -108,6 +164,10 @@ namespace Tapestry
                         Body.Vel.x = shellVx;
                     }
                     else { Walk(lv, true); WalkFrames(); }
+                    break;
+
+                case "snail_spike":   // plods along; its spikes forbid a stomp
+                    Walk(lv, true); WalkFrames();
                     break;
 
                 case "stag":   // runs with its herd, leaping gaps, turning back at walls; leaves the field after a while
@@ -239,6 +299,55 @@ namespace Tapestry
                     WalkFrames(0, 1, 9f);
                     lifeT += dt;
                     if (lifeT > 9f || Body.Pos.x > p.Body.Pos.x + 24f) Remove();
+                    break;
+
+                case "smith":   // paces a short beat, hops now and then, and hurls hammers in arcs at a knight in range (they come in pairs)
+                    if (charging)
+                    {
+                        Body.Vel.x = 0f; view.SetFrame(2); view.Face(dx > 0f);
+                        if (timer > 0.35f)
+                        {
+                            charging = false; timer = 0f;
+                            float d = dx > 0f ? 1f : -1f;
+                            GameManager.I.SpawnShot("hammer", Body.Pos + new Vector2(d * 0.3f, Body.H + 0.2f), new Vector2(Mathf.Clamp(dx * 0.55f, -5.5f, 5.5f), 9.5f));
+                            Audio.Play("spear", 0.5f);
+                        }
+                        break;
+                    }
+                    if (Mathf.Abs(Body.Pos.x - home.x) > 2.4f) dir = Body.Pos.x < home.x ? 1f : -1f;
+                    else if (Body.HitWall) dir = -dir;
+                    Body.Vel.x = dir * speed * 0.8f; view.Face(dir > 0f);
+                    if (Body.Grounded) WalkFrames(0, 1, 3f); else view.SetFrame(1);
+                    lifeT += dt;
+                    if (Body.Grounded && lifeT > 2.6f + (home.x % 1f)) { lifeT = 0f; Body.Vel.y = 11f; }   // a hop
+                    else if (Body.Grounded && timer > 1.9f && Mathf.Abs(dx) < 11f && Mathf.Abs(dx) > 1.2f) { charging = true; timer = 0f; }
+                    break;
+
+                case "ember":   // a spark of the fire pit: sinks from sight, then leaps high and falls back in; it cannot be stomped or shot
+                    if (!swooping)
+                    {
+                        Body.Pos = new Vector2(home.x, home.y - 0.9f); view.Renderer.enabled = false; Body.Vel = Vector2.zero;
+                        if (timer > 2.2f) { swooping = true; timer = 0f; Body.Pos = new Vector2(home.x, home.y); Body.Vel = new Vector2(0f, 12.5f); Audio.Play("soup", 0.3f); }
+                    }
+                    else
+                    {
+                        view.Renderer.enabled = true; view.SetFrame(Body.Vel.y > 0f ? 0 : 1);
+                        Body.Vel.y -= 24f * dt;
+                        if (Body.Pos.y < home.y - 0.6f && Body.Vel.y < 0f) { swooping = false; timer = 0f; }
+                    }
+                    Untouchable = !swooping;
+                    break;
+
+                case "urn_plant":   // rises from its urn, snaps, and sinks again; it stays down while a knight is near or upon the urn
+                    {
+                        bool near = Mathf.Abs(dx) < 1.5f && p.Body.Pos.y < home.y + 3f;
+                        bool shouldBeUp = (timer % 4.4f) < 2.8f && !near;
+                        plantLevel = Mathf.MoveTowards(plantLevel, shouldBeUp ? 1f : 0f, dt * 1.6f);
+                        Body.Pos = new Vector2(home.x, home.y - 1.1f * (1f - plantLevel));
+                        view.Renderer.enabled = plantLevel > 0.05f;
+                        view.SetFrame(plantLevel > 0.9f ? 1 : 0);
+                        Untouchable = plantLevel < 0.35f;
+                    }
                     break;
 
                 case "lapdog":   // scampers to and fro, yapping, and hops at the knight when he is near
@@ -476,6 +585,14 @@ namespace Tapestry
         public bool OnKnight(Knight k, bool fromAbove)
         {
             if (!Alive || k.Dead) return false;
+            if (Kind == "bombard") { if (fromAbove) k.Bounce(); else k.Hurt(); return false; }   // a firm iron thing: land on it and bounce off
+            if (winged)   // a stomp clips its wings: it drops and walks
+            {
+                if (!fromAbove) { k.Hurt(); return false; }
+                winged = false; gravity = true; Body.Vel = Vector2.zero; k.Bounce(); Audio.Play("stomp");
+                GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
+                return false;
+            }
             if (IsSnail && shell)
             {
                 if (ShellMoving)
@@ -498,6 +615,7 @@ namespace Tapestry
                 }
                 return false;
             }
+            if (Kind == "urn_plant" || Kind == "ember" || Kind == "snail_spike" || Kind == "hedgehog") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
             if (!fromAbove) { k.Hurt(); return false; }
             if (k.Mounted) { k.Bounce(); Squash(false); return true; }   // Bayard's hooves crush every beast, burning or not
             if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return false; }   // burning mane
@@ -586,7 +704,7 @@ namespace Tapestry
         public Shot(string kind, Vector2 pos, Vector2 vel, Transform parent)
         {
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
-            gravity = kind == "soup_glob" || kind == "spear" || kind == "comfit" || kind == "star";
+            gravity = kind == "spiny_egg" || kind == "soup_glob" || kind == "spear" || kind == "comfit" || kind == "star" || kind == "hammer";
             Friendly = kind == "bolt";
             Kind = kind;
             life = Friendly ? 1.1f : 4f;
@@ -598,12 +716,15 @@ namespace Tapestry
         public void Tick(float dt, Level lv)
         {
             if (Removed) return;
+            dt *= Enemy.TimeScale;
             t += dt;
             if (gravity) Body.Vel.y -= (Kind == "spear" ? 9f : Kind == "star" ? 5f : 22f) * dt;
+            if (Kind == "hammer") view.Renderer.transform.localEulerAngles = new Vector3(0f, 0f, -t * 720f * (Body.Vel.x >= 0f ? 1f : -1f));   // end over end
             if (Kind == "spear") view.Renderer.transform.localEulerAngles = new Vector3(0f, 0f, Mathf.Atan2(Body.Vel.y, Mathf.Abs(Body.Vel.x)) * Mathf.Rad2Deg * (Body.Vel.x >= 0f ? 1f : -1f));
             Body.Step(lv, dt);
             view.SetFrame(((int)(t * 10f)) % 2);
             view.SetPosition(Body.Pos);
+            if (Kind == "spiny_egg" && (Body.Grounded || Body.HitWall)) GameManager.I.SpawnEnemy("hedgehog", Body.Pos);   // it hatches
             if (Body.HitWall || Body.Grounded || Body.HitCeiling || t > life || Body.Pos.y < -2f) Destroy();
         }
 

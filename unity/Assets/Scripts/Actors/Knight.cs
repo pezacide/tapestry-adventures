@@ -83,6 +83,13 @@ namespace Tapestry
             bool wantCrouch = !Mounted && !stone && Body.Grounded && TapestryInput.DownHeld;
             if (wantCrouch && !crouching) { crouching = true; Body.H = CrouchHeight; }
             else if (crouching && !wantCrouch && RoomToStand(lv)) { crouching = false; Body.H = StandH; }
+            // a well: stand upon it and hold DOWN for a moment to climb in, to a hidden treasure cellar
+            if (!Mounted && !stone && Body.Grounded && TapestryInput.DownHeld && lv.Well(Mathf.FloorToInt(Body.Pos.x), Mathf.FloorToInt(Body.Pos.y - 0.1f)))
+            {
+                wellT += dt;
+                if (wellT > 0.4f) { wellT = 0f; GameManager.I.EnterWell(Mathf.FloorToInt(Body.Pos.x), Mathf.FloorToInt(Body.Pos.y - 0.1f)); }
+            }
+            else wellT = 0f;
             float speedMul = OnUnicorn ? 1.45f : Mounted ? 1.2f : 1f;   // the unicorn is the swifter steed
             float target = h * (TapestryInput.RunHeld && !crouching ? Def.Run : Def.Walk) * speedMul * (crouching ? 0.4f : 1f);
             float accel;
@@ -162,7 +169,7 @@ namespace Tapestry
 
         // ---- the beanstalk: UP grabs a vine tile the knight overlaps; UP and DOWN climb, LEFT and RIGHT drift (leaving the vine's
         // column lets go), and a JUMP press that is not the Up key leaps off. Reaching the top carries him up to the bonus heaven.
-        bool climbing, climbMoving; float vineCooldown, climbAnim;
+        bool climbing, climbMoving; float vineCooldown, climbAnim, wellT;
         public bool Climbing { get { return climbing; } }
         public void EndClimb() { climbing = false; vineCooldown = 0.3f; }
 

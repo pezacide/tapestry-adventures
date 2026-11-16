@@ -13,6 +13,7 @@ namespace Tapestry
             FarLayer = "backgrounds/river_far", NearLayer = "None",
             GroundTop = "scenery/verdure_top", GroundFill = "scenery/verdure_fill", Brick = "scenery/wicker",
             Plank = "scenery/branch",
+            Weather = "night",
             Map = new[]
             {
                 "",
@@ -24,7 +25,7 @@ namespace Tapestry
                 "        ?M?                                    BRB                                                    ?W?    B1B BHB                                            BBB      BBB",
                 "                                                                                                                                                                        BBBB",
                 "                                                                                                                                                                       BBBBB",
-                "   P         j          i   n       i                  h    S   S       i     n      i    n       C           j             i     n          i    i         h         BBBBBB      G",
+                "   P         j          i   n       i                  h    S   ƒ       i     n      i    n       C           j             i     n    ƒ     i    i         h         BBBBBB      G",
                 "###################r~~~~~~~~~~###r~~~~~~~~~########################r~~~~~~~~~~~~~###r~~~~~~~~~~########################r~~~~~~~~~~~~~~###r~~~~~~~~~~~~~#################################################",
                 "###################~~~~~~~~~~~###~~~~~~~~~~########################~~~~~~~~~~~~~~###~~~~~~~~~~~########################~~~~~~~~~~~~~~~###~~~~~~~~~~~~~~#################################################",
             },
