@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Build;
@@ -70,6 +71,7 @@ namespace Tapestry.EditorTools
             if (report.summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Tapestry: built " + AabPath + " (" + (report.summary.totalSize / (1024 * 1024)) + " MB). Upload it in the Play Console. Bump VersionCode for every upload.");
+                LogBiggest(report);
                 EditorUtility.RevealInFinder(AabPath);
             }
             else Debug.LogError("Tapestry: bundle build failed - see the Console above for the reason.");
@@ -104,6 +106,29 @@ namespace Tapestry.EditorTools
             return false;
         }
 
+        /// <summary>After a build, list the 25 biggest things that went into it (by size in the build), so an oversized build can be trimmed.</summary>
+        static void LogBiggest(BuildReport report)
+        {
+            try
+            {
+                var sizes = new Dictionary<string, ulong>();
+#pragma warning disable CS0618
+                foreach (var pa in report.packedAssets)
+                    foreach (var c in pa.contents)
+                    {
+                        string key = string.IsNullOrEmpty(c.sourceAssetPath) ? "(built-in or generated)" : c.sourceAssetPath;
+                        ulong v; sizes.TryGetValue(key, out v); sizes[key] = v + c.packedSize;
+                    }
+#pragma warning restore CS0618
+                var list = new List<KeyValuePair<string, ulong>>(sizes);
+                list.Sort((a, b) => b.Value.CompareTo(a.Value));
+                var sb = new System.Text.StringBuilder("Tapestry: the biggest things in the build (MB):\n");
+                for (int i = 0; i < list.Count && i < 25; i++) sb.AppendLine((list[i].Value / (1024.0 * 1024.0)).ToString("F1") + "  " + list[i].Key);
+                Debug.Log(sb.ToString());
+            }
+            catch (System.Exception e) { Debug.LogWarning("Tapestry: could not list build sizes: " + e.Message); }
+        }
+
         static void Build(bool run)
         {
             if (!EnsureSingleInputSystem()) return;
@@ -124,6 +149,7 @@ namespace Tapestry.EditorTools
             if (report.summary.result == BuildResult.Succeeded)
             {
                 Debug.Log("Tapestry: built " + ApkPath + " (" + (report.summary.totalSize / (1024 * 1024)) + " MB).");
+                LogBiggest(report);
                 if (!run) EditorUtility.RevealInFinder(ApkPath);
             }
             else Debug.LogError("Tapestry: Android build failed - see the Console above for the reason.");
