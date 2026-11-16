@@ -317,6 +317,12 @@ namespace Tapestry
         {
             if (Locked(index)) { carry = false; OpenPaywall(index); return; }
             levelIndex = index; checkpointClaimed = false;
+            if (twoPlayers)   // two knights: the second takes the next knight along, and each begins with his own three lives
+            {
+                lives = 3; score = 0; bezantCount = 0; purifiedSaved = false; newBest = false;
+                activeKnight = 0; SaveSlot();
+                slots[1] = new Slot { Knight = (knightIndex + 1) % Knights.All.Length, Level = index, Lives = 3 };
+            }
             LoadLevel();
             player.SetKnight(Knights.All[knightIndex]);
             Audio.Play("confirm");
@@ -344,7 +350,33 @@ namespace Tapestry
         int BestScore { get { return PlayerPrefs.GetInt(BestKey, 0); } }
         bool Beaten { get { return PlayerPrefs.GetInt(BeatenKey, 0) == 1; } }
         bool hardMode, newBest; int menuIndex;
-        void RecordBest() { if (score > BestScore) { PlayerPrefs.SetInt(BestKey, score); PlayerPrefs.Save(); newBest = true; } }
+
+        // two knights taking turns (as in the old two-player games): each has his own lives, glorie and place in the tapestry; a death passes the turn
+        bool twoPlayers; int activeKnight;
+        struct Slot { public int Knight, Level, Lives, Score, Bezants; public bool Checkpoint, Purified; }
+        readonly Slot[] slots = new Slot[2];
+        void SaveSlot() { slots[activeKnight] = new Slot { Knight = knightIndex, Level = levelIndex, Lives = lives, Score = score, Bezants = bezantCount, Checkpoint = checkpointClaimed, Purified = purifiedSaved }; }
+        void LoadSlot(int i)
+        {
+            activeKnight = i; var s = slots[i];
+            knightIndex = s.Knight; levelIndex = s.Level; lives = s.Lives; score = s.Score; bezantCount = s.Bezants; checkpointClaimed = s.Checkpoint; purifiedSaved = s.Purified;
+        }
+        /// <summary>After a death in a two-knight game: hand the turn to the other knight if he has lives left. False if the same knight must go on.</summary>
+        bool PassTurn()
+        {
+            if (!twoPlayers) return false;
+            SaveSlot();
+            int other = 1 - activeKnight;
+            if (slots[other].Lives <= 0) return false;
+            RecordBest();
+            LoadSlot(other);
+            carry = false; briefedTitle = null;
+            LoadLevel();
+            Toast("Knyghte " + (other + 1 == 1 ? "I" : "II") + ": " + Knights.All[knightIndex].Title + " taketh his turne.");
+            SetState(FirstState());
+            return true;
+        }
+        void RecordBest() { if (twoPlayers) { int other = slots[1 - activeKnight].Score; if (other > score && other > BestScore) { PlayerPrefs.SetInt(BestKey, other); PlayerPrefs.Save(); } } if (score > BestScore) { PlayerPrefs.SetInt(BestKey, score); PlayerPrefs.Save(); newBest = true; } }
         int bellsLeft; float bellT;
         class BellFx { public Transform T; public float Age; public Vector2 Base; }
         readonly List<BellFx> bellFx = new List<BellFx>();
@@ -643,6 +675,7 @@ namespace Tapestry
                     if (stateTime > 2.6f)
                     {
                         lives--;
+                        if (PassTurn()) break;
                         if (lives > 0) { LoadLevel(); SetState(State.Playing); }
                         else SetState(State.GameOver);
                     }
@@ -892,9 +925,10 @@ namespace Tapestry
             int n = Knights.All.Length;
             if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
             if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
-            int items = Beaten ? 2 : 1;
+            int items = Beaten ? 3 : 2;
             if (menuIndex >= items) menuIndex = 0;
-            if (items > 1 && (TapestryInput.UpPressed || TapestryInput.DownPressed)) { menuIndex = 1 - menuIndex; Audio.Play("select"); }
+            if (TapestryInput.UpPressed) { menuIndex = (menuIndex + items - 1) % items; Audio.Play("select"); }
+            if (TapestryInput.DownPressed) { menuIndex = (menuIndex + 1) % items; Audio.Play("select"); }
             // the Up key also jumps, so only a real jump button (or ENTER) starts the game from the title
             bool go = stateTime > 0.3f && (TapestryInput.JumpOnlyPressed || TapestryInput.StartPressed);
             if (TapestryInput.TapPosition.HasValue && TapestriesLinkRect().Contains(TapestryInput.TapPosition.Value))
@@ -922,7 +956,8 @@ namespace Tapestry
             }
             if (go)
             {
-                hardMode = menuIndex == 1;
+                hardMode = menuIndex == 2;
+                twoPlayers = menuIndex == 1;
                 Enemy.TimeScale = hardMode ? 1.3f : 1f;
                 FindRealms();
                 if (realmStarts.Count <= 1) { StartAt(0); return; }
@@ -1889,11 +1924,11 @@ namespace Tapestry
             GUI.Label(new Rect(W * 0.1f, H * 0.468f, W * 0.8f, U * 0.05f), def.Trait, center);
 
             // the menu, with a capon for its cursor
-            int items = Beaten ? 2 : 1;
+            int items = Beaten ? 3 : 2;
             for (int m = 0; m < items; m++)
             {
                 var r = MenuRect(m);
-                GUI.Label(new Rect(r.x + r.height * 1.4f, r.y, r.width, r.height), m == 0 ? "1 KNYGHT ADVENTURE" : "YE WRONGE SYDE", menuStyle);
+                GUI.Label(new Rect(r.x + r.height * 1.4f, r.y, r.width, r.height), m == 0 ? "1 KNYGHT ADVENTURE" : m == 1 ? "2 KNYGHTS TAKE TURNS" : "YE WRONGE SYDE", menuStyle);
                 if (m == menuIndex) { float bob = Mathf.Sin(Time.time * 6f) * r.height * 0.05f; DrawFrame("items/capon", 0, new Rect(r.x, r.y + bob, r.height * 1.1f, r.height * 1.1f)); }
             }
             var br = MenuRect(items - 1);
@@ -2092,7 +2127,7 @@ namespace Tapestry
             var safe = TapestryInput.Safe;   // keep the HUD clear of camera notches and rounded corners
             GUI.BeginGroup(new Rect(safe.x, 0, safe.width, H));
             W = safe.width;
-            GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), player.Def.Title + (player.Mounted ? " upon " + player.MountName : ""), small);
+            GUI.Label(new Rect(W * 0.02f, y, W * 0.3f, s * 1.2f), (twoPlayers ? (activeKnight == 0 ? "I  " : "II  ") : "") + player.Def.Title + (player.Mounted ? " upon " + player.MountName : ""), small);
             HealthBar(new Rect(W * 0.02f, y + s * 1.25f, s * 6f, s * 0.75f));
             DrawFrame("scenery/bezant", 0, new Rect(W * 0.34f, y + s * 0.1f, s, s));
             GUI.Label(new Rect(W * 0.34f + s * 1.2f, y, W * 0.12f, s * 1.2f), "× " + bezantCount, small);
