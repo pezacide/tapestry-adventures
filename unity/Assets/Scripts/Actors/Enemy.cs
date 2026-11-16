@@ -21,7 +21,7 @@ namespace Tapestry
         float dir = -1f, timer, anim, kickGrace, deadTimer, shellVx, lifeT;
         bool shell, squashed, flipped, charging, swooping, gravity = true;
         float speed, plantLevel;
-        bool winged;
+        bool winged, snapped; float flapT;
         /// <summary>A plant sunk inside its urn: it cannot touch, or be touched.</summary>
         public bool Untouchable { get; private set; }
         /// <summary>1 normally; faster on 'Ye Wronge Syde' (the beasts, their hammers and spears all move and wait that much quicker).</summary>
@@ -124,7 +124,7 @@ namespace Tapestry
                     {
                         timer = 0f; view.SetFrame(1);
                         GameManager.I.SpawnShot("spiny_egg", Body.Pos + new Vector2(0f, -0.2f), new Vector2(Body.Vel.x * 0.5f, 0f));
-                        Audio.Play("soup", 0.5f);
+                        Audio.Play("imp", 0.6f);
                     }
                     break;
                 }
@@ -142,7 +142,7 @@ namespace Tapestry
                         timer = 0f; view.SetFrame(1);
                         float sd = Mathf.Sign(dx);
                         GameManager.I.SpawnShot("cannonball", Body.Pos + new Vector2(sd * 1.0f, 0.55f), new Vector2(sd * 4.5f, 0f));
-                        Audio.Play("kick", 0.6f);
+                        Audio.Play("cannon", 0.8f);
                     }
                     break;
 
@@ -152,6 +152,7 @@ namespace Tapestry
                         float a = anim * 0.9f + home.x;
                         Body.Pos = new Vector2(home.x + Mathf.Sin(a) * 2.5f, home.y + 1.6f + Mathf.Sin(a * 2f) * 0.6f);
                         view.Face(Mathf.Cos(a) > 0f); view.SetFrame(3 + ((int)(anim * 6f) % 2));
+                        flapT -= dt; if (flapT <= 0f) { flapT = 0.55f; if (Mathf.Abs(dx) < 9f) Audio.Play("flap", 0.25f); }
                         break;
                     }
                     goto case "snail_hound";
@@ -310,7 +311,7 @@ namespace Tapestry
                             charging = false; timer = 0f;
                             float d = dx > 0f ? 1f : -1f;
                             GameManager.I.SpawnShot("hammer", Body.Pos + new Vector2(d * 0.3f, Body.H + 0.2f), new Vector2(Mathf.Clamp(dx * 0.55f, -5.5f, 5.5f), 9.5f));
-                            Audio.Play("spear", 0.5f);
+                            Audio.Play("hammer", 0.6f);
                         }
                         break;
                     }
@@ -327,7 +328,7 @@ namespace Tapestry
                     if (!swooping)
                     {
                         Body.Pos = new Vector2(home.x, home.y - 0.9f); view.Renderer.enabled = false; Body.Vel = Vector2.zero;
-                        if (timer > 2.2f) { swooping = true; timer = 0f; Body.Pos = new Vector2(home.x, home.y); Body.Vel = new Vector2(0f, 12.5f); Audio.Play("soup", 0.3f); }
+                        if (timer > 2.2f) { swooping = true; timer = 0f; Body.Pos = new Vector2(home.x, home.y); Body.Vel = new Vector2(0f, 12.5f); Audio.Play("ember", 0.4f); }
                     }
                     else
                     {
@@ -346,6 +347,8 @@ namespace Tapestry
                         Body.Pos = new Vector2(home.x, home.y - 1.1f * (1f - plantLevel));
                         view.Renderer.enabled = plantLevel > 0.05f;
                         view.SetFrame(plantLevel > 0.9f ? 1 : 0);
+                        if (plantLevel > 0.9f && !snapped) { snapped = true; if (Mathf.Abs(dx) < 9f) Audio.Play("snap", 0.5f); }
+                        else if (plantLevel < 0.5f) snapped = false;
                         Untouchable = plantLevel < 0.35f;
                     }
                     break;
@@ -585,11 +588,11 @@ namespace Tapestry
         public bool OnKnight(Knight k, bool fromAbove)
         {
             if (!Alive || k.Dead) return false;
-            if (Kind == "bombard") { if (fromAbove) k.Bounce(); else k.Hurt(); return false; }   // a firm iron thing: land on it and bounce off
+            if (Kind == "bombard") { Audio.Play("clang", 0.5f); if (fromAbove) k.Bounce(); else k.Hurt(); return false; }   // a firm iron thing: land on it and bounce off
             if (winged)   // a stomp clips its wings: it drops and walks
             {
                 if (!fromAbove) { k.Hurt(); return false; }
-                winged = false; gravity = true; Body.Vel = Vector2.zero; k.Bounce(); Audio.Play("stomp");
+                winged = false; gravity = true; Body.Vel = Vector2.zero; k.Bounce(); Audio.Play("clip");
                 GameManager.I.AddScore(100, Body.Pos + new Vector2(0f, Body.H));
                 return false;
             }
@@ -724,7 +727,7 @@ namespace Tapestry
             Body.Step(lv, dt);
             view.SetFrame(((int)(t * 10f)) % 2);
             view.SetPosition(Body.Pos);
-            if (Kind == "spiny_egg" && (Body.Grounded || Body.HitWall)) GameManager.I.SpawnEnemy("hedgehog", Body.Pos);   // it hatches
+            if (Kind == "spiny_egg" && (Body.Grounded || Body.HitWall)) { GameManager.I.SpawnEnemy("hedgehog", Body.Pos); Audio.Play("hatch", 0.6f); }   // it hatches
             if (Body.HitWall || Body.Grounded || Body.HitCeiling || t > life || Body.Pos.y < -2f) Destroy();
         }
 

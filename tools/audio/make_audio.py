@@ -662,6 +662,23 @@ def sfx():
     S["star"] = fx(add(sweep(1800, 300, 0.5, "sine", 0.5), noise(0.4, 1000, 5000, 8, 0.4)), 0.55)
     S["meow"] = fx(sweep(500, 900, 0.18, "sine", 0.7) * 0.8, 0.5)
     S["horn"] = fx(np.concatenate([horn(freq("C4"), 0.3, 1.0), horn(freq("G4"), 0.3, 1.0), horn(freq("C5"), 0.6, 1.0)]), 0.6, 0.3)
+    # the new beasts
+    cb = np.zeros(int(0.8 * SR)); mix_into(cb, sweep(130, 38, 0.5, "sine", 1.0), 0); mix_into(cb, noise(0.5, 80, 1800, 7, 1.0), 0); mix_into(cb, tabor(0.3, 1.0), 0.0)
+    S["cannon"] = fx(cb, 0.8, 0.15)
+    S["hammer"] = fx(add(noise(0.3, 400, 3500, 9, 0.5), sweep(300, 800, 0.22, "sine", 0.3)), 0.55)
+    sn = np.zeros(int(0.35 * SR)); mix_into(sn, noise(0.05, 1500, 6000, 60, 1.0), 0); mix_into(sn, noise(0.05, 1500, 6000, 60, 0.8), 0.11); mix_into(sn, tabor(0.06, 0.5, False), 0.0)
+    S["snap"] = fx(sn, 0.6, 0.04)
+    tt = t(0.7); S["ember"] = fx(bandpass(rng.standard_normal(len(tt)), 300, 3500) * np.sin(np.pi * tt / 0.7) ** 0.7 * (1 + 0.4 * np.sin(2 * np.pi * 40 * tt)) * 0.8, 0.5)
+    im = np.zeros(int(0.7 * SR))
+    for k, n in enumerate(("E5", "G5", "E5", "A5")): mix_into(im, shawm(freq(n), 0.09, 0.9), k * 0.14)
+    S["imp"] = fx(im, 0.55, 0.12)
+    ht = np.zeros(int(0.35 * SR)); mix_into(ht, sweep(300, 1100, 0.07, "sine", 0.9), 0); mix_into(ht, noise(0.12, 1500, 6000, 40, 0.5), 0.05)
+    S["hatch"] = fx(ht, 0.6, 0.05)
+    fl = np.zeros(int(0.35 * SR))
+    for k in range(3): mix_into(fl, noise(0.08, 600, 3500, 35, 0.8), k * 0.1)
+    S["flap"] = fx(fl, 0.35, 0.03)
+    S["clip"] = fx(add(noise(0.12, 1000, 6000, 40, 0.8), sweep(800, 200, 0.2, "sine", 0.6)), 0.65, 0.05)
+    S["clang"] = fx(add(bell(freq("D4"), 0.5, 0.6), bell(freq("G#4"), 0.4, 0.4), noise(0.05, 2000, 8000, 50, 0.6)), 0.6, 0.1)
     S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
     return S
 
