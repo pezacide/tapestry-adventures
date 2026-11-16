@@ -82,6 +82,12 @@ def air(m, ch, xs, y=4):
             if _clear(m, x - 1, x + 1, y, y + 1) and not _near(m, x, "PCG[:", 8) and not _near(m, x, "ĩ", 25):
                 m.put(x, y, ch); placed.append(x); break
     return placed
+def loop_route(m, ret=58, gate=94, y=6):
+    """A looping hall in a castle: cross the gate on the low road and ye halls turn thee back to `ret`; the high road
+    (a row of beams a little above the pits, reached from the beam platforms) lets thee pass."""
+    m.put(70, 6, " ")                                     # the swinging flail makes way for the high road
+    m.row(64, y, "=" * 30)
+    m.put(ret, 2, "\u0280"); m.put(gate, 2, "\u028c")
 def span(m, a, b, kind):
     """Hang two boards across the blank pit a..b (at least six wide): falling ones or a balance pair."""
     m.put(a + 1, 2, kind); m.put(a + 4, 2, kind)
@@ -712,6 +718,7 @@ for y in range(2, 5): m.put(98, y, "V")
 for y in range(2, 9): m.put(122, y, "D")
 m.put(110, 2, "6")
 m.put(136, 2, "N")
+loop_route(m)
 write("Level20", "Worlde 5-4", "Ye Unicorne in Captivitie", "HERE YE UNICORNE IS FENCED IN, AND SPARED", m,
       [], "", 0, "castle", "backgrounds/garden_far", "backgrounds/castle_near",
       skin=W5, plank="scenery/rail", gate="scenery/gate_paling")
@@ -805,6 +812,7 @@ for y in range(2, 5): m.put(98, y, "V")                          # a low wall: l
 for y in range(2, 9): m.put(122, y, "D")                         # the way on, shut until both are overcome
 m.put(110, 2, "$")
 m.put(136, 2, "N")
+loop_route(m)
 write("Level24", "Worlde 6-4", "A mon seul desir", "HERE YE LYON AND YE UNICORNE GUARDE YE LADYE'S TENTE", m,
       [], "", 0, "castle", "backgrounds/pavilion_far", "backgrounds/castle_near",
       skin=W6, plank="scenery/garland")
@@ -885,6 +893,7 @@ for y in range(2, 5): m.put(98, y, "V")
 for y in range(2, 9): m.put(122, y, "D")
 m.put(110, 2, "2")
 m.put(136, 2, "N")
+loop_route(m)
 write("Level28", "Worlde 7-4", "Ye Beaste of Seven Heddes", "HERE YE BEASTE RISETH OUT OF YE SEA WITH SEVEN HEDDES", m,
       [], "", 0, "castle", "backgrounds/apoc_far", "backgrounds/castle_near",
       skin=W7, plank="scenery/cloud_scroll")

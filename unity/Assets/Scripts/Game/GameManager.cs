@@ -31,6 +31,8 @@ namespace Tapestry
         // secret doors: faint on the wall until the knight draws near; UP in front of one warps him on to the next realme
         readonly List<KeyValuePair<Vector2, SpriteRenderer>> secretDoors = new List<KeyValuePair<Vector2, SpriteRenderer>>();
         int warpTarget = -1;
+        // looping halls: cross the gate (ʌ) without having taken the high road (above 5.5 between the return point ʀ and the gate) and ye halls turn thee back
+        float loopGateX = -1f; Vector2 loopReturn; bool loopHigh; int loopCount;
         Lift pendingBalance;   // the first board of a balance pair, waiting for its other
         // halfway banner
         SpriteRenderer checkpointView;
@@ -445,7 +447,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; pendingBalance = null; secretDoors.Clear(); warpTarget = -1; popups.Clear(); hasCheckpoint = false; checkpointView = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; pendingBalance = null; secretDoors.Clear(); warpTarget = -1; loopGateX = -1f; loopHigh = false; loopCount = 0; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
@@ -528,6 +530,8 @@ namespace Tapestry
                     case 'þ': kind = "snail_spike"; break;
                     case 'ȼ': kind = "bombard"; break;
                     case 'ĩ': kind = "imp_cloud"; break;
+                    case 'ʌ': loopGateX = p.x; break;
+                    case 'ʀ': loopReturn = p; break;
                     case 'ŷ': secretDoors.Add(new KeyValuePair<Vector2, SpriteRenderer>(p, Art.Make("scenery/secret_door", world, p, -3))); break;
                     case 'ƒ': kind = "snail_wing"; break;
                     case 'é': kind = "ember"; break;
@@ -1167,6 +1171,18 @@ namespace Tapestry
             if (pb.Grounded && pb.Vel.y <= 0f && level.Basket(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y - 0.1f)))
             { pb.Vel.y = TapestryInput.JumpHeld ? 21f : 17f; pb.Grounded = false; Audio.Play("spring"); }
             TickHornAndFountain(pb);
+            if (loopGateX > 0f && !inBonus)
+            {
+                if (pb.Pos.x > loopReturn.x && pb.Pos.x < loopGateX && pb.Pos.y > 5.5f) loopHigh = true;
+                if (pb.Pos.x >= loopGateX && !loopHigh)   // the wrong road: the halls fold back upon themselves
+                {
+                    pb.Pos = loopReturn; pb.Vel = Vector2.zero;
+                    camX = ClampCam(loopReturn.x + 4f); PlaceCamera();
+                    Audio.Play("powerup", 0.8f);
+                    Toast(loopCount == 0 ? "Ye halls turne thee backe! This waye is a loope." : "Ye same halls agayne... seeke ye hye roade.");
+                    loopCount++;
+                }
+            }
             foreach (var sd in secretDoors)   // a secret door: dim until the knight nears; then UP goes through
             {
                 float dd = Mathf.Abs(pb.Pos.x - sd.Key.x);
