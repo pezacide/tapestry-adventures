@@ -914,3 +914,24 @@ m.put(132, 2, "]")                                                # Princess Ael
 write("Level29", "Worlde 7-5", "Ye Greate Halle", "HERE YE CAT KING SITTETH UPON HIS THRONE", m,
       [], "", 0, "castle", "backgrounds/hall_far", "backgrounds/castle_near",
       skin=W7, plank="scenery/cloud_scroll", finale=True)
+
+# ======================================================= Ye Frayed Edge (the secret place at the very end of the cloth)
+# Unlocked from the title once the game is finished and all three secret doors have been found. One of everything new,
+# and bezants strewn like loose threads.
+m = Map(262)
+m.ground(0, 40); m.ground(49, 89); m.ground(97, 199)
+m.put(3, 2, "P"); m.row(8, 5, "?M?"); m.row(12, 5, "BHB")
+m.put(18, 2, "ƒ"); m.put(24, 2, "þ"); m.put(30, 2, "ȼ"); m.row(33, 5, "B1B"); m.row(34, 7, "oooo")
+m.put(42, 2, "ĺ"); m.put(45, 2, "ĺ"); m.row(41, 6, "ooooooooo")                       # falling boards over the first pit
+m.put(56, 4, "ĩ"); m.put(60, 2, "ß"); m.put(63, 2, "ß"); m.row(66, 5, "BRB"); m.row(68, 7, "ooooo")
+m.put(72, 2, "C"); m.put(76, 2, "ø"); m.put(82, 2, "ø"); m.row(84, 5, "B?B?B")
+m.put(90, 2, "ǿ"); m.put(93, 2, "ǿ"); m.row(90, 6, "ooooooo")                         # a balance pair over the second pit
+m.put(100, 2, "ŵ"); bonus_cellar(m, 216)                                              # a well to a cellar of bezants
+m.fire(112, 118); m.row(113, 4, "===="); m.row(113, 7, "oooo")                        # embers leap from this one
+m.put(122, 2, "ƒ"); m.put(127, 2, "þ"); m.put(133, 2, "ȼ"); m.row(136, 5, "BHB")
+m.row(142, 5, "ooooooooo"); m.row(146, 7, "ooooooo")
+m.stairs(160, 6)
+m.put(172, 2, "G")
+write("Level30", "Ye Frayed Edge", "Ye Frayed Edge", "HERE YE CLOTHE ENDETH IN LOOSE THREADES, AND YE BOLD ARE REWARDED", m,
+      [("tree", 6), ("shrub", 12), ("hill", 25), ("tree", 34), ("shrub", 45), ("hill", 86), ("tree", 95), ("shrub", 110), ("hill", 128), ("tree", 150), ("tree", 172)],
+      "scenery/castle_keep", 187, "meadow")

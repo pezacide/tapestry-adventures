@@ -89,7 +89,7 @@ namespace Tapestry
             for (int i = 0; i < Levels.All.Length; i++)
             {
                 var t = Levels.All[i].Title;
-                if (t == seen) continue;
+                if (t == seen || t == EdgeTitle) continue;
                 seen = t;
                 bool open = i == 0 || Passed(t);
 #if UNITY_EDITOR
@@ -351,6 +351,21 @@ namespace Tapestry
         bool Beaten { get { return PlayerPrefs.GetInt(BeatenKey, 0) == 1; } }
         bool hardMode, newBest; int menuIndex;
 
+        // ye Frayed Edge: a secret place at the very end of the cloth, opened by finishing the game and finding all three secret doors
+        const string EdgeTitle = "Ye Frayed Edge";
+        static readonly string[] DoorLevels = { "Worlde 3-3", "Worlde 5-2", "Worlde 6-3" };
+        static int DoorsFound { get { int n = 0; foreach (var d in DoorLevels) if (PlayerPrefs.GetInt("door:" + d, 0) == 1) n++; return n; } }
+        bool EdgeOpen { get { return Beaten && DoorsFound >= DoorLevels.Length; } }
+        int MenuItems { get { return 2 + (Beaten ? 1 : 0) + (EdgeOpen ? 1 : 0); } }
+        /// <summary>0 one knight, 1 two knights, then ye Wronge Syde (if the game is finished), then ye Frayed Edge (if its way is found).</summary>
+        string MenuLabel(int i)
+        {
+            if (i == 0) return "1 KNYGHT ADVENTURE";
+            if (i == 1) return "2 KNYGHTS TAKE TURNS";
+            if (i == 2 && Beaten) return "YE WRONGE SYDE";
+            return "YE FRAYED EDGE";
+        }
+        int EdgeLevelIndex() { for (int i = 0; i < Levels.All.Length; i++) if (Levels.All[i].Title == EdgeTitle) return i; return -1; }
         // two knights taking turns (as in the old two-player games): each has his own lives, glorie and place in the tapestry; a death passes the turn
         bool twoPlayers; int activeKnight;
         struct Slot { public int Knight, Level, Lives, Score, Bezants; public bool Checkpoint, Purified; }
@@ -925,7 +940,7 @@ namespace Tapestry
             int n = Knights.All.Length;
             if (TapestryInput.LeftPressed) { knightIndex = (knightIndex + n - 1) % n; Audio.Play("select"); }
             if (TapestryInput.RightPressed) { knightIndex = (knightIndex + 1) % n; Audio.Play("select"); }
-            int items = Beaten ? 3 : 2;
+            int items = MenuItems;
             if (menuIndex >= items) menuIndex = 0;
             if (TapestryInput.UpPressed) { menuIndex = (menuIndex + items - 1) % items; Audio.Play("select"); }
             if (TapestryInput.DownPressed) { menuIndex = (menuIndex + 1) % items; Audio.Play("select"); }
@@ -956,8 +971,14 @@ namespace Tapestry
             }
             if (go)
             {
-                hardMode = menuIndex == 2;
-                twoPlayers = menuIndex == 1;
+                string pick = MenuLabel(menuIndex);
+                hardMode = pick == "YE WRONGE SYDE";
+                twoPlayers = pick == "2 KNYGHTS TAKE TURNS";
+                if (pick == "YE FRAYED EDGE")
+                {
+                    int e = EdgeLevelIndex();
+                    if (e >= 0) { Enemy.TimeScale = 1f; lives = 3; briefedTitle = null; StartAt(e); return; }
+                }
                 Enemy.TimeScale = hardMode ? 1.3f : 1f;
                 FindRealms();
                 if (realmStarts.Count <= 1) { StartAt(0); return; }
@@ -1229,6 +1250,8 @@ namespace Tapestry
                         if (WorldOf(Levels.All[i]) > w) { warpTarget = i; break; }
                     if (warpTarget < 0) continue;
                     AddScore(1000, sd.Key + new Vector2(0f, 2f)); Audio.Play("powerup");
+                    PlayerPrefs.SetInt("door:" + L.Title, 1); PlayerPrefs.Save();
+                    if (EdgeOpen) Toast("Ye last secrete is founde! Ye Frayed Edge awaiteth upon ye title.");
                     player.Freeze(); player.Hide();
                     SetState(State.Entering);
                     return;
@@ -1802,6 +1825,8 @@ namespace Tapestry
                         GUI.Label(new Rect(0, H * 0.27f, W, H * 0.1f), "HERE YE KNYGHTE IS VICTORIOUS", big);
                         GUI.Label(new Rect(W * 0.15f, H * 0.37f, W * 0.7f, H * 0.17f), hasMonk
                             ? "Grammercy, good knyghte! " + (boss != null ? boss.Title : "Ye beaste") + " is vanquished.\nYet ye Princesse Aelfgyva is held in another castel..." + (levelIndex + 1 < Levels.All.Length ? "\nPresse JUMPE to ryde on." : "\nMore of ye tapestrie is yet to be sewn...")
+                            : L.Title == EdgeTitle
+                            ? "Thou hast found ye very edge of ye clothe!\nNo threade is left unfound. Well stitched, bold knyghte.\nPresse JUMPE to returne."
                             : levelIndex + 1 < Levels.All.Length
                             ? "Huzzah! Ye beastes are put to flyghte.\nYet ye Princesse Aelfgyva lyeth in another castel...\nPresse JUMPE to ryde on."
                             : "Huzzah! Thou hast passed every realme yet stitched.\nMore of ye tapestrie is yet to be sewn...", center);
@@ -1924,11 +1949,11 @@ namespace Tapestry
             GUI.Label(new Rect(W * 0.1f, H * 0.468f, W * 0.8f, U * 0.05f), def.Trait, center);
 
             // the menu, with a capon for its cursor
-            int items = Beaten ? 3 : 2;
+            int items = MenuItems;
             for (int m = 0; m < items; m++)
             {
                 var r = MenuRect(m);
-                GUI.Label(new Rect(r.x + r.height * 1.4f, r.y, r.width, r.height), m == 0 ? "1 KNYGHT ADVENTURE" : m == 1 ? "2 KNYGHTS TAKE TURNS" : "YE WRONGE SYDE", menuStyle);
+                GUI.Label(new Rect(r.x + r.height * 1.4f, r.y, r.width, r.height), MenuLabel(m), menuStyle);
                 if (m == menuIndex) { float bob = Mathf.Sin(Time.time * 6f) * r.height * 0.05f; DrawFrame("items/capon", 0, new Rect(r.x, r.y + bob, r.height * 1.1f, r.height * 1.1f)); }
             }
             var br = MenuRect(items - 1);
