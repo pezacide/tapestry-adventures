@@ -220,3 +220,15 @@ def hedgehog(f):
     return s
 C["hedgehog"] = dict(title="Hedgehog", size=(56, 40), frames=2, build=hedgehog,
                      behaviour="trundles along; its spines hurt a stomper; shoot it or smite it with the relique")
+
+# ---------------------------------------------------------------- the secret door
+def secret_door():
+    """An arched oaken door set in the tapestry, with iron straps and a ring: a way through to a later realme."""
+    s = woven("M4,72 L4,22 Q4,2 24,2 Q44,2 44,22 L44,72 Z", "terra", "dark", 1.8)
+    s += stem("M24,3 L24,72", "dark", 1.2, False) + stem("M4,30 L44,30 M4,52 L44,52", "dark", 2.2, False)
+    for x in (9, 39):
+        for y in (30, 52): s += dot(x, y, 1.6, "gold", "dark")
+    s += dot(18, 44, 3.4, "gold", "dark") + dot(30, 44, 3.4, "gold", "dark")
+    s += stem("M24,10 L24,20", "gold", 0.9, False) + dot(24, 9, 2.4, "gold", "dark")
+    return s
+S["secret_door"] = (48, 72, secret_door, False)

@@ -1824,6 +1824,13 @@
       ],
       "file": "scenery/spark.png"
     },
+    "secret_door": {
+      "size": [
+        48,
+        72
+      ],
+      "file": "scenery/secret_door.png"
+    },
     "fire": {
       "size": [
         48,

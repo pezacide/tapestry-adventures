@@ -524,6 +524,7 @@ m.put(132, 2, "v"); m.row(122, 5, "===="); m.row(127, 7, "===="); m.put(126, 8, 
 m.row(149, 4, "==="); m.put(156, 2, "S"); m.row(158, 5, "B1B"); m.put(162, 2, "h")
 m.stairs(166, 6)
 m.put(178, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
+print("Level11 door", sprinkle(m,"ŷ",[88]))
 write("Level11", "Worlde 3-3", "Ye Naming of ye Beastes", "HERE ADAM NAMETH YE BEASTES, AND YE BEASTES DOE RUNNE", m,
       [], "scenery/castle_eden_bower", 192, "eden", "backgrounds/creation_far", "backgrounds/eden_near",
       skin=("scenery/eden_top", "scenery/eden_fill", "scenery/roundel_block"))
@@ -675,6 +676,7 @@ m.stairs(172, 6)
 m.put(184, 2, "G")   # seven tiles past the top step: a good running leap reaches the toppe
 print("L18", sprinkle(m,"ƒ",[40]), sprinkle(m,"þ",[70,130]), sprinkle(m,"ȼ",[90,150]))
 print("Level18 imp", air(m,"ĩ",[110]))
+print("Level18 door", sprinkle(m,"ŷ",[60]))
 write("Level18", "Worlde 5-2", "Ye Fountaine", "HERE YE UNICORNE DIPPETH HIS HORNE AND MAKETH YE WATERS PURE", m,
       [], "scenery/castle_chapel", 192, "fountain", "backgrounds/fountain_far", "backgrounds/millefleur_near",
       skin=W5, plank="scenery/rail")
@@ -784,6 +786,7 @@ m.stairs(166, 6)
 m.put(178, 2, "G")
 print("L23", sprinkle(m,"ƒ",[40]), sprinkle(m,"þ",[90]), sprinkle(m,"ȼ",[130]), lifts_over_pits(m,"ǿ"))
 print("Level23 imp", air(m,"ĩ",[110]))
+print("Level23 door", sprinkle(m,"ŷ",[60]))
 write("Level23", "Worlde 6-3", "Taste and Smell", "HERE YE LADYE TAKETH A SWEETE, AND WEAVETH A GARLANDE", m,
       [], "scenery/castle_bower", 190, "taste", "backgrounds/red_far", "backgrounds/red_near",
       skin=W6, plank="scenery/garland")

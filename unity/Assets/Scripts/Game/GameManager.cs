@@ -28,6 +28,9 @@ namespace Tapestry
         readonly List<Item> items = new List<Item>();
         readonly List<Lift> lifts = new List<Lift>();
         Lift riding;   // the lift the knight stands on
+        // secret doors: faint on the wall until the knight draws near; UP in front of one warps him on to the next realme
+        readonly List<KeyValuePair<Vector2, SpriteRenderer>> secretDoors = new List<KeyValuePair<Vector2, SpriteRenderer>>();
+        int warpTarget = -1;
         Lift pendingBalance;   // the first board of a balance pair, waiting for its other
         // halfway banner
         SpriteRenderer checkpointView;
@@ -442,7 +445,7 @@ namespace Tapestry
         void LoadLevel()
         {
             if (world != null) Destroy(world.gameObject);
-            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; pendingBalance = null; popups.Clear(); hasCheckpoint = false; checkpointView = null;
+            enemies.Clear(); shots.Clear(); bezants.Clear(); debris.Clear(); items.Clear(); lifts.Clear(); riding = null; pendingBalance = null; secretDoors.Clear(); warpTarget = -1; popups.Clear(); hasCheckpoint = false; checkpointView = null;
             windT = 3f; wind = 0f; leapT = 2f; windToldOf = false;
             tymeLeft = L.Time; hurried = false; deathTyme = false; Audio.MusicPitch(1f);
             flails.Clear(); winds.Clear(); wheels.Clear(); wheelAngle = 0f; herds.Clear(); herdsSent.Clear(); raftLaunches.Clear(); raftTimers.Clear(); houndT = 3f; houndsToldOf = false; herdT = 2f; logs.Clear(); showManicule = false; logPiles.Clear(); logTimers.Clear(); boss = null; toldOfBoss = false; bossMusic = false; hasAxe = collapsing = false; hasMonk = rescuedMonk = false; bayard = null; winPhase = 0; toast = null;
@@ -525,6 +528,7 @@ namespace Tapestry
                     case 'þ': kind = "snail_spike"; break;
                     case 'ȼ': kind = "bombard"; break;
                     case 'ĩ': kind = "imp_cloud"; break;
+                    case 'ŷ': secretDoors.Add(new KeyValuePair<Vector2, SpriteRenderer>(p, Art.Make("scenery/secret_door", world, p, -3))); break;
                     case 'ƒ': kind = "snail_wing"; break;
                     case 'é': kind = "ember"; break;
                     case 'ø': kind = "urn_plant"; break;
@@ -662,7 +666,7 @@ namespace Tapestry
                     { levelIndex = 0; checkpointClaimed = false; LoadLevel(); SetState(State.Title); }
                     break;
                 case State.Entering:   // walked into the crypt door: fade, then on to the next part
-                    if (stateTime > 1.1f) NextLevel();
+                    if (stateTime > 1.1f) { if (warpTarget >= 0) { levelIndex = warpTarget - 1; warpTarget = -1; } NextLevel(); }
                     break;
                 case State.GameOver:
                     if (stateTime > 1.5f && (TapestryInput.JumpPressed || TapestryInput.StartPressed || TapestryInput.TapPosition.HasValue))
@@ -1163,6 +1167,22 @@ namespace Tapestry
             if (pb.Grounded && pb.Vel.y <= 0f && level.Basket(Mathf.FloorToInt(pb.Pos.x), Mathf.FloorToInt(pb.Pos.y - 0.1f)))
             { pb.Vel.y = TapestryInput.JumpHeld ? 21f : 17f; pb.Grounded = false; Audio.Play("spring"); }
             TickHornAndFountain(pb);
+            foreach (var sd in secretDoors)   // a secret door: dim until the knight nears; then UP goes through
+            {
+                float dd = Mathf.Abs(pb.Pos.x - sd.Key.x);
+                sd.Value.color = new Color(1f, 1f, 1f, dd < 3f ? 1f : 0.28f);
+                if (!inBonus && dd < 0.7f && pb.Grounded && TapestryInput.UpPressed && Mathf.Abs(pb.Pos.y - sd.Key.y) < 1.5f)
+                {
+                    int w = WorldOf(L);
+                    for (int i = levelIndex + 1; i < Levels.All.Length; i++)
+                        if (WorldOf(Levels.All[i]) > w) { warpTarget = i; break; }
+                    if (warpTarget < 0) continue;
+                    AddScore(1000, sd.Key + new Vector2(0f, 2f)); Audio.Play("powerup");
+                    player.Freeze(); player.Hide();
+                    SetState(State.Entering);
+                    return;
+                }
+            }
             if (player.Dead) return;
             if (hasCheckpoint && !checkpointClaimed && pb.Pos.x >= checkpointPos.x - 0.3f)
             {
