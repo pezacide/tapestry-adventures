@@ -139,6 +139,8 @@ namespace Tapestry
                 case "bombard":   // stands fast, faces the knight, and fires a slow iron ball along the ground when he is in range
                     view.Face(dx > 0f);
                     if (timer > 0.3f) view.SetFrame(0);
+                    if (timer > 2.2f && !snapped && Mathf.Abs(dx) < 9f && Mathf.Abs(dx) > 1.2f) { snapped = true; Audio.Play("fuse", 0.4f); }   // the fuse hisses just before it fires
+                    if (timer < 1f) snapped = false;
                     if (timer > 2.8f && Mathf.Abs(dx) < 9f && Mathf.Abs(dx) > 1.2f)
                     {
                         timer = 0f; view.SetFrame(1);
@@ -731,6 +733,7 @@ namespace Tapestry
             view.SetFrame(((int)(t * 10f)) % 2);
             view.SetPosition(Body.Pos);
             if (Kind == "spiny_egg" && (Body.Grounded || Body.HitWall)) { GameManager.I.SpawnEnemy("hedgehog", Body.Pos); Audio.Play("hatch", 0.6f); }   // it hatches
+            if (Kind == "cannonball" && Body.HitWall) Audio.Play("thud", 0.35f);   // the ball strikes a wall
             if (Body.HitWall || Body.Grounded || Body.HitCeiling || t > life || Body.Pos.y < -2f) Destroy();
         }
 

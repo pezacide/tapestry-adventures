@@ -687,6 +687,9 @@ def sfx():
     sk = np.zeros(int(0.45 * SR)); mix_into(sk, shawm(freq("B5"), 0.1, 0.8), 0); mix_into(sk, shawm(freq("F#5"), 0.18, 0.8), 0.08); mix_into(sk, noise(0.15, 1500, 7000, 30, 0.3), 0.0)
     S["squawk"] = fx(sk, 0.55, 0.05)
     S["plop"] = fx(add(sweep(260, 90, 0.14, "sine", 1.0), tabor(0.08, 0.6)), 0.6, 0.04)
+    # the bombard: a hissing fuse before it fires, and a thud when the ball strikes a wall
+    tt = t(0.5); S["fuse"] = fx(bandpass(rng.standard_normal(len(tt)), 3000, 9000) * env(len(tt), 0.02, 0.15) * (1 + 0.6 * np.sin(2 * np.pi * 55 * tt)) * 0.6, 0.4, 0.03)
+    S["thud"] = fx(add(sweep(120, 45, 0.2, "sine", 1.0), noise(0.12, 100, 900, 25, 0.7)), 0.65, 0.05)
     S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
     return S
 
