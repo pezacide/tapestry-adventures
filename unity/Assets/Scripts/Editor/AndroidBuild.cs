@@ -70,7 +70,7 @@ namespace Tapestry.EditorTools
             EditorUserBuildSettings.buildAppBundle = false;
             if (report.summary.result == BuildResult.Succeeded)
             {
-                Debug.Log("Tapestry: built " + AabPath + " (" + (report.summary.totalSize / (1024 * 1024)) + " MB). Upload it in the Play Console. Bump VersionCode for every upload.");
+                Debug.Log("Tapestry: built " + AabPath + " - the file itself is " + (new FileInfo(AabPath).Length / (1024 * 1024)) + " MB. Upload it in the Play Console. Bump VersionCode for every upload.");
                 LogBiggest(report);
                 EditorUtility.RevealInFinder(AabPath);
             }
@@ -159,7 +159,7 @@ namespace Tapestry.EditorTools
             var report = BuildPipeline.BuildPlayer(opts);
             if (report.summary.result == BuildResult.Succeeded)
             {
-                Debug.Log("Tapestry: built " + ApkPath + " (" + (report.summary.totalSize / (1024 * 1024)) + " MB).");
+                Debug.Log("Tapestry: built " + ApkPath + " - the file itself is " + (new FileInfo(ApkPath).Length / (1024 * 1024)) + " MB (Unity's build report totals " + (report.summary.totalSize / (1024 * 1024)) + " MB including intermediate files).");
                 LogBiggest(report);
                 if (!run) EditorUtility.RevealInFinder(ApkPath);
             }
