@@ -121,6 +121,11 @@ namespace Tapestry
                     if (c == '<' && !string.IsNullOrEmpty(def.WindSkin)) { Add(list, seen, new Entry(def.WindSkin, "Ye Trumpettes", "Angels sounde them in turne: each blaste driveth thee backe. Waite for ye silence, then go.")); continue; }
                     if (ByChar.TryGetValue(c, out e)) Add(list, seen, e);
                 }
+            // beasts with no map letter of their own: embers leap from any fire pit three tiles wide or more; hedgehogs hatch from the imp's eggs
+            bool embers = false, imp = false;
+            foreach (var row in def.Map) { if (row.Contains("***")) embers = true; if (row.IndexOf('\u0129') >= 0) imp = true; }
+            if (embers) Add(list, seen, new Entry("enemies/ember", "Leaping Ember", "Sparks leape from ye fire pittes. Ye cannot stompe nor shoote them: waite for them to fall, then passe."));
+            if (imp) Add(list, seen, new Entry("enemies/hedgehog", "Hedgehogge", "It hatcheth from ye imp's eggs and trundleth at thee. Its spines bite a stomper: shoote it, or leape over."));
             return list;
         }
 
