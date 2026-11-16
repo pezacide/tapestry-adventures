@@ -2,6 +2,8 @@
 
 *A Super Mario Bros. 2 (USA) style platformer set inside the paintings of Monet, Cézanne, Van Gogh and friends.*
 
+**Series:** part 2 of **Into the Frame**, after *Ye Tapestrie Adventures* (medieval tapestries) and before *Masks & Mosaics* (antiquity, in development). Full title: *Into the Frame: Dream Palette* (working title).
+
 Status: **planning only**. Nothing here is built. This is a separate game from the tapestry game in the rest of this repo; it lives in `docs/painters/` until we decide where it goes (see Open questions).
 
 Title options: *Dream Palette* · *Pull the Paint* · *Gallery of Dreams*.
