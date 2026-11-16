@@ -524,6 +524,7 @@ namespace Tapestry
                     case 'ß': kind = "smith"; break;
                     case 'þ': kind = "snail_spike"; break;
                     case 'ȼ': kind = "bombard"; break;
+                    case 'ĩ': kind = "imp_cloud"; break;
                     case 'ƒ': kind = "snail_wing"; break;
                     case 'é': kind = "ember"; break;
                     case 'ø': kind = "urn_plant"; break;

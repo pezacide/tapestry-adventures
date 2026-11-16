@@ -183,3 +183,40 @@ def spark():
     s = stem("M8,1 L8,15 M1,8 L15,8", "white", 1.6, False) + stem("M3,3 L13,13 M13,3 L3,13", "cream", 1, False)
     return s + dot(8, 8, 2.6, "gold", "dark")
 S["spark"] = (16, 16, spark, False)
+
+# ---------------------------------------------------------------- the cloud imp, his spiny eggs, and the hedgehogs that hatch
+def imp_cloud(f):
+    """An imp riding a woven cloud, spectacles on his nose: 0 riding, 1 hurling an egg."""
+    s = woven("M6,40 Q2,28 14,26 Q16,16 28,18 Q38,10 48,20 Q62,18 64,30 Q70,40 58,46 L12,46 Q4,46 6,40 Z", "white", "grey", 1.4)
+    s += stem("M14,38 Q24,34 34,38 M38,40 Q48,36 58,40", "grey", 1.2, False)
+    s += fill("M26,6 Q34,0 42,6 Q46,16 34,20 Q22,16 26,6 Z", "rose", 0, "dark", 1.2)                  # head
+    s += fill("M26,8 L22,-2 L31,5 Z M42,8 L46,-2 L37,5 Z", "terra", 0, "dark", 1)                      # horns
+    s += dot(30, 11, 3, "cream", "dark") + dot(38, 11, 3, "cream", "dark") + dot(30, 11, 1, "dark") + dot(38, 11, 1, "dark")
+    s += stem("M27,10 L33,10 M35,10 L41,10", "dark", 0.8, False)
+    s += f'<path d="M29,16 Q34,20 39,16" fill="none" stroke="{WOOL["dark"]}" stroke-width="1.2"/>'
+    if f == 1:
+        s += fill("M44,22 L56,10 L60,14 L48,26 Z", "rose", 0, "dark", 1) + dot(58, 9, 6, "buff", "dark")
+        for a in range(0, 360, 60):
+            s += stem(f"M58,9 l{6 * math.cos(math.radians(a)):.1f},{6 * math.sin(math.radians(a)):.1f}", "dark", 1, False)
+    return g(s, "translate(0 6)")
+C["imp_cloud"] = dict(title="Cloud Imp", size=(72, 56), frames=2, build=imp_cloud,
+                      behaviour="rides a cloud high overhead, keeping ahead of the knight and dropping spiny eggs that hatch into hedgehogs; can be stomped or shot")
+
+def spiny_egg(f):
+    s = fill("M10,4 Q20,4 20,16 Q20,24 10,24 Q0,24 0,16 Q0,4 10,4 Z", "buff", 0, "dark", 1.3)
+    for x, y in ((3, 6), (10, 2), (17, 6), (0, 14), (20, 14)):
+        s += fill(f"M{x - 2},{y + 2} L{x},{y - 5} L{x + 2},{y + 2} Z", "terra", 0, "dark", 0.9)
+    return s
+C["spiny_egg"] = dict(title="Spiny Egg", size=(22, 28), frames=1, build=spiny_egg, behaviour="falls from the cloud imp and hatches into a hedgehog on landing")
+
+def hedgehog(f):
+    """A hedgehog trundling on short legs."""
+    s = limb(18, 34, 10, 4, "brown", (-5, 5)[f], "hoof") + limb(36, 34, 10, 4, "brown", (5, -5)[f], "hoof")
+    s += fill("M6,34 Q4,12 24,8 Q44,10 46,34 Z", "brown", 90, "dark", 1.3)
+    for i in range(7):
+        x = 10 + i * 5.2
+        s += fill(f"M{x:.1f},{16 + abs(i - 3) * 2} L{x + 2.6:.1f},{3 + abs(i - 3) * 2.5:.1f} L{x + 5.2:.1f},{16 + abs(i - 3) * 2} Z", "dark", 0)
+    s += fill("M40,22 Q52,22 54,30 Q50,36 40,34 Z", "buff", 0, "dark", 1.2) + dot(49, 27, 1.1, "dark") + dot(54, 30, 1.4, "dark")
+    return s
+C["hedgehog"] = dict(title="Hedgehog", size=(56, 40), frames=2, build=hedgehog,
+                     behaviour="trundles along; its spines hurt a stomper; shoot it or smite it with the relique")

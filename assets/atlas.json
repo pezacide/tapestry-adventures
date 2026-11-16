@@ -688,6 +688,26 @@
       ],
       "frame_count": 2,
       "file": "enemies/bombard.png"
+    },
+    "imp_cloud": {
+      "title": "Cloud Imp",
+      "behaviour": "rides a cloud high overhead, keeping ahead of the knight and dropping spiny eggs that hatch into hedgehogs; can be stomped or shot",
+      "frame": [
+        72,
+        56
+      ],
+      "frame_count": 2,
+      "file": "enemies/imp_cloud.png"
+    },
+    "hedgehog": {
+      "title": "Hedgehog",
+      "behaviour": "trundles along; its spines hurt a stomper; shoot it or smite it with the relique",
+      "frame": [
+        56,
+        40
+      ],
+      "frame_count": 2,
+      "file": "enemies/hedgehog.png"
     }
   },
   "bosses": {
@@ -892,6 +912,16 @@
       ],
       "frame_count": 1,
       "file": "projectiles/cannonball.png"
+    },
+    "spiny_egg": {
+      "title": "Spiny Egg",
+      "behaviour": "falls from the cloud imp and hatches into a hedgehog on landing",
+      "frame": [
+        22,
+        28
+      ],
+      "frame_count": 1,
+      "file": "projectiles/spiny_egg.png"
     }
   },
   "items": {

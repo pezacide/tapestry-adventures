@@ -51,6 +51,8 @@ namespace Tapestry
                 case "smith": speed = 1.4f; break;
                 case "snail_spike": speed = 1.0f; break;
                 case "bombard": speed = 0f; timer = 1f; break;
+                case "imp_cloud": gravity = false; timer = 1f; break;
+                case "hedgehog": speed = 1.9f; break;
                 case "snail_wing": speed = 1.1f; gravity = false; winged = true; break;
                 case "urn_plant": gravity = false; break;
                 case "ember": gravity = false; timer = (pos.x * 0.37f) % 2f; break;
@@ -112,6 +114,26 @@ namespace Tapestry
             float dx = ToPlayer(p);
             switch (Kind)
             {
+                case "imp_cloud":   // rides high overhead, keeping a little ahead of the knight, and lets fall spiny eggs
+                {
+                    float want = p.Body.Pos.x + 3f + Mathf.Sin(anim * 0.8f) * 3.5f;
+                    Body.Vel = new Vector2(Mathf.Clamp((want - Body.Pos.x) * 1.4f, -4.5f, 4.5f), (home.y + Mathf.Sin(anim * 1.6f) * 0.5f - Body.Pos.y) * 3f);
+                    view.Face(Body.Vel.x > 0f);
+                    if (timer > 0.4f) view.SetFrame(0);
+                    if (timer > 3.2f && Mathf.Abs(dx) < 9f && GameManager.I.CountEnemies("hedgehog") < 3)
+                    {
+                        timer = 0f; view.SetFrame(1);
+                        GameManager.I.SpawnShot("spiny_egg", Body.Pos + new Vector2(0f, -0.2f), new Vector2(Body.Vel.x * 0.5f, 0f));
+                        Audio.Play("soup", 0.5f);
+                    }
+                    break;
+                }
+
+                case "hedgehog":   // trundles toward the knight along the ground
+                    dir = dx >= 0f ? 1f : -1f;
+                    Walk(lv, false); WalkFrames();
+                    break;
+
                 case "bombard":   // stands fast, faces the knight, and fires a slow iron ball along the ground when he is in range
                     view.Face(dx > 0f);
                     if (timer > 0.3f) view.SetFrame(0);
@@ -593,7 +615,7 @@ namespace Tapestry
                 }
                 return false;
             }
-            if (Kind == "urn_plant" || Kind == "ember" || Kind == "snail_spike") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
+            if (Kind == "urn_plant" || Kind == "ember" || Kind == "snail_spike" || Kind == "hedgehog") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
             if (!fromAbove) { k.Hurt(); return false; }
             if (k.Mounted) { k.Bounce(); Squash(false); return true; }   // Bayard's hooves crush every beast, burning or not
             if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return false; }   // burning mane
@@ -682,7 +704,7 @@ namespace Tapestry
         public Shot(string kind, Vector2 pos, Vector2 vel, Transform parent)
         {
             Body = new Body(pos, 0.35f, 0.3f) { Vel = vel, UsePlatforms = false };
-            gravity = kind == "soup_glob" || kind == "spear" || kind == "comfit" || kind == "star" || kind == "hammer";
+            gravity = kind == "spiny_egg" || kind == "soup_glob" || kind == "spear" || kind == "comfit" || kind == "star" || kind == "hammer";
             Friendly = kind == "bolt";
             Kind = kind;
             life = Friendly ? 1.1f : 4f;
@@ -702,6 +724,7 @@ namespace Tapestry
             Body.Step(lv, dt);
             view.SetFrame(((int)(t * 10f)) % 2);
             view.SetPosition(Body.Pos);
+            if (Kind == "spiny_egg" && (Body.Grounded || Body.HitWall)) GameManager.I.SpawnEnemy("hedgehog", Body.Pos);   // it hatches
             if (Body.HitWall || Body.Grounded || Body.HitCeiling || t > life || Body.Pos.y < -2f) Destroy();
         }
 
