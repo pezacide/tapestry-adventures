@@ -139,7 +139,7 @@ The seven trumpets, the locusts with human faces, the four horsemen, and the sev
 
 ## Ideas from a look at the old Mario games
 
-**Built:** Best Glorie (saved high score), bells at the pole, Smythes (hammer throwers), Urn-Plantes, wells with a treasure cellar, bombards (cannons, in 5-1 for now), falling and balance lifts (in 4-3 for now), the Winged Snail-Hound (a stomp clips its wings; in 4-1 for now), the Armoured Snail-Hound (spiked, never stomp it; in 4-1 for now), leaping embers (sparks that jump from castle fire pits), Ye Wronge Syde (hard mode after the ending), and a title screen laid out like the old one (banner, menu with cursor, top score).
+**Built:** Best Glorie (saved high score), bells at the pole, Smythes (hammer throwers), Urn-Plantes, wells with a treasure cellar, bombards (cannons, from World 5 on), falling and balance lifts (in 4-3, 6-3, 7-1 and 7-2), the Winged Snail-Hound (a stomp clips its wings; from World 4 on), the Armoured Snail-Hound (spiked, never stomp it; from World 4 on), leaping embers (sparks that jump from castle fire pits), Ye Wronge Syde (hard mode after the ending), and a title screen laid out like the old one (banner, menu with cursor, top score).
 
 **Still to do (not yet built):**
 - **A cloud-riding imp** who drops hedgehog-like spiny eggs from above.
