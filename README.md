@@ -2,6 +2,17 @@
 
 A Mario-Bros-style platformer stitched like the Bayeux Tapestry: Norman knights against the weird beasts of medieval bestiaries.
 
+## Part of *Into the Frame*
+*Into the Frame* is a series of platformers in which the hero jumps into a work of art and the art is the world.
+
+| Part | Title | Art | Status |
+|---|---|---|---|
+| 1 | *Into the Frame: Ye Tapestrie Adventures* (this repo) | Medieval tapestries | playable |
+| 2 | *Into the Frame: Dream Palette* (working title; [own repo](https://github.com/pezacide/dream-palette)) | Famous paintings | planned |
+| 3 | *Into the Frame: Masks & Mosaics* (working title; [own repo](https://github.com/pezacide/masks-and-mosaics)) | Antiquity: theatre masks, mosaics, vases, frescoes | in development |
+
+The series name is not yet checked against app-store and trademark clashes.
+
 ## Art assets
 Open `assets/gallery.html`, or look at `assets/showcase.png`.
 
