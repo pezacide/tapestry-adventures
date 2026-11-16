@@ -205,7 +205,7 @@ Also from World 2: **Angry Sun** returns later in World 8, so our **Aten** retur
 
 #### Scene bank (optional extras)
 
-If 39 levels feels too few for the main route and the ideas above are too good to waste, these are the bonus scenes, **not** counted in the 41 (the Causeway and the Shaduf Barges were promoted into Act I): *The Great Pyramid* (I), *The Flooded Labyrinth* (II), *Kiln Doors* (III), *The Cloaca Maxima* (IV), *The Garden Room* (IV), *The Tiber Flume* (IV), *Pelion upon Ossa* (V), *The Treadwheel Hall* (VII), *Charun's Workshop* (VI), *The Trojan Horse* (VIII).
+If 41 levels feels too few for the main route and the ideas above are too good to waste, these are the bonus scenes, **not** counted in the 41 (the Causeway and the Shaduf Barges were promoted into Act I): *The Great Pyramid* (I), *The Flooded Labyrinth* (II), *Kiln Doors* (III), *The Cloaca Maxima* (IV), *The Garden Room* (IV), *The Tiber Flume* (IV), *Pelion upon Ossa* (V), *The Treadwheel Hall* (VII), *Charun's Workshop* (VI), *The Trojan Horse* (VIII).
 
 ### Level by level: ideas from the rest of SMB3's level pages
 

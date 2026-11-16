@@ -8,6 +8,10 @@ Companion to [`DESIGN.md`](DESIGN.md) (see section 6, "Suits and items", and sec
 
 ![HUD annotated](mockups/hud_annotated.png)
 
+The same screen without the annotations:
+
+![HUD, clean](mockups/hud_phone.png)
+
 Gameplay is a placeholder (Act I's marsh). The red dashed box is the **safe area** (44 points in from the left and right edges for notches and rounded corners, 16 at the top and bottom). The blue dotted arcs are the approximate **thumb reach** from each lower corner.
 
 | # | Element | What it shows | Notes |
