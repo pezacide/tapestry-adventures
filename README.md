@@ -50,3 +50,7 @@ python3 tools/audio/make_audio.py    # composes the music + sound effects (numpy
 
 - To recolour a knight, edit the `KNIGHTS` table in `knights.py`.
 - To add a beast, add a function to `creatures.py`.
+
+## Licence
+
+All rights reserved; see [`LICENSE`](LICENSE). Nothing in this repository may be reused without permission.
