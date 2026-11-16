@@ -124,9 +124,20 @@ namespace Tapestry.EditorTools
                 list.Sort((a, b) => b.Value.CompareTo(a.Value));
                 var sb = new System.Text.StringBuilder("Tapestry: the biggest things in the build (MB):\n");
                 for (int i = 0; i < list.Count && i < 25; i++) sb.AppendLine((list[i].Value / (1024.0 * 1024.0)).ToString("F1") + "  " + list[i].Key);
+                if (list.Count == 0) sb.AppendLine("(Unity gave no per-asset list for this build.)");
                 Debug.Log(sb.ToString());
             }
             catch (System.Exception e) { Debug.LogWarning("Tapestry: could not list build sizes: " + e.Message); }
+            try
+            {
+                var files = new List<KeyValuePair<string, ulong>>();
+                foreach (var f in report.GetFiles()) files.Add(new KeyValuePair<string, ulong>(f.path + "  [" + f.role + "]", f.size));
+                files.Sort((a, b) => b.Value.CompareTo(a.Value));
+                var sb2 = new System.Text.StringBuilder("Tapestry: the biggest files in the build (MB):\n");
+                for (int i = 0; i < files.Count && i < 25; i++) sb2.AppendLine((files[i].Value / (1024.0 * 1024.0)).ToString("F1") + "  " + files[i].Key);
+                Debug.Log(sb2.ToString());
+            }
+            catch (System.Exception e) { Debug.LogWarning("Tapestry: could not list build files: " + e.Message); }
         }
 
         static void Build(bool run)
