@@ -94,7 +94,7 @@ It keeps what makes SMB3 special: **a map you read like a board game, suits that
 | **Exekias** (Athens, active c. 545 to 530 BC) | Potter *and* painter; signed "Exekias made me". Famous for the *Achilles and Ajax playing dice* amphora and the *Dionysus in a boat* cup | Black-figure silhouette with incised lines and a white-and-purple accent | The all-rounder ("Mario"). Steady, precise | medium | medium | **Steady Hand**: shortest recovery after a hit; best at learning the game |
 | **Iaia of Cyzicus** (active in Rome around 100 BC) | A woman painter whom the Roman writer Pliny the Elder praised for her speed and skill, and says painted a self-portrait in a mirror (it is lost) | Encaustic panel portrait, with big watchful eyes (in the manner of the Fayum mummy portraits, a style clash on purpose) | Light and quick ("Luigi"). Floaty | medium | **highest** | **Mirror Hop**: a tiny second hop after a stomp |
 | **Thutmose** (Amarna, active c. 1340 BC) | Court sculptor of the pharaoh Akhenaten. His workshop at Amarna was found with the famous bust of Nefertiti | Raised limestone relief with Egyptian profile and flat colour | Heavy and sturdy | slow acceleration | low | **Hard Head**: breaks blocks from below even when small; **Statue** suit lasts longer |
-| **Sosus of Pergamon** (2nd century BC) | Famed mosaicist: *The Unswept Floor* (a floor of banquet leftovers) and *The Doves Drinking*, both known now only through Roman copies (the copies show a mouse among the scraps) | A little tessera mosaic figure | Small, fast | **fastest** (fills the winged meter quickest) | low | **Tessera Magnet**: collects tesserae in a small radius |
+| **Sosus of Pergamon** (2nd century BC) | Famed mosaicist: *The Unswept Floor* (a floor of banquet leftovers) and *The Doves Drinking*, both known now only through Roman copies (the Vatican copy is signed by Heraklitos; one copy found at Boudry in Switzerland shows a mouse nibbling a nut) | A little tessera mosaic figure | Small, fast | **fastest** (fills the winged meter quickest) | low | **Tessera Magnet**: collects tesserae in a small radius |
 
 **Why these four.** Two potters/painters (one Greek, one Roman-era), one Egyptian sculptor, one Hellenistic mosaicist, so every medium the game uses has someone at home. Iaia matters because the ancient art world was not all men: Pliny lists several women painters (Timarete, Irene, Aristarete, Iaia and Olympias, and a Kalypso whose status is disputed), though only a few lines about each survive and none of their paintings does.
 
@@ -245,7 +245,7 @@ Black-figure vases are black silhouettes on orange clay, with incised detail. Re
 | Scene | Name | Idea | New things |
 |---|---|---|---|
 | III-1 | *The Labours Frieze* | The twelve labours of Heracles as a looping frieze; enemies are **giant** | **Giant scale** (you are tiny): bigger foes with several hit points. **Giant Sandal** introduced |
-| III-2 | *Achilles and Ajax Play Dice* | The famous Exekias amphora | Dice as platforms; the heroes' voices pop out as inscriptions ("three", "four"). *Tessera* comes from the Greek for "four", which Thespis will happily tell you |
+| III-2 | *Achilles and Ajax Play Dice* | The famous Exekias amphora | Dice as platforms; the heroes' voices pop out as inscriptions ("three", "four"). *Tessera* is usually derived from the Greek for "four", which Thespis will happily tell you (the etymology is standard but hedged by dictionaries) |
 | III-3 | *Dionysus Sails* | The Exekias cup: Dionysus in a boat with a vine growing up the mast, dolphins all round | **Vase wrap-around** (round the cup, level loops); **Kiln Switch** flips black-figure and red-figure, which swaps what's solid |
 | III-4 | *The Kiln* (fortress) | A pottery kiln | **Mini-boss: the Nemean Lion**: his pelt can't be pierced, so wait until he rolls and yawns |
 | III-5 | *The Argo* | The ship of the Argonauts | Harpies; then **boss: the Hydra**: cut a head and two grow back unless you **cauterise the stump with the Oil Lamp** (as Heracles' nephew Iolaus did) |
@@ -324,7 +324,7 @@ The full research is in [`SMB3_NOTES.md`](SMB3_NOTES.md): a table per Act that m
 | I | The Scribe of the Nile | a **cat** |
 | II | The King of Crete | a **bull** |
 | III | A Hero's herald | a **stag** (the myth of Actaeon) |
-| IV | The Villa's master | a **goose** (Roman house-guards, the geese that saved the Capitol) |
+| IV | The Villa's master | a **goose** (Roman house-guards; in the traditional story, geese on the Capitol woke the defenders in 390 BC, though historians treat the tale as legend) |
 | V | The Cloud King | a **swan** |
 | VI | The Tomb's host | a **wolf** (Aita's wolf-skin cap) |
 | VII | The Emperor's steward | a **peacock** (a Byzantine symbol) |
