@@ -120,7 +120,7 @@ SMB3's suits are its identity. Ours are objects from ancient life and myth. Each
 | **Triton's Conch** | Frog suit | **Swimming** (fast and graceful in water, clumsy on land). Blowing it calls a dolphin who carries you | W2 |
 | **Giant Sandal** | Kuribo's shoe | A single huge hobnailed sandal you hop in: **stomp spikes, ice and hot things**; hops high; can't be used underwater. Reusable in a level | W3 (Giant Act) |
 | **Marble Statue** | Tanooki statue | Hold **Down + Action** to strike a *contrapposto* pose: invulnerable, but frozen, and for a few seconds only | W4 |
-| **Winged Sandals of Hermes** | P-wing | **Sustained flight** for one level (tap Jump to flap, SMB3 raccoon style). The Winged meter at full | W5 (earlier only as a rare prize, such as a nine-pair Vase Match win) |
+| **Winged Sandals of Hermes** | P-wing | **Sustained flight** for one level (tap Jump to flap, SMB3 raccoon style). The Winged meter at full | W5 (earlier only as a rare prize, such as a gold shrine or a nine-pair Vase Match win) |
 | **Sculptor's Mallet and Chisel** | Hammer suit | **Throws chips** (arcing stone shards) and, **crouched, you are a sturdy block** immune to fire. In W7 it **scrapes whitewash** off hidden mosaics | W6 |
 | **Orpheus's Lyre** | Music box | Plays a tune that **sleeps wandering enemies** for a stage (or the map's Satyrs for one battle) | Muse Shrine item (Euterpe, Act II) |
 
