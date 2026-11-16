@@ -679,6 +679,10 @@ def sfx():
     S["flap"] = fx(fl, 0.35, 0.03)
     S["clip"] = fx(add(noise(0.12, 1000, 6000, 40, 0.8), sweep(800, 200, 0.2, "sine", 0.6)), 0.65, 0.05)
     S["clang"] = fx(add(bell(freq("D4"), 0.5, 0.6), bell(freq("G#4"), 0.4, 0.4), noise(0.05, 2000, 8000, 50, 0.6)), 0.6, 0.1)
+    # the armoured snail and the hedgehog
+    S["scrape"] = fx(add(noise(0.18, 2500, 9000, 22, 0.8), bell(freq("F#5"), 0.25, 0.35), sweep(2400, 1500, 0.14, "sine", 0.25)), 0.6, 0.05)
+    sq = np.zeros(int(0.4 * SR)); mix_into(sq, sweep(1500, 2300, 0.07, "sine", 0.8), 0); mix_into(sq, sweep(2100, 1700, 0.09, "sine", 0.7), 0.1); mix_into(sq, noise(0.12, 3000, 8000, 25, 0.25), 0.02)
+    S["squeak"] = fx(sq, 0.5, 0.04)
     S["roar"] = fx(bandpass(rng.standard_normal(int(0.6 * SR)), 80, 900) * env(int(0.6 * SR), 0.05, 0.3) * (1 + 0.5 * np.sin(2 * np.pi * 28 * t(0.6))), 0.6)
     return S
 

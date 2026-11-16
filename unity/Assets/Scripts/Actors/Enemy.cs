@@ -132,6 +132,7 @@ namespace Tapestry
                 case "hedgehog":   // trundles toward the knight along the ground
                     dir = dx >= 0f ? 1f : -1f;
                     Walk(lv, false); WalkFrames();
+                    flapT -= dt; if (flapT <= 0f) { flapT = 1.8f; if (Mathf.Abs(dx) < 7f) Audio.Play("squeak", 0.3f); }   // it snuffles and squeaks as it comes
                     break;
 
                 case "bombard":   // stands fast, faces the knight, and fires a slow iron ball along the ground when he is in range
@@ -169,6 +170,7 @@ namespace Tapestry
 
                 case "snail_spike":   // plods along; its spikes forbid a stomp
                     Walk(lv, true); WalkFrames();
+                    flapT -= dt; if (flapT <= 0f) { flapT = 1.6f; if (Mathf.Abs(dx) < 6f) Audio.Play("scrape", 0.12f); }   // iron clinks softly as it plods
                     break;
 
                 case "stag":   // runs with its herd, leaping gaps, turning back at walls; leaves the field after a while
@@ -618,7 +620,7 @@ namespace Tapestry
                 }
                 return false;
             }
-            if (Kind == "urn_plant" || Kind == "ember" || Kind == "snail_spike" || Kind == "hedgehog") { k.Hurt(); return false; }   // it bites a knight who lands upon it, too
+            if (Kind == "urn_plant" || Kind == "ember" || Kind == "snail_spike" || Kind == "hedgehog") { if (Kind == "snail_spike" || Kind == "hedgehog") Audio.Play("scrape", 0.55f); k.Hurt(); return false; }   // it bites a knight who lands upon it, too
             if (!fromAbove) { k.Hurt(); return false; }
             if (k.Mounted) { k.Bounce(); Squash(false); return true; }   // Bayard's hooves crush every beast, burning or not
             if (Kind == "fiery_lion") { k.Hurt(); k.Bounce(); return false; }   // burning mane
